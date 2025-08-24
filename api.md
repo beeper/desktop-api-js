@@ -17,7 +17,7 @@ Types:
 
 Methods:
 
-- <code title="get /v0/get-accounts">client.accounts.<a href="./src/resources/accounts.ts">list</a>() -> AccountsResponse</code>
+- <code title="get /v0/get-accounts">client.accounts.<a href="./src/resources/accounts.ts">getAccounts</a>() -> AccountsResponse</code>
 
 # App
 
@@ -27,7 +27,7 @@ Types:
 
 Methods:
 
-- <code title="post /v0/focus-app">client.app.<a href="./src/resources/app.ts">focus</a>({ ...params }) -> BaseResponse</code>
+- <code title="post /v0/focus-app">client.app.<a href="./src/resources/app.ts">focusApp</a>({ ...params }) -> BaseResponse</code>
 
 # Messages
 
@@ -42,9 +42,9 @@ Types:
 
 Methods:
 
-- <code title="post /v0/draft-message">client.messages.<a href="./src/resources/messages.ts">draft</a>({ ...params }) -> BaseResponse</code>
-- <code title="get /v0/search-messages">client.messages.<a href="./src/resources/messages.ts">search</a>({ ...params }) -> MessagesCursorID</code>
-- <code title="post /v0/send-message">client.messages.<a href="./src/resources/messages.ts">send</a>({ ...params }) -> SendResponse</code>
+- <code title="post /v0/draft-message">client.messages.<a href="./src/resources/messages.ts">draftMessage</a>({ ...params }) -> BaseResponse</code>
+- <code title="get /v0/search-messages">client.messages.<a href="./src/resources/messages.ts">searchMessages</a>({ ...params }) -> MessagesCursorID</code>
+- <code title="post /v0/send-message">client.messages.<a href="./src/resources/messages.ts">sendMessage</a>({ ...params }) -> SendResponse</code>
 
 # Chats
 
@@ -61,10 +61,10 @@ Types:
 
 Methods:
 
-- <code title="get /v0/get-chat">client.chats.<a href="./src/resources/chats.ts">retrieve</a>({ ...params }) -> GetChatResponse | null</code>
-- <code title="post /v0/archive-chat">client.chats.<a href="./src/resources/chats.ts">archive</a>({ ...params }) -> BaseResponse</code>
-- <code title="get /v0/find-chats">client.chats.<a href="./src/resources/chats.ts">find</a>({ ...params }) -> ChatsCursorID</code>
-- <code title="post /v0/get-link-to-chat">client.chats.<a href="./src/resources/chats.ts">getLink</a>({ ...params }) -> LinkResponse</code>
+- <code title="post /v0/archive-chat">client.chats.<a href="./src/resources/chats.ts">archiveChat</a>({ ...params }) -> BaseResponse</code>
+- <code title="get /v0/find-chats">client.chats.<a href="./src/resources/chats.ts">findChats</a>({ ...params }) -> ChatsCursorID</code>
+- <code title="get /v0/get-chat">client.chats.<a href="./src/resources/chats.ts">getChat</a>({ ...params }) -> GetChatResponse | null</code>
+- <code title="post /v0/get-link-to-chat">client.chats.<a href="./src/resources/chats.ts">getLinkToChat</a>({ ...params }) -> LinkResponse</code>
 
 # Reminders
 
@@ -75,8 +75,8 @@ Types:
 
 Methods:
 
-- <code title="post /v0/clear-chat-reminder">client.reminders.<a href="./src/resources/reminders.ts">clear</a>({ ...params }) -> BaseResponse</code>
-- <code title="post /v0/set-chat-reminder">client.reminders.<a href="./src/resources/reminders.ts">set</a>({ ...params }) -> BaseResponse</code>
+- <code title="post /v0/clear-chat-reminder">client.reminders.<a href="./src/resources/reminders.ts">clearChatReminder</a>({ ...params }) -> BaseResponse</code>
+- <code title="post /v0/set-chat-reminder">client.reminders.<a href="./src/resources/reminders.ts">setChatReminder</a>({ ...params }) -> BaseResponse</code>
 
 # OAuth
 
@@ -84,8 +84,3 @@ Types:
 
 - <code><a href="./src/resources/oauth.ts">RevokeRequest</a></code>
 - <code><a href="./src/resources/oauth.ts">UserInfo</a></code>
-
-Methods:
-
-- <code title="get /oauth/userinfo">client.oauth.<a href="./src/resources/oauth.ts">getUserInfo</a>() -> UserInfo</code>
-- <code title="post /oauth/revoke">client.oauth.<a href="./src/resources/oauth.ts">revokeToken</a>({ ...params }) -> void</code>

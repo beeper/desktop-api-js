@@ -8,8 +8,8 @@ const client = new BeeperDesktop({
 });
 
 describe('resource reminders', () => {
-  test('clear: only required params', async () => {
-    const responsePromise = client.reminders.clear({
+  test('clearChatReminder: only required params', async () => {
+    const responsePromise = client.reminders.clearChatReminder({
       chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -21,14 +21,14 @@ describe('resource reminders', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('clear: required and optional params', async () => {
-    const response = await client.reminders.clear({
+  test('clearChatReminder: required and optional params', async () => {
+    const response = await client.reminders.clearChatReminder({
       chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
     });
   });
 
-  test('set: only required params', async () => {
-    const responsePromise = client.reminders.set({
+  test('setChatReminder: only required params', async () => {
+    const responsePromise = client.reminders.setChatReminder({
       chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
       reminder: { remindAtMs: 0 },
     });
@@ -41,8 +41,8 @@ describe('resource reminders', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('set: required and optional params', async () => {
-    const response = await client.reminders.set({
+  test('setChatReminder: required and optional params', async () => {
+    const response = await client.reminders.setChatReminder({
       chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
       reminder: { remindAtMs: 0, dismissOnIncomingMessage: true },
     });

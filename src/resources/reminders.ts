@@ -14,13 +14,17 @@ export class Reminders extends APIResource {
    *
    * @example
    * ```ts
-   * const baseResponse = await client.reminders.clear({
-   *   chatID:
-   *     '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
-   * });
+   * const baseResponse =
+   *   await client.reminders.clearChatReminder({
+   *     chatID:
+   *       '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+   *   });
    * ```
    */
-  clear(body: ReminderClearParams, options?: RequestOptions): APIPromise<Shared.BaseResponse> {
+  clearChatReminder(
+    body: ReminderClearChatReminderParams,
+    options?: RequestOptions,
+  ): APIPromise<Shared.BaseResponse> {
     return this._client.post('/v0/clear-chat-reminder', { body, ...options });
   }
 
@@ -29,14 +33,19 @@ export class Reminders extends APIResource {
    *
    * @example
    * ```ts
-   * const baseResponse = await client.reminders.set({
-   *   chatID:
-   *     '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
-   *   reminder: { remindAtMs: 0 },
-   * });
+   * const baseResponse = await client.reminders.setChatReminder(
+   *   {
+   *     chatID:
+   *       '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+   *     reminder: { remindAtMs: 0 },
+   *   },
+   * );
    * ```
    */
-  set(body: ReminderSetParams, options?: RequestOptions): APIPromise<Shared.BaseResponse> {
+  setChatReminder(
+    body: ReminderSetChatReminderParams,
+    options?: RequestOptions,
+  ): APIPromise<Shared.BaseResponse> {
     return this._client.post('/v0/set-chat-reminder', { body, ...options });
   }
 }
@@ -77,14 +86,14 @@ export namespace SetReminderRequest {
   }
 }
 
-export interface ReminderClearParams {
+export interface ReminderClearChatReminderParams {
   /**
    * The identifier of the chat to clear reminder from
    */
   chatID: string;
 }
 
-export interface ReminderSetParams {
+export interface ReminderSetChatReminderParams {
   /**
    * The identifier of the chat to set reminder for
    */
@@ -93,10 +102,10 @@ export interface ReminderSetParams {
   /**
    * Reminder configuration
    */
-  reminder: ReminderSetParams.Reminder;
+  reminder: ReminderSetChatReminderParams.Reminder;
 }
 
-export namespace ReminderSetParams {
+export namespace ReminderSetChatReminderParams {
   /**
    * Reminder configuration
    */
@@ -117,7 +126,7 @@ export declare namespace Reminders {
   export {
     type ClearReminderRequest as ClearReminderRequest,
     type SetReminderRequest as SetReminderRequest,
-    type ReminderClearParams as ReminderClearParams,
-    type ReminderSetParams as ReminderSetParams,
+    type ReminderClearChatReminderParams as ReminderClearChatReminderParams,
+    type ReminderSetChatReminderParams as ReminderSetChatReminderParams,
   };
 }

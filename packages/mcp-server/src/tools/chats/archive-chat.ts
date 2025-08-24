@@ -7,34 +7,28 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'messages',
+  resource: 'chats',
   operation: 'write',
-  tags: [],
+  tags: ['chats'],
   httpMethod: 'post',
-  httpPath: '/v0/draft-message',
-  operationId: 'draft_message',
+  httpPath: '/v0/archive-chat',
+  operationId: 'archive_chat',
 };
 
 export const tool: Tool = {
-  name: 'draft_messages',
+  name: 'archive_chat',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nDraft a message in a specific chat. This will be placed in the message input field without sending\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/base_response',\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nArchive or unarchive a chat. Set archived=true to move to archive, archived=false to move back to inbox\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/base_response',\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
-        description: 'Provide the unique identifier of the chat where you want to draft a message',
+        description: 'The identifier of the chat to archive or unarchive',
       },
-      focusApp: {
+      archived: {
         type: 'boolean',
-        description:
-          'Set to true to bring Beeper application to the foreground, or false to draft silently in background',
-      },
-      text: {
-        type: 'string',
-        description:
-          'Provide the text content you want to draft. This will be placed in the message input field without sending',
+        description: 'True to archive, false to unarchive',
       },
       jq_filter: {
         type: 'string',
@@ -50,7 +44,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.messages.draft(body)));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.chats.archiveChat(body)));
 };
 
 export default { metadata, tool, handler };

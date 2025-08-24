@@ -4,19 +4,17 @@ import { Metadata, Endpoint, HandlerFunction } from './types';
 
 export { Metadata, Endpoint, HandlerFunction };
 
-import list_accounts from './accounts/list-accounts';
+import get_accounts from './accounts/get-accounts';
 import focus_app from './app/focus-app';
-import draft_messages from './messages/draft-messages';
+import draft_message from './messages/draft-message';
 import search_messages from './messages/search-messages';
-import send_messages from './messages/send-messages';
-import retrieve_chats from './chats/retrieve-chats';
-import archive_chats from './chats/archive-chats';
+import send_message from './messages/send-message';
+import archive_chat from './chats/archive-chat';
 import find_chats from './chats/find-chats';
-import get_link_chats from './chats/get-link-chats';
-import clear_reminders from './reminders/clear-reminders';
-import set_reminders from './reminders/set-reminders';
-import get_user_info_oauth from './oauth/get-user-info-oauth';
-import revoke_token_oauth from './oauth/revoke-token-oauth';
+import get_chat from './chats/get-chat';
+import get_link_to_chat from './chats/get-link-to-chat';
+import clear_chat_reminder from './reminders/clear-chat-reminder';
+import set_chat_reminder from './reminders/set-chat-reminder';
 
 export const endpoints: Endpoint[] = [];
 
@@ -24,19 +22,17 @@ function addEndpoint(endpoint: Endpoint) {
   endpoints.push(endpoint);
 }
 
-addEndpoint(list_accounts);
+addEndpoint(get_accounts);
 addEndpoint(focus_app);
-addEndpoint(draft_messages);
+addEndpoint(draft_message);
 addEndpoint(search_messages);
-addEndpoint(send_messages);
-addEndpoint(retrieve_chats);
-addEndpoint(archive_chats);
+addEndpoint(send_message);
+addEndpoint(archive_chat);
 addEndpoint(find_chats);
-addEndpoint(get_link_chats);
-addEndpoint(clear_reminders);
-addEndpoint(set_reminders);
-addEndpoint(get_user_info_oauth);
-addEndpoint(revoke_token_oauth);
+addEndpoint(get_chat);
+addEndpoint(get_link_to_chat);
+addEndpoint(clear_chat_reminder);
+addEndpoint(set_chat_reminder);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';

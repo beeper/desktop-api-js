@@ -12,7 +12,7 @@ export class Accounts extends APIResource {
   /**
    * List connected Beeper accounts available on this device
    */
-  list(options?: RequestOptions): APIPromise<AccountsResponse> {
+  getAccounts(options?: RequestOptions): APIPromise<AccountsResponse> {
     return this._client.get('/v0/get-accounts', options);
   }
 }
