@@ -1,12 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { BeeperDesktopAPI as default } from './client';
+export { BeeperDesktop as default } from './client';
 
-export { type Uploadable, toFile } from './core/uploads';
-export { APIPromise } from './core/api-promise';
-export { BeeperDesktopAPI, type ClientOptions } from './client';
+export { type Uploadable, toFile } from 'beeper/desktop-api/core/uploads';
+export { APIPromise } from 'beeper/desktop-api/core/api-promise';
+export { BeeperDesktop, type ClientOptions } from 'beeper/desktop-api/client';
+export { PagePromise } from 'beeper/desktop-api/core/pagination';
 export {
-  BeeperDesktopAPIError,
+  BeeperDesktopError,
   APIError,
   APIConnectionError,
   APIConnectionTimeoutError,
@@ -19,4 +20,4 @@ export {
   InternalServerError,
   PermissionDeniedError,
   UnprocessableEntityError,
-} from './core/error';
+} from 'beeper/desktop-api/core/error';

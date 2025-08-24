@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { NullableHeaders } from './headers';
+import { NullableHeaders } from 'beeper/desktop-api/internal/headers';
 
 import type { BodyInit } from './builtin-types';
 import type { HTTPMethod, MergedRequestInit } from './types';
@@ -40,7 +40,7 @@ export type RequestOptions = {
    * The maximum number of times that the client will retry a request in case of a
    * temporary failure, like a network error or a 5XX error from the server.
    *
-   * @default 2
+   * @default 3
    */
   maxRetries?: number;
 

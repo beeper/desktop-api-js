@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import type { FinalRequestOptions } from './request-options';
-import { type BeeperDesktopAPI } from '../client';
-import { formatRequestDetails, loggerFor } from './utils/log';
+import { type BeeperDesktop } from 'beeper/desktop-api/client';
+import { formatRequestDetails, loggerFor } from 'beeper/desktop-api/internal/utils/log';
 
 export type APIResponseProps = {
   response: Response;
@@ -13,7 +13,7 @@ export type APIResponseProps = {
   startTime: number;
 };
 
-export async function defaultParseResponse<T>(client: BeeperDesktopAPI, props: APIResponseProps): Promise<T> {
+export async function defaultParseResponse<T>(client: BeeperDesktop, props: APIResponseProps): Promise<T> {
   const { response, requestLogID, retryOfRequestLogID, startTime } = props;
   const body = await (async () => {
     // fetch refuses to read the body when the status code is 204.

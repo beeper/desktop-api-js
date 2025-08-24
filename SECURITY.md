@@ -16,9 +16,9 @@ before making any information public.
 ## Reporting Non-SDK Related Security Issues
 
 If you encounter security issues that are not directly related to SDKs but pertain to the services
-or products provided by Beeper Desktop API, please follow the respective company's security reporting guidelines.
+or products provided by Beeper Desktop, please follow the respective company's security reporting guidelines.
 
-### Beeper Desktop API Terms and Policies
+### Beeper Desktop Terms and Policies
 
 Please contact help@beeper.com for any questions or concerns regarding the security of our services.
 

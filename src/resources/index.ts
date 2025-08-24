@@ -1,22 +1,42 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { ArchiveChat, type ArchiveChatArchiveParams } from './archive-chat';
-export { ClearChatReminder, type ClearChatReminderClearParams } from './clear-chat-reminder';
-export { DraftMessage, type DraftMessageCreateParams } from './draft-message';
-export { FindChats, type FindChatListResponse, type FindChatListParams } from './find-chats';
-export { FocusApp, type BaseResponse, type FocusAppOpenParams } from './focus-app';
-export { GetAccounts, type GetAccountListResponse } from './get-accounts';
-export { GetChat, type User, type GetChatRetrieveResponse, type GetChatRetrieveParams } from './get-chat';
+export * from './shared';
+export { Accounts, type Account, type AccountsResponse } from './accounts';
+export { App, type FocusRequest, type AppFocusParams } from './app';
 export {
-  GetLinkToChat,
-  type GetLinkToChatCreateResponse,
-  type GetLinkToChatCreateParams,
-} from './get-link-to-chat';
-export { OAuth, type OAuthRetrieveUserInfoResponse, type OAuthRevokeTokenParams } from './oauth';
+  Chats,
+  type ArchiveRequest,
+  type Chat,
+  type FindChatsRequest,
+  type FindChatsResponse,
+  type GetChatRequest,
+  type GetChatResponse,
+  type LinkRequest,
+  type LinkResponse,
+  type ChatRetrieveParams,
+  type ChatArchiveParams,
+  type ChatFindParams,
+  type ChatGetLinkParams,
+  type ChatsCursorID,
+} from './chats';
 export {
-  SearchMessages,
-  type SearchMessageSearchResponse,
-  type SearchMessageSearchParams,
-} from './search-messages';
-export { SendMessage, type SendMessageSendResponse, type SendMessageSendParams } from './send-message';
-export { SetChatReminder, type SetChatReminderCreateParams } from './set-chat-reminder';
+  Messages,
+  type DraftRequest,
+  type Message,
+  type SearchRequest,
+  type SearchResponse,
+  type SendRequest,
+  type SendResponse,
+  type MessageDraftParams,
+  type MessageSearchParams,
+  type MessageSendParams,
+  type MessagesCursorID,
+} from './messages';
+export { OAuth, type RevokeRequest, type UserInfo, type OAuthRevokeTokenParams } from './oauth';
+export {
+  Reminders,
+  type ClearReminderRequest,
+  type SetReminderRequest,
+  type ReminderClearParams,
+  type ReminderSetParams,
+} from './reminders';

@@ -25,7 +25,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^beeper-desktop-api(/.*)?',
+              regex: '^beeper-desktop-api-typescript(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],
