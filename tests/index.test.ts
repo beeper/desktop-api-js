@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from '@beeper/desktop-api-js/core/api-promise';
+import { APIPromise } from '@beeper/desktop-api/core/api-promise';
 
 import util from 'node:util';
-import BeeperDesktop from '@beeper/desktop-api-js';
-import { APIUserAbortError } from '@beeper/desktop-api-js';
+import BeeperDesktop from '@beeper/desktop-api';
+import { APIUserAbortError } from '@beeper/desktop-api';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {

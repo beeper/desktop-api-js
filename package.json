@@ -1,5 +1,5 @@
 {
-  "name": "@beeper/desktop-api-js",
+  "name": "@beeper/desktop-api",
   "version": "0.0.1",
   "description": "The official TypeScript library for the Beeper Desktop API",
   "author": "Beeper Desktop <help@beeper.com>",
