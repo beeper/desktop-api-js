@@ -42,25 +42,25 @@ If you’d like to use the repository from source, you can either install from g
 To install via git:
 
 ```sh
-$ npm install git+ssh://git@github.com:beeper/beeper-desktop-api-typescript.git
+$ npm install git+ssh://git@github.com:beeper/desktop-api-typescript.git
 ```
 
 Alternatively, to link a local copy of the repo:
 
 ```sh
 # Clone
-$ git clone https://www.github.com/beeper/beeper-desktop-api-typescript
-$ cd beeper-desktop-api-typescript
+$ git clone https://www.github.com/beeper/desktop-api-typescript
+$ cd desktop-api-typescript
 
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link beeper-desktop-api-typescript
+$ yarn link desktop-api-typescript
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global beeper-desktop-api-typescript
+$ pnpm link -—global desktop-api-typescript
 ```
 
 ## Running tests
@@ -99,7 +99,7 @@ the changes aren't made through the automated pipeline, you may want to make rel
 
 ### Publish with a GitHub workflow
 
-You can release to package managers by using [the `Publish NPM` GitHub action](https://www.github.com/beeper/beeper-desktop-api-typescript/actions/workflows/publish-npm.yml). This requires a setup organization or repository secret to be set up.
+You can release to package managers by using [the `Publish NPM` GitHub action](https://www.github.com/beeper/desktop-api-typescript/actions/workflows/publish-npm.yml). This requires a setup organization or repository secret to be set up.
 
 ### Publish manually
 
