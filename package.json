@@ -1,6 +1,6 @@
 {
   "name": "beeper-desktop-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The official TypeScript library for the Beeper Desktop API API",
   "author": "Beeper Desktop API <help@beeper.com>",
   "types": "dist/index.d.ts",
