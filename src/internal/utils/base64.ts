@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { BeeperDesktopError } from 'beeper/desktop-api/core/error';
-import { encodeUTF8 } from 'beeper/desktop-api/internal/utils/bytes';
+import { BeeperDesktopError } from 'beeper/desktop-api-typescript/core/error';
+import { encodeUTF8 } from 'beeper/desktop-api-typescript/internal/utils/bytes';
 
 export const toBase64 = (data: string | Uint8Array | null | undefined): string => {
   if (!data) return '';
