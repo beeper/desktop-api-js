@@ -1,7 +1,7 @@
 import iconv from 'iconv-lite';
-import { stringify } from '@beeper/desktop-api-js/internal/qs';
-import { encode } from '@beeper/desktop-api-js/internal/qs/utils';
-import { StringifyOptions } from '@beeper/desktop-api-js/internal/qs/types';
+import { stringify } from '@beeper/desktop-api/internal/qs';
+import { encode } from '@beeper/desktop-api/internal/qs/utils';
+import { StringifyOptions } from '@beeper/desktop-api/internal/qs/types';
 import { empty_test_cases } from './empty-keys-cases';
 import assert from 'assert';
 

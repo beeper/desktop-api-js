@@ -9,8 +9,8 @@ import {
   ListToolsRequestSchema,
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
-import { ClientOptions } from '@beeper/desktop-api-js';
-import BeeperDesktop from '@beeper/desktop-api-js';
+import { ClientOptions } from '@beeper/desktop-api';
+import BeeperDesktop from '@beeper/desktop-api';
 import {
   applyCompatibilityTransformations,
   ClientCapabilities,
@@ -25,13 +25,13 @@ import { McpOptions } from './options';
 export { McpOptions } from './options';
 export { ClientType } from './compat';
 export { Filter } from './tools';
-export { ClientOptions } from '@beeper/desktop-api-js';
+export { ClientOptions } from '@beeper/desktop-api';
 export { endpoints } from './tools';
 
 export const newMcpServer = () =>
   new McpServer(
     {
-      name: 'beeper_desktop_api_js_api',
+      name: 'beeper_desktop_api_api',
       version: '0.0.1',
     },
     { capabilities: { tools: {}, logging: {} } },

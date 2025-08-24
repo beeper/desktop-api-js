@@ -55,12 +55,12 @@ $ cd desktop-api-js
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link @beeper/desktop-api-js
+$ yarn link @beeper/desktop-api
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @beeper/desktop-api-js
+$ pnpm link -—global @beeper/desktop-api
 ```
 
 ## Running tests

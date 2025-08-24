@@ -1,5 +1,5 @@
 {
-  "name": "beeper/desktop-api-js-mcp",
+  "name": "@beeper/desktop-api-mcp",
   "version": "0.0.1",
   "description": "The official MCP Server for the Beeper Desktop API",
   "author": "Beeper Desktop <help@beeper.com>",
@@ -30,7 +30,7 @@
     "fix": "eslint --fix --ext ts,js ."
   },
   "dependencies": {
-    "@beeper/desktop-api-js": "file:../../dist/",
+    "@beeper/desktop-api": "file:../../dist/",
     "@cloudflare/cabidela": "^0.2.4",
     "@modelcontextprotocol/sdk": "^1.11.5",
     "@valtown/deno-http-worker": "^0.0.21",
@@ -67,8 +67,8 @@
     "typescript": "5.8.3"
   },
   "imports": {
-    "beeper/desktop-api-js-mcp": ".",
-    "beeper/desktop-api-js-mcp/*": "./src/*"
+    "@beeper/desktop-api-mcp": ".",
+    "@beeper/desktop-api-mcp/*": "./src/*"
   },
   "exports": {
     ".": {

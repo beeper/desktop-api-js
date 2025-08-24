@@ -1,4 +1,4 @@
-import BeeperDesktop from '@beeper/desktop-api-js';
+import BeeperDesktop from '@beeper/desktop-api';
 import { Endpoint, asTextContentResult, ToolCallResult } from './tools/types';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import { z } from 'zod';
