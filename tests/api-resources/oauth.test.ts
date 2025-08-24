@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import BeeperDesktop from 'beeper/desktop-api-typescript';
+import BeeperDesktop from 'desktop-api-typescript';
 
 const client = new BeeperDesktop({
   accessToken: 'My Access Token',

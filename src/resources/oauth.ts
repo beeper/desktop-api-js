@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from 'beeper/desktop-api-typescript/core/resource';
-import { APIPromise } from 'beeper/desktop-api-typescript/core/api-promise';
-import { buildHeaders } from 'beeper/desktop-api-typescript/internal/headers';
-import { RequestOptions } from 'beeper/desktop-api-typescript/internal/request-options';
+import { APIResource } from '../core/resource';
+import { APIPromise } from '../core/api-promise';
+import { buildHeaders } from '../internal/headers';
+import { RequestOptions } from '../internal/request-options';
 
 /**
  * OAuth2 authentication and token management

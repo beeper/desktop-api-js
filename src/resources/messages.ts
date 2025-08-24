@@ -1,11 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from 'beeper/desktop-api-typescript/core/resource';
-import * as ChatsAPI from 'beeper/desktop-api-typescript/resources/chats';
-import * as Shared from 'beeper/desktop-api-typescript/resources/shared';
-import { APIPromise } from 'beeper/desktop-api-typescript/core/api-promise';
-import { CursorID, type CursorIDParams, PagePromise } from 'beeper/desktop-api-typescript/core/pagination';
-import { RequestOptions } from 'beeper/desktop-api-typescript/internal/request-options';
+import { APIResource } from '../core/resource';
+import * as ChatsAPI from './chats';
+import * as Shared from './shared';
+import { APIPromise } from '../core/api-promise';
+import { CursorID, type CursorIDParams, PagePromise } from '../core/pagination';
+import { RequestOptions } from '../internal/request-options';
 
 /**
  * Send, draft, and search messages across all chat networks
