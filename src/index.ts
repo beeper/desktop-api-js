@@ -2,10 +2,10 @@
 
 export { BeeperDesktop as default } from './client';
 
-export { type Uploadable, toFile } from './core/uploads';
-export { APIPromise } from './core/api-promise';
-export { BeeperDesktop, type ClientOptions } from './client';
-export { PagePromise } from './core/pagination';
+export { type Uploadable, toFile } from 'beeper/desktop-api-typescript/core/uploads';
+export { APIPromise } from 'beeper/desktop-api-typescript/core/api-promise';
+export { BeeperDesktop, type ClientOptions } from 'beeper/desktop-api-typescript/client';
+export { PagePromise } from 'beeper/desktop-api-typescript/core/pagination';
 export {
   BeeperDesktopError,
   APIError,
@@ -20,4 +20,4 @@ export {
   InternalServerError,
   PermissionDeniedError,
   UnprocessableEntityError,
-} from './core/error';
+} from 'beeper/desktop-api-typescript/core/error';

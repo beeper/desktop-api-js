@@ -13,14 +13,18 @@ import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
 import * as qs from './internal/qs';
 import { VERSION } from './version';
-import * as Errors from './core/error';
-import * as Pagination from './core/pagination';
-import { AbstractPage, type CursorIDParams, CursorIDResponse } from './core/pagination';
-import * as Uploads from './core/uploads';
-import * as API from './resources/index';
-import { APIPromise } from './core/api-promise';
-import { Account, Accounts, AccountsResponse } from './resources/accounts';
-import { App, AppFocusParams, FocusRequest } from './resources/app';
+import * as Errors from 'beeper/desktop-api-typescript/core/error';
+import * as Pagination from 'beeper/desktop-api-typescript/core/pagination';
+import {
+  AbstractPage,
+  type CursorIDParams,
+  CursorIDResponse,
+} from 'beeper/desktop-api-typescript/core/pagination';
+import * as Uploads from 'beeper/desktop-api-typescript/core/uploads';
+import * as API from 'beeper/desktop-api-typescript/resources/index';
+import { APIPromise } from 'beeper/desktop-api-typescript/core/api-promise';
+import { Account, Accounts, AccountsResponse } from 'beeper/desktop-api-typescript/resources/accounts';
+import { App, AppFocusParams, FocusRequest } from 'beeper/desktop-api-typescript/resources/app';
 import {
   ArchiveRequest,
   Chat,
@@ -36,7 +40,7 @@ import {
   GetChatResponse,
   LinkRequest,
   LinkResponse,
-} from './resources/chats';
+} from 'beeper/desktop-api-typescript/resources/chats';
 import {
   DraftRequest,
   Message,
@@ -49,28 +53,33 @@ import {
   SearchResponse,
   SendRequest,
   SendResponse,
-} from './resources/messages';
-import { OAuth, OAuthRevokeTokenParams, RevokeRequest, UserInfo } from './resources/oauth';
+} from 'beeper/desktop-api-typescript/resources/messages';
+import {
+  OAuth,
+  OAuthRevokeTokenParams,
+  RevokeRequest,
+  UserInfo,
+} from 'beeper/desktop-api-typescript/resources/oauth';
 import {
   ClearReminderRequest,
   ReminderClearParams,
   ReminderSetParams,
   Reminders,
   SetReminderRequest,
-} from './resources/reminders';
-import { type Fetch } from './internal/builtin-types';
-import { isRunningInBrowser } from './internal/detect-platform';
-import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
-import { FinalRequestOptions, RequestOptions } from './internal/request-options';
-import { readEnv } from './internal/utils/env';
+} from 'beeper/desktop-api-typescript/resources/reminders';
+import { type Fetch } from 'beeper/desktop-api-typescript/internal/builtin-types';
+import { isRunningInBrowser } from 'beeper/desktop-api-typescript/internal/detect-platform';
+import { HeadersLike, NullableHeaders, buildHeaders } from 'beeper/desktop-api-typescript/internal/headers';
+import { FinalRequestOptions, RequestOptions } from 'beeper/desktop-api-typescript/internal/request-options';
+import { readEnv } from 'beeper/desktop-api-typescript/internal/utils/env';
 import {
   type LogLevel,
   type Logger,
   formatRequestDetails,
   loggerFor,
   parseLogLevel,
-} from './internal/utils/log';
-import { isEmptyObj } from './internal/utils/values';
+} from 'beeper/desktop-api-typescript/internal/utils/log';
+import { isEmptyObj } from 'beeper/desktop-api-typescript/internal/utils/values';
 
 export interface ClientOptions {
   /**
