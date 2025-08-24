@@ -9,8 +9,8 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "desktop-api-typescript/*": ["src/*"],
-      "desktop-api-typescript": ["src/index.ts"]
+      "desktop-api-js/*": ["src/*"],
+      "desktop-api-js": ["src/index.ts"]
     },
     "noEmit": true,
 

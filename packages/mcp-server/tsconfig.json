@@ -9,8 +9,8 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "beeper/desktop-api-typescript-mcp/*": ["src/*"],
-      "beeper/desktop-api-typescript-mcp": ["src/index.ts"]
+      "beeper/desktop-api-js-mcp/*": ["src/*"],
+      "beeper/desktop-api-js-mcp": ["src/index.ts"]
     },
     "noEmit": true,
 

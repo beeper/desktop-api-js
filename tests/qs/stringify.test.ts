@@ -1,7 +1,7 @@
 import iconv from 'iconv-lite';
-import { stringify } from 'desktop-api-typescript/internal/qs';
-import { encode } from 'desktop-api-typescript/internal/qs/utils';
-import { StringifyOptions } from 'desktop-api-typescript/internal/qs/types';
+import { stringify } from 'desktop-api-js/internal/qs';
+import { encode } from 'desktop-api-js/internal/qs/utils';
+import { StringifyOptions } from 'desktop-api-js/internal/qs/types';
 import { empty_test_cases } from './empty-keys-cases';
 import assert from 'assert';
 

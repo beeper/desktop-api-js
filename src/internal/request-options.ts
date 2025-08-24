@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { NullableHeaders } from 'beeper/desktop-api-typescript/internal/headers';
+import { NullableHeaders } from 'beeper/desktop-api-js/internal/headers';
 
 import type { BodyInit } from './builtin-types';
 import type { HTTPMethod, MergedRequestInit } from './types';

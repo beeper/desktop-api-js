@@ -1,5 +1,5 @@
 {
-  "name": "beeper/desktop-api-typescript-mcp",
+  "name": "beeper/desktop-api-js-mcp",
   "version": "0.0.1",
   "description": "The official MCP Server for the Beeper Desktop API",
   "author": "Beeper Desktop <help@beeper.com>",
@@ -8,10 +8,10 @@
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/beeper/desktop-api-typescript.git",
+    "url": "git+https://github.com/beeper/desktop-api-js.git",
     "directory": "packages/mcp-server"
   },
-  "homepage": "https://github.com/beeper/desktop-api-typescript/tree/main/packages/mcp-server#readme",
+  "homepage": "https://github.com/beeper/desktop-api-js/tree/main/packages/mcp-server#readme",
   "license": "MIT",
   "packageManager": "yarn@1.22.22",
   "private": false,
@@ -30,7 +30,7 @@
     "fix": "eslint --fix --ext ts,js ."
   },
   "dependencies": {
-    "desktop-api-typescript": "file:../../dist/",
+    "desktop-api-js": "file:../../dist/",
     "@cloudflare/cabidela": "^0.2.4",
     "@modelcontextprotocol/sdk": "^1.11.5",
     "@valtown/deno-http-worker": "^0.0.21",
@@ -67,8 +67,8 @@
     "typescript": "5.8.3"
   },
   "imports": {
-    "beeper/desktop-api-typescript-mcp": ".",
-    "beeper/desktop-api-typescript-mcp/*": "./src/*"
+    "beeper/desktop-api-js-mcp": ".",
+    "beeper/desktop-api-js-mcp/*": "./src/*"
   },
   "exports": {
     ".": {
