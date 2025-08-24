@@ -10,11 +10,7 @@ import { RequestOptions } from '../internal/request-options';
  */
 export class Accounts extends APIResource {
   /**
-   * List connected Beeper accounts available on this device.
-   *
-   * - When to use: select account context before account-scoped operations.
-   * - Scope: only accounts currently Connected on this device are included. Returns:
-   *   connected accounts.
+   * List connected Beeper accounts available on this device
    */
   list(options?: RequestOptions): APIPromise<AccountsResponse> {
     return this._client.get('/v0/get-accounts', options);
