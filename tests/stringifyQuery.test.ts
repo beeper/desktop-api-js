@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { BeeperDesktop } from 'beeper/desktop-api';
+import { BeeperDesktop } from 'beeper/desktop-api-typescript';
 
 const { stringifyQuery } = BeeperDesktop.prototype as any;
 
