@@ -11,12 +11,7 @@ import { RequestOptions } from '../internal/request-options';
  */
 export class Chats extends APIResource {
   /**
-   * Retrieve chat details: metadata, participants (limited), and latest message.
-   *
-   * - When to use: fetch a complete view of a chat beyond what search returns.
-   * - Constraints: not available for iMessage chats ('imsg##'). Participants limited
-   *   by 'maxParticipantCount' (default 20, max 500). Returns: chat details.Agents:
-   *   ALWAYS use linkToChat to make clickable links in your response
+   * Retrieve chat details including metadata, participants, and latest message
    *
    * @example
    * ```ts
@@ -47,14 +42,7 @@ export class Chats extends APIResource {
   }
 
   /**
-   * Search and filter conversations across all messaging accounts.
-   *
-   * - When to use: browse chats by inbox (primary/low-priority/archive), type,
-   *   unread status, or search terms.
-   * - Pagination: use cursor + direction for pagination.
-   * - Performance: provide accountIDs when known for faster filtering. Returns:
-   *   matching chats with pagination. Agents: ALWAYS use linkToChat to make
-   *   clickable links in your response
+   * Search and filter conversations across all messaging accounts
    *
    * @example
    * ```ts

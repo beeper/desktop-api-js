@@ -28,30 +28,7 @@ export class Messages extends APIResource {
   }
 
   /**
-   * Search messages across chats using Beeper's message index.
-   *
-   * - When to use: find messages by text and/or filters (chatIDs, accountIDs,
-   *   chatType, media type filters, sender, date ranges).
-   * - CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds
-   *   messages containing these EXACT words. • ✅ RIGHT: query="dinner" or
-   *   query="sick" or query="error" (single words users type) • ❌ WRONG:
-   *   query="dinner plans tonight" or query="health issues" (phrases/concepts) • The
-   *   query matches ALL words provided (in any order). Example: query="flight
-   *   booking" finds messages with both "flight" AND "booking".
-   * - Media filters: Use onlyWithMedia for any media, or specific filters like
-   *   onlyWithVideo, onlyWithImage, onlyWithLink, onlyWithFile for specific types.
-   * - Pagination: use 'oldestCursor' + direction='before' for older;
-   *   'newestCursor' + direction='after' for newer.
-   * - Performance: provide chatIDs/accountIDs when known. Omitted 'query' returns
-   *   results based on filters only. Partial matches enabled; 'excludeLowPriority'
-   *   defaults to true.
-   * - Workflow tip: To search messages in specific conversations: 1) Use find-chats
-   *   to get chatIDs, 2) Use search-messages with those chatIDs.
-   * - IMPORTANT: Chat names vary widely. ASK the user for clarification: • "Which
-   *   chat do you mean by family?" (could be "The Smiths", "Mom Dad Kids", etc.) •
-   *   "What's the name of your work chat?" (could be "Team", company name, project
-   *   name) • "Who are the participants?" (use participantQuery in find-chats)
-   *   Returns: matching messages and referenced chats.
+   * Search messages across chats using Beeper's message index
    *
    * @example
    * ```ts

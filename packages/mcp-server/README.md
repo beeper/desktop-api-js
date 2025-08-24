@@ -206,52 +206,23 @@ The following tools are available in this MCP server.
 
 ### Resource `accounts`:
 
-- `list_accounts` (`read`): List connected Beeper accounts available on this device.
-  - When to use: select account context before account-scoped operations.
-  - Scope: only accounts currently Connected on this device are included.
-    Returns: connected accounts.
+- `list_accounts` (`read`): List connected Beeper accounts available on this device
 
 ### Resource `app`:
 
-- `focus_app` (`write`): Bring Beeper Desktop to the foreground on this device. Optionally focuses a specific chat if chatID is provided.
-  - When to use: open Beeper, or jump to a specific chat.
-  - Constraints: requires Beeper Desktop running locally; no-op in headless environments.
-  - Idempotent: safe to call repeatedly. Returns an error if chatID is not found.
-    Returns: success.
+- `focus_app` (`write`): Bring Beeper Desktop to the foreground on this device
 
 ### Resource `messages`:
 
 - `draft_messages` (`write`): Draft a message in a specific chat. This will be placed in the message input field without sending
-- `search_messages` (`read`): Search messages across chats using Beeper's message index.
-  - When to use: find messages by text and/or filters (chatIDs, accountIDs, chatType, media type filters, sender, date ranges).
-  - CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds messages containing these EXACT words.
-    • ✅ RIGHT: query="dinner" or query="sick" or query="error" (single words users type)
-    • ❌ WRONG: query="dinner plans tonight" or query="health issues" (phrases/concepts)
-    • The query matches ALL words provided (in any order). Example: query="flight booking" finds messages with both "flight" AND "booking".
-  - Media filters: Use onlyWithMedia for any media, or specific filters like onlyWithVideo, onlyWithImage, onlyWithLink, onlyWithFile for specific types.
-  - Pagination: use 'oldestCursor' + direction='before' for older; 'newestCursor' + direction='after' for newer.
-  - Performance: provide chatIDs/accountIDs when known. Omitted 'query' returns results based on filters only. Partial matches enabled; 'excludeLowPriority' defaults to true.
-  - Workflow tip: To search messages in specific conversations: 1) Use find-chats to get chatIDs, 2) Use search-messages with those chatIDs.
-  - IMPORTANT: Chat names vary widely. ASK the user for clarification:
-    • "Which chat do you mean by family?" (could be "The Smiths", "Mom Dad Kids", etc.)
-    • "What's the name of your work chat?" (could be "Team", company name, project name)
-    • "Who are the participants?" (use participantQuery in find-chats)
-    Returns: matching messages and referenced chats.
+- `search_messages` (`read`): Search messages across chats using Beeper's message index
 - `send_messages` (`write`): Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat
 
 ### Resource `chats`:
 
-- `retrieve_chats` (`read`): Retrieve chat details: metadata, participants (limited), and latest message.
-  - When to use: fetch a complete view of a chat beyond what search returns.
-  - Constraints: not available for iMessage chats ('imsg##'). Participants limited by 'maxParticipantCount' (default 20, max 500).
-    Returns: chat details.Agents: ALWAYS use linkToChat to make clickable links in your response
+- `retrieve_chats` (`read`): Retrieve chat details including metadata, participants, and latest message
 - `archive_chats` (`write`): Archive or unarchive a chat. Set archived=true to move to archive, archived=false to move back to inbox
-- `find_chats` (`read`): Search and filter conversations across all messaging accounts.
-  - When to use: browse chats by inbox (primary/low-priority/archive), type, unread status, or search terms.
-  - Pagination: use cursor + direction for pagination.
-  - Performance: provide accountIDs when known for faster filtering.
-    Returns: matching chats with pagination.
-    Agents: ALWAYS use linkToChat to make clickable links in your response
+- `find_chats` (`read`): Search and filter conversations across all messaging accounts
 - `get_link_chats` (`write`): Generate a deep link to a specific chat or message. This link can be used to open the chat directly in the Beeper app.
 
 ### Resource `reminders`:
