@@ -133,6 +133,12 @@ export interface ClientOptions {
   defaultQuery?: Record<string, string | undefined> | undefined;
 
   /**
+   * By default, client-side use of this library is not allowed, as it risks exposing your secret API credentials to attackers.
+   * Only set this option to `true` if you understand the risks and have appropriate mitigations in place.
+   */
+  dangerouslyAllowBrowser?: boolean | undefined;
+
+  /**
    * Set the log level.
    *
    * Defaults to process.env['BEEPER-DESKTOP_LOG'] or 'warn' if it isn't set.
@@ -176,6 +182,7 @@ export class BeeperDesktop {
    * @param {number} [opts.maxRetries=3] - The maximum number of times the client will retry a request.
    * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
+   * @param {boolean} [opts.dangerouslyAllowBrowser=false] - By default, client-side use of this library is not allowed, as it risks exposing your secret API credentials to attackers.
    */
   constructor({
     baseURL = readEnv('BEEPER-DESKTOP_BASE_URL'),
@@ -188,9 +195,9 @@ export class BeeperDesktop {
       baseURL: baseURL || `http://localhost:23374`,
     };
 
-    if (isRunningInBrowser()) {
+    if (!options.dangerouslyAllowBrowser && isRunningInBrowser()) {
       throw new Errors.BeeperDesktopError(
-        "It looks like you're running in a browser-like environment, which is disabled to protect your secret API credentials from attackers. If you have a strong business need for client-side use of this API, please open a GitHub issue with your use-case and security mitigations.",
+        'This is disabled by default, as it risks exposing your secret API credentials to attackers.\nIf you understand the risks and have appropriate mitigations in place,\nyou can set the `dangerouslyAllowBrowser` option to `true`, e.g.,\n\nnew BeeperDesktop({ dangerouslyAllowBrowser: true })',
       );
     }
 
