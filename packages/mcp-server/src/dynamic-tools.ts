@@ -1,4 +1,4 @@
-import BeeperDesktop from 'desktop-api-typescript';
+import BeeperDesktop from 'desktop-api-js';
 import { Endpoint, asTextContentResult, ToolCallResult } from './tools/types';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import { z } from 'zod';

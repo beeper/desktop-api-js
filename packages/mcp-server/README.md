@@ -10,7 +10,7 @@ You can run the MCP Server directly via `npx`:
 
 ```sh
 export BEEPER_ACCESS_TOKEN="My Access Token"
-npx -y beeper/desktop-api-typescript-mcp@latest
+npx -y beeper/desktop-api-js-mcp@latest
 ```
 
 ### Via MCP Client
@@ -23,9 +23,9 @@ For clients with a configuration JSON, it might look something like this:
 ```json
 {
   "mcpServers": {
-    "desktop_api_typescript_api": {
+    "desktop_api_js_api": {
       "command": "npx",
-      "args": ["-y", "beeper/desktop-api-typescript-mcp", "--client=claude", "--tools=all"],
+      "args": ["-y", "beeper/desktop-api-js-mcp", "--client=claude", "--tools=all"],
       "env": {
         "BEEPER_ACCESS_TOKEN": "My Access Token"
       }
@@ -142,7 +142,7 @@ A configuration JSON for this server might look like this, assuming the server i
 ```json
 {
   "mcpServers": {
-    "desktop_api_typescript_api": {
+    "desktop_api_js_api": {
       "url": "http://localhost:3000",
       "headers": {
         "Authorization": "Bearer <auth value>"
@@ -169,10 +169,10 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 
 ```js
 // Import the server, generated endpoints, or the init function
-import { server, endpoints, init } from "beeper/desktop-api-typescript-mcp/server";
+import { server, endpoints, init } from "beeper/desktop-api-js-mcp/server";
 
 // import a specific tool
-import listAccounts from "beeper/desktop-api-typescript-mcp/tools/accounts/list-accounts";
+import listAccounts from "beeper/desktop-api-js-mcp/tools/accounts/list-accounts";
 
 // initialize the server and all endpoints
 init({ server, endpoints });

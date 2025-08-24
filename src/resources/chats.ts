@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from 'beeper/desktop-api-typescript/core/resource';
-import * as Shared from 'beeper/desktop-api-typescript/resources/shared';
-import { APIPromise } from 'beeper/desktop-api-typescript/core/api-promise';
-import { CursorID, type CursorIDParams, PagePromise } from 'beeper/desktop-api-typescript/core/pagination';
-import { RequestOptions } from 'beeper/desktop-api-typescript/internal/request-options';
+import { APIResource } from 'beeper/desktop-api-js/core/resource';
+import * as Shared from 'beeper/desktop-api-js/resources/shared';
+import { APIPromise } from 'beeper/desktop-api-js/core/api-promise';
+import { CursorID, type CursorIDParams, PagePromise } from 'beeper/desktop-api-js/core/pagination';
+import { RequestOptions } from 'beeper/desktop-api-js/internal/request-options';
 
 /**
  * Manage chats, conversations, and threads

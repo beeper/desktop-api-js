@@ -2,7 +2,7 @@
 
 import { dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import BeeperDesktop, { ClientOptions } from 'desktop-api-typescript';
+import BeeperDesktop, { ClientOptions } from 'desktop-api-js';
 import { Endpoint, ContentBlock, Metadata } from './tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';

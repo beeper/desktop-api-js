@@ -3,10 +3,10 @@
 import { BeeperDesktopError } from './error';
 import { FinalRequestOptions } from '../internal/request-options';
 import { defaultParseResponse } from '../internal/parse';
-import { type BeeperDesktop } from 'beeper/desktop-api-typescript/client';
-import { APIPromise } from 'beeper/desktop-api-typescript/core/api-promise';
-import { type APIResponseProps } from 'beeper/desktop-api-typescript/internal/parse';
-import { maybeObj } from 'beeper/desktop-api-typescript/internal/utils/values';
+import { type BeeperDesktop } from 'beeper/desktop-api-js/client';
+import { APIPromise } from 'beeper/desktop-api-js/core/api-promise';
+import { type APIResponseProps } from 'beeper/desktop-api-js/internal/parse';
+import { maybeObj } from 'beeper/desktop-api-js/internal/utils/values';
 
 export type PageRequestOptions = Pick<FinalRequestOptions, 'query' | 'headers' | 'body' | 'path' | 'method'>;
 
