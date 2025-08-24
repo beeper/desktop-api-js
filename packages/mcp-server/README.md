@@ -23,7 +23,7 @@ For clients with a configuration JSON, it might look something like this:
 ```json
 {
   "mcpServers": {
-    "desktop_api_js_api": {
+    "beeper_desktop_api_js_api": {
       "command": "npx",
       "args": ["-y", "beeper/desktop-api-js-mcp", "--client=claude", "--tools=all"],
       "env": {
@@ -142,7 +142,7 @@ A configuration JSON for this server might look like this, assuming the server i
 ```json
 {
   "mcpServers": {
-    "desktop_api_js_api": {
+    "beeper_desktop_api_js_api": {
       "url": "http://localhost:3000",
       "headers": {
         "Authorization": "Bearer <auth value>"

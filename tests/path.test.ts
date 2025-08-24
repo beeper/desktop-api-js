@@ -1,4 +1,4 @@
-import { createPathTagFunction, encodeURIPath } from 'desktop-api-js/internal/utils/path';
+import { createPathTagFunction, encodeURIPath } from '@beeper/desktop-api-js/internal/utils/path';
 import { inspect } from 'node:util';
 import { runInNewContext } from 'node:vm';
 

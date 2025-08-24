@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^desktop-api-js$': '<rootDir>/src/index.ts',
-    '^desktop-api-js/(.*)$': '<rootDir>/src/$1',
+    '^@beeper/desktop-api-js$': '<rootDir>/src/index.ts',
+    '^@beeper/desktop-api-js/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',

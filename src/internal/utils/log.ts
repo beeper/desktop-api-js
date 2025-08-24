@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { hasOwn } from './values';
-import { type BeeperDesktop } from 'beeper/desktop-api-js/client';
-import { RequestOptions } from 'beeper/desktop-api-js/internal/request-options';
+import { type BeeperDesktop } from '../../client';
+import { RequestOptions } from '../request-options';
 
 type LogFn = (message: string, ...rest: unknown[]) => void;
 export type Logger = {

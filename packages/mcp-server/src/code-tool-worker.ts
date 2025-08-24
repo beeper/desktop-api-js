@@ -2,7 +2,7 @@
 
 import util from 'node:util';
 import { WorkerInput, WorkerSuccess, WorkerError } from './code-tool-types';
-import { BeeperDesktop } from 'desktop-api-js';
+import { BeeperDesktop } from '@beeper/desktop-api-js';
 
 const fetch = async (req: Request): Promise<Response> => {
   const { opts, code } = (await req.json()) as WorkerInput;

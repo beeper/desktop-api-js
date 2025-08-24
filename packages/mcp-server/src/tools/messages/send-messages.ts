@@ -4,7 +4,7 @@ import { maybeFilter } from 'beeper/desktop-api-js-mcp/filtering';
 import { Metadata, asTextContentResult } from 'beeper/desktop-api-js-mcp/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import BeeperDesktop from 'desktop-api-js';
+import BeeperDesktop from '@beeper/desktop-api-js';
 
 export const metadata: Metadata = {
   resource: 'messages',
