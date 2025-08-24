@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'beeper-desktop-api-typescript/internal/uploads';
-import { toFile } from 'beeper-desktop-api-typescript/core/uploads';
+import { multipartFormRequestOptions, createForm } from 'desktop-api-typescript/internal/uploads';
+import { toFile } from 'desktop-api-typescript/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {
