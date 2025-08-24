@@ -9,7 +9,7 @@ import BeeperDesktop from '@beeper/desktop-api';
 export const metadata: Metadata = {
   resource: 'app',
   operation: 'write',
-  tags: [],
+  tags: ['app'],
   httpMethod: 'post',
   httpPath: '/v0/focus-app',
   operationId: 'focus_app',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'focus_app',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nBring Beeper Desktop to the foreground on this device\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/base_response',\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nBring Beeper Desktop to the foreground on this device. Optionally focuses a specific chat if chatID is provided.\n- When to use: open Beeper, or jump to a specific chat.\n- Constraints: requires Beeper Desktop running locally; no-op in headless environments.\n- Idempotent: safe to call repeatedly. Returns an error if chatID is not found.\nReturns: success.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/base_response',\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
@@ -45,7 +45,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.app.focus(body)));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.app.focusApp(body)));
 };
 
 export default { metadata, tool, handler };

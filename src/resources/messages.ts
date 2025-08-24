@@ -17,13 +17,13 @@ export class Messages extends APIResource {
    *
    * @example
    * ```ts
-   * const baseResponse = await client.messages.draft({
+   * const baseResponse = await client.messages.draftMessage({
    *   chatID:
    *     '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
    * });
    * ```
    */
-  draft(body: MessageDraftParams, options?: RequestOptions): APIPromise<Shared.BaseResponse> {
+  draftMessage(body: MessageDraftMessageParams, options?: RequestOptions): APIPromise<Shared.BaseResponse> {
     return this._client.post('/v0/draft-message', { body, ...options });
   }
 
@@ -33,13 +33,13 @@ export class Messages extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const message of client.messages.search()) {
+   * for await (const message of client.messages.searchMessages()) {
    *   // ...
    * }
    * ```
    */
-  search(
-    query: MessageSearchParams | null | undefined = {},
+  searchMessages(
+    query: MessageSearchMessagesParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<MessagesCursorID, Message> {
     return this._client.getAPIList('/v0/search-messages', CursorID<Message>, { query, ...options });
@@ -51,13 +51,13 @@ export class Messages extends APIResource {
    *
    * @example
    * ```ts
-   * const sendResponse = await client.messages.send({
+   * const sendResponse = await client.messages.sendMessage({
    *   chatID:
    *     '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
    * });
    * ```
    */
-  send(body: MessageSendParams, options?: RequestOptions): APIPromise<SendResponse> {
+  sendMessage(body: MessageSendMessageParams, options?: RequestOptions): APIPromise<SendResponse> {
     return this._client.post('/v0/send-message', { body, ...options });
   }
 }
@@ -299,7 +299,7 @@ export interface SendResponse extends Shared.BaseResponse {
   messageID: string;
 }
 
-export interface MessageDraftParams {
+export interface MessageDraftMessageParams {
   /**
    * Provide the unique identifier of the chat where you want to draft a message
    */
@@ -318,7 +318,7 @@ export interface MessageDraftParams {
   text?: string;
 }
 
-export interface MessageSearchParams extends CursorIDParams {
+export interface MessageSearchMessagesParams extends CursorIDParams {
   /**
    * Limit search to specific Beeper account IDs (bridge instances).
    */
@@ -398,7 +398,7 @@ export interface MessageSearchParams extends CursorIDParams {
   sender?: 'me' | 'others' | (string & {});
 }
 
-export interface MessageSendParams {
+export interface MessageSendMessageParams {
   /**
    * The identifier of the chat where the message will send
    */
@@ -424,8 +424,8 @@ export declare namespace Messages {
     type SendRequest as SendRequest,
     type SendResponse as SendResponse,
     type MessagesCursorID as MessagesCursorID,
-    type MessageDraftParams as MessageDraftParams,
-    type MessageSearchParams as MessageSearchParams,
-    type MessageSendParams as MessageSendParams,
+    type MessageDraftMessageParams as MessageDraftMessageParams,
+    type MessageSearchMessagesParams as MessageSearchMessagesParams,
+    type MessageSendMessageParams as MessageSendMessageParams,
   };
 }

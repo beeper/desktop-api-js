@@ -8,8 +8,8 @@ const client = new BeeperDesktop({
 });
 
 describe('resource accounts', () => {
-  test('list', async () => {
-    const responsePromise = client.accounts.list();
+  test('getAccounts', async () => {
+    const responsePromise = client.accounts.getAccounts();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

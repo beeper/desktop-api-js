@@ -7,28 +7,32 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'chats',
+  resource: 'messages',
   operation: 'write',
-  tags: [],
+  tags: ['messages'],
   httpMethod: 'post',
-  httpPath: '/v0/get-link-to-chat',
-  operationId: 'get_link_to_chat',
+  httpPath: '/v0/send-message',
+  operationId: 'send_message',
 };
 
 export const tool: Tool = {
-  name: 'get_link_chats',
+  name: 'send_message',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nGenerate a deep link to a specific chat or message. This link can be used to open the chat directly in the Beeper app.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/link_response',\n  $defs: {\n    link_response: {\n      type: 'object',\n      description: 'URL to open a specific chat or message.',\n      properties: {\n        url: {\n          type: 'string',\n          description: 'Deep link URL to the specified chat or message.'\n        }\n      },\n      required: [        'url'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nSend a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/send_response',\n  $defs: {\n    send_response: {\n      allOf: [        {\n          $ref: '#/$defs/base_response'\n        }\n      ]\n    },\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
-        description: 'The ID of the chat to link to.',
+        description: 'The identifier of the chat where the message will send',
       },
-      messageSortKey: {
+      replyToMessageID: {
         type: 'string',
-        description: 'Optional message sort key. Jumps to that message in the chat.',
+        description: 'Provide a message ID to send this as a reply to an existing message',
+      },
+      text: {
+        type: 'string',
+        description: 'Text content of the message you want to send. You may use markdown.',
       },
       jq_filter: {
         type: 'string',
@@ -44,7 +48,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.chats.getLink(body)));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.messages.sendMessage(body)));
 };
 
 export default { metadata, tool, handler };

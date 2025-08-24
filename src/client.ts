@@ -20,14 +20,14 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Account, Accounts, AccountsResponse } from './resources/accounts';
-import { App, AppFocusParams, FocusRequest } from './resources/app';
+import { App, AppFocusAppParams, FocusRequest } from './resources/app';
 import {
   ArchiveRequest,
   Chat,
-  ChatArchiveParams,
-  ChatFindParams,
-  ChatGetLinkParams,
-  ChatRetrieveParams,
+  ChatArchiveChatParams,
+  ChatFindChatsParams,
+  ChatGetChatParams,
+  ChatGetLinkToChatParams,
   Chats,
   ChatsCursorID,
   FindChatsRequest,
@@ -40,9 +40,9 @@ import {
 import {
   DraftRequest,
   Message,
-  MessageDraftParams,
-  MessageSearchParams,
-  MessageSendParams,
+  MessageDraftMessageParams,
+  MessageSearchMessagesParams,
+  MessageSendMessageParams,
   Messages,
   MessagesCursorID,
   SearchRequest,
@@ -50,11 +50,11 @@ import {
   SendRequest,
   SendResponse,
 } from './resources/messages';
-import { OAuth, OAuthRevokeTokenParams, RevokeRequest, UserInfo } from './resources/oauth';
+import { OAuth, RevokeRequest, UserInfo } from './resources/oauth';
 import {
   ClearReminderRequest,
-  ReminderClearParams,
-  ReminderSetParams,
+  ReminderClearChatReminderParams,
+  ReminderSetChatReminderParams,
   Reminders,
   SetReminderRequest,
 } from './resources/reminders';
@@ -818,7 +818,7 @@ export declare namespace BeeperDesktop {
 
   export { Accounts as Accounts, type Account as Account, type AccountsResponse as AccountsResponse };
 
-  export { App as App, type FocusRequest as FocusRequest, type AppFocusParams as AppFocusParams };
+  export { App as App, type FocusRequest as FocusRequest, type AppFocusAppParams as AppFocusAppParams };
 
   export {
     Messages as Messages,
@@ -829,9 +829,9 @@ export declare namespace BeeperDesktop {
     type SendRequest as SendRequest,
     type SendResponse as SendResponse,
     type MessagesCursorID as MessagesCursorID,
-    type MessageDraftParams as MessageDraftParams,
-    type MessageSearchParams as MessageSearchParams,
-    type MessageSendParams as MessageSendParams,
+    type MessageDraftMessageParams as MessageDraftMessageParams,
+    type MessageSearchMessagesParams as MessageSearchMessagesParams,
+    type MessageSendMessageParams as MessageSendMessageParams,
   };
 
   export {
@@ -845,26 +845,21 @@ export declare namespace BeeperDesktop {
     type LinkRequest as LinkRequest,
     type LinkResponse as LinkResponse,
     type ChatsCursorID as ChatsCursorID,
-    type ChatRetrieveParams as ChatRetrieveParams,
-    type ChatArchiveParams as ChatArchiveParams,
-    type ChatFindParams as ChatFindParams,
-    type ChatGetLinkParams as ChatGetLinkParams,
+    type ChatArchiveChatParams as ChatArchiveChatParams,
+    type ChatFindChatsParams as ChatFindChatsParams,
+    type ChatGetChatParams as ChatGetChatParams,
+    type ChatGetLinkToChatParams as ChatGetLinkToChatParams,
   };
 
   export {
     Reminders as Reminders,
     type ClearReminderRequest as ClearReminderRequest,
     type SetReminderRequest as SetReminderRequest,
-    type ReminderClearParams as ReminderClearParams,
-    type ReminderSetParams as ReminderSetParams,
+    type ReminderClearChatReminderParams as ReminderClearChatReminderParams,
+    type ReminderSetChatReminderParams as ReminderSetChatReminderParams,
   };
 
-  export {
-    OAuth as OAuth,
-    type RevokeRequest as RevokeRequest,
-    type UserInfo as UserInfo,
-    type OAuthRevokeTokenParams as OAuthRevokeTokenParams,
-  };
+  export { OAuth as OAuth, type RevokeRequest as RevokeRequest, type UserInfo as UserInfo };
 
   export type Attachment = API.Attachment;
   export type BaseResponse = API.BaseResponse;

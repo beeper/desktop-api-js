@@ -1,32 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import { APIPromise } from '../core/api-promise';
-import { buildHeaders } from '../internal/headers';
-import { RequestOptions } from '../internal/request-options';
 
 /**
  * OAuth2 authentication and token management
  */
-export class OAuth extends APIResource {
-  /**
-   * Returns information about the authenticated user/token
-   */
-  getUserInfo(options?: RequestOptions): APIPromise<UserInfo> {
-    return this._client.get('/oauth/userinfo', options);
-  }
-
-  /**
-   * Revoke an access token or refresh token (RFC 7009)
-   */
-  revokeToken(body: OAuthRevokeTokenParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.post('/oauth/revoke', {
-      body,
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
-  }
-}
+export class OAuth extends APIResource {}
 
 export interface RevokeRequest {
   /**
@@ -77,22 +56,6 @@ export interface UserInfo {
   exp?: number;
 }
 
-export interface OAuthRevokeTokenParams {
-  /**
-   * The token to revoke
-   */
-  token: string;
-
-  /**
-   * Token type hint (RFC 7009)
-   */
-  token_type_hint?: 'access_token';
-}
-
 export declare namespace OAuth {
-  export {
-    type RevokeRequest as RevokeRequest,
-    type UserInfo as UserInfo,
-    type OAuthRevokeTokenParams as OAuthRevokeTokenParams,
-  };
+  export { type RevokeRequest as RevokeRequest, type UserInfo as UserInfo };
 }

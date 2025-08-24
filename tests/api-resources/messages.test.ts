@@ -8,8 +8,8 @@ const client = new BeeperDesktop({
 });
 
 describe('resource messages', () => {
-  test('draft: only required params', async () => {
-    const responsePromise = client.messages.draft({
+  test('draftMessage: only required params', async () => {
+    const responsePromise = client.messages.draftMessage({
       chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -21,16 +21,16 @@ describe('resource messages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('draft: required and optional params', async () => {
-    const response = await client.messages.draft({
+  test('draftMessage: required and optional params', async () => {
+    const response = await client.messages.draftMessage({
       chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
       focusApp: true,
       text: 'text',
     });
   });
 
-  test('search', async () => {
-    const responsePromise = client.messages.search();
+  test('searchMessages', async () => {
+    const responsePromise = client.messages.searchMessages();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -40,10 +40,10 @@ describe('resource messages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('search: request options and params are passed correctly', async () => {
+  test('searchMessages: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.messages.search(
+      client.messages.searchMessages(
         {
           accountIDs: [
             'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
@@ -71,8 +71,8 @@ describe('resource messages', () => {
     ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
-  test('send: only required params', async () => {
-    const responsePromise = client.messages.send({
+  test('sendMessage: only required params', async () => {
+    const responsePromise = client.messages.sendMessage({
       chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -84,8 +84,8 @@ describe('resource messages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('send: required and optional params', async () => {
-    const response = await client.messages.send({
+  test('sendMessage: required and optional params', async () => {
+    const response = await client.messages.sendMessage({
       chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
       replyToMessageID: 'replyToMessageID',
       text: 'text',

@@ -2,7 +2,7 @@
 
 export * from './shared';
 export { Accounts, type Account, type AccountsResponse } from './accounts';
-export { App, type FocusRequest, type AppFocusParams } from './app';
+export { App, type FocusRequest, type AppFocusAppParams } from './app';
 export {
   Chats,
   type ArchiveRequest,
@@ -13,10 +13,10 @@ export {
   type GetChatResponse,
   type LinkRequest,
   type LinkResponse,
-  type ChatRetrieveParams,
-  type ChatArchiveParams,
-  type ChatFindParams,
-  type ChatGetLinkParams,
+  type ChatArchiveChatParams,
+  type ChatFindChatsParams,
+  type ChatGetChatParams,
+  type ChatGetLinkToChatParams,
   type ChatsCursorID,
 } from './chats';
 export {
@@ -27,16 +27,16 @@ export {
   type SearchResponse,
   type SendRequest,
   type SendResponse,
-  type MessageDraftParams,
-  type MessageSearchParams,
-  type MessageSendParams,
+  type MessageDraftMessageParams,
+  type MessageSearchMessagesParams,
+  type MessageSendMessageParams,
   type MessagesCursorID,
 } from './messages';
-export { OAuth, type RevokeRequest, type UserInfo, type OAuthRevokeTokenParams } from './oauth';
+export { OAuth, type RevokeRequest, type UserInfo } from './oauth';
 export {
   Reminders,
   type ClearReminderRequest,
   type SetReminderRequest,
-  type ReminderClearParams,
-  type ReminderSetParams,
+  type ReminderClearChatReminderParams,
+  type ReminderSetChatReminderParams,
 } from './reminders';

@@ -11,33 +11,18 @@ import { RequestOptions } from '../internal/request-options';
  */
 export class Chats extends APIResource {
   /**
-   * Retrieve chat details including metadata, participants, and latest message
-   *
-   * @example
-   * ```ts
-   * const getChatResponse = await client.chats.retrieve({
-   *   chatID:
-   *     '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
-   * });
-   * ```
-   */
-  retrieve(query: ChatRetrieveParams, options?: RequestOptions): APIPromise<GetChatResponse | null> {
-    return this._client.get('/v0/get-chat', { query, ...options });
-  }
-
-  /**
    * Archive or unarchive a chat. Set archived=true to move to archive,
    * archived=false to move back to inbox
    *
    * @example
    * ```ts
-   * const baseResponse = await client.chats.archive({
+   * const baseResponse = await client.chats.archiveChat({
    *   chatID:
    *     '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
    * });
    * ```
    */
-  archive(body: ChatArchiveParams, options?: RequestOptions): APIPromise<Shared.BaseResponse> {
+  archiveChat(body: ChatArchiveChatParams, options?: RequestOptions): APIPromise<Shared.BaseResponse> {
     return this._client.post('/v0/archive-chat', { body, ...options });
   }
 
@@ -47,16 +32,31 @@ export class Chats extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const chat of client.chats.find()) {
+   * for await (const chat of client.chats.findChats()) {
    *   // ...
    * }
    * ```
    */
-  find(
-    query: ChatFindParams | null | undefined = {},
+  findChats(
+    query: ChatFindChatsParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ChatsCursorID, Chat> {
     return this._client.getAPIList('/v0/find-chats', CursorID<Chat>, { query, ...options });
+  }
+
+  /**
+   * Retrieve chat details including metadata, participants, and latest message
+   *
+   * @example
+   * ```ts
+   * const getChatResponse = await client.chats.getChat({
+   *   chatID:
+   *     '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+   * });
+   * ```
+   */
+  getChat(query: ChatGetChatParams, options?: RequestOptions): APIPromise<GetChatResponse | null> {
+    return this._client.get('/v0/get-chat', { query, ...options });
   }
 
   /**
@@ -65,13 +65,13 @@ export class Chats extends APIResource {
    *
    * @example
    * ```ts
-   * const linkResponse = await client.chats.getLink({
+   * const linkResponse = await client.chats.getLinkToChat({
    *   chatID:
    *     '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
    * });
    * ```
    */
-  getLink(body: ChatGetLinkParams, options?: RequestOptions): APIPromise<LinkResponse> {
+  getLinkToChat(body: ChatGetLinkToChatParams, options?: RequestOptions): APIPromise<LinkResponse> {
     return this._client.post('/v0/get-link-to-chat', { body, ...options });
   }
 }
@@ -414,21 +414,7 @@ export interface LinkResponse {
   url: string;
 }
 
-export interface ChatRetrieveParams {
-  /**
-   * Unique identifier of the chat to retrieve. Not available for iMessage chats.
-   * Participants are limited by 'maxParticipantCount'.
-   */
-  chatID: string;
-
-  /**
-   * Maximum number of participants to return. Use -1 for all; otherwise 0–500.
-   * Defaults to 20.
-   */
-  maxParticipantCount?: number | null;
-}
-
-export interface ChatArchiveParams {
+export interface ChatArchiveChatParams {
   /**
    * The identifier of the chat to archive or unarchive
    */
@@ -440,7 +426,7 @@ export interface ChatArchiveParams {
   archived?: boolean;
 }
 
-export interface ChatFindParams extends CursorIDParams {
+export interface ChatFindChatsParams extends CursorIDParams {
   /**
    * Provide an array of account IDs to filter chats from specific messaging accounts
    * only
@@ -496,7 +482,21 @@ export interface ChatFindParams extends CursorIDParams {
   unreadOnly?: boolean;
 }
 
-export interface ChatGetLinkParams {
+export interface ChatGetChatParams {
+  /**
+   * Unique identifier of the chat to retrieve. Not available for iMessage chats.
+   * Participants are limited by 'maxParticipantCount'.
+   */
+  chatID: string;
+
+  /**
+   * Maximum number of participants to return. Use -1 for all; otherwise 0–500.
+   * Defaults to 20.
+   */
+  maxParticipantCount?: number | null;
+}
+
+export interface ChatGetLinkToChatParams {
   /**
    * The ID of the chat to link to.
    */
@@ -519,9 +519,9 @@ export declare namespace Chats {
     type LinkRequest as LinkRequest,
     type LinkResponse as LinkResponse,
     type ChatsCursorID as ChatsCursorID,
-    type ChatRetrieveParams as ChatRetrieveParams,
-    type ChatArchiveParams as ChatArchiveParams,
-    type ChatFindParams as ChatFindParams,
-    type ChatGetLinkParams as ChatGetLinkParams,
+    type ChatArchiveChatParams as ChatArchiveChatParams,
+    type ChatFindChatsParams as ChatFindChatsParams,
+    type ChatGetChatParams as ChatGetChatParams,
+    type ChatGetLinkToChatParams as ChatGetLinkToChatParams,
   };
 }

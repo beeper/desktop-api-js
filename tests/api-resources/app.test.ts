@@ -8,8 +8,8 @@ const client = new BeeperDesktop({
 });
 
 describe('resource app', () => {
-  test('focus', async () => {
-    const responsePromise = client.app.focus();
+  test('focusApp', async () => {
+    const responsePromise = client.app.focusApp();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,10 +19,10 @@ describe('resource app', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('focus: request options and params are passed correctly', async () => {
+  test('focusApp: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.app.focus(
+      client.app.focusApp(
         {
           chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
           messageSortKey: 'messageSortKey',

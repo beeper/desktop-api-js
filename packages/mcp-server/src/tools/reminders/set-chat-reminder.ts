@@ -9,14 +9,14 @@ import BeeperDesktop from '@beeper/desktop-api';
 export const metadata: Metadata = {
   resource: 'reminders',
   operation: 'write',
-  tags: [],
+  tags: ['reminders'],
   httpMethod: 'post',
   httpPath: '/v0/set-chat-reminder',
   operationId: 'set_chat_reminder',
 };
 
 export const tool: Tool = {
-  name: 'set_reminders',
+  name: 'set_chat_reminder',
   description:
     "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nSet a reminder for a chat at a specific time\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/base_response',\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
@@ -55,7 +55,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.reminders.set(body)));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.reminders.setChatReminder(body)));
 };
 
 export default { metadata, tool, handler };

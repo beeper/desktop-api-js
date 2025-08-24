@@ -7,24 +7,28 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'reminders',
+  resource: 'chats',
   operation: 'write',
-  tags: [],
+  tags: ['chats'],
   httpMethod: 'post',
-  httpPath: '/v0/clear-chat-reminder',
-  operationId: 'clear_chat_reminder',
+  httpPath: '/v0/get-link-to-chat',
+  operationId: 'get_link_to_chat',
 };
 
 export const tool: Tool = {
-  name: 'clear_reminders',
+  name: 'get_link_to_chat',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nClear an existing reminder from a chat\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/base_response',\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nGenerate a deep link to a specific chat or message. This link can be used to open the chat directly in the Beeper app.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/link_response',\n  $defs: {\n    link_response: {\n      type: 'object',\n      description: 'URL to open a specific chat or message.',\n      properties: {\n        url: {\n          type: 'string',\n          description: 'Deep link URL to the specified chat or message.'\n        }\n      },\n      required: [        'url'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
-        description: 'The identifier of the chat to clear reminder from',
+        description: 'The ID of the chat to link to.',
+      },
+      messageSortKey: {
+        type: 'string',
+        description: 'Optional message sort key. Jumps to that message in the chat.',
       },
       jq_filter: {
         type: 'string',
@@ -40,7 +44,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.reminders.clear(body)));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.chats.getLinkToChat(body)));
 };
 
 export default { metadata, tool, handler };

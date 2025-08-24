@@ -1,6 +1,5 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { maybeFilter } from '@beeper/desktop-api-mcp/filtering';
 import { Metadata, asTextContentResult } from '@beeper/desktop-api-mcp/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
@@ -9,7 +8,7 @@ import BeeperDesktop from '@beeper/desktop-api';
 export const metadata: Metadata = {
   resource: 'messages',
   operation: 'read',
-  tags: [],
+  tags: ['messages'],
   httpMethod: 'get',
   httpPath: '/v0/search-messages',
   operationId: 'search_messages',
@@ -18,7 +17,7 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'search_messages',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nSearch messages across chats using Beeper's message index\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/search_response',\n  $defs: {\n    search_response: {\n      type: 'object',\n      properties: {\n        chats: {\n          type: 'object',\n          description: 'Map of chatID -> chat details for chats referenced in data.',\n          additionalProperties: true\n        },\n        data: {\n          type: 'array',\n          description: 'Messages matching the query and filters.',\n          items: {\n            $ref: '#/$defs/message'\n          }\n        },\n        has_more: {\n          type: 'boolean',\n          description: 'Whether there are more items available after this set.'\n        }\n      },\n      required: [        'chats',\n        'data',\n        'has_more'\n      ]\n    },\n    message: {\n      type: 'object',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'Stable message ID for cursor pagination.'\n        },\n        accountID: {\n          type: 'string',\n          description: 'Beeper account ID the message belongs to.'\n        },\n        chatID: {\n          type: 'string',\n          description: 'Beeper chat/thread/room ID.'\n        },\n        messageID: {\n          type: 'string',\n          description: 'Stable message ID (same as id).'\n        },\n        senderID: {\n          type: 'string',\n          description: 'Sender user ID.'\n        },\n        sortKey: {\n          anyOf: [            {\n              type: 'string'\n            },\n            {\n              type: 'number'\n            }\n          ],\n          description: 'A unique key used to sort messages'\n        },\n        timestamp: {\n          type: 'string',\n          description: 'Message timestamp.',\n          format: 'date-time'\n        },\n        attachments: {\n          type: 'array',\n          description: 'Attachments included with this message, if any.',\n          items: {\n            $ref: '#/$defs/attachment'\n          }\n        },\n        isSender: {\n          type: 'boolean',\n          description: 'True if the authenticated user sent the message.'\n        },\n        isUnread: {\n          type: 'boolean',\n          description: 'True if the message is unread for the authenticated user. May be omitted.'\n        },\n        reactions: {\n          type: 'array',\n          description: 'Reactions to the message, if any.',\n          items: {\n            $ref: '#/$defs/reaction'\n          }\n        },\n        senderName: {\n          type: 'string',\n          description: 'Resolved sender display name (impersonator/full name/username/participant name).'\n        },\n        text: {\n          type: 'string',\n          description: 'Plain-text body if present. May include a JSON fallback with text entities for rich messages.'\n        }\n      },\n      required: [        'id',\n        'accountID',\n        'chatID',\n        'messageID',\n        'senderID',\n        'sortKey',\n        'timestamp'\n      ]\n    },\n    attachment: {\n      type: 'object',\n      properties: {\n        type: {\n          type: 'string',\n          description: 'Attachment type.',\n          enum: [            'unknown',\n            'img',\n            'video',\n            'audio'\n          ]\n        },\n        duration: {\n          type: 'number',\n          description: 'Duration in seconds (audio/video).'\n        },\n        fileName: {\n          type: 'string',\n          description: 'Original filename if available.'\n        },\n        fileSize: {\n          type: 'number',\n          description: 'File size in bytes if known.'\n        },\n        isGif: {\n          type: 'boolean',\n          description: 'True if the attachment is a GIF.'\n        },\n        isSticker: {\n          type: 'boolean',\n          description: 'True if the attachment is a sticker.'\n        },\n        isVoiceNote: {\n          type: 'boolean',\n          description: 'True if the attachment is a voice note.'\n        },\n        mimeType: {\n          type: 'string',\n          description: 'MIME type if known (e.g., \\'image/png\\').'\n        },\n        posterImg: {\n          type: 'string',\n          description: 'Preview image URL for video attachments (poster frame). May be temporary or local-only to this device; download promptly if durable access is needed.'\n        },\n        size: {\n          type: 'object',\n          description: 'Pixel dimensions of the attachment: width/height in px.',\n          properties: {\n            height: {\n              type: 'number'\n            },\n            width: {\n              type: 'number'\n            }\n          }\n        },\n        srcURL: {\n          type: 'string',\n          description: 'Public URL or local file path to fetch the asset. May be temporary or local-only to this device; download promptly if durable access is needed.'\n        }\n      },\n      required: [        'type'\n      ]\n    },\n    reaction: {\n      type: 'object',\n      properties: {\n        id: {\n          type: 'string',\n          description: 'Reaction ID, typically ${participantID}${reactionKey} if multiple reactions allowed, or just participantID otherwise.'\n        },\n        participantID: {\n          type: 'string',\n          description: 'User ID of the participant who reacted.'\n        },\n        reactionKey: {\n          type: 'string',\n          description: 'The reaction key: an emoji (😄), a network-specific key, or a shortcode like \"smiling-face\".'\n        },\n        emoji: {\n          type: 'boolean',\n          description: 'True if the reactionKey is an emoji.'\n        },\n        imgURL: {\n          type: 'string',\n          description: 'URL to the reaction\\'s image. May be temporary or local-only to this device; download promptly if durable access is needed.'\n        }\n      },\n      required: [        'id',\n        'participantID',\n        'reactionKey'\n      ]\n    }\n  }\n}\n```",
+    'Search messages across chats using Beeper\'s message index.\n- When to use: find messages by text and/or filters (chatIDs, accountIDs, chatType, media type filters, sender, date ranges).\n- CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds messages containing these EXACT words.\n  • ✅ RIGHT: query="dinner" or query="sick" or query="error" (single words users type)\n  • ❌ WRONG: query="dinner plans tonight" or query="health issues" (phrases/concepts)\n  • The query matches ALL words provided (in any order). Example: query="flight booking" finds messages with both "flight" AND "booking".\n- Media filters: Use onlyWithMedia for any media, or specific filters like onlyWithVideo, onlyWithImage, onlyWithLink, onlyWithFile for specific types.\n- Pagination: use \'oldestCursor\' + direction=\'before\' for older; \'newestCursor\' + direction=\'after\' for newer.\n- Performance: provide chatIDs/accountIDs when known. Omitted \'query\' returns results based on filters only. Partial matches enabled; \'excludeLowPriority\' defaults to true.\n- Workflow tip: To search messages in specific conversations: 1) Use find-chats to get chatIDs, 2) Use search-messages with those chatIDs.\n- IMPORTANT: Chat names vary widely. ASK the user for clarification:\n  • "Which chat do you mean by family?" (could be "The Smiths", "Mom Dad Kids", etc.)\n  • "What\'s the name of your work chat?" (could be "Team", company name, project name)\n  • "Who are the participants?" (use participantQuery in find-chats)\nReturns: matching messages and referenced chats.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -117,12 +116,6 @@ export const tool: Tool = {
         description:
           'A cursor for use in pagination. starting_after is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include starting_after=obj_foo in order to fetch the next page of the list.',
       },
-      jq_filter: {
-        type: 'string',
-        title: 'jq Filter',
-        description:
-          'A jq filter to apply to the response to include certain fields. Consult the output schema in the tool description to see the fields that are available.\n\nFor example: to include only the `name` field in every object of a results array, you can provide ".results[].name".\n\nFor more information, see the [jq documentation](https://jqlang.org/manual/).',
-      },
     },
     required: [],
   },
@@ -132,9 +125,9 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
-  const { jq_filter, ...body } = args as any;
-  const response = await client.messages.search(body).asResponse();
-  return asTextContentResult(await maybeFilter(jq_filter, await response.json()));
+  const body = args as any;
+  const response = await client.messages.searchMessages(body).asResponse();
+  return asTextContentResult(await response.json());
 };
 
 export default { metadata, tool, handler };

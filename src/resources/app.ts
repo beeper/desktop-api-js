@@ -14,11 +14,11 @@ export class App extends APIResource {
    *
    * @example
    * ```ts
-   * const baseResponse = await client.app.focus();
+   * const baseResponse = await client.app.focusApp();
    * ```
    */
-  focus(
-    body: AppFocusParams | null | undefined = {},
+  focusApp(
+    body: AppFocusAppParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<Shared.BaseResponse> {
     return this._client.post('/v0/focus-app', { body, ...options });
@@ -43,7 +43,7 @@ export interface FocusRequest {
   messageSortKey?: string;
 }
 
-export interface AppFocusParams {
+export interface AppFocusAppParams {
   /**
    * Optional Beeper chat ID to focus after bringing the app to foreground. If
    * omitted, only foregrounds the app. Required if messageSortKey is present. No-op
@@ -58,5 +58,5 @@ export interface AppFocusParams {
 }
 
 export declare namespace App {
-  export { type FocusRequest as FocusRequest, type AppFocusParams as AppFocusParams };
+  export { type FocusRequest as FocusRequest, type AppFocusAppParams as AppFocusAppParams };
 }
