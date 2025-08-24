@@ -1,15 +1,18 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../core/resource';
-import { APIPromise } from '../core/api-promise';
-import { buildHeaders } from '../internal/headers';
-import { RequestOptions } from '../internal/request-options';
+import { APIResource } from 'beeper/desktop-api/core/resource';
+import { APIPromise } from 'beeper/desktop-api/core/api-promise';
+import { buildHeaders } from 'beeper/desktop-api/internal/headers';
+import { RequestOptions } from 'beeper/desktop-api/internal/request-options';
 
+/**
+ * OAuth2 authentication and token management
+ */
 export class OAuth extends APIResource {
   /**
    * Returns information about the authenticated user/token
    */
-  retrieveUserInfo(options?: RequestOptions): APIPromise<OAuthRetrieveUserInfoResponse> {
+  getUserInfo(options?: RequestOptions): APIPromise<UserInfo> {
     return this._client.get('/oauth/userinfo', options);
   }
 
@@ -25,7 +28,19 @@ export class OAuth extends APIResource {
   }
 }
 
-export interface OAuthRetrieveUserInfoResponse {
+export interface RevokeRequest {
+  /**
+   * The token to revoke
+   */
+  token: string;
+
+  /**
+   * Hint about the type of token being revoked
+   */
+  token_type_hint?: 'access_token' | 'refresh_token';
+}
+
+export interface UserInfo {
   /**
    * Issued at timestamp (Unix epoch seconds)
    */
@@ -76,7 +91,8 @@ export interface OAuthRevokeTokenParams {
 
 export declare namespace OAuth {
   export {
-    type OAuthRetrieveUserInfoResponse as OAuthRetrieveUserInfoResponse,
+    type RevokeRequest as RevokeRequest,
+    type UserInfo as UserInfo,
     type OAuthRevokeTokenParams as OAuthRevokeTokenParams,
   };
 }

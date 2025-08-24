@@ -1,21 +1,18 @@
-# Beeper Desktop API TypeScript API Library
+# Beeper Desktop TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/beeper-desktop-api.svg?label=npm%20(stable)>)](https://npmjs.org/package/beeper-desktop-api) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/beeper-desktop-api)
+[![NPM version](<https://img.shields.io/npm/v/beeper-desktop-api-typescript.svg?label=npm%20(stable)>)](https://npmjs.org/package/beeper-desktop-api-typescript) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/beeper-desktop-api-typescript)
 
-This library provides convenient access to the Beeper Desktop API REST API from server-side TypeScript or JavaScript.
+This library provides convenient access to the Beeper Desktop REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found on [www.beeper.com](https://www.beeper.com). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [www.beeper.com](https://www.beeper.com/desktop-api). The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:beeper/desktop-api-typescript.git
+npm install beeper-desktop-api-typescript
 ```
-
-> [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install beeper-desktop-api`
 
 ## Usage
 
@@ -23,15 +20,16 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import BeeperDesktopAPI from 'beeper-desktop-api';
+import BeeperDesktop from 'beeper-desktop-api-typescript';
 
-const client = new BeeperDesktopAPI({
-  apiKey: process.env['BEEPER_DESKTOP_API_API_KEY'], // This is the default and can be omitted
+const client = new BeeperDesktop({
+  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const getAccounts = await client.getAccounts.list();
+const page = await client.chats.find({ limit: 10, type: 'single' });
+const chat = page.data[0];
 
-console.log(getAccounts.accounts);
+console.log(chat.id);
 ```
 
 ### Request & Response types
@@ -40,13 +38,13 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import BeeperDesktopAPI from 'beeper-desktop-api';
+import BeeperDesktop from 'beeper-desktop-api-typescript';
 
-const client = new BeeperDesktopAPI({
-  apiKey: process.env['BEEPER_DESKTOP_API_API_KEY'], // This is the default and can be omitted
+const client = new BeeperDesktop({
+  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const getAccounts: BeeperDesktopAPI.GetAccountListResponse = await client.getAccounts.list();
+const accountsResponse: BeeperDesktop.AccountsResponse = await client.accounts.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -59,15 +57,17 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const getAccounts = await client.getAccounts.list().catch(async (err) => {
-  if (err instanceof BeeperDesktopAPI.APIError) {
-    console.log(err.status); // 400
-    console.log(err.name); // BadRequestError
-    console.log(err.headers); // {server: 'nginx', ...}
-  } else {
-    throw err;
-  }
-});
+const sendResponse = await client.messages
+  .send({ chatID: '!invalid-chat-id', text: 'Test message' })
+  .catch(async (err) => {
+    if (err instanceof BeeperDesktop.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
 ```
 
 Error codes are as follows:
@@ -85,7 +85,7 @@ Error codes are as follows:
 
 ### Retries
 
-Certain errors will be automatically retried 2 times by default, with a short exponential backoff.
+Certain errors will be automatically retried 3 times by default, with a short exponential backoff.
 Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,
 429 Rate Limit, and >=500 Internal errors will all be retried by default.
 
@@ -94,29 +94,29 @@ You can use the `maxRetries` option to configure or disable this:
 <!-- prettier-ignore -->
 ```js
 // Configure the default for all requests:
-const client = new BeeperDesktopAPI({
+const client = new BeeperDesktop({
   maxRetries: 0, // default is 2
 });
 
 // Or, configure per-request:
-await client.getAccounts.list({
+await client.accounts.list({
   maxRetries: 5,
 });
 ```
 
 ### Timeouts
 
-Requests time out after 1 minute by default. You can configure this with a `timeout` option:
+Requests time out after 30 seconds by default. You can configure this with a `timeout` option:
 
 <!-- prettier-ignore -->
 ```ts
 // Configure the default for all requests:
-const client = new BeeperDesktopAPI({
-  timeout: 20 * 1000, // 20 seconds (default is 1 minute)
+const client = new BeeperDesktop({
+  timeout: 20 * 1000, // 20 seconds (default is 30 seconds)
 });
 
 // Override per-request:
-await client.getAccounts.list({
+await client.accounts.list({
   timeout: 5 * 1000,
 });
 ```
@@ -124,6 +124,37 @@ await client.getAccounts.list({
 On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
+
+## Auto-pagination
+
+List methods in the BeeperDesktop API are paginated.
+You can use the `for await … of` syntax to iterate through items across all pages:
+
+```ts
+async function fetchAllMessages(params) {
+  const allMessages = [];
+  // Automatically fetches more pages as needed.
+  for await (const message of client.messages.search({ limit: 20, query: 'meeting' })) {
+    allMessages.push(message);
+  }
+  return allMessages;
+}
+```
+
+Alternatively, you can request a single page at a time:
+
+```ts
+let page = await client.messages.search({ limit: 20, query: 'meeting' });
+for (const message of page.data) {
+  console.log(message);
+}
+
+// Convenience methods are provided for manually paginating:
+while (page.hasNextPage()) {
+  page = await page.getNextPage();
+  // ...
+}
+```
 
 ## Advanced Usage
 
@@ -137,15 +168,15 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 
 <!-- prettier-ignore -->
 ```ts
-const client = new BeeperDesktopAPI();
+const client = new BeeperDesktop();
 
-const response = await client.getAccounts.list().asResponse();
+const response = await client.accounts.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: getAccounts, response: raw } = await client.getAccounts.list().withResponse();
+const { data: accountsResponse, response: raw } = await client.accounts.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(getAccounts.accounts);
+console.log(accountsResponse.accounts);
 ```
 
 ### Logging
@@ -158,13 +189,13 @@ console.log(getAccounts.accounts);
 
 The log level can be configured in two ways:
 
-1. Via the `BEEPER_DESKTOP_API_LOG` environment variable
+1. Via the `BEEPER-DESKTOP_LOG` environment variable
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
-import BeeperDesktopAPI from 'beeper-desktop-api';
+import BeeperDesktop from 'beeper-desktop-api-typescript';
 
-const client = new BeeperDesktopAPI({
+const client = new BeeperDesktop({
   logLevel: 'debug', // Show all log messages
 });
 ```
@@ -190,13 +221,13 @@ When providing a custom logger, the `logLevel` option still controls which messa
 below the configured level will not be sent to your logger.
 
 ```ts
-import BeeperDesktopAPI from 'beeper-desktop-api';
+import BeeperDesktop from 'beeper-desktop-api-typescript';
 import pino from 'pino';
 
 const logger = pino();
 
-const client = new BeeperDesktopAPI({
-  logger: logger.child({ name: 'BeeperDesktopAPI' }),
+const client = new BeeperDesktop({
+  logger: logger.child({ name: 'BeeperDesktop' }),
   logLevel: 'debug', // Send all messages to pino, allowing it to filter
 });
 ```
@@ -225,7 +256,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.getAccounts.list({
+client.chats.find({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
@@ -259,10 +290,10 @@ globalThis.fetch = fetch;
 Or pass it to the client:
 
 ```ts
-import BeeperDesktopAPI from 'beeper-desktop-api';
+import BeeperDesktop from 'beeper-desktop-api-typescript';
 import fetch from 'my-fetch';
 
-const client = new BeeperDesktopAPI({ fetch });
+const client = new BeeperDesktop({ fetch });
 ```
 
 ### Fetch options
@@ -270,9 +301,9 @@ const client = new BeeperDesktopAPI({ fetch });
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import BeeperDesktopAPI from 'beeper-desktop-api';
+import BeeperDesktop from 'beeper-desktop-api-typescript';
 
-const client = new BeeperDesktopAPI({
+const client = new BeeperDesktop({
   fetchOptions: {
     // `RequestInit` options
   },
@@ -287,11 +318,11 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import BeeperDesktopAPI from 'beeper-desktop-api';
+import BeeperDesktop from 'beeper-desktop-api-typescript';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
-const client = new BeeperDesktopAPI({
+const client = new BeeperDesktop({
   fetchOptions: {
     dispatcher: proxyAgent,
   },
@@ -301,9 +332,9 @@ const client = new BeeperDesktopAPI({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import BeeperDesktopAPI from 'beeper-desktop-api';
+import BeeperDesktop from 'beeper-desktop-api-typescript';
 
-const client = new BeeperDesktopAPI({
+const client = new BeeperDesktop({
   fetchOptions: {
     proxy: 'http://localhost:8888',
   },
@@ -313,10 +344,10 @@ const client = new BeeperDesktopAPI({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import BeeperDesktopAPI from 'npm:beeper-desktop-api';
+import BeeperDesktop from 'npm:beeper-desktop-api-typescript';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
-const client = new BeeperDesktopAPI({
+const client = new BeeperDesktop({
   fetchOptions: {
     client: httpClient,
   },
@@ -335,7 +366,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/beeper/desktop-api-typescript/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/beeper/beeper-desktop-api-typescript/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 
@@ -343,7 +374,6 @@ TypeScript >= 4.9 is supported.
 
 The following runtimes are supported:
 
-- Web browsers (Up-to-date Chrome, Firefox, Safari, Edge, and more)
 - Node.js 20 LTS or later ([non-EOL](https://endoflife.date/nodejs)) versions.
 - Deno v1.28.0 or higher.
 - Bun 1.0 or later.
@@ -351,6 +381,9 @@ The following runtimes are supported:
 - Vercel Edge Runtime.
 - Jest 28 or greater with the `"node"` environment (`"jsdom"` is not supported at this time).
 - Nitro v2.6 or greater.
+
+> [!WARNING]
+> Web browser runtimes aren't supported. The SDK will throw an error if used in a browser environment.
 
 Note that React Native is not supported at this time.
 

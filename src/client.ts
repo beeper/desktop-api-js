@@ -13,53 +13,75 @@ import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
 import * as qs from './internal/qs';
 import { VERSION } from './version';
-import * as Errors from './core/error';
-import * as Uploads from './core/uploads';
-import * as API from './resources/index';
-import { APIPromise } from './core/api-promise';
-import { ArchiveChat, ArchiveChatArchiveParams } from './resources/archive-chat';
-import { ClearChatReminder, ClearChatReminderClearParams } from './resources/clear-chat-reminder';
-import { DraftMessage, DraftMessageCreateParams } from './resources/draft-message';
-import { FindChatListParams, FindChatListResponse, FindChats } from './resources/find-chats';
-import { BaseResponse, FocusApp, FocusAppOpenParams } from './resources/focus-app';
-import { GetAccountListResponse, GetAccounts } from './resources/get-accounts';
-import { GetChat, GetChatRetrieveParams, GetChatRetrieveResponse, User } from './resources/get-chat';
+import * as Errors from 'beeper/desktop-api/core/error';
+import * as Pagination from 'beeper/desktop-api/core/pagination';
+import { AbstractPage, type CursorIDParams, CursorIDResponse } from 'beeper/desktop-api/core/pagination';
+import * as Uploads from 'beeper/desktop-api/core/uploads';
+import * as API from 'beeper/desktop-api/resources/index';
+import { APIPromise } from 'beeper/desktop-api/core/api-promise';
+import { Account, Accounts, AccountsResponse } from 'beeper/desktop-api/resources/accounts';
+import { App, AppFocusParams, FocusRequest } from 'beeper/desktop-api/resources/app';
 import {
-  GetLinkToChat,
-  GetLinkToChatCreateParams,
-  GetLinkToChatCreateResponse,
-} from './resources/get-link-to-chat';
-import { OAuth, OAuthRetrieveUserInfoResponse, OAuthRevokeTokenParams } from './resources/oauth';
+  ArchiveRequest,
+  Chat,
+  ChatArchiveParams,
+  ChatFindParams,
+  ChatGetLinkParams,
+  ChatRetrieveParams,
+  Chats,
+  ChatsCursorID,
+  FindChatsRequest,
+  FindChatsResponse,
+  GetChatRequest,
+  GetChatResponse,
+  LinkRequest,
+  LinkResponse,
+} from 'beeper/desktop-api/resources/chats';
 import {
-  SearchMessageSearchParams,
-  SearchMessageSearchResponse,
-  SearchMessages,
-} from './resources/search-messages';
-import { SendMessage, SendMessageSendParams, SendMessageSendResponse } from './resources/send-message';
-import { SetChatReminder, SetChatReminderCreateParams } from './resources/set-chat-reminder';
-import { type Fetch } from './internal/builtin-types';
-import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
-import { FinalRequestOptions, RequestOptions } from './internal/request-options';
-import { readEnv } from './internal/utils/env';
+  DraftRequest,
+  Message,
+  MessageDraftParams,
+  MessageSearchParams,
+  MessageSendParams,
+  Messages,
+  MessagesCursorID,
+  SearchRequest,
+  SearchResponse,
+  SendRequest,
+  SendResponse,
+} from 'beeper/desktop-api/resources/messages';
+import { OAuth, OAuthRevokeTokenParams, RevokeRequest, UserInfo } from 'beeper/desktop-api/resources/oauth';
+import {
+  ClearReminderRequest,
+  ReminderClearParams,
+  ReminderSetParams,
+  Reminders,
+  SetReminderRequest,
+} from 'beeper/desktop-api/resources/reminders';
+import { type Fetch } from 'beeper/desktop-api/internal/builtin-types';
+import { isRunningInBrowser } from 'beeper/desktop-api/internal/detect-platform';
+import { HeadersLike, NullableHeaders, buildHeaders } from 'beeper/desktop-api/internal/headers';
+import { FinalRequestOptions, RequestOptions } from 'beeper/desktop-api/internal/request-options';
+import { readEnv } from 'beeper/desktop-api/internal/utils/env';
 import {
   type LogLevel,
   type Logger,
   formatRequestDetails,
   loggerFor,
   parseLogLevel,
-} from './internal/utils/log';
-import { isEmptyObj } from './internal/utils/values';
+} from 'beeper/desktop-api/internal/utils/log';
+import { isEmptyObj } from 'beeper/desktop-api/internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Bearer token authentication. Token can be obtained either by creating it in-app or through OAuth2 authorization code flow.
+   * Access token - either created in-app or obtained via OAuth2 authorization code flow
    */
-  apiKey?: string | null | undefined;
+  accessToken?: string | null | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['BEEPER_DESKTOP_API_BASE_URL'].
+   * Defaults to process.env['BEEPER-DESKTOP_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -90,7 +112,7 @@ export interface ClientOptions {
    * The maximum number of times that the client will retry a request in case of a
    * temporary failure, like a network error or a 5XX error from the server.
    *
-   * @default 2
+   * @default 3
    */
   maxRetries?: number | undefined;
 
@@ -113,7 +135,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['BEEPER_DESKTOP_API_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['BEEPER-DESKTOP_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -126,10 +148,10 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Beeper Desktop API API.
+ * API Client for interfacing with the Beeper Desktop API.
  */
-export class BeeperDesktopAPI {
-  apiKey: string | null;
+export class BeeperDesktop {
+  accessToken: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -144,46 +166,52 @@ export class BeeperDesktopAPI {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Beeper Desktop API API.
+   * API Client for interfacing with the Beeper Desktop API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['BEEPER_DESKTOP_API_API_KEY'] ?? null]
-   * @param {string} [opts.baseURL=process.env['BEEPER_DESKTOP_API_BASE_URL'] ?? http://localhost:23374] - Override the default base URL for the API.
-   * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
+   * @param {string | null | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? null]
+   * @param {string} [opts.baseURL=process.env['BEEPER-DESKTOP_BASE_URL'] ?? http://localhost:23374] - Override the default base URL for the API.
+   * @param {number} [opts.timeout=30 seconds] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
-   * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
+   * @param {number} [opts.maxRetries=3] - The maximum number of times the client will retry a request.
    * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('BEEPER_DESKTOP_API_BASE_URL'),
-    apiKey = readEnv('BEEPER_DESKTOP_API_API_KEY') ?? null,
+    baseURL = readEnv('BEEPER-DESKTOP_BASE_URL'),
+    accessToken = readEnv('BEEPER_ACCESS_TOKEN') ?? null,
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {
-      apiKey,
+      accessToken,
       ...opts,
       baseURL: baseURL || `http://localhost:23374`,
     };
 
+    if (isRunningInBrowser()) {
+      throw new Errors.BeeperDesktopError(
+        "It looks like you're running in a browser-like environment, which is disabled to protect your secret API credentials from attackers. If you have a strong business need for client-side use of this API, please open a GitHub issue with your use-case and security mitigations.",
+      );
+    }
+
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? BeeperDesktopAPI.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? BeeperDesktop.DEFAULT_TIMEOUT /* 30 seconds */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('BEEPER_DESKTOP_API_LOG'), "process.env['BEEPER_DESKTOP_API_LOG']", this) ??
+      parseLogLevel(readEnv('BEEPER-DESKTOP_LOG'), "process.env['BEEPER-DESKTOP_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
-    this.maxRetries = options.maxRetries ?? 2;
+    this.maxRetries = options.maxRetries ?? 3;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
 
     this._options = options;
 
-    this.apiKey = apiKey;
+    this.accessToken = accessToken;
   }
 
   /**
@@ -199,7 +227,7 @@ export class BeeperDesktopAPI {
       logLevel: this.logLevel,
       fetch: this.fetch,
       fetchOptions: this.fetchOptions,
-      apiKey: this.apiKey,
+      accessToken: this.accessToken,
       ...options,
     });
     return client;
@@ -225,10 +253,10 @@ export class BeeperDesktopAPI {
   }
 
   protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    if (this.apiKey == null) {
+    if (this.accessToken == null) {
       return undefined;
     }
-    return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
+    return buildHeaders([{ Authorization: `Bearer ${this.accessToken}` }]);
   }
 
   protected async oauth2Auth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
@@ -236,7 +264,7 @@ export class BeeperDesktopAPI {
   }
 
   protected stringifyQuery(query: Record<string, unknown>): string {
-    return qs.stringify(query, { arrayFormat: 'comma' });
+    return qs.stringify(query, { arrayFormat: 'repeat' });
   }
 
   private getUserAgent(): string {
@@ -491,6 +519,25 @@ export class BeeperDesktopAPI {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: RequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(Page, { method: 'get', path, ...opts });
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: FinalRequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as BeeperDesktop, request, Page);
+  }
+
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -589,8 +636,8 @@ export class BeeperDesktopAPI {
   }
 
   private calculateDefaultRetryTimeoutMillis(retriesRemaining: number, maxRetries: number): number {
-    const initialRetryDelay = 0.5;
-    const maxRetryDelay = 8.0;
+    const initialRetryDelay = 1.0;
+    const maxRetryDelay = 10.0;
 
     const numRetries = maxRetries - retriesRemaining;
 
@@ -704,10 +751,10 @@ export class BeeperDesktopAPI {
     }
   }
 
-  static BeeperDesktopAPI = this;
-  static DEFAULT_TIMEOUT = 60000; // 1 minute
+  static BeeperDesktop = this;
+  static DEFAULT_TIMEOUT = 30000; // 30 seconds
 
-  static BeeperDesktopAPIError = Errors.BeeperDesktopAPIError;
+  static BeeperDesktopError = Errors.BeeperDesktopError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -723,92 +770,98 @@ export class BeeperDesktopAPI {
 
   static toFile = Uploads.toFile;
 
-  getAccounts: API.GetAccounts = new API.GetAccounts(this);
-  focusApp: API.FocusApp = new API.FocusApp(this);
-  draftMessage: API.DraftMessage = new API.DraftMessage(this);
-  getLinkToChat: API.GetLinkToChat = new API.GetLinkToChat(this);
-  getChat: API.GetChat = new API.GetChat(this);
-  findChats: API.FindChats = new API.FindChats(this);
-  searchMessages: API.SearchMessages = new API.SearchMessages(this);
-  sendMessage: API.SendMessage = new API.SendMessage(this);
-  archiveChat: API.ArchiveChat = new API.ArchiveChat(this);
-  setChatReminder: API.SetChatReminder = new API.SetChatReminder(this);
-  clearChatReminder: API.ClearChatReminder = new API.ClearChatReminder(this);
+  /**
+   * Manage and list connected messaging accounts
+   */
+  accounts: API.Accounts = new API.Accounts(this);
+  /**
+   * Control the Beeper Desktop application
+   */
+  app: API.App = new API.App(this);
+  /**
+   * Send, draft, and search messages across all chat networks
+   */
+  messages: API.Messages = new API.Messages(this);
+  /**
+   * Manage chats, conversations, and threads
+   */
+  chats: API.Chats = new API.Chats(this);
+  /**
+   * Set and clear reminders for chats
+   */
+  reminders: API.Reminders = new API.Reminders(this);
+  /**
+   * OAuth2 authentication and token management
+   */
   oauth: API.OAuth = new API.OAuth(this);
 }
 
-BeeperDesktopAPI.GetAccounts = GetAccounts;
-BeeperDesktopAPI.FocusApp = FocusApp;
-BeeperDesktopAPI.DraftMessage = DraftMessage;
-BeeperDesktopAPI.GetLinkToChat = GetLinkToChat;
-BeeperDesktopAPI.GetChat = GetChat;
-BeeperDesktopAPI.FindChats = FindChats;
-BeeperDesktopAPI.SearchMessages = SearchMessages;
-BeeperDesktopAPI.SendMessage = SendMessage;
-BeeperDesktopAPI.ArchiveChat = ArchiveChat;
-BeeperDesktopAPI.SetChatReminder = SetChatReminder;
-BeeperDesktopAPI.ClearChatReminder = ClearChatReminder;
-BeeperDesktopAPI.OAuth = OAuth;
+BeeperDesktop.Accounts = Accounts;
+BeeperDesktop.App = App;
+BeeperDesktop.Messages = Messages;
+BeeperDesktop.Chats = Chats;
+BeeperDesktop.Reminders = Reminders;
+BeeperDesktop.OAuth = OAuth;
 
-export declare namespace BeeperDesktopAPI {
+export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { GetAccounts as GetAccounts, type GetAccountListResponse as GetAccountListResponse };
+  export import CursorID = Pagination.CursorID;
+  export { type CursorIDParams as CursorIDParams, type CursorIDResponse as CursorIDResponse };
+
+  export { Accounts as Accounts, type Account as Account, type AccountsResponse as AccountsResponse };
+
+  export { App as App, type FocusRequest as FocusRequest, type AppFocusParams as AppFocusParams };
 
   export {
-    FocusApp as FocusApp,
-    type BaseResponse as BaseResponse,
-    type FocusAppOpenParams as FocusAppOpenParams,
-  };
-
-  export { DraftMessage as DraftMessage, type DraftMessageCreateParams as DraftMessageCreateParams };
-
-  export {
-    GetLinkToChat as GetLinkToChat,
-    type GetLinkToChatCreateResponse as GetLinkToChatCreateResponse,
-    type GetLinkToChatCreateParams as GetLinkToChatCreateParams,
-  };
-
-  export {
-    GetChat as GetChat,
-    type User as User,
-    type GetChatRetrieveResponse as GetChatRetrieveResponse,
-    type GetChatRetrieveParams as GetChatRetrieveParams,
-  };
-
-  export {
-    FindChats as FindChats,
-    type FindChatListResponse as FindChatListResponse,
-    type FindChatListParams as FindChatListParams,
+    Messages as Messages,
+    type DraftRequest as DraftRequest,
+    type Message as Message,
+    type SearchRequest as SearchRequest,
+    type SearchResponse as SearchResponse,
+    type SendRequest as SendRequest,
+    type SendResponse as SendResponse,
+    type MessagesCursorID as MessagesCursorID,
+    type MessageDraftParams as MessageDraftParams,
+    type MessageSearchParams as MessageSearchParams,
+    type MessageSendParams as MessageSendParams,
   };
 
   export {
-    SearchMessages as SearchMessages,
-    type SearchMessageSearchResponse as SearchMessageSearchResponse,
-    type SearchMessageSearchParams as SearchMessageSearchParams,
+    Chats as Chats,
+    type ArchiveRequest as ArchiveRequest,
+    type Chat as Chat,
+    type FindChatsRequest as FindChatsRequest,
+    type FindChatsResponse as FindChatsResponse,
+    type GetChatRequest as GetChatRequest,
+    type GetChatResponse as GetChatResponse,
+    type LinkRequest as LinkRequest,
+    type LinkResponse as LinkResponse,
+    type ChatsCursorID as ChatsCursorID,
+    type ChatRetrieveParams as ChatRetrieveParams,
+    type ChatArchiveParams as ChatArchiveParams,
+    type ChatFindParams as ChatFindParams,
+    type ChatGetLinkParams as ChatGetLinkParams,
   };
 
   export {
-    SendMessage as SendMessage,
-    type SendMessageSendResponse as SendMessageSendResponse,
-    type SendMessageSendParams as SendMessageSendParams,
-  };
-
-  export { ArchiveChat as ArchiveChat, type ArchiveChatArchiveParams as ArchiveChatArchiveParams };
-
-  export {
-    SetChatReminder as SetChatReminder,
-    type SetChatReminderCreateParams as SetChatReminderCreateParams,
-  };
-
-  export {
-    ClearChatReminder as ClearChatReminder,
-    type ClearChatReminderClearParams as ClearChatReminderClearParams,
+    Reminders as Reminders,
+    type ClearReminderRequest as ClearReminderRequest,
+    type SetReminderRequest as SetReminderRequest,
+    type ReminderClearParams as ReminderClearParams,
+    type ReminderSetParams as ReminderSetParams,
   };
 
   export {
     OAuth as OAuth,
-    type OAuthRetrieveUserInfoResponse as OAuthRetrieveUserInfoResponse,
+    type RevokeRequest as RevokeRequest,
+    type UserInfo as UserInfo,
     type OAuthRevokeTokenParams as OAuthRevokeTokenParams,
   };
+
+  export type Attachment = API.Attachment;
+  export type BaseResponse = API.BaseResponse;
+  export type Error = API.Error;
+  export type Reaction = API.Reaction;
+  export type User = API.User;
 }
