@@ -175,6 +175,12 @@ export interface Chat {
    * clickable link in responses.
    */
   linkToChat?: string;
+
+  /**
+   * Local numeric chat ID specific to this Beeper Desktop installation. null for
+   * iMessage chats.
+   */
+  localChatID?: number | null;
 }
 
 export namespace Chat {
