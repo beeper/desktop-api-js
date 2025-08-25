@@ -7,7 +7,7 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'chats',
+  resource: 'v0',
   operation: 'read',
   tags: ['chats'],
   httpMethod: 'get',
@@ -102,7 +102,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  const response = await client.chats.findChats(body).asResponse();
+  const response = await client.v0.findChats(body).asResponse();
   return asTextContentResult(await maybeFilter(jq_filter, await response.json()));
 };
 

@@ -7,7 +7,7 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'app',
+  resource: 'v0',
   operation: 'write',
   tags: ['app'],
   httpMethod: 'post',
@@ -45,7 +45,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.app.focusApp(body)));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.v0.focusApp(body)));
 };
 
 export default { metadata, tool, handler };

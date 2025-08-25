@@ -1,42 +1,33 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
-export { Accounts, type Account, type AccountsResponse } from './accounts';
-export { App, type FocusRequest, type AppFocusAppParams } from './app';
+export { OAuth, type RevokeRequest, type UserInfo, type OAuthRevokeTokenParams } from './oauth';
 export {
-  Chats,
+  V0,
+  type AccountsResponse,
   type ArchiveRequest,
-  type Chat,
+  type ClearReminderRequest,
+  type DraftRequest,
   type FindChatsRequest,
   type FindChatsResponse,
+  type FocusRequest,
   type GetChatRequest,
   type GetChatResponse,
   type LinkRequest,
   type LinkResponse,
-  type ChatArchiveChatParams,
-  type ChatFindChatsParams,
-  type ChatGetChatParams,
-  type ChatGetLinkToChatParams,
-  type ChatsCursorID,
-} from './chats';
-export {
-  Messages,
-  type DraftRequest,
-  type Message,
   type SearchRequest,
   type SearchResponse,
   type SendRequest,
   type SendResponse,
-  type MessageDraftMessageParams,
-  type MessageSearchMessagesParams,
-  type MessageSendMessageParams,
-  type MessagesCursorID,
-} from './messages';
-export { OAuth, type RevokeRequest, type UserInfo } from './oauth';
-export {
-  Reminders,
-  type ClearReminderRequest,
   type SetReminderRequest,
-  type ReminderClearChatReminderParams,
-  type ReminderSetChatReminderParams,
-} from './reminders';
+  type V0ArchiveChatParams,
+  type V0ClearChatReminderParams,
+  type V0DraftMessageParams,
+  type V0FindChatsParams,
+  type V0FocusAppParams,
+  type V0GetChatParams,
+  type V0GetLinkToChatParams,
+  type V0SearchMessagesParams,
+  type V0SendMessageParams,
+  type V0SetChatReminderParams,
+} from './v0';

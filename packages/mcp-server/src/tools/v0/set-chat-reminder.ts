@@ -7,7 +7,7 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'reminders',
+  resource: 'v0',
   operation: 'write',
   tags: ['reminders'],
   httpMethod: 'post',
@@ -55,7 +55,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.reminders.setChatReminder(body)));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.v0.setChatReminder(body)));
 };
 
 export default { metadata, tool, handler };

@@ -19,45 +19,36 @@ import { AbstractPage, type CursorIDParams, CursorIDResponse } from './core/pagi
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account, Accounts, AccountsResponse } from './resources/accounts';
-import { App, AppFocusAppParams, FocusRequest } from './resources/app';
+import { OAuth, OAuthRevokeTokenParams, RevokeRequest, UserInfo } from './resources/oauth';
 import {
+  AccountsResponse,
   ArchiveRequest,
-  Chat,
-  ChatArchiveChatParams,
-  ChatFindChatsParams,
-  ChatGetChatParams,
-  ChatGetLinkToChatParams,
-  Chats,
-  ChatsCursorID,
+  ClearReminderRequest,
+  DraftRequest,
   FindChatsRequest,
   FindChatsResponse,
+  FocusRequest,
   GetChatRequest,
   GetChatResponse,
   LinkRequest,
   LinkResponse,
-} from './resources/chats';
-import {
-  DraftRequest,
-  Message,
-  MessageDraftMessageParams,
-  MessageSearchMessagesParams,
-  MessageSendMessageParams,
-  Messages,
-  MessagesCursorID,
   SearchRequest,
   SearchResponse,
   SendRequest,
   SendResponse,
-} from './resources/messages';
-import { OAuth, RevokeRequest, UserInfo } from './resources/oauth';
-import {
-  ClearReminderRequest,
-  ReminderClearChatReminderParams,
-  ReminderSetChatReminderParams,
-  Reminders,
   SetReminderRequest,
-} from './resources/reminders';
+  V0,
+  V0ArchiveChatParams,
+  V0ClearChatReminderParams,
+  V0DraftMessageParams,
+  V0FindChatsParams,
+  V0FocusAppParams,
+  V0GetChatParams,
+  V0GetLinkToChatParams,
+  V0SearchMessagesParams,
+  V0SendMessageParams,
+  V0SetChatReminderParams,
+} from './resources/v0';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -778,36 +769,16 @@ export class BeeperDesktop {
   static toFile = Uploads.toFile;
 
   /**
-   * Manage and list connected messaging accounts
+   * Beeper Desktop API v0
    */
-  accounts: API.Accounts = new API.Accounts(this);
-  /**
-   * Control the Beeper Desktop application
-   */
-  app: API.App = new API.App(this);
-  /**
-   * Send, draft, and search messages across all chat networks
-   */
-  messages: API.Messages = new API.Messages(this);
-  /**
-   * Manage chats, conversations, and threads
-   */
-  chats: API.Chats = new API.Chats(this);
-  /**
-   * Set and clear reminders for chats
-   */
-  reminders: API.Reminders = new API.Reminders(this);
+  v0: API.V0 = new API.V0(this);
   /**
    * OAuth2 authentication and token management
    */
   oauth: API.OAuth = new API.OAuth(this);
 }
 
-BeeperDesktop.Accounts = Accounts;
-BeeperDesktop.App = App;
-BeeperDesktop.Messages = Messages;
-BeeperDesktop.Chats = Chats;
-BeeperDesktop.Reminders = Reminders;
+BeeperDesktop.V0 = V0;
 BeeperDesktop.OAuth = OAuth;
 
 export declare namespace BeeperDesktop {
@@ -816,54 +787,49 @@ export declare namespace BeeperDesktop {
   export import CursorID = Pagination.CursorID;
   export { type CursorIDParams as CursorIDParams, type CursorIDResponse as CursorIDResponse };
 
-  export { Accounts as Accounts, type Account as Account, type AccountsResponse as AccountsResponse };
-
-  export { App as App, type FocusRequest as FocusRequest, type AppFocusAppParams as AppFocusAppParams };
-
   export {
-    Messages as Messages,
-    type DraftRequest as DraftRequest,
-    type Message as Message,
-    type SearchRequest as SearchRequest,
-    type SearchResponse as SearchResponse,
-    type SendRequest as SendRequest,
-    type SendResponse as SendResponse,
-    type MessagesCursorID as MessagesCursorID,
-    type MessageDraftMessageParams as MessageDraftMessageParams,
-    type MessageSearchMessagesParams as MessageSearchMessagesParams,
-    type MessageSendMessageParams as MessageSendMessageParams,
-  };
-
-  export {
-    Chats as Chats,
+    V0 as V0,
+    type AccountsResponse as AccountsResponse,
     type ArchiveRequest as ArchiveRequest,
-    type Chat as Chat,
+    type ClearReminderRequest as ClearReminderRequest,
+    type DraftRequest as DraftRequest,
     type FindChatsRequest as FindChatsRequest,
     type FindChatsResponse as FindChatsResponse,
+    type FocusRequest as FocusRequest,
     type GetChatRequest as GetChatRequest,
     type GetChatResponse as GetChatResponse,
     type LinkRequest as LinkRequest,
     type LinkResponse as LinkResponse,
-    type ChatsCursorID as ChatsCursorID,
-    type ChatArchiveChatParams as ChatArchiveChatParams,
-    type ChatFindChatsParams as ChatFindChatsParams,
-    type ChatGetChatParams as ChatGetChatParams,
-    type ChatGetLinkToChatParams as ChatGetLinkToChatParams,
+    type SearchRequest as SearchRequest,
+    type SearchResponse as SearchResponse,
+    type SendRequest as SendRequest,
+    type SendResponse as SendResponse,
+    type SetReminderRequest as SetReminderRequest,
+    type V0ArchiveChatParams as V0ArchiveChatParams,
+    type V0ClearChatReminderParams as V0ClearChatReminderParams,
+    type V0DraftMessageParams as V0DraftMessageParams,
+    type V0FindChatsParams as V0FindChatsParams,
+    type V0FocusAppParams as V0FocusAppParams,
+    type V0GetChatParams as V0GetChatParams,
+    type V0GetLinkToChatParams as V0GetLinkToChatParams,
+    type V0SearchMessagesParams as V0SearchMessagesParams,
+    type V0SendMessageParams as V0SendMessageParams,
+    type V0SetChatReminderParams as V0SetChatReminderParams,
   };
 
   export {
-    Reminders as Reminders,
-    type ClearReminderRequest as ClearReminderRequest,
-    type SetReminderRequest as SetReminderRequest,
-    type ReminderClearChatReminderParams as ReminderClearChatReminderParams,
-    type ReminderSetChatReminderParams as ReminderSetChatReminderParams,
+    OAuth as OAuth,
+    type RevokeRequest as RevokeRequest,
+    type UserInfo as UserInfo,
+    type OAuthRevokeTokenParams as OAuthRevokeTokenParams,
   };
 
-  export { OAuth as OAuth, type RevokeRequest as RevokeRequest, type UserInfo as UserInfo };
-
+  export type Account = API.Account;
   export type Attachment = API.Attachment;
   export type BaseResponse = API.BaseResponse;
+  export type Chat = API.Chat;
   export type Error = API.Error;
+  export type Message = API.Message;
   export type Reaction = API.Reaction;
   export type User = API.User;
 }
