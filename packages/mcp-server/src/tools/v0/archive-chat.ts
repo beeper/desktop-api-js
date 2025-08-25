@@ -7,24 +7,28 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'reminders',
+  resource: 'v0',
   operation: 'write',
-  tags: ['reminders'],
+  tags: ['chats'],
   httpMethod: 'post',
-  httpPath: '/v0/clear-chat-reminder',
-  operationId: 'clear_chat_reminder',
+  httpPath: '/v0/archive-chat',
+  operationId: 'archive_chat',
 };
 
 export const tool: Tool = {
-  name: 'clear_chat_reminder',
+  name: 'archive_chat',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nClear an existing reminder from a chat\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/base_response',\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nArchive or unarchive a chat. Set archived=true to move to archive, archived=false to move back to inbox\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/base_response',\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
-        description: 'The identifier of the chat to clear reminder from',
+        description: 'The identifier of the chat to archive or unarchive',
+      },
+      archived: {
+        type: 'boolean',
+        description: 'True to archive, false to unarchive',
       },
       jq_filter: {
         type: 'string',
@@ -40,7 +44,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.reminders.clearChatReminder(body)));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.v0.archiveChat(body)));
 };
 
 export default { metadata, tool, handler };

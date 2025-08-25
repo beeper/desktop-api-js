@@ -4,17 +4,19 @@ import { Metadata, Endpoint, HandlerFunction } from './types';
 
 export { Metadata, Endpoint, HandlerFunction };
 
-import get_accounts from './accounts/get-accounts';
-import focus_app from './app/focus-app';
-import draft_message from './messages/draft-message';
-import search_messages from './messages/search-messages';
-import send_message from './messages/send-message';
-import archive_chat from './chats/archive-chat';
-import find_chats from './chats/find-chats';
-import get_chat from './chats/get-chat';
-import get_link_to_chat from './chats/get-link-to-chat';
-import clear_chat_reminder from './reminders/clear-chat-reminder';
-import set_chat_reminder from './reminders/set-chat-reminder';
+import archive_chat from './v0/archive-chat';
+import clear_chat_reminder from './v0/clear-chat-reminder';
+import draft_message from './v0/draft-message';
+import find_chats from './v0/find-chats';
+import focus_app from './v0/focus-app';
+import get_accounts from './v0/get-accounts';
+import get_chat from './v0/get-chat';
+import get_link_to_chat from './v0/get-link-to-chat';
+import search_messages from './v0/search-messages';
+import send_message from './v0/send-message';
+import set_chat_reminder from './v0/set-chat-reminder';
+import get_user_info_oauth from './oauth/get-user-info-oauth';
+import revoke_token_oauth from './oauth/revoke-token-oauth';
 
 export const endpoints: Endpoint[] = [];
 
@@ -22,17 +24,19 @@ function addEndpoint(endpoint: Endpoint) {
   endpoints.push(endpoint);
 }
 
-addEndpoint(get_accounts);
-addEndpoint(focus_app);
-addEndpoint(draft_message);
-addEndpoint(search_messages);
-addEndpoint(send_message);
 addEndpoint(archive_chat);
+addEndpoint(clear_chat_reminder);
+addEndpoint(draft_message);
 addEndpoint(find_chats);
+addEndpoint(focus_app);
+addEndpoint(get_accounts);
 addEndpoint(get_chat);
 addEndpoint(get_link_to_chat);
-addEndpoint(clear_chat_reminder);
+addEndpoint(search_messages);
+addEndpoint(send_message);
 addEndpoint(set_chat_reminder);
+addEndpoint(get_user_info_oauth);
+addEndpoint(revoke_token_oauth);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';

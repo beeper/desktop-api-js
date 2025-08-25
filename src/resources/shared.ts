@@ -1,5 +1,30 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import * as Shared from './shared';
+import { CursorID } from '../core/pagination';
+
+/**
+ * A chat account added to Beeper
+ */
+export interface Account {
+  /**
+   * Chat account added to Beeper. Use this to route account-scoped actions.
+   */
+  accountID: string;
+
+  /**
+   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
+   * MUST use 'accountID' to perform actions.
+   */
+  network: string;
+
+  /**
+   * A person on or reachable through Beeper. Values are best-effort and can vary by
+   * network.
+   */
+  user: User;
+}
+
 export interface Attachment {
   /**
    * Attachment type.
@@ -76,6 +101,104 @@ export interface BaseResponse {
   error?: string;
 }
 
+export interface Chat {
+  /**
+   * Unique identifier for cursor pagination.
+   */
+  id: string;
+
+  /**
+   * Beeper account ID this chat belongs to.
+   */
+  accountID: string;
+
+  /**
+   * Unique identifier of the chat (room/thread ID, same as id).
+   */
+  chatID: string;
+
+  /**
+   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
+   * MUST use 'accountID' to perform actions.
+   */
+  network: string;
+
+  /**
+   * Chat participants information.
+   */
+  participants: Chat.Participants;
+
+  /**
+   * Display title of the chat as computed by the client/server.
+   */
+  title: string;
+
+  /**
+   * Chat type: 'single' for direct messages, 'group' for group chats, 'channel' for
+   * channels, 'broadcast' for broadcasts.
+   */
+  type: 'single' | 'group' | 'channel' | 'broadcast';
+
+  /**
+   * Number of unread messages.
+   */
+  unreadCount: number;
+
+  /**
+   * True if chat is archived.
+   */
+  isArchived?: boolean;
+
+  /**
+   * True if chat notifications are muted.
+   */
+  isMuted?: boolean;
+
+  /**
+   * True if chat is pinned.
+   */
+  isPinned?: boolean;
+
+  /**
+   * Timestamp of last activity. Chats with more recent activity are often more
+   * important.
+   */
+  lastActivity?: string;
+
+  /**
+   * Last read message sortKey (hsOrder). Used to compute 'isUnread'.
+   */
+  lastReadMessageSortKey?: number | string;
+
+  /**
+   * Deep link to open this chat in Beeper. AI agents should ALWAYS include this as a
+   * clickable link in responses.
+   */
+  linkToChat?: string;
+}
+
+export namespace Chat {
+  /**
+   * Chat participants information.
+   */
+  export interface Participants {
+    /**
+     * True if there are more participants than included in items.
+     */
+    hasMore: boolean;
+
+    /**
+     * Participants returned for this chat (limited by the request; may be a subset).
+     */
+    items: Array<Shared.User>;
+
+    /**
+     * Total number of participants in the chat.
+     */
+    total: number;
+  }
+}
+
 export interface Error {
   /**
    * Error message
@@ -91,6 +214,74 @@ export interface Error {
    * Additional error details
    */
   details?: { [key: string]: string };
+}
+
+export interface Message {
+  /**
+   * Stable message ID for cursor pagination.
+   */
+  id: string;
+
+  /**
+   * Beeper account ID the message belongs to.
+   */
+  accountID: string;
+
+  /**
+   * Beeper chat/thread/room ID.
+   */
+  chatID: string;
+
+  /**
+   * Stable message ID (same as id).
+   */
+  messageID: string;
+
+  /**
+   * Sender user ID.
+   */
+  senderID: string;
+
+  /**
+   * A unique key used to sort messages
+   */
+  sortKey: string | number;
+
+  /**
+   * Message timestamp.
+   */
+  timestamp: string;
+
+  /**
+   * Attachments included with this message, if any.
+   */
+  attachments?: Array<Attachment>;
+
+  /**
+   * True if the authenticated user sent the message.
+   */
+  isSender?: boolean;
+
+  /**
+   * True if the message is unread for the authenticated user. May be omitted.
+   */
+  isUnread?: boolean;
+
+  /**
+   * Reactions to the message, if any.
+   */
+  reactions?: Array<Reaction>;
+
+  /**
+   * Resolved sender display name (impersonator/full name/username/participant name).
+   */
+  senderName?: string;
+
+  /**
+   * Plain-text body if present. May include a JSON fallback with text entities for
+   * rich messages.
+   */
+  text?: string;
 }
 
 export interface Reaction {
@@ -171,3 +362,7 @@ export interface User {
    */
   username?: string;
 }
+
+export type ChatsCursorID = CursorID<Chat>;
+
+export type MessagesCursorID = CursorID<Message>;

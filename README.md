@@ -26,7 +26,7 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const page = await client.chats.findChats({ limit: 10, type: 'single' });
+const page = await client.v0.findChats({ limit: 10, type: 'single' });
 const chat = page.data[0];
 
 console.log(chat.id);
@@ -44,7 +44,7 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const accountsResponse: BeeperDesktop.AccountsResponse = await client.accounts.getAccounts();
+const accountsResponse: BeeperDesktop.AccountsResponse = await client.v0.getAccounts();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -57,7 +57,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const sendResponse = await client.messages
+const sendResponse = await client.v0
   .sendMessage({ chatID: '!invalid-chat-id', text: 'Test message' })
   .catch(async (err) => {
     if (err instanceof BeeperDesktop.APIError) {
@@ -99,7 +99,7 @@ const client = new BeeperDesktop({
 });
 
 // Or, configure per-request:
-await client.accounts.getAccounts({
+await client.v0.getAccounts({
   maxRetries: 5,
 });
 ```
@@ -116,7 +116,7 @@ const client = new BeeperDesktop({
 });
 
 // Override per-request:
-await client.accounts.getAccounts({
+await client.v0.getAccounts({
   timeout: 5 * 1000,
 });
 ```
@@ -134,7 +134,7 @@ You can use the `for await … of` syntax to iterate through items across all pa
 async function fetchAllMessages(params) {
   const allMessages = [];
   // Automatically fetches more pages as needed.
-  for await (const message of client.messages.searchMessages({ limit: 20, query: 'meeting' })) {
+  for await (const message of client.v0.searchMessages({ limit: 20, query: 'meeting' })) {
     allMessages.push(message);
   }
   return allMessages;
@@ -144,7 +144,7 @@ async function fetchAllMessages(params) {
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.messages.searchMessages({ limit: 20, query: 'meeting' });
+let page = await client.v0.searchMessages({ limit: 20, query: 'meeting' });
 for (const message of page.data) {
   console.log(message);
 }
@@ -170,11 +170,11 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new BeeperDesktop();
 
-const response = await client.accounts.getAccounts().asResponse();
+const response = await client.v0.getAccounts().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: accountsResponse, response: raw } = await client.accounts.getAccounts().withResponse();
+const { data: accountsResponse, response: raw } = await client.v0.getAccounts().withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(accountsResponse.accounts);
 ```
@@ -256,7 +256,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.chats.findChats({
+client.v0.findChats({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
