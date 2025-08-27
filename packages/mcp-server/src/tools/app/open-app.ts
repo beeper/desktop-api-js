@@ -7,29 +7,33 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'v0',
+  resource: 'app',
   operation: 'write',
   tags: ['app'],
   httpMethod: 'post',
-  httpPath: '/v0/focus-app',
-  operationId: 'focus_app',
+  httpPath: '/v0/open-app',
+  operationId: 'open_app',
 };
 
 export const tool: Tool = {
-  name: 'focus_app',
+  name: 'open_app',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nBring Beeper Desktop to the foreground on this device. Optionally focuses a specific chat if chatID is provided.\n- When to use: open Beeper, or jump to a specific chat.\n- Constraints: requires Beeper Desktop running locally; no-op in headless environments.\n- Idempotent: safe to call repeatedly. Returns an error if chatID is not found.\nReturns: success.\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/base_response',\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nOpen Beeper, optionally focusing a chat or message, or pre-filling a draft.\n\n# Response Schema\n```json\n{\n  type: 'object',\n  description: 'Response indicating successful app opening.',\n  properties: {\n    success: {\n      type: 'boolean',\n      description: 'Whether the app was successfully opened/focused.'\n    }\n  },\n  required: [    'success'\n  ]\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
         description:
-          'Optional Beeper chat ID to focus after bringing the app to foreground. If omitted, only foregrounds the app. Required if messageSortKey is present. No-op in headless environments.',
+          'Optional Beeper chat ID to focus after opening the app. If omitted, only opens/focuses the app.',
+      },
+      draftText: {
+        type: 'string',
+        description: 'Optional draft text to populate in the message input field.',
       },
       messageSortKey: {
         type: 'string',
-        description: 'Optional message sort key. Jumps to that message in the chat when foregrounding.',
+        description: 'Optional message sort key. Jumps to that message in the chat when opening.',
       },
       jq_filter: {
         type: 'string',
@@ -45,7 +49,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.v0.focusApp(body)));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.app.focus(body)));
 };
 
 export default { metadata, tool, handler };

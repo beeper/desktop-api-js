@@ -7,24 +7,32 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'v0',
+  resource: 'messages',
   operation: 'write',
-  tags: ['reminders'],
+  tags: ['messages'],
   httpMethod: 'post',
-  httpPath: '/v0/clear-chat-reminder',
-  operationId: 'clear_chat_reminder',
+  httpPath: '/v0/send-message',
+  operationId: 'send_message',
 };
 
 export const tool: Tool = {
-  name: 'clear_chat_reminder',
+  name: 'send_message',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nClear an existing reminder from a chat\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/base_response',\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nSend a text message to a chat. Can reply to an existing message.\n\n# Response Schema\n```json\n{\n  allOf: [    {\n      $ref: '#/$defs/base_response'\n    }\n  ],\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
-        description: 'The identifier of the chat to clear reminder from',
+        description: 'The identifier of the chat where the message will send',
+      },
+      replyToMessageID: {
+        type: 'string',
+        description: 'Provide a message ID to send this as a reply to an existing message',
+      },
+      text: {
+        type: 'string',
+        description: 'Text content of the message you want to send. You may use markdown.',
       },
       jq_filter: {
         type: 'string',
@@ -40,7 +48,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.v0.clearChatReminder(body)));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.messages.send(body)));
 };
 
 export default { metadata, tool, handler };

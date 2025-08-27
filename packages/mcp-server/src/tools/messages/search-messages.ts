@@ -6,7 +6,7 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'v0',
+  resource: 'messages',
   operation: 'read',
   tags: ['messages'],
   httpMethod: 'get',
@@ -126,7 +126,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  const response = await client.v0.searchMessages(body).asResponse();
+  const response = await client.messages.search(body).asResponse();
   return asTextContentResult(await response.json());
 };
 

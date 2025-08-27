@@ -19,36 +19,25 @@ import { AbstractPage, type CursorIDParams, CursorIDResponse } from './core/pagi
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { OAuth, OAuthRevokeTokenParams, RevokeRequest, UserInfo } from './resources/oauth';
+import { AccountListResponse, Accounts } from './resources/accounts';
+import { App, AppFocusParams, AppFocusResponse } from './resources/app';
 import {
-  AccountsResponse,
-  ArchiveRequest,
-  ClearReminderRequest,
-  DraftRequest,
-  FindChatsRequest,
-  FindChatsResponse,
-  FocusRequest,
-  GetChatRequest,
-  GetChatResponse,
-  LinkRequest,
-  LinkResponse,
-  SearchRequest,
-  SearchResponse,
-  SendRequest,
-  SendResponse,
-  SetReminderRequest,
-  V0,
-  V0ArchiveChatParams,
-  V0ClearChatReminderParams,
-  V0DraftMessageParams,
-  V0FindChatsParams,
-  V0FocusAppParams,
-  V0GetChatParams,
-  V0GetLinkToChatParams,
-  V0SearchMessagesParams,
-  V0SendMessageParams,
-  V0SetChatReminderParams,
-} from './resources/v0';
+  ChatArchiveParams,
+  ChatGetParams,
+  ChatGetResponse,
+  ChatSearchParams,
+  Chats,
+} from './resources/chats';
+import {
+  MessageGetAttachmentParams,
+  MessageGetAttachmentResponse,
+  MessageSearchParams,
+  MessageSendParams,
+  MessageSendResponse,
+  Messages,
+} from './resources/messages';
+import { OAuth, OAuthRevokeTokenParams, RevokeRequest, UserInfo } from './resources/oauth';
+import { ReminderClearParams, ReminderSetParams, Reminders } from './resources/reminders';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -166,7 +155,7 @@ export class BeeperDesktop {
    * API Client for interfacing with the Beeper Desktop API.
    *
    * @param {string | null | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? null]
-   * @param {string} [opts.baseURL=process.env['BEEPER-DESKTOP_BASE_URL'] ?? http://localhost:23374] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['BEEPER-DESKTOP_BASE_URL'] ?? http://localhost:23373] - Override the default base URL for the API.
    * @param {number} [opts.timeout=30 seconds] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -183,7 +172,7 @@ export class BeeperDesktop {
     const options: ClientOptions = {
       accessToken,
       ...opts,
-      baseURL: baseURL || `http://localhost:23374`,
+      baseURL: baseURL || `http://localhost:23373`,
     };
 
     if (!options.dangerouslyAllowBrowser && isRunningInBrowser()) {
@@ -235,7 +224,7 @@ export class BeeperDesktop {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'http://localhost:23374';
+    return this.baseURL !== 'http://localhost:23373';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -769,16 +758,36 @@ export class BeeperDesktop {
   static toFile = Uploads.toFile;
 
   /**
-   * Beeper Desktop API v0
+   * Accounts operations
    */
-  v0: API.V0 = new API.V0(this);
+  accounts: API.Accounts = new API.Accounts(this);
+  /**
+   * App operations
+   */
+  app: API.App = new API.App(this);
+  /**
+   * Chats operations
+   */
+  chats: API.Chats = new API.Chats(this);
+  /**
+   * Messages operations
+   */
+  messages: API.Messages = new API.Messages(this);
+  /**
+   * Reminders operations
+   */
+  reminders: API.Reminders = new API.Reminders(this);
   /**
    * OAuth2 authentication and token management
    */
   oauth: API.OAuth = new API.OAuth(this);
 }
 
-BeeperDesktop.V0 = V0;
+BeeperDesktop.Accounts = Accounts;
+BeeperDesktop.App = App;
+BeeperDesktop.Chats = Chats;
+BeeperDesktop.Messages = Messages;
+BeeperDesktop.Reminders = Reminders;
 BeeperDesktop.OAuth = OAuth;
 
 export declare namespace BeeperDesktop {
@@ -787,34 +796,31 @@ export declare namespace BeeperDesktop {
   export import CursorID = Pagination.CursorID;
   export { type CursorIDParams as CursorIDParams, type CursorIDResponse as CursorIDResponse };
 
+  export { Accounts as Accounts, type AccountListResponse as AccountListResponse };
+
+  export { App as App, type AppFocusResponse as AppFocusResponse, type AppFocusParams as AppFocusParams };
+
   export {
-    V0 as V0,
-    type AccountsResponse as AccountsResponse,
-    type ArchiveRequest as ArchiveRequest,
-    type ClearReminderRequest as ClearReminderRequest,
-    type DraftRequest as DraftRequest,
-    type FindChatsRequest as FindChatsRequest,
-    type FindChatsResponse as FindChatsResponse,
-    type FocusRequest as FocusRequest,
-    type GetChatRequest as GetChatRequest,
-    type GetChatResponse as GetChatResponse,
-    type LinkRequest as LinkRequest,
-    type LinkResponse as LinkResponse,
-    type SearchRequest as SearchRequest,
-    type SearchResponse as SearchResponse,
-    type SendRequest as SendRequest,
-    type SendResponse as SendResponse,
-    type SetReminderRequest as SetReminderRequest,
-    type V0ArchiveChatParams as V0ArchiveChatParams,
-    type V0ClearChatReminderParams as V0ClearChatReminderParams,
-    type V0DraftMessageParams as V0DraftMessageParams,
-    type V0FindChatsParams as V0FindChatsParams,
-    type V0FocusAppParams as V0FocusAppParams,
-    type V0GetChatParams as V0GetChatParams,
-    type V0GetLinkToChatParams as V0GetLinkToChatParams,
-    type V0SearchMessagesParams as V0SearchMessagesParams,
-    type V0SendMessageParams as V0SendMessageParams,
-    type V0SetChatReminderParams as V0SetChatReminderParams,
+    Chats as Chats,
+    type ChatGetResponse as ChatGetResponse,
+    type ChatArchiveParams as ChatArchiveParams,
+    type ChatGetParams as ChatGetParams,
+    type ChatSearchParams as ChatSearchParams,
+  };
+
+  export {
+    Messages as Messages,
+    type MessageGetAttachmentResponse as MessageGetAttachmentResponse,
+    type MessageSendResponse as MessageSendResponse,
+    type MessageGetAttachmentParams as MessageGetAttachmentParams,
+    type MessageSearchParams as MessageSearchParams,
+    type MessageSendParams as MessageSendParams,
+  };
+
+  export {
+    Reminders as Reminders,
+    type ReminderClearParams as ReminderClearParams,
+    type ReminderSetParams as ReminderSetParams,
   };
 
   export {

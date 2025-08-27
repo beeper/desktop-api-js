@@ -37,7 +37,7 @@ export interface RevokeRequest {
   /**
    * Hint about the type of token being revoked
    */
-  token_type_hint?: 'access_token' | 'refresh_token';
+  token_type_hint?: 'access_token';
 }
 
 export interface UserInfo {

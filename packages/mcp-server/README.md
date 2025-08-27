@@ -173,7 +173,7 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 import { server, endpoints, init } from "@beeper/desktop-api-mcp/server";
 
 // import a specific tool
-import archiveChat from "@beeper/desktop-api-mcp/tools/v0/archive-chat";
+import getAccounts from "@beeper/desktop-api-mcp/tools/accounts/get-accounts";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
@@ -198,39 +198,30 @@ const myCustomEndpoint = {
 };
 
 // initialize the server with your custom endpoints
-init({ server: myServer, endpoints: [archiveChat, myCustomEndpoint] });
+init({ server: myServer, endpoints: [getAccounts, myCustomEndpoint] });
 ```
 
 ## Available Tools
 
 The following tools are available in this MCP server.
 
-### Resource `v0`:
+### Resource `accounts`:
 
-- `archive_chat` (`write`) tags: [chats]: Archive or unarchive a chat. Set archived=true to move to archive, archived=false to move back to inbox
-- `clear_chat_reminder` (`write`) tags: [reminders]: Clear an existing reminder from a chat
-- `draft_message` (`write`) tags: [messages]: Draft a message in a specific chat. This will be placed in the message input field without sending
-- `find_chats` (`read`) tags: [chats]: Search and filter conversations across all messaging accounts.
-  - When to use: browse chats by inbox (primary/low-priority/archive), type, unread status, or search terms.
-  - Pagination: use cursor + direction for pagination.
-  - Performance: provide accountIDs when known for faster filtering.
-    Returns: matching chats with pagination.
-    Agents: ALWAYS use linkToChat to make clickable links in your response
-- `focus_app` (`write`) tags: [app]: Bring Beeper Desktop to the foreground on this device. Optionally focuses a specific chat if chatID is provided.
-  - When to use: open Beeper, or jump to a specific chat.
-  - Constraints: requires Beeper Desktop running locally; no-op in headless environments.
-  - Idempotent: safe to call repeatedly. Returns an error if chatID is not found.
-    Returns: success.
-- `get_accounts` (`read`) tags: [accounts]: List connected Beeper accounts available on this device.
-  - When to use: select account context before account-scoped operations.
-  - Scope: only accounts currently Connected on this device are included.
-    Returns: connected accounts.
-- `get_chat` (`read`) tags: [chats]: Retrieve chat details: metadata, participants (limited), and latest message.
-  - When to use: fetch a complete view of a chat beyond what search returns.
-  - Constraints: not available for iMessage chats ('imsg##'). Participants limited by 'maxParticipantCount' (default 20, max 500).
-    Returns: chat details.
-    Agents: ALWAYS use linkToChat to make clickable links in your response
-- `get_link_to_chat` (`write`) tags: [chats]: Generate a deep link to a specific chat or message. This link can be used to open the chat directly in the Beeper app.
+- `get_accounts` (`read`) tags: [accounts]: List connected accounts on this device. Use to pick account context.
+
+### Resource `app`:
+
+- `open_app` (`write`) tags: [app]: Open Beeper, optionally focusing a chat or message, or pre-filling a draft.
+
+### Resource `chats`:
+
+- `archive_chat` (`write`) tags: [chats]: Archive or unarchive a chat.
+- `get_chat` (`read`) tags: [chats]: Get chat details: metadata, participants (limited), last activity.
+- `search_chats` (`read`) tags: [chats]: Search chats by inbox, type, unread status, or text. Paginates.
+
+### Resource `messages`:
+
+- `get_attachment` (`write`) tags: [messages]: Download a message attachment and return the local file path.
 - `search_messages` (`read`) tags: [messages]: Search messages across chats using Beeper's message index.
   - When to use: find messages by text and/or filters (chatIDs, accountIDs, chatType, media type filters, sender, date ranges).
   - CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds messages containing these EXACT words.
@@ -246,8 +237,12 @@ The following tools are available in this MCP server.
     • "What's the name of your work chat?" (could be "Team", company name, project name)
     • "Who are the participants?" (use participantQuery in find-chats)
     Returns: matching messages and referenced chats.
-- `send_message` (`write`) tags: [messages]: Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat
-- `set_chat_reminder` (`write`) tags: [reminders]: Set a reminder for a chat at a specific time
+- `send_message` (`write`) tags: [messages]: Send a text message to a chat. Can reply to an existing message.
+
+### Resource `reminders`:
+
+- `clear_chat_reminder` (`write`) tags: [reminders]: Clear a chat reminder.
+- `set_chat_reminder` (`write`) tags: [reminders]: Set a reminder for a chat at a specific time.
 
 ### Resource `oauth`:
 

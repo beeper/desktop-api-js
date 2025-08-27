@@ -4,17 +4,16 @@ import { Metadata, Endpoint, HandlerFunction } from './types';
 
 export { Metadata, Endpoint, HandlerFunction };
 
-import archive_chat from './v0/archive-chat';
-import clear_chat_reminder from './v0/clear-chat-reminder';
-import draft_message from './v0/draft-message';
-import find_chats from './v0/find-chats';
-import focus_app from './v0/focus-app';
-import get_accounts from './v0/get-accounts';
-import get_chat from './v0/get-chat';
-import get_link_to_chat from './v0/get-link-to-chat';
-import search_messages from './v0/search-messages';
-import send_message from './v0/send-message';
-import set_chat_reminder from './v0/set-chat-reminder';
+import get_accounts from './accounts/get-accounts';
+import open_app from './app/open-app';
+import archive_chat from './chats/archive-chat';
+import get_chat from './chats/get-chat';
+import search_chats from './chats/search-chats';
+import get_attachment from './messages/get-attachment';
+import search_messages from './messages/search-messages';
+import send_message from './messages/send-message';
+import clear_chat_reminder from './reminders/clear-chat-reminder';
+import set_chat_reminder from './reminders/set-chat-reminder';
 import get_user_info_oauth from './oauth/get-user-info-oauth';
 import revoke_token_oauth from './oauth/revoke-token-oauth';
 
@@ -24,16 +23,15 @@ function addEndpoint(endpoint: Endpoint) {
   endpoints.push(endpoint);
 }
 
-addEndpoint(archive_chat);
-addEndpoint(clear_chat_reminder);
-addEndpoint(draft_message);
-addEndpoint(find_chats);
-addEndpoint(focus_app);
 addEndpoint(get_accounts);
+addEndpoint(open_app);
+addEndpoint(archive_chat);
 addEndpoint(get_chat);
-addEndpoint(get_link_to_chat);
+addEndpoint(search_chats);
+addEndpoint(get_attachment);
 addEndpoint(search_messages);
 addEndpoint(send_message);
+addEndpoint(clear_chat_reminder);
 addEndpoint(set_chat_reminder);
 addEndpoint(get_user_info_oauth);
 addEndpoint(revoke_token_oauth);
