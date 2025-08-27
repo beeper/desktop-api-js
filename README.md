@@ -26,9 +26,10 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const accounts = await client.accounts.list();
+const page = await client.chats.search({ limit: 10, type: 'single' });
+const chat = page.data[0];
 
-console.log(accounts.accounts);
+console.log(chat.id);
 ```
 
 ### Request & Response types
@@ -255,7 +256,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.accounts.list({
+client.chats.search({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
