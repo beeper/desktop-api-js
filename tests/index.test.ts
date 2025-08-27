@@ -312,13 +312,13 @@ describe('instantiate client', () => {
     test('empty env variable', () => {
       process.env['BEEPER-DESKTOP_BASE_URL'] = ''; // empty
       const client = new BeeperDesktop({ accessToken: 'My Access Token' });
-      expect(client.baseURL).toEqual('http://localhost:23374');
+      expect(client.baseURL).toEqual('http://localhost:23373');
     });
 
     test('blank env variable', () => {
       process.env['BEEPER-DESKTOP_BASE_URL'] = '  '; // blank
       const client = new BeeperDesktop({ accessToken: 'My Access Token' });
-      expect(client.baseURL).toEqual('http://localhost:23374');
+      expect(client.baseURL).toEqual('http://localhost:23373');
     });
 
     test('in request options', () => {

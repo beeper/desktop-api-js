@@ -171,16 +171,10 @@ export interface Chat {
   lastReadMessageSortKey?: number | string;
 
   /**
-   * Deep link to open this chat in Beeper. AI agents should ALWAYS include this as a
-   * clickable link in responses.
-   */
-  linkToChat?: string;
-
-  /**
    * Local numeric chat ID specific to this Beeper Desktop installation. null for
    * iMessage chats.
    */
-  localChatID?: number | null;
+  localChatID?: string | null;
 }
 
 export namespace Chat {
