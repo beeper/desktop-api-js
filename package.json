@@ -1,12 +1,12 @@
 {
-  "name": "beeper-desktop-api",
-  "version": "0.0.1",
-  "description": "The official TypeScript library for the Beeper Desktop API API",
-  "author": "Beeper Desktop API <help@beeper.com>",
+  "name": "@beeper/desktop-api",
+  "version": "0.1.0",
+  "description": "The official TypeScript library for the Beeper Desktop API",
+  "author": "Beeper Desktop <help@beeper.com>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
-  "repository": "github:stainless-sdks/beeper-desktop-api-typescript",
+  "repository": "github:beeper/desktop-api-js",
   "license": "MIT",
   "packageManager": "yarn@1.22.22",
   "files": [

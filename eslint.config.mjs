@@ -25,7 +25,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^beeper-desktop-api(/.*)?',
+              regex: '^@beeper/desktop-api(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],
@@ -34,7 +34,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['tests/**', 'examples/**'],
+    files: ['tests/**', 'examples/**', 'packages/**'],
     rules: {
       'no-restricted-imports': 'off',
     },

@@ -1,11 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { BeeperDesktopAPI } from '../client';
+import type { BeeperDesktop } from '../client';
 
 export abstract class APIResource {
-  protected _client: BeeperDesktopAPI;
+  protected _client: BeeperDesktop;
 
-  constructor(client: BeeperDesktopAPI) {
+  constructor(client: BeeperDesktop) {
     this._client = client;
   }
 }

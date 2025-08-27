@@ -1,22 +1,22 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { ArchiveChat, type ArchiveChatArchiveParams } from './archive-chat';
-export { ClearChatReminder, type ClearChatReminderClearParams } from './clear-chat-reminder';
-export { DraftMessage, type DraftMessageCreateParams } from './draft-message';
-export { FindChats, type FindChatListResponse, type FindChatListParams } from './find-chats';
-export { FocusApp, type BaseResponse, type FocusAppOpenParams } from './focus-app';
-export { GetAccounts, type GetAccountListResponse } from './get-accounts';
-export { GetChat, type User, type GetChatRetrieveResponse, type GetChatRetrieveParams } from './get-chat';
+export * from './shared';
+export { Accounts, type AccountListResponse } from './accounts';
+export { App, type AppFocusResponse, type AppFocusParams } from './app';
 export {
-  GetLinkToChat,
-  type GetLinkToChatCreateResponse,
-  type GetLinkToChatCreateParams,
-} from './get-link-to-chat';
-export { OAuth, type OAuthRetrieveUserInfoResponse, type OAuthRevokeTokenParams } from './oauth';
+  Chats,
+  type ChatGetResponse,
+  type ChatArchiveParams,
+  type ChatGetParams,
+  type ChatSearchParams,
+} from './chats';
 export {
-  SearchMessages,
-  type SearchMessageSearchResponse,
-  type SearchMessageSearchParams,
-} from './search-messages';
-export { SendMessage, type SendMessageSendResponse, type SendMessageSendParams } from './send-message';
-export { SetChatReminder, type SetChatReminderCreateParams } from './set-chat-reminder';
+  Messages,
+  type MessageGetAttachmentResponse,
+  type MessageSendResponse,
+  type MessageGetAttachmentParams,
+  type MessageSearchParams,
+  type MessageSendParams,
+} from './messages';
+export { OAuth, type RevokeRequest, type UserInfo, type OAuthRevokeTokenParams } from './oauth';
+export { Reminders, type ReminderClearParams, type ReminderSetParams } from './reminders';
