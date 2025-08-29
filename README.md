@@ -6,8 +6,6 @@ This library provides convenient access to the Beeper Desktop REST API from serv
 
 The REST API documentation can be found on [www.beeper.com](https://www.beeper.com/desktop-api). The full API of this library can be found in [api.md](api.md).
 
-It is generated with [Stainless](https://www.stainless.com/).
-
 ## Installation
 
 ```sh
