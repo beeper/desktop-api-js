@@ -19,7 +19,7 @@ import { AbstractPage, type CursorIDParams, CursorIDResponse } from './core/pagi
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { AccountListResponse, Accounts } from './resources/accounts';
+import { Accounts } from './resources/accounts';
 import { App, AppFocusParams, AppFocusResponse } from './resources/app';
 import {
   ChatArchiveParams,
@@ -36,23 +36,8 @@ import {
   MessageSendResponse,
   Messages,
 } from './resources/messages';
-import {
-  OAuth,
-  OAuthAuthorizeCallbackParams,
-  OAuthAuthorizeCallbackResponse,
-  OAuthAuthorizeParams,
-  OAuthAuthorizeResponse,
-  OAuthRegisterClientParams,
-  OAuthRegisterClientResponse,
-  OAuthRevokeTokenParams,
-  OAuthTokenParams,
-  OAuthTokenResponse,
-  OAuthWellKnownAuthorizationServerResponse,
-  OAuthWellKnownProtectedResourceResponse,
-  RevokeRequest,
-  UserInfo,
-} from './resources/oauth';
 import { ReminderClearParams, ReminderSetParams, Reminders } from './resources/reminders';
+import { GetAccountsResponse, RevokeRequest, Token, TokenRevokeParams, UserInfo } from './resources/token';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -69,7 +54,7 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Access token - either created in-app or obtained via OAuth2 Authorization Code flow (PKCE).
+   * Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for all API operations.
    */
   accessToken?: string | undefined;
 
@@ -796,9 +781,9 @@ export class BeeperDesktop {
    */
   reminders: API.Reminders = new API.Reminders(this);
   /**
-   * OAuth2 authentication and token management
+   * Authenticated operations related to the current access token
    */
-  oauth: API.OAuth = new API.OAuth(this);
+  token: API.Token = new API.Token(this);
 }
 
 BeeperDesktop.Accounts = Accounts;
@@ -806,7 +791,7 @@ BeeperDesktop.App = App;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
 BeeperDesktop.Reminders = Reminders;
-BeeperDesktop.OAuth = OAuth;
+BeeperDesktop.Token = Token;
 
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
@@ -814,7 +799,7 @@ export declare namespace BeeperDesktop {
   export import CursorID = Pagination.CursorID;
   export { type CursorIDParams as CursorIDParams, type CursorIDResponse as CursorIDResponse };
 
-  export { Accounts as Accounts, type AccountListResponse as AccountListResponse };
+  export { Accounts as Accounts };
 
   export { App as App, type AppFocusResponse as AppFocusResponse, type AppFocusParams as AppFocusParams };
 
@@ -842,20 +827,11 @@ export declare namespace BeeperDesktop {
   };
 
   export {
-    OAuth as OAuth,
+    Token as Token,
+    type GetAccountsResponse as GetAccountsResponse,
     type RevokeRequest as RevokeRequest,
     type UserInfo as UserInfo,
-    type OAuthAuthorizeResponse as OAuthAuthorizeResponse,
-    type OAuthAuthorizeCallbackResponse as OAuthAuthorizeCallbackResponse,
-    type OAuthRegisterClientResponse as OAuthRegisterClientResponse,
-    type OAuthTokenResponse as OAuthTokenResponse,
-    type OAuthWellKnownAuthorizationServerResponse as OAuthWellKnownAuthorizationServerResponse,
-    type OAuthWellKnownProtectedResourceResponse as OAuthWellKnownProtectedResourceResponse,
-    type OAuthAuthorizeParams as OAuthAuthorizeParams,
-    type OAuthAuthorizeCallbackParams as OAuthAuthorizeCallbackParams,
-    type OAuthRegisterClientParams as OAuthRegisterClientParams,
-    type OAuthRevokeTokenParams as OAuthRevokeTokenParams,
-    type OAuthTokenParams as OAuthTokenParams,
+    type TokenRevokeParams as TokenRevokeParams,
   };
 
   export type Account = API.Account;

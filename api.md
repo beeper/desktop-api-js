@@ -13,13 +13,9 @@ Types:
 
 # Accounts
 
-Types:
-
-- <code><a href="./src/resources/accounts.ts">AccountListResponse</a></code>
-
 Methods:
 
-- <code title="get /v0/get-accounts">client.accounts.<a href="./src/resources/accounts.ts">list</a>() -> AccountListResponse</code>
+- <code title="get /v0/get-accounts">client.accounts.<a href="./src/resources/accounts.ts">list</a>() -> GetAccountsResponse</code>
 
 # App
 
@@ -63,26 +59,16 @@ Methods:
 - <code title="post /v0/clear-chat-reminder">client.reminders.<a href="./src/resources/reminders.ts">clear</a>({ ...params }) -> BaseResponse</code>
 - <code title="post /v0/set-chat-reminder">client.reminders.<a href="./src/resources/reminders.ts">set</a>({ ...params }) -> BaseResponse</code>
 
-# OAuth
+# Token
 
 Types:
 
-- <code><a href="./src/resources/oauth.ts">RevokeRequest</a></code>
-- <code><a href="./src/resources/oauth.ts">UserInfo</a></code>
-- <code><a href="./src/resources/oauth.ts">OAuthAuthorizeResponse</a></code>
-- <code><a href="./src/resources/oauth.ts">OAuthAuthorizeCallbackResponse</a></code>
-- <code><a href="./src/resources/oauth.ts">OAuthRegisterClientResponse</a></code>
-- <code><a href="./src/resources/oauth.ts">OAuthTokenResponse</a></code>
-- <code><a href="./src/resources/oauth.ts">OAuthWellKnownAuthorizationServerResponse</a></code>
-- <code><a href="./src/resources/oauth.ts">OAuthWellKnownProtectedResourceResponse</a></code>
+- <code><a href="./src/resources/token.ts">GetAccountsResponse</a></code>
+- <code><a href="./src/resources/token.ts">RevokeRequest</a></code>
+- <code><a href="./src/resources/token.ts">UserInfo</a></code>
 
 Methods:
 
-- <code title="get /oauth/authorize">client.oauth.<a href="./src/resources/oauth.ts">authorize</a>({ ...params }) -> string</code>
-- <code title="post /oauth/authorize/callback">client.oauth.<a href="./src/resources/oauth.ts">authorizeCallback</a>({ ...params }) -> OAuthAuthorizeCallbackResponse</code>
-- <code title="get /oauth/userinfo">client.oauth.<a href="./src/resources/oauth.ts">getUserInfo</a>() -> UserInfo</code>
-- <code title="post /oauth/register">client.oauth.<a href="./src/resources/oauth.ts">registerClient</a>({ ...params }) -> OAuthRegisterClientResponse</code>
-- <code title="post /oauth/revoke">client.oauth.<a href="./src/resources/oauth.ts">revokeToken</a>({ ...params }) -> void</code>
-- <code title="post /oauth/token">client.oauth.<a href="./src/resources/oauth.ts">token</a>({ ...params }) -> OAuthTokenResponse</code>
-- <code title="get /.well-known/oauth-authorization-server">client.oauth.<a href="./src/resources/oauth.ts">wellKnownAuthorizationServer</a>() -> OAuthWellKnownAuthorizationServerResponse</code>
-- <code title="get /.well-known/oauth-protected-resource">client.oauth.<a href="./src/resources/oauth.ts">wellKnownProtectedResource</a>() -> OAuthWellKnownProtectedResourceResponse</code>
+- <code title="get /v0/get-accounts">client.token.<a href="./src/resources/token.ts">accounts</a>() -> GetAccountsResponse</code>
+- <code title="get /oauth/userinfo">client.token.<a href="./src/resources/token.ts">info</a>() -> UserInfo</code>
+- <code title="post /oauth/revoke">client.token.<a href="./src/resources/token.ts">revoke</a>({ ...params }) -> void</code>
