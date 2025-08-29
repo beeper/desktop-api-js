@@ -44,7 +44,7 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const accounts: BeeperDesktop.AccountListResponse = await client.accounts.list();
+const getAccountsResponse: BeeperDesktop.GetAccountsResponse = await client.accounts.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -174,9 +174,9 @@ const response = await client.accounts.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: accounts, response: raw } = await client.accounts.list().withResponse();
+const { data: getAccountsResponse, response: raw } = await client.accounts.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(accounts.accounts);
+console.log(getAccountsResponse.accounts);
 ```
 
 ### Logging

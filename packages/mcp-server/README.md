@@ -244,13 +244,8 @@ The following tools are available in this MCP server.
 - `clear_chat_reminder` (`write`) tags: [reminders]: Clear a chat reminder.
 - `set_chat_reminder` (`write`) tags: [reminders]: Set a reminder for a chat at a specific time.
 
-### Resource `oauth`:
+### Resource `token`:
 
-- `authorize_oauth` (`read`): Starts the OAuth2 Authorization Code flow with PKCE. Renders an HTML consent page where the user can approve the requested scopes.
-- `authorize_callback_oauth` (`write`): Completes the OAuth2 approval initiated by the consent screen and returns an authorization code if approved.
-- `get_user_info_oauth` (`read`): Returns information about the authenticated user/token
-- `register_client_oauth` (`write`): Registers a new OAuth2 public client using Dynamic Client Registration (RFC 7591). Returns client metadata.
-- `revoke_token_oauth` (`write`): Revoke an access token or refresh token (RFC 7009)
-- `token_oauth` (`write`): Exchanges an authorization code (PKCE) for an access token. Supports the Authorization Code grant with PKCE.
-- `well_known_authorization_server_oauth` (`read`): RFC 8414 authorization server metadata document.
-- `well_known_protected_resource_oauth` (`read`): RFC 9728 protected resource metadata document.
+- `accounts_token` (`read`): List connected Beeper accounts available on this device
+- `info_token` (`read`): Returns information about the authenticated user/token
+- `revoke_token` (`write`): Revoke an access token or refresh token (RFC 7009)

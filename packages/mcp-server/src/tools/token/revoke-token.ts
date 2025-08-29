@@ -6,7 +6,7 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'oauth',
+  resource: 'token',
   operation: 'write',
   tags: [],
   httpMethod: 'post',
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export const tool: Tool = {
-  name: 'revoke_token_oauth',
+  name: 'revoke_token',
   description: 'Revoke an access token or refresh token (RFC 7009)',
   inputSchema: {
     type: 'object',
@@ -37,7 +37,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  const response = await client.oauth.revokeToken(body).asResponse();
+  const response = await client.token.revoke(body).asResponse();
   return asTextContentResult(await response.text());
 };
 
