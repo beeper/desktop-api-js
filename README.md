@@ -1,10 +1,10 @@
-# Beeper Desktop TypeScript API Library
+# Beeper Desktop API TypeScript Library
 
 [![NPM version](<https://img.shields.io/npm/v/@beeper/desktop-api.svg?label=npm%20(stable)>)](https://npmjs.org/package/@beeper/desktop-api) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@beeper/desktop-api)
 
-This library provides convenient access to the Beeper Desktop REST API from server-side TypeScript or JavaScript.
+This library provides convenient access to the Beeper Desktop API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found on [www.beeper.com](https://www.beeper.com/desktop-api). The full API of this library can be found in [api.md](api.md).
+The documentation for Beeper Desktop API can be found on [developers.beeper.com/desktop-api](https://developers.beeper.com/desktop-api/). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
