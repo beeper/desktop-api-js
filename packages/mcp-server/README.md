@@ -246,6 +246,4 @@ The following tools are available in this MCP server.
 
 ### Resource `token`:
 
-- `accounts_token` (`read`): List connected Beeper accounts available on this device
 - `info_token` (`read`): Returns information about the authenticated user/token
-- `revoke_token` (`write`): Revoke an access token or refresh token (RFC 7009)

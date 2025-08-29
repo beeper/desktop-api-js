@@ -14,9 +14,7 @@ import search_messages from './messages/search-messages';
 import send_message from './messages/send-message';
 import clear_chat_reminder from './reminders/clear-chat-reminder';
 import set_chat_reminder from './reminders/set-chat-reminder';
-import accounts_token from './token/accounts-token';
 import info_token from './token/info-token';
-import revoke_token from './token/revoke-token';
 
 export const endpoints: Endpoint[] = [];
 
@@ -34,9 +32,7 @@ addEndpoint(search_messages);
 addEndpoint(send_message);
 addEndpoint(clear_chat_reminder);
 addEndpoint(set_chat_reminder);
-addEndpoint(accounts_token);
 addEndpoint(info_token);
-addEndpoint(revoke_token);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';

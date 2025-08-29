@@ -37,7 +37,7 @@ import {
   Messages,
 } from './resources/messages';
 import { ReminderClearParams, ReminderSetParams, Reminders } from './resources/reminders';
-import { GetAccountsResponse, RevokeRequest, Token, TokenRevokeParams, UserInfo } from './resources/token';
+import { GetAccountsResponse, RevokeRequest, Token, UserInfo } from './resources/token';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -155,7 +155,7 @@ export class BeeperDesktop {
    * API Client for interfacing with the Beeper Desktop API.
    *
    * @param {string | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['BEEPER-DESKTOP_BASE_URL'] ?? http://localhost:23374] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['BEEPER-DESKTOP_BASE_URL'] ?? http://localhost:23373] - Override the default base URL for the API.
    * @param {number} [opts.timeout=30 seconds] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -178,7 +178,7 @@ export class BeeperDesktop {
     const options: ClientOptions = {
       accessToken,
       ...opts,
-      baseURL: baseURL || `http://localhost:23374`,
+      baseURL: baseURL || `http://localhost:23373`,
     };
 
     if (!options.dangerouslyAllowBrowser && isRunningInBrowser()) {
@@ -230,7 +230,7 @@ export class BeeperDesktop {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'http://localhost:23374';
+    return this.baseURL !== 'http://localhost:23373';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -781,7 +781,7 @@ export class BeeperDesktop {
    */
   reminders: API.Reminders = new API.Reminders(this);
   /**
-   * Authenticated operations related to the current access token
+   * Operations related to the current access token
    */
   token: API.Token = new API.Token(this);
 }
@@ -831,7 +831,6 @@ export declare namespace BeeperDesktop {
     type GetAccountsResponse as GetAccountsResponse,
     type RevokeRequest as RevokeRequest,
     type UserInfo as UserInfo,
-    type TokenRevokeParams as TokenRevokeParams,
   };
 
   export type Account = API.Account;

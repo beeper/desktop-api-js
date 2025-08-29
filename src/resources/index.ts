@@ -19,10 +19,4 @@ export {
   type MessageSendParams,
 } from './messages';
 export { Reminders, type ReminderClearParams, type ReminderSetParams } from './reminders';
-export {
-  Token,
-  type GetAccountsResponse,
-  type RevokeRequest,
-  type UserInfo,
-  type TokenRevokeParams,
-} from './token';
+export { Token, type GetAccountsResponse, type RevokeRequest, type UserInfo } from './token';
