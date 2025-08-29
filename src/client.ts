@@ -36,7 +36,22 @@ import {
   MessageSendResponse,
   Messages,
 } from './resources/messages';
-import { OAuth, OAuthRevokeTokenParams, RevokeRequest, UserInfo } from './resources/oauth';
+import {
+  OAuth,
+  OAuthAuthorizeCallbackParams,
+  OAuthAuthorizeCallbackResponse,
+  OAuthAuthorizeParams,
+  OAuthAuthorizeResponse,
+  OAuthRegisterClientParams,
+  OAuthRegisterClientResponse,
+  OAuthRevokeTokenParams,
+  OAuthTokenParams,
+  OAuthTokenResponse,
+  OAuthWellKnownAuthorizationServerResponse,
+  OAuthWellKnownProtectedResourceResponse,
+  RevokeRequest,
+  UserInfo,
+} from './resources/oauth';
 import { ReminderClearParams, ReminderSetParams, Reminders } from './resources/reminders';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
@@ -54,9 +69,9 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Access token - either created in-app or obtained via OAuth2 authorization code flow
+   * Access token - either created in-app or obtained via OAuth2 Authorization Code flow (PKCE).
    */
-  accessToken?: string | null | undefined;
+  accessToken?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -137,7 +152,7 @@ export interface ClientOptions {
  * API Client for interfacing with the Beeper Desktop API.
  */
 export class BeeperDesktop {
-  accessToken: string | null;
+  accessToken: string;
 
   baseURL: string;
   maxRetries: number;
@@ -154,7 +169,7 @@ export class BeeperDesktop {
   /**
    * API Client for interfacing with the Beeper Desktop API.
    *
-   * @param {string | null | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? null]
+   * @param {string | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? undefined]
    * @param {string} [opts.baseURL=process.env['BEEPER-DESKTOP_BASE_URL'] ?? http://localhost:23374] - Override the default base URL for the API.
    * @param {number} [opts.timeout=30 seconds] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -166,9 +181,15 @@ export class BeeperDesktop {
    */
   constructor({
     baseURL = readEnv('BEEPER-DESKTOP_BASE_URL'),
-    accessToken = readEnv('BEEPER_ACCESS_TOKEN') ?? null,
+    accessToken = readEnv('BEEPER_ACCESS_TOKEN'),
     ...opts
   }: ClientOptions = {}) {
+    if (accessToken === undefined) {
+      throw new Errors.BeeperDesktopError(
+        "The BEEPER_ACCESS_TOKEN environment variable is missing or empty; either provide it, or instantiate the BeeperDesktop client with an accessToken option, like new BeeperDesktop({ accessToken: 'My Access Token' }).",
+      );
+    }
+
     const options: ClientOptions = {
       accessToken,
       ...opts,
@@ -240,9 +261,6 @@ export class BeeperDesktop {
   }
 
   protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    if (this.accessToken == null) {
-      return undefined;
-    }
     return buildHeaders([{ Authorization: `Bearer ${this.accessToken}` }]);
   }
 
@@ -827,7 +845,17 @@ export declare namespace BeeperDesktop {
     OAuth as OAuth,
     type RevokeRequest as RevokeRequest,
     type UserInfo as UserInfo,
+    type OAuthAuthorizeResponse as OAuthAuthorizeResponse,
+    type OAuthAuthorizeCallbackResponse as OAuthAuthorizeCallbackResponse,
+    type OAuthRegisterClientResponse as OAuthRegisterClientResponse,
+    type OAuthTokenResponse as OAuthTokenResponse,
+    type OAuthWellKnownAuthorizationServerResponse as OAuthWellKnownAuthorizationServerResponse,
+    type OAuthWellKnownProtectedResourceResponse as OAuthWellKnownProtectedResourceResponse,
+    type OAuthAuthorizeParams as OAuthAuthorizeParams,
+    type OAuthAuthorizeCallbackParams as OAuthAuthorizeCallbackParams,
+    type OAuthRegisterClientParams as OAuthRegisterClientParams,
     type OAuthRevokeTokenParams as OAuthRevokeTokenParams,
+    type OAuthTokenParams as OAuthTokenParams,
   };
 
   export type Account = API.Account;

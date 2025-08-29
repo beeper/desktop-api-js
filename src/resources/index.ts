@@ -18,5 +18,20 @@ export {
   type MessageSearchParams,
   type MessageSendParams,
 } from './messages';
-export { OAuth, type RevokeRequest, type UserInfo, type OAuthRevokeTokenParams } from './oauth';
+export {
+  OAuth,
+  type RevokeRequest,
+  type UserInfo,
+  type OAuthAuthorizeResponse,
+  type OAuthAuthorizeCallbackResponse,
+  type OAuthRegisterClientResponse,
+  type OAuthTokenResponse,
+  type OAuthWellKnownAuthorizationServerResponse,
+  type OAuthWellKnownProtectedResourceResponse,
+  type OAuthAuthorizeParams,
+  type OAuthAuthorizeCallbackParams,
+  type OAuthRegisterClientParams,
+  type OAuthRevokeTokenParams,
+  type OAuthTokenParams,
+} from './oauth';
 export { Reminders, type ReminderClearParams, type ReminderSetParams } from './reminders';

@@ -14,8 +14,14 @@ import search_messages from './messages/search-messages';
 import send_message from './messages/send-message';
 import clear_chat_reminder from './reminders/clear-chat-reminder';
 import set_chat_reminder from './reminders/set-chat-reminder';
+import authorize_oauth from './oauth/authorize-oauth';
+import authorize_callback_oauth from './oauth/authorize-callback-oauth';
 import get_user_info_oauth from './oauth/get-user-info-oauth';
+import register_client_oauth from './oauth/register-client-oauth';
 import revoke_token_oauth from './oauth/revoke-token-oauth';
+import token_oauth from './oauth/token-oauth';
+import well_known_authorization_server_oauth from './oauth/well-known-authorization-server-oauth';
+import well_known_protected_resource_oauth from './oauth/well-known-protected-resource-oauth';
 
 export const endpoints: Endpoint[] = [];
 
@@ -33,8 +39,14 @@ addEndpoint(search_messages);
 addEndpoint(send_message);
 addEndpoint(clear_chat_reminder);
 addEndpoint(set_chat_reminder);
+addEndpoint(authorize_oauth);
+addEndpoint(authorize_callback_oauth);
 addEndpoint(get_user_info_oauth);
+addEndpoint(register_client_oauth);
 addEndpoint(revoke_token_oauth);
+addEndpoint(token_oauth);
+addEndpoint(well_known_authorization_server_oauth);
+addEndpoint(well_known_protected_resource_oauth);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';
