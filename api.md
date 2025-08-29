@@ -69,6 +69,4 @@ Types:
 
 Methods:
 
-- <code title="get /v0/get-accounts">client.token.<a href="./src/resources/token.ts">accounts</a>() -> GetAccountsResponse</code>
 - <code title="get /oauth/userinfo">client.token.<a href="./src/resources/token.ts">info</a>() -> UserInfo</code>
-- <code title="post /oauth/revoke">client.token.<a href="./src/resources/token.ts">revoke</a>({ ...params }) -> void</code>
