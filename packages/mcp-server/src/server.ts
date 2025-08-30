@@ -32,7 +32,7 @@ export const newMcpServer = () =>
   new McpServer(
     {
       name: 'beeper_desktop_api_api',
-      version: '0.1.0',
+      version: '0.1.1',
     },
     {
       capabilities: { tools: {}, logging: {} },
