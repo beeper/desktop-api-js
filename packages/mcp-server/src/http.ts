@@ -3,11 +3,17 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 
+import cors from 'cors';
 import express from 'express';
 import { fromError } from 'zod-validation-error/v3';
 import { McpOptions, parseQueryOptions } from './options';
 import { initMcpServer, newMcpServer } from './server';
 import { parseAuthHeaders } from './headers';
+
+const oauthResourceIdentifier = (req: express.Request): string => {
+  const protocol = req.headers['x-forwarded-proto'] ?? req.protocol;
+  return `${protocol}://${req.get('host')}/`;
+};
 
 const newServer = (
   defaultMcpOptions: McpOptions,
@@ -43,6 +49,11 @@ const newServer = (
       mcpOptions,
     });
   } catch {
+    const resourceIdentifier = oauthResourceIdentifier(req);
+    res.set(
+      'WWW-Authenticate',
+      `Bearer resource_metadata="${resourceIdentifier}.well-known/oauth-protected-resource"`,
+    );
     res.status(401).json({
       jsonrpc: '2.0',
       error: {
@@ -88,11 +99,22 @@ const del = async (req: express.Request, res: express.Response) => {
   });
 };
 
+const oauthMetadata = (req: express.Request, res: express.Response) => {
+  const resourceIdentifier = oauthResourceIdentifier(req);
+  res.json({
+    resource: resourceIdentifier,
+    authorization_servers: ['http://localhost:23373/oauth/authorize'],
+    bearer_methods_supported: ['header'],
+    scopes_supported: 'read write',
+  });
+};
+
 export const streamableHTTPApp = (options: McpOptions): express.Express => {
   const app = express();
   app.set('query parser', 'extended');
   app.use(express.json());
 
+  app.get('/.well-known/oauth-protected-resource', cors(), oauthMetadata);
   app.get('/', get);
   app.post('/', post(options));
   app.delete('/', del);

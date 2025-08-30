@@ -92,7 +92,7 @@ export interface ClientOptions {
    * The maximum number of times that the client will retry a request in case of a
    * temporary failure, like a network error or a 5XX error from the server.
    *
-   * @default 3
+   * @default 2
    */
   maxRetries?: number | undefined;
 
@@ -159,7 +159,7 @@ export class BeeperDesktop {
    * @param {number} [opts.timeout=30 seconds] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
-   * @param {number} [opts.maxRetries=3] - The maximum number of times the client will retry a request.
+   * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
    * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    * @param {boolean} [opts.dangerouslyAllowBrowser=false] - By default, client-side use of this library is not allowed, as it risks exposing your secret API credentials to attackers.
@@ -198,7 +198,7 @@ export class BeeperDesktop {
       parseLogLevel(readEnv('BEEPER-DESKTOP_LOG'), "process.env['BEEPER-DESKTOP_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
-    this.maxRetries = options.maxRetries ?? 3;
+    this.maxRetries = options.maxRetries ?? 2;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
 
@@ -626,8 +626,8 @@ export class BeeperDesktop {
   }
 
   private calculateDefaultRetryTimeoutMillis(retriesRemaining: number, maxRetries: number): number {
-    const initialRetryDelay = 1.0;
-    const maxRetryDelay = 10.0;
+    const initialRetryDelay = 0.5;
+    const maxRetryDelay = 8.0;
 
     const numRetries = maxRetries - retriesRemaining;
 
