@@ -13,13 +13,9 @@ Types:
 
 # Accounts
 
-Types:
-
-- <code><a href="./src/resources/accounts.ts">AccountListResponse</a></code>
-
 Methods:
 
-- <code title="get /v0/get-accounts">client.accounts.<a href="./src/resources/accounts.ts">list</a>() -> AccountListResponse</code>
+- <code title="get /v0/get-accounts">client.accounts.<a href="./src/resources/accounts.ts">list</a>() -> GetAccountsResponse</code>
 
 # App
 
@@ -63,14 +59,14 @@ Methods:
 - <code title="post /v0/clear-chat-reminder">client.reminders.<a href="./src/resources/reminders.ts">clear</a>({ ...params }) -> BaseResponse</code>
 - <code title="post /v0/set-chat-reminder">client.reminders.<a href="./src/resources/reminders.ts">set</a>({ ...params }) -> BaseResponse</code>
 
-# OAuth
+# Token
 
 Types:
 
-- <code><a href="./src/resources/oauth.ts">RevokeRequest</a></code>
-- <code><a href="./src/resources/oauth.ts">UserInfo</a></code>
+- <code><a href="./src/resources/token.ts">GetAccountsResponse</a></code>
+- <code><a href="./src/resources/token.ts">RevokeRequest</a></code>
+- <code><a href="./src/resources/token.ts">UserInfo</a></code>
 
 Methods:
 
-- <code title="get /oauth/userinfo">client.oauth.<a href="./src/resources/oauth.ts">getUserInfo</a>() -> UserInfo</code>
-- <code title="post /oauth/revoke">client.oauth.<a href="./src/resources/oauth.ts">revokeToken</a>({ ...params }) -> void</code>
+- <code title="get /oauth/userinfo">client.token.<a href="./src/resources/token.ts">info</a>() -> UserInfo</code>

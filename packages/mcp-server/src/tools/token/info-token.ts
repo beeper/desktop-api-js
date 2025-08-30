@@ -7,7 +7,7 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'oauth',
+  resource: 'token',
   operation: 'read',
   tags: [],
   httpMethod: 'get',
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export const tool: Tool = {
-  name: 'get_user_info_oauth',
+  name: 'info_token',
   description:
     "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nReturns information about the authenticated user/token\n\n# Response Schema\n```json\n{\n  $ref: '#/$defs/user_info',\n  $defs: {\n    user_info: {\n      type: 'object',\n      properties: {\n        iat: {\n          type: 'number',\n          description: 'Issued at timestamp (Unix epoch seconds)'\n        },\n        scope: {\n          type: 'string',\n          description: 'Granted scopes'\n        },\n        sub: {\n          type: 'string',\n          description: 'Subject identifier (token ID)'\n        },\n        token_use: {\n          type: 'string',\n          description: 'Token type',\n          enum: [            'access'\n          ]\n        },\n        aud: {\n          type: 'string',\n          description: 'Audience (client ID)'\n        },\n        client_id: {\n          type: 'string',\n          description: 'Client identifier'\n        },\n        exp: {\n          type: 'number',\n          description: 'Expiration timestamp (Unix epoch seconds)'\n        }\n      },\n      required: [        'iat',\n        'scope',\n        'sub',\n        'token_use'\n      ]\n    }\n  }\n}\n```",
   inputSchema: {
@@ -38,7 +38,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.oauth.getUserInfo()));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.token.info()));
 };
 
 export default { metadata, tool, handler };

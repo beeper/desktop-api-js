@@ -1,31 +1,31 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
-import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
 /**
- * OAuth2 authentication and token management
+ * Operations related to the current access token
  */
-export class OAuth extends APIResource {
+export class Token extends APIResource {
   /**
    * Returns information about the authenticated user/token
    */
-  getUserInfo(options?: RequestOptions): APIPromise<UserInfo> {
+  info(options?: RequestOptions): APIPromise<UserInfo> {
     return this._client.get('/oauth/userinfo', options);
   }
+}
 
+/**
+ * Response payload for listing connected Beeper accounts.
+ */
+export interface GetAccountsResponse {
   /**
-   * Revoke an access token or refresh token (RFC 7009)
+   * Connected accounts the user can act through. Includes accountID, network, and
+   * user identity.
    */
-  revokeToken(body: OAuthRevokeTokenParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.post('/oauth/revoke', {
-      body,
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
-  }
+  accounts: Array<Shared.Account>;
 }
 
 export interface RevokeRequest {
@@ -77,22 +77,10 @@ export interface UserInfo {
   exp?: number;
 }
 
-export interface OAuthRevokeTokenParams {
-  /**
-   * The token to revoke
-   */
-  token: string;
-
-  /**
-   * Token type hint (RFC 7009)
-   */
-  token_type_hint?: 'access_token';
-}
-
-export declare namespace OAuth {
+export declare namespace Token {
   export {
+    type GetAccountsResponse as GetAccountsResponse,
     type RevokeRequest as RevokeRequest,
     type UserInfo as UserInfo,
-    type OAuthRevokeTokenParams as OAuthRevokeTokenParams,
   };
 }

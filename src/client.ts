@@ -19,7 +19,7 @@ import { AbstractPage, type CursorIDParams, CursorIDResponse } from './core/pagi
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { AccountListResponse, Accounts } from './resources/accounts';
+import { Accounts } from './resources/accounts';
 import { App, AppFocusParams, AppFocusResponse } from './resources/app';
 import {
   ChatArchiveParams,
@@ -36,8 +36,8 @@ import {
   MessageSendResponse,
   Messages,
 } from './resources/messages';
-import { OAuth, OAuthRevokeTokenParams, RevokeRequest, UserInfo } from './resources/oauth';
 import { ReminderClearParams, ReminderSetParams, Reminders } from './resources/reminders';
+import { GetAccountsResponse, RevokeRequest, Token, UserInfo } from './resources/token';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -54,9 +54,9 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Access token - either created in-app or obtained via OAuth2 authorization code flow
+   * Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for all API operations.
    */
-  accessToken?: string | null | undefined;
+  accessToken?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -137,7 +137,7 @@ export interface ClientOptions {
  * API Client for interfacing with the Beeper Desktop API.
  */
 export class BeeperDesktop {
-  accessToken: string | null;
+  accessToken: string;
 
   baseURL: string;
   maxRetries: number;
@@ -154,8 +154,8 @@ export class BeeperDesktop {
   /**
    * API Client for interfacing with the Beeper Desktop API.
    *
-   * @param {string | null | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? null]
-   * @param {string} [opts.baseURL=process.env['BEEPER-DESKTOP_BASE_URL'] ?? http://localhost:23374] - Override the default base URL for the API.
+   * @param {string | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? undefined]
+   * @param {string} [opts.baseURL=process.env['BEEPER-DESKTOP_BASE_URL'] ?? http://localhost:23373] - Override the default base URL for the API.
    * @param {number} [opts.timeout=30 seconds] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -166,13 +166,19 @@ export class BeeperDesktop {
    */
   constructor({
     baseURL = readEnv('BEEPER-DESKTOP_BASE_URL'),
-    accessToken = readEnv('BEEPER_ACCESS_TOKEN') ?? null,
+    accessToken = readEnv('BEEPER_ACCESS_TOKEN'),
     ...opts
   }: ClientOptions = {}) {
+    if (accessToken === undefined) {
+      throw new Errors.BeeperDesktopError(
+        "The BEEPER_ACCESS_TOKEN environment variable is missing or empty; either provide it, or instantiate the BeeperDesktop client with an accessToken option, like new BeeperDesktop({ accessToken: 'My Access Token' }).",
+      );
+    }
+
     const options: ClientOptions = {
       accessToken,
       ...opts,
-      baseURL: baseURL || `http://localhost:23374`,
+      baseURL: baseURL || `http://localhost:23373`,
     };
 
     if (!options.dangerouslyAllowBrowser && isRunningInBrowser()) {
@@ -224,7 +230,7 @@ export class BeeperDesktop {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'http://localhost:23374';
+    return this.baseURL !== 'http://localhost:23373';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -240,9 +246,6 @@ export class BeeperDesktop {
   }
 
   protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    if (this.accessToken == null) {
-      return undefined;
-    }
     return buildHeaders([{ Authorization: `Bearer ${this.accessToken}` }]);
   }
 
@@ -392,7 +395,7 @@ export class BeeperDesktop {
     const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
     const headersTime = Date.now();
 
-    if (response instanceof Error) {
+    if (response instanceof globalThis.Error) {
       const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
       if (options.signal?.aborted) {
         throw new Errors.APIUserAbortError();
@@ -778,9 +781,9 @@ export class BeeperDesktop {
    */
   reminders: API.Reminders = new API.Reminders(this);
   /**
-   * OAuth2 authentication and token management
+   * Operations related to the current access token
    */
-  oauth: API.OAuth = new API.OAuth(this);
+  token: API.Token = new API.Token(this);
 }
 
 BeeperDesktop.Accounts = Accounts;
@@ -788,7 +791,7 @@ BeeperDesktop.App = App;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
 BeeperDesktop.Reminders = Reminders;
-BeeperDesktop.OAuth = OAuth;
+BeeperDesktop.Token = Token;
 
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
@@ -796,7 +799,7 @@ export declare namespace BeeperDesktop {
   export import CursorID = Pagination.CursorID;
   export { type CursorIDParams as CursorIDParams, type CursorIDResponse as CursorIDResponse };
 
-  export { Accounts as Accounts, type AccountListResponse as AccountListResponse };
+  export { Accounts as Accounts };
 
   export { App as App, type AppFocusResponse as AppFocusResponse, type AppFocusParams as AppFocusParams };
 
@@ -824,10 +827,10 @@ export declare namespace BeeperDesktop {
   };
 
   export {
-    OAuth as OAuth,
+    Token as Token,
+    type GetAccountsResponse as GetAccountsResponse,
     type RevokeRequest as RevokeRequest,
     type UserInfo as UserInfo,
-    type OAuthRevokeTokenParams as OAuthRevokeTokenParams,
   };
 
   export type Account = API.Account;

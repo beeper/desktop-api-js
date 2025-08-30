@@ -1,7 +1,5 @@
 # Beeper Desktop TypeScript MCP Server
 
-It is generated with [Stainless](https://www.stainless.com/).
-
 ## Installation
 
 ### Direct invocation
@@ -244,7 +242,6 @@ The following tools are available in this MCP server.
 - `clear_chat_reminder` (`write`) tags: [reminders]: Clear a chat reminder.
 - `set_chat_reminder` (`write`) tags: [reminders]: Set a reminder for a chat at a specific time.
 
-### Resource `oauth`:
+### Resource `token`:
 
-- `get_user_info_oauth` (`read`): Returns information about the authenticated user/token
-- `revoke_token_oauth` (`write`): Revoke an access token or refresh token (RFC 7009)
+- `info_token` (`read`): Returns information about the authenticated user/token
