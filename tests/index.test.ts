@@ -348,12 +348,12 @@ describe('instantiate client', () => {
   });
 
   test('maxRetries option is correctly set', () => {
-    const client = new BeeperDesktop({ maxRetries: 6, accessToken: 'My Access Token' });
-    expect(client.maxRetries).toEqual(6);
+    const client = new BeeperDesktop({ maxRetries: 4, accessToken: 'My Access Token' });
+    expect(client.maxRetries).toEqual(4);
 
     // default
     const client2 = new BeeperDesktop({ accessToken: 'My Access Token' });
-    expect(client2.maxRetries).toEqual(3);
+    expect(client2.maxRetries).toEqual(2);
   });
 
   describe('withOptions', () => {

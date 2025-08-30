@@ -20,7 +20,7 @@ or products provided by Beeper Desktop, please follow the respective company's s
 
 ### Beeper Desktop Terms and Policies
 
-Please contact help@beeper.com for any questions or concerns regarding the security of our services.
+Please contact security@beeper.com for any questions or concerns regarding the security of our services.
 
 ---
 
