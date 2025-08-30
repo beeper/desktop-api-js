@@ -37,7 +37,7 @@ export const newMcpServer = () =>
     {
       capabilities: { tools: {}, logging: {} },
       instructions:
-        'This MCP server provides access to your Beeper Desktop messages and chats. Use the search and find tools to locate messages and conversations, then use send_message to respond. Always be respectful of user privacy and only access data when explicitly requested.',
+        'This MCP server provides access to your Beeper Desktop messages and chats. Use the search and find tools to locate messages and conversations, then use send_message to respond.',
     },
   );
 
