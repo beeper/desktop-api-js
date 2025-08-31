@@ -40,6 +40,10 @@ export const tool: Tool = {
         description: "Filter by chat type: 'group' for group chats, 'single' for 1:1 chats.",
         enum: ['group', 'single'],
       },
+      cursor: {
+        type: 'string',
+        description: "Opaque pagination cursor; do not inspect. Use together with 'direction'.",
+      },
       dateAfter: {
         type: 'string',
         description:
@@ -52,10 +56,11 @@ export const tool: Tool = {
           "Only include messages with timestamp strictly before this ISO 8601 datetime (e.g., '2024-07-31T23:59:59Z' or '2024-07-31T23:59:59+02:00').",
         format: 'date-time',
       },
-      ending_before: {
+      direction: {
         type: 'string',
         description:
-          'A cursor for use in pagination. ending_before is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with obj_bar, your subsequent call can include ending_before=obj_bar in order to fetch the previous page of the list.',
+          "Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.",
+        enum: ['after', 'before'],
       },
       excludeLowPriority: {
         type: 'boolean',
@@ -111,11 +116,6 @@ export const tool: Tool = {
         description:
           "Filter by sender: 'me' (messages sent by the authenticated user), 'others' (messages sent by others), or a specific user ID string (user.id).",
       },
-      starting_after: {
-        type: 'string',
-        description:
-          'A cursor for use in pagination. starting_after is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include starting_after=obj_foo in order to fetch the next page of the list.',
-      },
     },
     required: [],
   },
@@ -126,8 +126,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  const response = await client.messages.search(body).asResponse();
-  return asTextContentResult(await response.json());
+  return asTextContentResult(await client.messages.search(body));
 };
 
 export default { metadata, tool, handler };

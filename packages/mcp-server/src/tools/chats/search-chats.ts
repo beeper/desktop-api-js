@@ -27,10 +27,15 @@ export const tool: Tool = {
           type: 'string',
         },
       },
-      ending_before: {
+      cursor: {
+        type: 'string',
+        description: 'Pagination cursor from previous response. Use with direction to navigate results',
+      },
+      direction: {
         type: 'string',
         description:
-          'A cursor for use in pagination. ending_before is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, starting with obj_bar, your subsequent call can include ending_before=obj_bar in order to fetch the previous page of the list.',
+          'Pagination direction: "after" for newer page, "before" for older page. Defaults to "before" when only cursor is provided.',
+        enum: ['after', 'before'],
       },
       inbox: {
         type: 'string',
@@ -69,11 +74,6 @@ export const tool: Tool = {
         description:
           'Search string to filter chats by title. When multiple words provided, ALL words must match. Matches are case-insensitive substrings.',
       },
-      starting_after: {
-        type: 'string',
-        description:
-          'A cursor for use in pagination. starting_after is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include starting_after=obj_foo in order to fetch the next page of the list.',
-      },
       type: {
         type: 'string',
         description:
@@ -94,8 +94,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  const response = await client.chats.search(body).asResponse();
-  return asTextContentResult(await response.json());
+  return asTextContentResult(await client.chats.search(body));
 };
 
 export default { metadata, tool, handler };
