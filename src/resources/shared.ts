@@ -166,8 +166,7 @@ export interface Chat {
   lastReadMessageSortKey?: number | string;
 
   /**
-   * Local numeric chat ID specific to this Beeper Desktop installation. null for
-   * iMessage chats.
+   * Local chat ID specific to this Beeper Desktop installation.
    */
   localChatID?: string | null;
 }

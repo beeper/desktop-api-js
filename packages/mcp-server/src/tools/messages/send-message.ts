@@ -16,13 +16,15 @@ export const metadata: Metadata = {
 
 export const tool: Tool = {
   name: 'send_message',
-  description: 'Send a text message to a chat. Can reply to an existing message.',
+  description:
+    'Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat',
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
-        description: 'The identifier of the chat where the message will send',
+        description:
+          'The identifier of the chat where the message will send (accepts both chatID and local chat ID)',
       },
       replyToMessageID: {
         type: 'string',

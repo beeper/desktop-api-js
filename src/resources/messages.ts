@@ -50,7 +50,7 @@ export class Messages extends APIResource {
 
   /**
    * Send a text message to a specific chat. Supports replying to existing messages.
-   * Returns the sent message ID and a deeplink to the chat
+   * Returns the sent message ID.
    *
    * @example
    * ```ts
@@ -83,12 +83,6 @@ export interface MessageGetAttachmentResponse {
 }
 
 export interface MessageSendResponse extends Shared.BaseResponse {
-  /**
-   * Link to the chat where the message was sent. This should always be shown to the
-   * user.
-   */
-  deeplink: string;
-
   /**
    * Stable message ID.
    */
@@ -189,7 +183,8 @@ export interface MessageSearchParams extends CursorParams {
 
 export interface MessageSendParams {
   /**
-   * The identifier of the chat where the message will send
+   * The identifier of the chat where the message will send (accepts both chatID and
+   * local chat ID)
    */
   chatID: string;
 

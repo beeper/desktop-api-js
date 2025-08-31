@@ -22,7 +22,8 @@ export const tool: Tool = {
     properties: {
       chatID: {
         type: 'string',
-        description: 'The identifier of the chat to archive or unarchive',
+        description:
+          'The identifier of the chat to archive or unarchive (accepts both chatID and local chat ID)',
       },
       archived: {
         type: 'boolean',

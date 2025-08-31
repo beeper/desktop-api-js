@@ -43,14 +43,16 @@ export class Reminders extends APIResource {
 
 export interface ReminderClearParams {
   /**
-   * The identifier of the chat to clear reminder from
+   * The identifier of the chat to clear reminder from (accepts both chatID and local
+   * chat ID)
    */
   chatID: string;
 }
 
 export interface ReminderSetParams {
   /**
-   * The identifier of the chat to set reminder for
+   * The identifier of the chat to set reminder for (accepts both chatID and local
+   * chat ID)
    */
   chatID: string;
 

@@ -22,7 +22,7 @@ export const tool: Tool = {
     properties: {
       chatID: {
         type: 'string',
-        description: 'The identifier of the chat to set reminder for',
+        description: 'The identifier of the chat to set reminder for (accepts both chatID and local chat ID)',
       },
       reminder: {
         type: 'object',
