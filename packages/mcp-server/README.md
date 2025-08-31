@@ -209,17 +209,21 @@ The following tools are available in this MCP server.
 
 ### Resource `app`:
 
-- `open_app` (`write`) tags: [app]: Open Beeper, optionally focusing a chat or message, or pre-filling a draft.
+- `open_in_app` (`write`) tags: [app]: Open Beeper, optionally focusing a chat or message, or pre-filling a draft.
 
 ### Resource `chats`:
 
-- `archive_chat` (`write`) tags: [chats]: Archive or unarchive a chat.
 - `get_chat` (`read`) tags: [chats]: Get chat details: metadata, participants (limited), last activity.
+- `archive_chat` (`write`) tags: [chats]: Archive or unarchive a chat.
 - `search_chats` (`read`) tags: [chats]: Search chats by inbox, type, unread status, or text. Paginates.
+
+### Resource `chats.reminders`:
+
+- `set_chat_reminder` (`write`) tags: [chats]: Set a reminder for a chat at a specific time.
+- `clear_chat_reminder` (`write`) tags: [chats]: Clear a chat reminder.
 
 ### Resource `messages`:
 
-- `get_attachment` (`write`) tags: [messages]: Download a message attachment and return the local file path.
 - `search_messages` (`read`) tags: [messages]: Search messages across chats using Beeper's message index.
   - When to use: find messages by text and/or filters (chatIDs, accountIDs, chatType, media type filters, sender, date ranges).
   - CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds messages containing these EXACT words.
@@ -237,7 +241,6 @@ The following tools are available in this MCP server.
     Returns: matching messages and referenced chats.
 - `send_message` (`write`) tags: [messages]: Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat
 
-### Resource `reminders`:
+### Resource `messages.attachments`:
 
-- `clear_chat_reminder` (`write`) tags: [reminders]: Clear a chat reminder.
-- `set_chat_reminder` (`write`) tags: [reminders]: Set a reminder for a chat at a specific time.
+- `get_attachment` (`write`) tags: [messages]: Download a message attachment and return the local file path.

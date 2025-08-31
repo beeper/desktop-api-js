@@ -6,42 +6,34 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'app',
+  resource: 'chats.reminders',
   operation: 'write',
-  tags: ['app'],
+  tags: ['chats'],
   httpMethod: 'post',
-  httpPath: '/v0/open-app',
-  operationId: 'open_app',
+  httpPath: '/v0/clear-chat-reminder',
+  operationId: 'clear_chat_reminder',
 };
 
 export const tool: Tool = {
-  name: 'open_app',
-  description: 'Open Beeper, optionally focusing a chat or message, or pre-filling a draft.',
+  name: 'clear_chat_reminder',
+  description: 'Clear a chat reminder.',
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
         description:
-          'Optional Beeper chat ID (or local chat ID) to focus after opening the app. If omitted, only opens/focuses the app.',
-      },
-      draftText: {
-        type: 'string',
-        description: 'Optional draft text to populate in the message input field.',
-      },
-      messageSortKey: {
-        type: 'string',
-        description: 'Optional message sort key. Jumps to that message in the chat when opening.',
+          'The identifier of the chat to clear reminder from (accepts both chatID and local chat ID)',
       },
     },
-    required: [],
+    required: ['chatID'],
   },
   annotations: {},
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  return asTextContentResult(await client.app.focus(body));
+  return asTextContentResult(await client.chats.reminders.delete(body));
 };
 
 export default { metadata, tool, handler };

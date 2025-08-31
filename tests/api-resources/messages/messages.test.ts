@@ -8,27 +8,6 @@ const client = new BeeperDesktop({
 });
 
 describe('resource messages', () => {
-  test('getAttachment: only required params', async () => {
-    const responsePromise = client.messages.getAttachment({
-      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
-      messageID: 'messageID',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('getAttachment: required and optional params', async () => {
-    const response = await client.messages.getAttachment({
-      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
-      messageID: 'messageID',
-    });
-  });
-
   test('search', async () => {
     const responsePromise = client.messages.search();
     const rawResponse = await responsePromise.asResponse();

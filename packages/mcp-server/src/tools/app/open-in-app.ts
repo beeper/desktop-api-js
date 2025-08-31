@@ -6,37 +6,42 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'messages',
+  resource: 'app',
   operation: 'write',
-  tags: ['messages'],
+  tags: ['app'],
   httpMethod: 'post',
-  httpPath: '/v0/get-attachment',
-  operationId: 'get_attachment',
+  httpPath: '/v0/open-app',
+  operationId: 'open_app',
 };
 
 export const tool: Tool = {
-  name: 'get_attachment',
-  description: 'Download a message attachment and return the local file path.',
+  name: 'open_in_app',
+  description: 'Open Beeper, optionally focusing a chat or message, or pre-filling a draft.',
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
-        description: 'Unique identifier of the chat (supports both chatID and localChatID).',
+        description:
+          'Optional Beeper chat ID (or local chat ID) to focus after opening the app. If omitted, only opens/focuses the app.',
       },
-      messageID: {
+      draftText: {
         type: 'string',
-        description: 'The message ID (eventID) containing the attachment.',
+        description: 'Optional draft text to populate in the message input field.',
+      },
+      messageSortKey: {
+        type: 'string',
+        description: 'Optional message sort key. Jumps to that message in the chat when opening.',
       },
     },
-    required: ['chatID', 'messageID'],
+    required: [],
   },
   annotations: {},
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  return asTextContentResult(await client.messages.getAttachment(body));
+  return asTextContentResult(await client.app.open(body));
 };
 
 export default { metadata, tool, handler };

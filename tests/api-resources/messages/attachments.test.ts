@@ -7,9 +7,12 @@ const client = new BeeperDesktop({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource app', () => {
-  test('open', async () => {
-    const responsePromise = client.app.open();
+describe('resource attachments', () => {
+  test('retrieve: only required params', async () => {
+    const responsePromise = client.messages.attachments.retrieve({
+      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+      messageID: 'messageID',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,17 +22,10 @@ describe('resource app', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('open: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.app.open(
-        {
-          chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
-          draftText: 'draftText',
-          messageSortKey: 'messageSortKey',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(BeeperDesktop.NotFoundError);
+  test('retrieve: required and optional params', async () => {
+    const response = await client.messages.attachments.retrieve({
+      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+      messageID: 'messageID',
+    });
   });
 });
