@@ -6,7 +6,6 @@ export { App, type AppFocusResponse, type AppFocusParams } from './app';
 export {
   Chats,
   type ChatGetResponse,
-  type ChatSearchResponse,
   type ChatArchiveParams,
   type ChatGetParams,
   type ChatSearchParams,
@@ -14,7 +13,6 @@ export {
 export {
   Messages,
   type MessageGetAttachmentResponse,
-  type MessageSearchResponse,
   type MessageSendResponse,
   type MessageGetAttachmentParams,
   type MessageSearchParams,

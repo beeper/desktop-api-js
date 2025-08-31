@@ -54,7 +54,7 @@ describe('instantiate client', () => {
 
     beforeEach(() => {
       process.env = { ...env };
-      process.env['BEEPER-DESKTOP_LOG'] = undefined;
+      process.env['BEEPER_DESKTOP_LOG'] = undefined;
     });
 
     afterEach(() => {
@@ -122,7 +122,7 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['BEEPER-DESKTOP_LOG'] = 'debug';
+      process.env['BEEPER_DESKTOP_LOG'] = 'debug';
       const client = new BeeperDesktop({ logger: logger, accessToken: 'My Access Token' });
       expect(client.logLevel).toBe('debug');
 
@@ -139,11 +139,11 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['BEEPER-DESKTOP_LOG'] = 'not a log level';
+      process.env['BEEPER_DESKTOP_LOG'] = 'not a log level';
       const client = new BeeperDesktop({ logger: logger, accessToken: 'My Access Token' });
       expect(client.logLevel).toBe('warn');
       expect(warnMock).toHaveBeenCalledWith(
-        'process.env[\'BEEPER-DESKTOP_LOG\'] was set to "not a log level", expected one of ["off","error","warn","info","debug"]',
+        'process.env[\'BEEPER_DESKTOP_LOG\'] was set to "not a log level", expected one of ["off","error","warn","info","debug"]',
       );
     });
 
@@ -156,7 +156,7 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['BEEPER-DESKTOP_LOG'] = 'debug';
+      process.env['BEEPER_DESKTOP_LOG'] = 'debug';
       const client = new BeeperDesktop({ logger: logger, logLevel: 'off', accessToken: 'My Access Token' });
 
       await forceAPIResponseForClient(client);
@@ -172,7 +172,7 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['BEEPER-DESKTOP_LOG'] = 'not a log level';
+      process.env['BEEPER_DESKTOP_LOG'] = 'not a log level';
       const client = new BeeperDesktop({ logger: logger, logLevel: 'debug', accessToken: 'My Access Token' });
       expect(client.logLevel).toBe('debug');
       expect(warnMock).not.toHaveBeenCalled();
@@ -295,7 +295,7 @@ describe('instantiate client', () => {
     });
 
     afterEach(() => {
-      process.env['BEEPER-DESKTOP_BASE_URL'] = undefined;
+      process.env['BEEPER_DESKTOP_BASE_URL'] = undefined;
     });
 
     test('explicit option', () => {
@@ -304,19 +304,19 @@ describe('instantiate client', () => {
     });
 
     test('env variable', () => {
-      process.env['BEEPER-DESKTOP_BASE_URL'] = 'https://example.com/from_env';
+      process.env['BEEPER_DESKTOP_BASE_URL'] = 'https://example.com/from_env';
       const client = new BeeperDesktop({ accessToken: 'My Access Token' });
       expect(client.baseURL).toEqual('https://example.com/from_env');
     });
 
     test('empty env variable', () => {
-      process.env['BEEPER-DESKTOP_BASE_URL'] = ''; // empty
+      process.env['BEEPER_DESKTOP_BASE_URL'] = ''; // empty
       const client = new BeeperDesktop({ accessToken: 'My Access Token' });
       expect(client.baseURL).toEqual('http://localhost:23373');
     });
 
     test('blank env variable', () => {
-      process.env['BEEPER-DESKTOP_BASE_URL'] = '  '; // blank
+      process.env['BEEPER_DESKTOP_BASE_URL'] = '  '; // blank
       const client = new BeeperDesktop({ accessToken: 'My Access Token' });
       expect(client.baseURL).toEqual('http://localhost:23373');
     });
@@ -339,7 +339,7 @@ describe('instantiate client', () => {
     });
 
     test('in request options overridden by env variable', () => {
-      process.env['BEEPER-DESKTOP_BASE_URL'] = 'http://localhost:5000/env';
+      process.env['BEEPER_DESKTOP_BASE_URL'] = 'http://localhost:5000/env';
       const client = new BeeperDesktop({ accessToken: 'My Access Token' });
       expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
         'http://localhost:5000/env/foo',

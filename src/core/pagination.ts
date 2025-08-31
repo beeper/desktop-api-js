@@ -107,46 +107,53 @@ export class PagePromise<
   }
 }
 
-export interface CursorIDResponse<Item> {
-  data: Array<Item>;
+export interface BeeperCursorResponse<Item> {
+  items: Array<Item>;
 
-  has_more: boolean;
+  hasMore: boolean;
+
+  oldestCursor: string | null;
+
+  newestCursor: string | null;
 }
 
-export interface CursorIDParams {
-  starting_after?: string | null;
+export interface BeeperCursorParams {
+  cursor?: string | null;
 
-  ending_before?: string | null;
+  direction?: string | null;
 
   limit?: number | null;
 }
 
-export class CursorID<Item extends { id: string }>
-  extends AbstractPage<Item>
-  implements CursorIDResponse<Item>
-{
-  data: Array<Item>;
+export class BeeperCursor<Item> extends AbstractPage<Item> implements BeeperCursorResponse<Item> {
+  items: Array<Item>;
 
-  has_more: boolean;
+  hasMore: boolean;
+
+  oldestCursor: string | null;
+
+  newestCursor: string | null;
 
   constructor(
     client: BeeperDesktop,
     response: Response,
-    body: CursorIDResponse<Item>,
+    body: BeeperCursorResponse<Item>,
     options: FinalRequestOptions,
   ) {
     super(client, response, body, options);
 
-    this.data = body.data || [];
-    this.has_more = body.has_more || false;
+    this.items = body.items || [];
+    this.hasMore = body.hasMore || false;
+    this.oldestCursor = body.oldestCursor || null;
+    this.newestCursor = body.newestCursor || null;
   }
 
   getPaginatedItems(): Item[] {
-    return this.data ?? [];
+    return this.items ?? [];
   }
 
   override hasNextPage(): boolean {
-    if (this.has_more === false) {
+    if (this.hasMore === false) {
       return false;
     }
 
@@ -154,28 +161,8 @@ export class CursorID<Item extends { id: string }>
   }
 
   nextPageRequestOptions(): PageRequestOptions | null {
-    const data = this.getPaginatedItems();
-
-    const isForwards = !(
-      typeof this.options.query === 'object' && 'ending_before' in (this.options.query || {})
-    );
-    if (isForwards) {
-      const id = data[data.length - 1]?.id;
-      if (!id) {
-        return null;
-      }
-
-      return {
-        ...this.options,
-        query: {
-          ...maybeObj(this.options.query),
-          starting_after: id,
-        },
-      };
-    }
-
-    const id = data[0]?.id;
-    if (!id) {
+    const cursor = this.oldestCursor;
+    if (!cursor) {
       return null;
     }
 
@@ -183,7 +170,7 @@ export class CursorID<Item extends { id: string }>
       ...this.options,
       query: {
         ...maybeObj(this.options.query),
-        ending_before: id,
+        cursor,
       },
     };
   }
