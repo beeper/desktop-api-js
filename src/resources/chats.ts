@@ -2,9 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { ChatsCursorID } from './shared';
 import { APIPromise } from '../core/api-promise';
-import { CursorID, type CursorIDParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 /**
@@ -47,23 +45,20 @@ export class Chats extends APIResource {
    *
    * @example
    * ```ts
-   * // Automatically fetches more pages as needed.
-   * for await (const chat of client.chats.search()) {
-   *   // ...
-   * }
+   * const response = await client.chats.search();
    * ```
    */
   search(
     query: ChatSearchParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ChatsCursorID, Shared.Chat> {
-    return this._client.getAPIList('/v0/search-chats', CursorID<Shared.Chat>, { query, ...options });
+  ): APIPromise<ChatSearchResponse> {
+    return this._client.get('/v0/search-chats', { query, ...options });
   }
 }
 
 export interface ChatGetResponse {
   /**
-   * Unique identifier for cursor pagination.
+   * Unique identifier of the chat (room/thread ID, same as id) across Beeper.
    */
   id: string;
 
@@ -71,11 +66,6 @@ export interface ChatGetResponse {
    * Beeper account ID this chat belongs to.
    */
   accountID: string;
-
-  /**
-   * Unique identifier of the chat (room/thread ID, same as id).
-   */
-  chatID: string;
 
   /**
    * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
@@ -159,6 +149,30 @@ export namespace ChatGetResponse {
   }
 }
 
+export interface ChatSearchResponse {
+  /**
+   * True if additional results can be fetched using the provided cursors.
+   */
+  hasMore: boolean;
+
+  /**
+   * Chats matching the filters.
+   */
+  items: Array<Shared.Chat>;
+
+  /**
+   * Cursor for fetching newer results (use with direction='after'). Opaque string;
+   * do not inspect.
+   */
+  newestCursor: string | null;
+
+  /**
+   * Cursor for fetching older results (use with direction='before'). Opaque string;
+   * do not inspect.
+   */
+  oldestCursor: string | null;
+}
+
 export interface ChatArchiveParams {
   /**
    * The identifier of the chat to archive or unarchive
@@ -185,12 +199,23 @@ export interface ChatGetParams {
   maxParticipantCount?: number | null;
 }
 
-export interface ChatSearchParams extends CursorIDParams {
+export interface ChatSearchParams {
   /**
    * Provide an array of account IDs to filter chats from specific messaging accounts
    * only
    */
   accountIDs?: Array<string>;
+
+  /**
+   * Pagination cursor from previous response. Use with direction to navigate results
+   */
+  cursor?: string;
+
+  /**
+   * Pagination direction: "after" for newer page, "before" for older page. Defaults
+   * to "before" when only cursor is provided.
+   */
+  direction?: 'after' | 'before';
 
   /**
    * Filter by inbox type: "primary" (non-archived, non-low-priority),
@@ -215,6 +240,11 @@ export interface ChatSearchParams extends CursorIDParams {
    * this time
    */
   lastActivityBefore?: string;
+
+  /**
+   * Set the maximum number of chats to retrieve. Valid range: 1-200, default is 50
+   */
+  limit?: number;
 
   /**
    * Search string to filter chats by participant names. When multiple words
@@ -244,10 +274,9 @@ export interface ChatSearchParams extends CursorIDParams {
 export declare namespace Chats {
   export {
     type ChatGetResponse as ChatGetResponse,
+    type ChatSearchResponse as ChatSearchResponse,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatGetParams as ChatGetParams,
     type ChatSearchParams as ChatSearchParams,
   };
 }
-
-export { type ChatsCursorID };

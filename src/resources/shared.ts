@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import * as Shared from './shared';
-import { CursorID } from '../core/pagination';
 
 /**
  * A chat account added to Beeper
@@ -103,7 +102,7 @@ export interface BaseResponse {
 
 export interface Chat {
   /**
-   * Unique identifier for cursor pagination.
+   * Unique identifier of the chat (room/thread ID, same as id) across Beeper.
    */
   id: string;
 
@@ -111,11 +110,6 @@ export interface Chat {
    * Beeper account ID this chat belongs to.
    */
   accountID: string;
-
-  /**
-   * Unique identifier of the chat (room/thread ID, same as id).
-   */
-  chatID: string;
 
   /**
    * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
@@ -338,7 +332,7 @@ export interface User {
   /**
    * Display name as shown in clients (e.g., 'Alice Example'). May include emojis.
    */
-  fullName?: string | null;
+  fullName?: string;
 
   /**
    * Avatar image URL if available. May be temporary or local-only to this device;
@@ -362,7 +356,3 @@ export interface User {
    */
   username?: string;
 }
-
-export type ChatsCursorID = CursorID<Chat>;
-
-export type MessagesCursorID = CursorID<Message>;

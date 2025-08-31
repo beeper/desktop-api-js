@@ -26,12 +26,14 @@ import {
   ChatGetParams,
   ChatGetResponse,
   ChatSearchParams,
+  ChatSearchResponse,
   Chats,
 } from './resources/chats';
 import {
   MessageGetAttachmentParams,
   MessageGetAttachmentResponse,
   MessageSearchParams,
+  MessageSearchResponse,
   MessageSendParams,
   MessageSendResponse,
   Messages,
@@ -806,6 +808,7 @@ export declare namespace BeeperDesktop {
   export {
     Chats as Chats,
     type ChatGetResponse as ChatGetResponse,
+    type ChatSearchResponse as ChatSearchResponse,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatGetParams as ChatGetParams,
     type ChatSearchParams as ChatSearchParams,
@@ -814,6 +817,7 @@ export declare namespace BeeperDesktop {
   export {
     Messages as Messages,
     type MessageGetAttachmentResponse as MessageGetAttachmentResponse,
+    type MessageSearchResponse as MessageSearchResponse,
     type MessageSendResponse as MessageSendResponse,
     type MessageGetAttachmentParams as MessageGetAttachmentParams,
     type MessageSearchParams as MessageSearchParams,
