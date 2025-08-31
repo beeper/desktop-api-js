@@ -1,4 +1,4 @@
-# TypeScript SDK for Beeper Desktop API API Library
+# TypeScript SDK for Beeper Desktop API Library
 
 [![NPM version](<https://img.shields.io/npm/v/@beeper/desktop-api.svg?label=npm%20(stable)>)](https://npmjs.org/package/@beeper/desktop-api) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@beeper/desktop-api)
 

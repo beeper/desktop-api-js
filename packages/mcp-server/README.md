@@ -1,4 +1,4 @@
-# TypeScript SDK for Beeper Desktop API MCP Server
+# TypeScript SDK for Beeper Desktop MCP Server
 
 ## Installation
 
