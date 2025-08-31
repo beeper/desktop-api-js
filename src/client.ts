@@ -21,13 +21,7 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Accounts } from './resources/accounts';
 import { App, AppFocusParams, AppFocusResponse } from './resources/app';
-import {
-  ChatArchiveParams,
-  ChatGetParams,
-  ChatGetResponse,
-  ChatSearchParams,
-  Chats,
-} from './resources/chats';
+import { ChatArchiveParams, ChatGetParams, ChatSearchParams, Chats } from './resources/chats';
 import {
   MessageGetAttachmentParams,
   MessageGetAttachmentResponse,
@@ -805,7 +799,6 @@ export declare namespace BeeperDesktop {
 
   export {
     Chats as Chats,
-    type ChatGetResponse as ChatGetResponse,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatGetParams as ChatGetParams,
     type ChatSearchParams as ChatSearchParams,
