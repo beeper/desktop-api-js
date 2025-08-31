@@ -29,14 +29,10 @@ Methods:
 
 # Chats
 
-Types:
-
-- <code><a href="./src/resources/chats.ts">ChatGetResponse</a></code>
-
 Methods:
 
 - <code title="post /v0/archive-chat">client.chats.<a href="./src/resources/chats.ts">archive</a>({ ...params }) -> BaseResponse</code>
-- <code title="get /v0/get-chat">client.chats.<a href="./src/resources/chats.ts">get</a>({ ...params }) -> ChatGetResponse | null</code>
+- <code title="get /v0/get-chat">client.chats.<a href="./src/resources/chats.ts">get</a>({ ...params }) -> Chat</code>
 - <code title="get /v0/search-chats">client.chats.<a href="./src/resources/chats.ts">search</a>({ ...params }) -> ChatsCursor</code>
 
 # Messages

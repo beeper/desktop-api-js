@@ -3,13 +3,7 @@
 export * from './shared';
 export { Accounts } from './accounts';
 export { App, type AppFocusResponse, type AppFocusParams } from './app';
-export {
-  Chats,
-  type ChatGetResponse,
-  type ChatArchiveParams,
-  type ChatGetParams,
-  type ChatSearchParams,
-} from './chats';
+export { Chats, type ChatArchiveParams, type ChatGetParams, type ChatSearchParams } from './chats';
 export {
   Messages,
   type MessageGetAttachmentResponse,

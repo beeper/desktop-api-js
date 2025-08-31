@@ -38,7 +38,7 @@ export class Chats extends APIResource {
    * });
    * ```
    */
-  get(query: ChatGetParams, options?: RequestOptions): APIPromise<ChatGetResponse | null> {
+  get(query: ChatGetParams, options?: RequestOptions): APIPromise<Shared.Chat> {
     return this._client.get('/v0/get-chat', { query, ...options });
   }
 
@@ -58,98 +58,6 @@ export class Chats extends APIResource {
     options?: RequestOptions,
   ): PagePromise<ChatsCursor, Shared.Chat> {
     return this._client.getAPIList('/v0/search-chats', Cursor<Shared.Chat>, { query, ...options });
-  }
-}
-
-export interface ChatGetResponse {
-  /**
-   * Unique identifier of the chat (room/thread ID, same as id) across Beeper.
-   */
-  id: string;
-
-  /**
-   * Beeper account ID this chat belongs to.
-   */
-  accountID: string;
-
-  /**
-   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
-   * MUST use 'accountID' to perform actions.
-   */
-  network: string;
-
-  /**
-   * Chat participants information.
-   */
-  participants: ChatGetResponse.Participants;
-
-  /**
-   * Display title of the chat as computed by the client/server.
-   */
-  title: string;
-
-  /**
-   * Chat type: 'single' for direct messages, 'group' for group chats, 'channel' for
-   * channels, 'broadcast' for broadcasts.
-   */
-  type: 'single' | 'group' | 'channel' | 'broadcast';
-
-  /**
-   * Number of unread messages.
-   */
-  unreadCount: number;
-
-  /**
-   * True if chat is archived.
-   */
-  isArchived?: boolean;
-
-  /**
-   * True if chat notifications are muted.
-   */
-  isMuted?: boolean;
-
-  /**
-   * True if chat is pinned.
-   */
-  isPinned?: boolean;
-
-  /**
-   * Timestamp of last activity. Chats with more recent activity are often more
-   * important.
-   */
-  lastActivity?: string;
-
-  /**
-   * Last read message sortKey (hsOrder). Used to compute 'isUnread'.
-   */
-  lastReadMessageSortKey?: number | string;
-
-  /**
-   * Local chat ID specific to this Beeper Desktop installation.
-   */
-  localChatID?: string | null;
-}
-
-export namespace ChatGetResponse {
-  /**
-   * Chat participants information.
-   */
-  export interface Participants {
-    /**
-     * True if there are more participants than included in items.
-     */
-    hasMore: boolean;
-
-    /**
-     * Participants returned for this chat (limited by the request; may be a subset).
-     */
-    items: Array<Shared.User>;
-
-    /**
-     * Total number of participants in the chat.
-     */
-    total: number;
   }
 }
 
@@ -238,7 +146,6 @@ export interface ChatSearchParams extends CursorParams {
 
 export declare namespace Chats {
   export {
-    type ChatGetResponse as ChatGetResponse,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatGetParams as ChatGetParams,
     type ChatSearchParams as ChatSearchParams,
