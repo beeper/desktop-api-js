@@ -2,9 +2,9 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { ChatsBeeperCursor } from './shared';
+import { ChatsCursor } from './shared';
 import { APIPromise } from '../core/api-promise';
-import { BeeperCursor, type BeeperCursorParams, PagePromise } from '../core/pagination';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 /**
@@ -56,8 +56,8 @@ export class Chats extends APIResource {
   search(
     query: ChatSearchParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ChatsBeeperCursor, Shared.Chat> {
-    return this._client.getAPIList('/v0/search-chats', BeeperCursor<Shared.Chat>, { query, ...options });
+  ): PagePromise<ChatsCursor, Shared.Chat> {
+    return this._client.getAPIList('/v0/search-chats', Cursor<Shared.Chat>, { query, ...options });
   }
 }
 
@@ -180,7 +180,7 @@ export interface ChatGetParams {
   maxParticipantCount?: number | null;
 }
 
-export interface ChatSearchParams extends BeeperCursorParams {
+export interface ChatSearchParams extends CursorParams {
   /**
    * Provide an array of account IDs to filter chats from specific messaging accounts
    * only
@@ -245,4 +245,4 @@ export declare namespace Chats {
   };
 }
 
-export { type ChatsBeeperCursor };
+export { type ChatsCursor };

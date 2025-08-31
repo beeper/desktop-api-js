@@ -2,9 +2,9 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { MessagesBeeperCursor } from './shared';
+import { MessagesCursor } from './shared';
 import { APIPromise } from '../core/api-promise';
-import { BeeperCursor, type BeeperCursorParams, PagePromise } from '../core/pagination';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 /**
@@ -44,11 +44,8 @@ export class Messages extends APIResource {
   search(
     query: MessageSearchParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<MessagesBeeperCursor, Shared.Message> {
-    return this._client.getAPIList('/v0/search-messages', BeeperCursor<Shared.Message>, {
-      query,
-      ...options,
-    });
+  ): PagePromise<MessagesCursor, Shared.Message> {
+    return this._client.getAPIList('/v0/search-messages', Cursor<Shared.Message>, { query, ...options });
   }
 
   /**
@@ -110,7 +107,7 @@ export interface MessageGetAttachmentParams {
   messageID: string;
 }
 
-export interface MessageSearchParams extends BeeperCursorParams {
+export interface MessageSearchParams extends CursorParams {
   /**
    * Limit search to specific Beeper account IDs (bridge instances).
    */
@@ -217,4 +214,4 @@ export declare namespace Messages {
   };
 }
 
-export { type MessagesBeeperCursor };
+export { type MessagesCursor };
