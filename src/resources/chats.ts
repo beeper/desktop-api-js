@@ -126,8 +126,7 @@ export interface ChatGetResponse {
   lastReadMessageSortKey?: number | string;
 
   /**
-   * Local numeric chat ID specific to this Beeper Desktop installation. null for
-   * iMessage chats.
+   * Local chat ID specific to this Beeper Desktop installation.
    */
   localChatID?: string | null;
 }
@@ -156,7 +155,8 @@ export namespace ChatGetResponse {
 
 export interface ChatArchiveParams {
   /**
-   * The identifier of the chat to archive or unarchive
+   * The identifier of the chat to archive or unarchive (accepts both chatID and
+   * local chat ID)
    */
   chatID: string;
 

@@ -235,7 +235,7 @@ The following tools are available in this MCP server.
     • "What's the name of your work chat?" (could be "Team", company name, project name)
     • "Who are the participants?" (use participantQuery in find-chats)
     Returns: matching messages and referenced chats.
-- `send_message` (`write`) tags: [messages]: Send a text message to a chat. Can reply to an existing message.
+- `send_message` (`write`) tags: [messages]: Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat
 
 ### Resource `reminders`:
 

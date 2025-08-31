@@ -23,7 +23,7 @@ export const tool: Tool = {
       chatID: {
         type: 'string',
         description:
-          'Optional Beeper chat ID to focus after opening the app. If omitted, only opens/focuses the app.',
+          'Optional Beeper chat ID (or local chat ID) to focus after opening the app. If omitted, only opens/focuses the app.',
       },
       draftText: {
         type: 'string',
