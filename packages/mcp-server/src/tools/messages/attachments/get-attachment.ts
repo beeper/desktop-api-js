@@ -6,34 +6,37 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'reminders',
+  resource: 'messages.attachments',
   operation: 'write',
-  tags: ['reminders'],
+  tags: ['messages'],
   httpMethod: 'post',
-  httpPath: '/v0/clear-chat-reminder',
-  operationId: 'clear_chat_reminder',
+  httpPath: '/v0/get-attachment',
+  operationId: 'get_attachment',
 };
 
 export const tool: Tool = {
-  name: 'clear_chat_reminder',
-  description: 'Clear a chat reminder.',
+  name: 'get_attachment',
+  description: 'Download a message attachment and return the local file path.',
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
-        description:
-          'The identifier of the chat to clear reminder from (accepts both chatID and local chat ID)',
+        description: 'Unique identifier of the chat (supports both chatID and localChatID).',
+      },
+      messageID: {
+        type: 'string',
+        description: 'The message ID (eventID) containing the attachment.',
       },
     },
-    required: ['chatID'],
+    required: ['chatID', 'messageID'],
   },
   annotations: {},
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  return asTextContentResult(await client.reminders.clear(body));
+  return asTextContentResult(await client.messages.attachments.retrieve(body));
 };
 
 export default { metadata, tool, handler };

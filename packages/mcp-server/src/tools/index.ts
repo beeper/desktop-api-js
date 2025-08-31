@@ -5,15 +5,15 @@ import { Metadata, Endpoint, HandlerFunction } from './types';
 export { Metadata, Endpoint, HandlerFunction };
 
 import get_accounts from './accounts/get-accounts';
-import open_app from './app/open-app';
-import archive_chat from './chats/archive-chat';
+import open_in_app from './app/open-in-app';
 import get_chat from './chats/get-chat';
+import archive_chat from './chats/archive-chat';
 import search_chats from './chats/search-chats';
-import get_attachment from './messages/get-attachment';
+import set_chat_reminder from './chats/reminders/set-chat-reminder';
+import clear_chat_reminder from './chats/reminders/clear-chat-reminder';
 import search_messages from './messages/search-messages';
 import send_message from './messages/send-message';
-import clear_chat_reminder from './reminders/clear-chat-reminder';
-import set_chat_reminder from './reminders/set-chat-reminder';
+import get_attachment from './messages/attachments/get-attachment';
 
 export const endpoints: Endpoint[] = [];
 
@@ -22,15 +22,15 @@ function addEndpoint(endpoint: Endpoint) {
 }
 
 addEndpoint(get_accounts);
-addEndpoint(open_app);
-addEndpoint(archive_chat);
+addEndpoint(open_in_app);
 addEndpoint(get_chat);
+addEndpoint(archive_chat);
 addEndpoint(search_chats);
-addEndpoint(get_attachment);
+addEndpoint(set_chat_reminder);
+addEndpoint(clear_chat_reminder);
 addEndpoint(search_messages);
 addEndpoint(send_message);
-addEndpoint(clear_chat_reminder);
-addEndpoint(set_chat_reminder);
+addEndpoint(get_attachment);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';

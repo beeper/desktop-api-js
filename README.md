@@ -24,10 +24,10 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const page = await client.chats.search({ limit: 10, type: 'single' });
-const chat = page.items[0];
+const page = await client.chats.search({ includeMuted: true, limit: 3, type: 'single' });
+const chatSearchResponse = page.items[0];
 
-console.log(chat.id);
+console.log(chatSearchResponse.id);
 ```
 
 ### Request & Response types
@@ -56,7 +56,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 const response = await client.messages
-  .send({ chatID: '!invalid-chat-id', text: 'Test message' })
+  .send({ chatID: '1229391', text: 'Hello! Just checking in on the project status.' })
   .catch(async (err) => {
     if (err instanceof BeeperDesktop.APIError) {
       console.log(err.status); // 400
@@ -129,22 +129,30 @@ List methods in the BeeperDesktop API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllMessages(params) {
-  const allMessages = [];
+async function fetchAllMessageSearchResponses(params) {
+  const allMessageSearchResponses = [];
   // Automatically fetches more pages as needed.
-  for await (const message of client.messages.search({ limit: 20, query: 'meeting' })) {
-    allMessages.push(message);
+  for await (const messageSearchResponse of client.messages.search({
+    accountIDs: ['local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI'],
+    limit: 10,
+    query: 'deployment',
+  })) {
+    allMessageSearchResponses.push(messageSearchResponse);
   }
-  return allMessages;
+  return allMessageSearchResponses;
 }
 ```
 
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.messages.search({ limit: 20, query: 'meeting' });
-for (const message of page.items) {
-  console.log(message);
+let page = await client.messages.search({
+  accountIDs: ['local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI'],
+  limit: 10,
+  query: 'deployment',
+});
+for (const messageSearchResponse of page.items) {
+  console.log(messageSearchResponse);
 }
 
 // Convenience methods are provided for manually paginating:
