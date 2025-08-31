@@ -15,7 +15,7 @@ import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
-import { AbstractPage, type CursorIDParams, CursorIDResponse } from './core/pagination';
+import { AbstractPage, type BeeperCursorParams, BeeperCursorResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
@@ -26,14 +26,12 @@ import {
   ChatGetParams,
   ChatGetResponse,
   ChatSearchParams,
-  ChatSearchResponse,
   Chats,
 } from './resources/chats';
 import {
   MessageGetAttachmentParams,
   MessageGetAttachmentResponse,
   MessageSearchParams,
-  MessageSearchResponse,
   MessageSendParams,
   MessageSendResponse,
   Messages,
@@ -63,7 +61,7 @@ export interface ClientOptions {
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['BEEPER-DESKTOP_BASE_URL'].
+   * Defaults to process.env['BEEPER_DESKTOP_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -123,7 +121,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['BEEPER-DESKTOP_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['BEEPER_DESKTOP_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -157,7 +155,7 @@ export class BeeperDesktop {
    * API Client for interfacing with the Beeper Desktop API.
    *
    * @param {string | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['BEEPER-DESKTOP_BASE_URL'] ?? http://localhost:23373] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['BEEPER_DESKTOP_BASE_URL'] ?? http://localhost:23373] - Override the default base URL for the API.
    * @param {number} [opts.timeout=30 seconds] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -167,7 +165,7 @@ export class BeeperDesktop {
    * @param {boolean} [opts.dangerouslyAllowBrowser=false] - By default, client-side use of this library is not allowed, as it risks exposing your secret API credentials to attackers.
    */
   constructor({
-    baseURL = readEnv('BEEPER-DESKTOP_BASE_URL'),
+    baseURL = readEnv('BEEPER_DESKTOP_BASE_URL'),
     accessToken = readEnv('BEEPER_ACCESS_TOKEN'),
     ...opts
   }: ClientOptions = {}) {
@@ -197,7 +195,7 @@ export class BeeperDesktop {
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('BEEPER-DESKTOP_LOG'), "process.env['BEEPER-DESKTOP_LOG']", this) ??
+      parseLogLevel(readEnv('BEEPER_DESKTOP_LOG'), "process.env['BEEPER_DESKTOP_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
@@ -798,8 +796,8 @@ BeeperDesktop.Token = Token;
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
 
-  export import CursorID = Pagination.CursorID;
-  export { type CursorIDParams as CursorIDParams, type CursorIDResponse as CursorIDResponse };
+  export import BeeperCursor = Pagination.BeeperCursor;
+  export { type BeeperCursorParams as BeeperCursorParams, type BeeperCursorResponse as BeeperCursorResponse };
 
   export { Accounts as Accounts };
 
@@ -808,7 +806,6 @@ export declare namespace BeeperDesktop {
   export {
     Chats as Chats,
     type ChatGetResponse as ChatGetResponse,
-    type ChatSearchResponse as ChatSearchResponse,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatGetParams as ChatGetParams,
     type ChatSearchParams as ChatSearchParams,
@@ -817,7 +814,6 @@ export declare namespace BeeperDesktop {
   export {
     Messages as Messages,
     type MessageGetAttachmentResponse as MessageGetAttachmentResponse,
-    type MessageSearchResponse as MessageSearchResponse,
     type MessageSendResponse as MessageSendResponse,
     type MessageGetAttachmentParams as MessageGetAttachmentParams,
     type MessageSearchParams as MessageSearchParams,
