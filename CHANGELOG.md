@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.3 (2025-08-31)
+
+Full Changelog: [v0.1.2...v0.1.3](https://github.com/beeper/desktop-api-js/compare/v0.1.2...v0.1.3)
+
+### Features
+
+* **api:** update via SDK Studio ([8a9d7d5](https://github.com/beeper/desktop-api-js/commit/8a9d7d5a2a8c46c2e20c342045526ce1a8bdc1dd))
+
 ## 0.1.2 (2025-08-31)
 
 Full Changelog: [v0.1.1...v0.1.2](https://github.com/beeper/desktop-api-js/compare/v0.1.1...v0.1.2)
