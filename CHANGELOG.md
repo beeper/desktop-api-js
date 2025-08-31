@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.1.2 (2025-08-31)
+
+Full Changelog: [v0.1.1...v0.1.2](https://github.com/beeper/desktop-api-js/compare/v0.1.1...v0.1.2)
+
+### Features
+
+* **api:** update via SDK Studio ([3399700](https://github.com/beeper/desktop-api-js/commit/33997008444a85543233419923865a2ff69ba9b3))
+* **api:** update via SDK Studio ([4c7bd95](https://github.com/beeper/desktop-api-js/commit/4c7bd95249128ab201bf9be673684aee5779efbc))
+* **api:** update via SDK Studio ([eace66e](https://github.com/beeper/desktop-api-js/commit/eace66e4dde7b6fde8564d4162353bd244c05c46))
+* **api:** update via SDK Studio ([a04be9f](https://github.com/beeper/desktop-api-js/commit/a04be9f2376372c8309b542d0e56f58517b49ec8))
+* **api:** update via SDK Studio ([8c1a8ac](https://github.com/beeper/desktop-api-js/commit/8c1a8acd4fb39dfc53b6a224745337209cc64d30))
+
+
+### Documentation
+
+* **readme:** add disclaimer about MCP server ([e208bd7](https://github.com/beeper/desktop-api-js/commit/e208bd71145c05e46684db32c67431eb18ec69f4))
+
 ## 0.1.1 (2025-08-30)
 
 Full Changelog: [v0.1.0...v0.1.1](https://github.com/beeper/desktop-api-js/compare/v0.1.0...v0.1.1)
