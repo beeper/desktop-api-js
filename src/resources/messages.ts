@@ -2,9 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { MessagesCursorID } from './shared';
 import { APIPromise } from '../core/api-promise';
-import { CursorID, type CursorIDParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 /**
@@ -35,17 +33,14 @@ export class Messages extends APIResource {
    *
    * @example
    * ```ts
-   * // Automatically fetches more pages as needed.
-   * for await (const message of client.messages.search()) {
-   *   // ...
-   * }
+   * const response = await client.messages.search();
    * ```
    */
   search(
     query: MessageSearchParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<MessagesCursorID, Shared.Message> {
-    return this._client.getAPIList('/v0/search-messages', CursorID<Shared.Message>, { query, ...options });
+  ): APIPromise<MessageSearchResponse> {
+    return this._client.get('/v0/search-messages', { query, ...options });
   }
 
   /**
@@ -82,6 +77,35 @@ export interface MessageGetAttachmentResponse {
   filePath?: string;
 }
 
+export interface MessageSearchResponse {
+  /**
+   * Map of chatID -> chat details for chats referenced in items.
+   */
+  chats: { [key: string]: Shared.Chat };
+
+  /**
+   * True if additional results can be fetched using the provided cursors.
+   */
+  hasMore: boolean;
+
+  /**
+   * Messages matching the query and filters.
+   */
+  items: Array<Shared.Message>;
+
+  /**
+   * Cursor for fetching newer results (use with direction='after'). Opaque string;
+   * do not inspect.
+   */
+  newestCursor: string | null;
+
+  /**
+   * Cursor for fetching older results (use with direction='before'). Opaque string;
+   * do not inspect.
+   */
+  oldestCursor: string | null;
+}
+
 export interface MessageSendResponse extends Shared.BaseResponse {
   /**
    * Link to the chat where the message was sent. This should always be shown to the
@@ -107,7 +131,7 @@ export interface MessageGetAttachmentParams {
   messageID: string;
 }
 
-export interface MessageSearchParams extends CursorIDParams {
+export interface MessageSearchParams {
   /**
    * Limit search to specific Beeper account IDs (bridge instances).
    */
@@ -124,6 +148,11 @@ export interface MessageSearchParams extends CursorIDParams {
   chatType?: 'group' | 'single';
 
   /**
+   * Opaque pagination cursor; do not inspect. Use together with 'direction'.
+   */
+  cursor?: string;
+
+  /**
    * Only include messages with timestamp strictly after this ISO 8601 datetime
    * (e.g., '2024-07-01T00:00:00Z' or '2024-07-01T00:00:00+02:00').
    */
@@ -136,6 +165,12 @@ export interface MessageSearchParams extends CursorIDParams {
   dateBefore?: string;
 
   /**
+   * Pagination direction used with 'cursor': 'before' fetches older results, 'after'
+   * fetches newer results. Defaults to 'before' when only 'cursor' is provided.
+   */
+  direction?: 'after' | 'before';
+
+  /**
    * Exclude messages marked Low Priority by the user. Default: true. Set to false to
    * include all.
    */
@@ -146,6 +181,11 @@ export interface MessageSearchParams extends CursorIDParams {
    * important. Default: true. Set to false if the user wants a more refined search.
    */
   includeMuted?: boolean;
+
+  /**
+   * Maximum number of messages to return (1–500). Defaults to 50.
+   */
+  limit?: number;
 
   /**
    * Only return messages that contain file attachments.
@@ -207,11 +247,10 @@ export interface MessageSendParams {
 export declare namespace Messages {
   export {
     type MessageGetAttachmentResponse as MessageGetAttachmentResponse,
+    type MessageSearchResponse as MessageSearchResponse,
     type MessageSendResponse as MessageSendResponse,
     type MessageGetAttachmentParams as MessageGetAttachmentParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };
 }
-
-export { type MessagesCursorID };

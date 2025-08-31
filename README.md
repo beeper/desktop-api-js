@@ -24,10 +24,9 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const page = await client.chats.search({ limit: 10, type: 'single' });
-const chat = page.data[0];
+const response = await client.chats.search({ limit: 10, type: 'single' });
 
-console.log(chat.id);
+console.log(response.hasMore);
 ```
 
 ### Request & Response types
@@ -122,37 +121,6 @@ await client.accounts.list({
 On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
-
-## Auto-pagination
-
-List methods in the BeeperDesktop API are paginated.
-You can use the `for await … of` syntax to iterate through items across all pages:
-
-```ts
-async function fetchAllMessages(params) {
-  const allMessages = [];
-  // Automatically fetches more pages as needed.
-  for await (const message of client.messages.search({ limit: 20, query: 'meeting' })) {
-    allMessages.push(message);
-  }
-  return allMessages;
-}
-```
-
-Alternatively, you can request a single page at a time:
-
-```ts
-let page = await client.messages.search({ limit: 20, query: 'meeting' });
-for (const message of page.data) {
-  console.log(message);
-}
-
-// Convenience methods are provided for manually paginating:
-while (page.hasNextPage()) {
-  page = await page.getNextPage();
-  // ...
-}
-```
 
 ## Advanced Usage
 

@@ -65,7 +65,8 @@ describe('resource chats', () => {
       client.chats.search(
         {
           accountIDs: ['local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc', 'slackgo.T031TC83W'],
-          ending_before: '872739',
+          cursor: 'eyJvZmZzZXQiOjE3MTk5OTk5OTl9',
+          direction: 'after',
           inbox: 'primary',
           includeMuted: true,
           lastActivityAfter: '2019-12-27T18:11:19.117Z',
@@ -73,7 +74,6 @@ describe('resource chats', () => {
           limit: 1,
           participantQuery: 'participantQuery',
           query: 'query',
-          starting_after: '196640',
           type: 'single',
           unreadOnly: true,
         },
