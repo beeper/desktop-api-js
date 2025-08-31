@@ -11,6 +11,11 @@ import { RequestOptions } from '../internal/request-options';
 export class Accounts extends APIResource {
   /**
    * List connected Beeper accounts available on this device
+   *
+   * @example
+   * ```ts
+   * const getAccountsResponse = await client.accounts.list();
+   * ```
    */
   list(options?: RequestOptions): APIPromise<TokenAPI.GetAccountsResponse> {
     return this._client.get('/v0/get-accounts', options);
