@@ -107,7 +107,7 @@ export class PagePromise<
   }
 }
 
-export interface BeeperCursorResponse<Item> {
+export interface CursorResponse<Item> {
   items: Array<Item>;
 
   hasMore: boolean;
@@ -117,7 +117,7 @@ export interface BeeperCursorResponse<Item> {
   newestCursor: string | null;
 }
 
-export interface BeeperCursorParams {
+export interface CursorParams {
   cursor?: string | null;
 
   direction?: string | null;
@@ -125,7 +125,7 @@ export interface BeeperCursorParams {
   limit?: number | null;
 }
 
-export class BeeperCursor<Item> extends AbstractPage<Item> implements BeeperCursorResponse<Item> {
+export class Cursor<Item> extends AbstractPage<Item> implements CursorResponse<Item> {
   items: Array<Item>;
 
   hasMore: boolean;
@@ -137,7 +137,7 @@ export class BeeperCursor<Item> extends AbstractPage<Item> implements BeeperCurs
   constructor(
     client: BeeperDesktop,
     response: Response,
-    body: BeeperCursorResponse<Item>,
+    body: CursorResponse<Item>,
     options: FinalRequestOptions,
   ) {
     super(client, response, body, options);

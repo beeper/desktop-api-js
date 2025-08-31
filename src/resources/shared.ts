@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import * as Shared from './shared';
-import { BeeperCursor } from '../core/pagination';
+import { Cursor } from '../core/pagination';
 
 /**
  * A chat account added to Beeper
@@ -358,6 +358,6 @@ export interface User {
   username?: string;
 }
 
-export type ChatsBeeperCursor = BeeperCursor<Chat>;
+export type ChatsCursor = Cursor<Chat>;
 
-export type MessagesBeeperCursor = BeeperCursor<Message>;
+export type MessagesCursor = Cursor<Message>;
