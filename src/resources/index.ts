@@ -1,17 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
-export { Accounts, type Account, type AccountListResponse } from './accounts';
+export { Accounts, type AccountListResponse } from './accounts';
 export { App, type AppOpenResponse, type AppOpenParams } from './app';
-export {
-  Chats,
-  type ChatRetrieveResponse,
-  type ChatSearchResponse,
-  type ChatRetrieveParams,
-  type ChatArchiveParams,
-  type ChatSearchParams,
-  type ChatSearchResponsesCursor,
-} from './chats/chats';
+export { Chats, type ChatRetrieveParams, type ChatArchiveParams, type ChatSearchParams } from './chats/chats';
 export {
   Messages,
   type MessageSendResponse,
