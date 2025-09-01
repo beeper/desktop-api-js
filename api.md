@@ -14,6 +14,7 @@ Types:
 
 Types:
 
+- <code><a href="./src/resources/accounts.ts">Account</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountListResponse</a></code>
 
 Methods:
@@ -70,7 +71,6 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/token.ts">GetAccountsResponse</a></code>
 - <code><a href="./src/resources/token.ts">RevokeRequest</a></code>
 - <code><a href="./src/resources/token.ts">UserInfo</a></code>
 
