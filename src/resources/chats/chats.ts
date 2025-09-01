@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
-import { ChatsCursor } from '../shared';
 import * as RemindersAPI from './reminders';
 import { ReminderCreateParams, ReminderDeleteParams, Reminders } from './reminders';
 import { APIPromise } from '../../core/api-promise';
@@ -25,7 +24,7 @@ export class Chats extends APIResource {
    * });
    * ```
    */
-  retrieve(query: ChatRetrieveParams, options?: RequestOptions): APIPromise<Shared.Chat> {
+  retrieve(query: ChatRetrieveParams, options?: RequestOptions): APIPromise<ChatRetrieveResponse> {
     return this._client.get('/v0/get-chat', { query, ...options });
   }
 
@@ -50,7 +49,7 @@ export class Chats extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const chat of client.chats.search()) {
+   * for await (const chatSearchResponse of client.chats.search()) {
    *   // ...
    * }
    * ```
@@ -58,8 +57,192 @@ export class Chats extends APIResource {
   search(
     query: ChatSearchParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ChatsCursor, Shared.Chat> {
-    return this._client.getAPIList('/v0/search-chats', Cursor<Shared.Chat>, { query, ...options });
+  ): PagePromise<ChatSearchResponsesCursor, ChatSearchResponse> {
+    return this._client.getAPIList('/v0/search-chats', Cursor<ChatSearchResponse>, { query, ...options });
+  }
+}
+
+export type ChatSearchResponsesCursor = Cursor<ChatSearchResponse>;
+
+export interface ChatRetrieveResponse {
+  /**
+   * Unique identifier of the chat (room/thread ID, same as id) across Beeper.
+   */
+  id: string;
+
+  /**
+   * Beeper account ID this chat belongs to.
+   */
+  accountID: string;
+
+  /**
+   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
+   * MUST use 'accountID' to perform actions.
+   */
+  network: string;
+
+  /**
+   * Chat participants information.
+   */
+  participants: ChatRetrieveResponse.Participants;
+
+  /**
+   * Display title of the chat as computed by the client/server.
+   */
+  title: string;
+
+  /**
+   * Chat type: 'single' for direct messages, 'group' for group chats.
+   */
+  type: 'single' | 'group';
+
+  /**
+   * Number of unread messages.
+   */
+  unreadCount: number;
+
+  /**
+   * True if chat is archived.
+   */
+  isArchived?: boolean;
+
+  /**
+   * True if chat notifications are muted.
+   */
+  isMuted?: boolean;
+
+  /**
+   * True if chat is pinned.
+   */
+  isPinned?: boolean;
+
+  /**
+   * Timestamp of last activity. Chats with more recent activity are often more
+   * important.
+   */
+  lastActivity?: string;
+
+  /**
+   * Last read message sortKey (hsOrder). Used to compute 'isUnread'.
+   */
+  lastReadMessageSortKey?: number | string;
+
+  /**
+   * Local chat ID specific to this Beeper Desktop installation.
+   */
+  localChatID?: string | null;
+}
+
+export namespace ChatRetrieveResponse {
+  /**
+   * Chat participants information.
+   */
+  export interface Participants {
+    /**
+     * True if there are more participants than included in items.
+     */
+    hasMore: boolean;
+
+    /**
+     * Participants returned for this chat (limited by the request; may be a subset).
+     */
+    items: Array<Shared.User>;
+
+    /**
+     * Total number of participants in the chat.
+     */
+    total: number;
+  }
+}
+
+export interface ChatSearchResponse {
+  /**
+   * Unique identifier of the chat (room/thread ID, same as id) across Beeper.
+   */
+  id: string;
+
+  /**
+   * Beeper account ID this chat belongs to.
+   */
+  accountID: string;
+
+  /**
+   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
+   * MUST use 'accountID' to perform actions.
+   */
+  network: string;
+
+  /**
+   * Chat participants information.
+   */
+  participants: ChatSearchResponse.Participants;
+
+  /**
+   * Display title of the chat as computed by the client/server.
+   */
+  title: string;
+
+  /**
+   * Chat type: 'single' for direct messages, 'group' for group chats.
+   */
+  type: 'single' | 'group';
+
+  /**
+   * Number of unread messages.
+   */
+  unreadCount: number;
+
+  /**
+   * True if chat is archived.
+   */
+  isArchived?: boolean;
+
+  /**
+   * True if chat notifications are muted.
+   */
+  isMuted?: boolean;
+
+  /**
+   * True if chat is pinned.
+   */
+  isPinned?: boolean;
+
+  /**
+   * Timestamp of last activity. Chats with more recent activity are often more
+   * important.
+   */
+  lastActivity?: string;
+
+  /**
+   * Last read message sortKey (hsOrder). Used to compute 'isUnread'.
+   */
+  lastReadMessageSortKey?: number | string;
+
+  /**
+   * Local chat ID specific to this Beeper Desktop installation.
+   */
+  localChatID?: string | null;
+}
+
+export namespace ChatSearchResponse {
+  /**
+   * Chat participants information.
+   */
+  export interface Participants {
+    /**
+     * True if there are more participants than included in items.
+     */
+    hasMore: boolean;
+
+    /**
+     * Participants returned for this chat (limited by the request; may be a subset).
+     */
+    items: Array<Shared.User>;
+
+    /**
+     * Total number of participants in the chat.
+     */
+    total: number;
   }
 }
 
@@ -150,6 +333,9 @@ Chats.Reminders = Reminders;
 
 export declare namespace Chats {
   export {
+    type ChatRetrieveResponse as ChatRetrieveResponse,
+    type ChatSearchResponse as ChatSearchResponse,
+    type ChatSearchResponsesCursor as ChatSearchResponsesCursor,
     type ChatRetrieveParams as ChatRetrieveParams,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatSearchParams as ChatSearchParams,
@@ -161,5 +347,3 @@ export declare namespace Chats {
     type ReminderDeleteParams as ReminderDeleteParams,
   };
 }
-
-export { type ChatsCursor };
