@@ -13,9 +13,13 @@ Types:
 
 # Accounts
 
+Types:
+
+- <code><a href="./src/resources/accounts.ts">AccountListResponse</a></code>
+
 Methods:
 
-- <code title="get /v0/get-accounts">client.accounts.<a href="./src/resources/accounts.ts">list</a>() -> GetAccountsResponse</code>
+- <code title="get /v0/get-accounts">client.accounts.<a href="./src/resources/accounts.ts">list</a>() -> AccountListResponse</code>
 
 # App
 
