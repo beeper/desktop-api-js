@@ -2,7 +2,6 @@
 
 Types:
 
-- <code><a href="./src/resources/shared.ts">Account</a></code>
 - <code><a href="./src/resources/shared.ts">Attachment</a></code>
 - <code><a href="./src/resources/shared.ts">BaseResponse</a></code>
 - <code><a href="./src/resources/shared.ts">Chat</a></code>

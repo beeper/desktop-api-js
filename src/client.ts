@@ -810,7 +810,6 @@ export declare namespace BeeperDesktop {
     type UserInfo as UserInfo,
   };
 
-  export type Account = API.Account;
   export type Attachment = API.Attachment;
   export type BaseResponse = API.BaseResponse;
   export type Chat = API.Chat;
