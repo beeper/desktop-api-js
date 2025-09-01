@@ -2,7 +2,6 @@
 
 Types:
 
-- <code><a href="./src/resources/shared.ts">Account</a></code>
 - <code><a href="./src/resources/shared.ts">Attachment</a></code>
 - <code><a href="./src/resources/shared.ts">BaseResponse</a></code>
 - <code><a href="./src/resources/shared.ts">Chat</a></code>
@@ -15,7 +14,6 @@ Types:
 
 Types:
 
-- <code><a href="./src/resources/accounts.ts">Account</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountListResponse</a></code>
 
 Methods:
@@ -34,16 +32,11 @@ Methods:
 
 # Chats
 
-Types:
-
-- <code><a href="./src/resources/chats/chats.ts">ChatRetrieveResponse</a></code>
-- <code><a href="./src/resources/chats/chats.ts">ChatSearchResponse</a></code>
-
 Methods:
 
-- <code title="get /v0/get-chat">client.chats.<a href="./src/resources/chats/chats.ts">retrieve</a>({ ...params }) -> ChatRetrieveResponse</code>
+- <code title="get /v0/get-chat">client.chats.<a href="./src/resources/chats/chats.ts">retrieve</a>({ ...params }) -> Chat</code>
 - <code title="post /v0/archive-chat">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>({ ...params }) -> BaseResponse</code>
-- <code title="get /v0/search-chats">client.chats.<a href="./src/resources/chats/chats.ts">search</a>({ ...params }) -> ChatSearchResponsesCursor</code>
+- <code title="get /v0/search-chats">client.chats.<a href="./src/resources/chats/chats.ts">search</a>({ ...params }) -> ChatsCursor</code>
 
 ## Reminders
 

@@ -23,33 +23,35 @@ export class Accounts extends APIResource {
 }
 
 /**
- * A chat account added to Beeper
- */
-export interface Account {
-  /**
-   * Chat account added to Beeper. Use this to route account-scoped actions.
-   */
-  accountID: string;
-
-  /**
-   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
-   * MUST use 'accountID' to perform actions.
-   */
-  network: string;
-
-  /**
-   * A person on or reachable through Beeper. Values are best-effort and can vary by
-   * network.
-   */
-  user: Shared.User;
-}
-
-/**
  * Connected accounts the user can act through. Includes accountID, network, and
  * user identity.
  */
-export type AccountListResponse = Array<Account>;
+export type AccountListResponse = Array<AccountListResponse.AccountListResponseItem>;
+
+export namespace AccountListResponse {
+  /**
+   * A chat account added to Beeper
+   */
+  export interface AccountListResponseItem {
+    /**
+     * Chat account added to Beeper. Use this to route account-scoped actions.
+     */
+    accountID: string;
+
+    /**
+     * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
+     * MUST use 'accountID' to perform actions.
+     */
+    network: string;
+
+    /**
+     * A person on or reachable through Beeper. Values are best-effort and can vary by
+     * network.
+     */
+    user: Shared.User;
+  }
+}
 
 export declare namespace Accounts {
-  export { type Account as Account, type AccountListResponse as AccountListResponse };
+  export { type AccountListResponse as AccountListResponse };
 }

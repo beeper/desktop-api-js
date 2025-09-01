@@ -25,9 +25,9 @@ const client = new BeeperDesktop({
 });
 
 const page = await client.chats.search({ includeMuted: true, limit: 3, type: 'single' });
-const chatSearchResponse = page.items[0];
+const chat = page.items[0];
 
-console.log(chatSearchResponse.id);
+console.log(chat.id);
 ```
 
 ### Request & Response types
