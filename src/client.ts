@@ -19,7 +19,7 @@ import { AbstractPage, type CursorParams, CursorResponse } from './core/paginati
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Accounts } from './resources/accounts';
+import { AccountListResponse, Accounts } from './resources/accounts';
 import { App, AppOpenParams, AppOpenResponse } from './resources/app';
 import { GetAccountsResponse, RevokeRequest, Token, UserInfo } from './resources/token';
 import { ChatArchiveParams, ChatRetrieveParams, ChatSearchParams, Chats } from './resources/chats/chats';
@@ -785,7 +785,7 @@ export declare namespace BeeperDesktop {
   export import Cursor = Pagination.Cursor;
   export { type CursorParams as CursorParams, type CursorResponse as CursorResponse };
 
-  export { Accounts as Accounts };
+  export { Accounts as Accounts, type AccountListResponse as AccountListResponse };
 
   export { App as App, type AppOpenResponse as AppOpenResponse, type AppOpenParams as AppOpenParams };
 
