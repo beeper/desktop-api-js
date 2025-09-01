@@ -14,13 +14,10 @@ export class App extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.app.focus();
+   * const response = await client.app.open();
    * ```
    */
-  focus(
-    body: AppFocusParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<AppFocusResponse> {
+  open(body: AppOpenParams | null | undefined = {}, options?: RequestOptions): APIPromise<AppOpenResponse> {
     return this._client.post('/v0/open-app', { body, ...options });
   }
 }
@@ -28,14 +25,14 @@ export class App extends APIResource {
 /**
  * Response indicating successful app opening.
  */
-export interface AppFocusResponse {
+export interface AppOpenResponse {
   /**
    * Whether the app was successfully opened/focused.
    */
   success: boolean;
 }
 
-export interface AppFocusParams {
+export interface AppOpenParams {
   /**
    * Optional Beeper chat ID (or local chat ID) to focus after opening the app. If
    * omitted, only opens/focuses the app.
@@ -54,5 +51,5 @@ export interface AppFocusParams {
 }
 
 export declare namespace App {
-  export { type AppFocusResponse as AppFocusResponse, type AppFocusParams as AppFocusParams };
+  export { type AppOpenResponse as AppOpenResponse, type AppOpenParams as AppOpenParams };
 }

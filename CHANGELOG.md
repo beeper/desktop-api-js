@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.1.4 (2025-09-01)
+
+Full Changelog: [v0.1.3...v0.1.4](https://github.com/beeper/desktop-api-js/compare/v0.1.3...v0.1.4)
+
+### Features
+
+* **api:** update via SDK Studio ([bbe3626](https://github.com/beeper/desktop-api-js/commit/bbe36264b74f2ae8009e34e45b506e10c1124cc3))
+* **api:** update via SDK Studio ([06dd842](https://github.com/beeper/desktop-api-js/commit/06dd8423e1029424eee113dc8d04d0bf8b817c80))
+* **api:** update via SDK Studio ([fd90cba](https://github.com/beeper/desktop-api-js/commit/fd90cba2611d50c4279386f2be4aa3952fc44fe6))
+* **api:** update via SDK Studio ([7ede9f4](https://github.com/beeper/desktop-api-js/commit/7ede9f4c55d46320237aa3f71a3a6098361999ae))
+* **api:** update via SDK Studio ([d1fcd59](https://github.com/beeper/desktop-api-js/commit/d1fcd596528871c739c1eae0f99776f4f4db50ac))
+* **api:** update via SDK Studio ([1c6b007](https://github.com/beeper/desktop-api-js/commit/1c6b007ccb14bfaffbb663cc1b701477eea787fc))
+* **api:** update via SDK Studio ([f3cb8ed](https://github.com/beeper/desktop-api-js/commit/f3cb8edb6ec2f3cc741604217c05ac30d3a7f4ec))
+* **api:** update via SDK Studio ([bc8868a](https://github.com/beeper/desktop-api-js/commit/bc8868aaea478fa02692c32298a4fca8f5992a41))
+* **api:** update via SDK Studio ([0aae9fc](https://github.com/beeper/desktop-api-js/commit/0aae9fcca4ffc1028389e7bdba9ccb9fab1c0926))
+* **api:** update via SDK Studio ([9cb7c64](https://github.com/beeper/desktop-api-js/commit/9cb7c646abc140f9bbb137a629d2614d344475d6))
+
 ## 0.1.3 (2025-08-31)
 
 Full Changelog: [v0.1.2...v0.1.3](https://github.com/beeper/desktop-api-js/compare/v0.1.2...v0.1.3)

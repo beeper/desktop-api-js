@@ -19,25 +19,23 @@ import { AbstractPage, type CursorParams, CursorResponse } from './core/paginati
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Accounts } from './resources/accounts';
-import { App, AppFocusParams, AppFocusResponse } from './resources/app';
+import { Account, AccountListResponse, Accounts } from './resources/accounts';
+import { App, AppOpenParams, AppOpenResponse } from './resources/app';
+import { RevokeRequest, Token, UserInfo } from './resources/token';
 import {
+  Chat,
   ChatArchiveParams,
-  ChatGetParams,
-  ChatGetResponse,
+  ChatRetrieveParams,
   ChatSearchParams,
   Chats,
-} from './resources/chats';
+  ChatsCursor,
+} from './resources/chats/chats';
 import {
-  MessageGetAttachmentParams,
-  MessageGetAttachmentResponse,
   MessageSearchParams,
   MessageSendParams,
   MessageSendResponse,
   Messages,
-} from './resources/messages';
-import { ReminderClearParams, ReminderSetParams, Reminders } from './resources/reminders';
-import { GetAccountsResponse, RevokeRequest, Token, UserInfo } from './resources/token';
+} from './resources/messages/messages';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -777,10 +775,6 @@ export class BeeperDesktop {
    */
   messages: API.Messages = new API.Messages(this);
   /**
-   * Reminders operations
-   */
-  reminders: API.Reminders = new API.Reminders(this);
-  /**
    * Operations related to the current access token
    */
   token: API.Token = new API.Token(this);
@@ -790,7 +784,6 @@ BeeperDesktop.Accounts = Accounts;
 BeeperDesktop.App = App;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
-BeeperDesktop.Reminders = Reminders;
 BeeperDesktop.Token = Token;
 
 export declare namespace BeeperDesktop {
@@ -799,44 +792,30 @@ export declare namespace BeeperDesktop {
   export import Cursor = Pagination.Cursor;
   export { type CursorParams as CursorParams, type CursorResponse as CursorResponse };
 
-  export { Accounts as Accounts };
+  export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
 
-  export { App as App, type AppFocusResponse as AppFocusResponse, type AppFocusParams as AppFocusParams };
+  export { App as App, type AppOpenResponse as AppOpenResponse, type AppOpenParams as AppOpenParams };
 
   export {
     Chats as Chats,
-    type ChatGetResponse as ChatGetResponse,
+    type Chat as Chat,
+    type ChatsCursor as ChatsCursor,
+    type ChatRetrieveParams as ChatRetrieveParams,
     type ChatArchiveParams as ChatArchiveParams,
-    type ChatGetParams as ChatGetParams,
     type ChatSearchParams as ChatSearchParams,
   };
 
   export {
     Messages as Messages,
-    type MessageGetAttachmentResponse as MessageGetAttachmentResponse,
     type MessageSendResponse as MessageSendResponse,
-    type MessageGetAttachmentParams as MessageGetAttachmentParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };
 
-  export {
-    Reminders as Reminders,
-    type ReminderClearParams as ReminderClearParams,
-    type ReminderSetParams as ReminderSetParams,
-  };
+  export { Token as Token, type RevokeRequest as RevokeRequest, type UserInfo as UserInfo };
 
-  export {
-    Token as Token,
-    type GetAccountsResponse as GetAccountsResponse,
-    type RevokeRequest as RevokeRequest,
-    type UserInfo as UserInfo,
-  };
-
-  export type Account = API.Account;
   export type Attachment = API.Attachment;
   export type BaseResponse = API.BaseResponse;
-  export type Chat = API.Chat;
   export type Error = API.Error;
   export type Message = API.Message;
   export type Reaction = API.Reaction;

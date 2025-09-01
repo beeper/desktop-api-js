@@ -40,7 +40,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  return asTextContentResult(await client.chats.get(body));
+  return asTextContentResult(await client.chats.retrieve(body));
 };
 
 export default { metadata, tool, handler };

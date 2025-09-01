@@ -24,7 +24,7 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const page = await client.chats.search({ limit: 10, type: 'single' });
+const page = await client.chats.search({ includeMuted: true, limit: 3, type: 'single' });
 const chat = page.items[0];
 
 console.log(chat.id);
@@ -42,7 +42,7 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const getAccountsResponse: BeeperDesktop.GetAccountsResponse = await client.accounts.list();
+const accounts: BeeperDesktop.AccountListResponse = await client.accounts.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -56,7 +56,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 const response = await client.messages
-  .send({ chatID: '!invalid-chat-id', text: 'Test message' })
+  .send({ chatID: '1229391', text: 'Hello! Just checking in on the project status.' })
   .catch(async (err) => {
     if (err instanceof BeeperDesktop.APIError) {
       console.log(err.status); // 400
@@ -132,7 +132,11 @@ You can use the `for await … of` syntax to iterate through items across all pa
 async function fetchAllMessages(params) {
   const allMessages = [];
   // Automatically fetches more pages as needed.
-  for await (const message of client.messages.search({ limit: 20, query: 'meeting' })) {
+  for await (const message of client.messages.search({
+    accountIDs: ['local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI'],
+    limit: 10,
+    query: 'deployment',
+  })) {
     allMessages.push(message);
   }
   return allMessages;
@@ -142,7 +146,11 @@ async function fetchAllMessages(params) {
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.messages.search({ limit: 20, query: 'meeting' });
+let page = await client.messages.search({
+  accountIDs: ['local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI'],
+  limit: 10,
+  query: 'deployment',
+});
 for (const message of page.items) {
   console.log(message);
 }
@@ -172,9 +180,9 @@ const response = await client.accounts.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: getAccountsResponse, response: raw } = await client.accounts.list().withResponse();
+const { data: accounts, response: raw } = await client.accounts.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(getAccountsResponse.accounts);
+console.log(accounts);
 ```
 
 ### Logging
