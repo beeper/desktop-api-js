@@ -13,19 +13,20 @@ export class Attachments extends APIResource {
    *
    * @example
    * ```ts
-   * const attachment =
-   *   await client.messages.attachments.retrieve({
+   * const response = await client.messages.attachments.download(
+   *   {
    *     chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
    *     messageID: 'messageID',
-   *   });
+   *   },
+   * );
    * ```
    */
-  retrieve(body: AttachmentRetrieveParams, options?: RequestOptions): APIPromise<AttachmentRetrieveResponse> {
-    return this._client.post('/v0/get-attachment', { body, ...options });
+  download(body: AttachmentDownloadParams, options?: RequestOptions): APIPromise<AttachmentDownloadResponse> {
+    return this._client.post('/v0/download-attachment', { body, ...options });
   }
 }
 
-export interface AttachmentRetrieveResponse {
+export interface AttachmentDownloadResponse {
   /**
    * Whether the attachment was successfully downloaded.
    */
@@ -42,7 +43,7 @@ export interface AttachmentRetrieveResponse {
   filePath?: string;
 }
 
-export interface AttachmentRetrieveParams {
+export interface AttachmentDownloadParams {
   /**
    * Unique identifier of the chat (supports both chatID and localChatID).
    */
@@ -56,7 +57,7 @@ export interface AttachmentRetrieveParams {
 
 export declare namespace Attachments {
   export {
-    type AttachmentRetrieveResponse as AttachmentRetrieveResponse,
-    type AttachmentRetrieveParams as AttachmentRetrieveParams,
+    type AttachmentDownloadResponse as AttachmentDownloadResponse,
+    type AttachmentDownloadParams as AttachmentDownloadParams,
   };
 }

@@ -4,7 +4,7 @@ import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import { MessagesCursor } from '../shared';
 import * as AttachmentsAPI from './attachments';
-import { AttachmentRetrieveParams, AttachmentRetrieveResponse, Attachments } from './attachments';
+import { AttachmentDownloadParams, AttachmentDownloadResponse, Attachments } from './attachments';
 import { APIPromise } from '../../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
@@ -165,8 +165,8 @@ export declare namespace Messages {
 
   export {
     Attachments as Attachments,
-    type AttachmentRetrieveResponse as AttachmentRetrieveResponse,
-    type AttachmentRetrieveParams as AttachmentRetrieveParams,
+    type AttachmentDownloadResponse as AttachmentDownloadResponse,
+    type AttachmentDownloadParams as AttachmentDownloadParams,
   };
 }
 

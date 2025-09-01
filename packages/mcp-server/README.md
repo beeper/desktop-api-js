@@ -252,4 +252,4 @@ The following tools are available in this MCP server.
 
 ### Resource `messages.attachments`:
 
-- `get_attachment` (`write`) tags: [messages]: Download a message attachment and return the local file path.
+- `download_attachment` (`write`) tags: [messages]: Download a message attachment and return the local file path.

@@ -25,6 +25,7 @@ export const tool: Tool = {
         description: 'Provide an array of account IDs to filter chats from specific messaging accounts only',
         items: {
           type: 'string',
+          description: 'Beeper account ID this resource belongs to.',
         },
       },
       cursor: {
