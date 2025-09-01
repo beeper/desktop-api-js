@@ -4,7 +4,6 @@ Types:
 
 - <code><a href="./src/resources/shared.ts">Attachment</a></code>
 - <code><a href="./src/resources/shared.ts">BaseResponse</a></code>
-- <code><a href="./src/resources/shared.ts">Chat</a></code>
 - <code><a href="./src/resources/shared.ts">Error</a></code>
 - <code><a href="./src/resources/shared.ts">Message</a></code>
 - <code><a href="./src/resources/shared.ts">Reaction</a></code>
@@ -14,6 +13,7 @@ Types:
 
 Types:
 
+- <code><a href="./src/resources/accounts.ts">Account</a></code>
 - <code><a href="./src/resources/accounts.ts">AccountListResponse</a></code>
 
 Methods:
@@ -31,6 +31,10 @@ Methods:
 - <code title="post /v0/open-app">client.app.<a href="./src/resources/app.ts">open</a>({ ...params }) -> AppOpenResponse</code>
 
 # Chats
+
+Types:
+
+- <code><a href="./src/resources/chats/chats.ts">Chat</a></code>
 
 Methods:
 
@@ -60,11 +64,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/messages/attachments.ts">AttachmentRetrieveResponse</a></code>
+- <code><a href="./src/resources/messages/attachments.ts">AttachmentDownloadResponse</a></code>
 
 Methods:
 
-- <code title="post /v0/get-attachment">client.messages.attachments.<a href="./src/resources/messages/attachments.ts">retrieve</a>({ ...params }) -> AttachmentRetrieveResponse</code>
+- <code title="post /v0/download-attachment">client.messages.attachments.<a href="./src/resources/messages/attachments.ts">download</a>({ ...params }) -> AttachmentDownloadResponse</code>
 
 # Token
 

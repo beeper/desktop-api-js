@@ -8,8 +8,8 @@ const client = new BeeperDesktop({
 });
 
 describe('resource attachments', () => {
-  test('retrieve: only required params', async () => {
-    const responsePromise = client.messages.attachments.retrieve({
+  test('download: only required params', async () => {
+    const responsePromise = client.messages.attachments.download({
       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       messageID: 'messageID',
     });
@@ -22,8 +22,8 @@ describe('resource attachments', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('retrieve: required and optional params', async () => {
-    const response = await client.messages.attachments.retrieve({
+  test('download: required and optional params', async () => {
+    const response = await client.messages.attachments.download({
       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       messageID: 'messageID',
     });

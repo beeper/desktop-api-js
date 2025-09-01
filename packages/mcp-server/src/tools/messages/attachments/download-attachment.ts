@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   operation: 'write',
   tags: ['messages'],
   httpMethod: 'post',
-  httpPath: '/v0/get-attachment',
-  operationId: 'get_attachment',
+  httpPath: '/v0/download-attachment',
+  operationId: 'download_attachment',
 };
 
 export const tool: Tool = {
-  name: 'get_attachment',
+  name: 'download_attachment',
   description: 'Download a message attachment and return the local file path.',
   inputSchema: {
     type: 'object',
@@ -36,7 +36,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  return asTextContentResult(await client.messages.attachments.retrieve(body));
+  return asTextContentResult(await client.messages.attachments.download(body));
 };
 
 export default { metadata, tool, handler };

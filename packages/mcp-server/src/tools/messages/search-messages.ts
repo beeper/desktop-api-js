@@ -26,6 +26,7 @@ export const tool: Tool = {
         description: 'Limit search to specific Beeper account IDs (bridge instances).',
         items: {
           type: 'string',
+          description: 'Beeper account ID this resource belongs to.',
         },
       },
       chatIDs: {

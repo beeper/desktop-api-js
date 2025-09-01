@@ -13,7 +13,7 @@ import set_chat_reminder from './chats/reminders/set-chat-reminder';
 import clear_chat_reminder from './chats/reminders/clear-chat-reminder';
 import search_messages from './messages/search-messages';
 import send_message from './messages/send-message';
-import get_attachment from './messages/attachments/get-attachment';
+import download_attachment from './messages/attachments/download-attachment';
 
 export const endpoints: Endpoint[] = [];
 
@@ -30,7 +30,7 @@ addEndpoint(set_chat_reminder);
 addEndpoint(clear_chat_reminder);
 addEndpoint(search_messages);
 addEndpoint(send_message);
-addEndpoint(get_attachment);
+addEndpoint(download_attachment);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';
