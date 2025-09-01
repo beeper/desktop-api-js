@@ -10,7 +10,7 @@ const client = new BeeperDesktop({
 describe('resource attachments', () => {
   test('retrieve: only required params', async () => {
     const responsePromise = client.messages.attachments.retrieve({
-      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       messageID: 'messageID',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -24,7 +24,7 @@ describe('resource attachments', () => {
 
   test('retrieve: required and optional params', async () => {
     const response = await client.messages.attachments.retrieve({
-      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       messageID: 'messageID',
     });
   });

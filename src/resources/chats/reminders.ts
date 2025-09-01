@@ -15,8 +15,7 @@ export class Reminders extends APIResource {
    * @example
    * ```ts
    * const baseResponse = await client.chats.reminders.create({
-   *   chatID:
-   *     '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
    *   reminder: { remindAtMs: 0 },
    * });
    * ```
@@ -31,8 +30,7 @@ export class Reminders extends APIResource {
    * @example
    * ```ts
    * const baseResponse = await client.chats.reminders.delete({
-   *   chatID:
-   *     '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
    * });
    * ```
    */

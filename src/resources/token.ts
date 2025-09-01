@@ -18,15 +18,10 @@ export class Token extends APIResource {
 }
 
 /**
- * Response payload for listing connected Beeper accounts.
+ * Connected accounts the user can act through. Includes accountID, network, and
+ * user identity.
  */
-export interface GetAccountsResponse {
-  /**
-   * Connected accounts the user can act through. Includes accountID, network, and
-   * user identity.
-   */
-  accounts: Array<Shared.Account>;
-}
+export type GetAccountsResponse = Array<Shared.Account>;
 
 export interface RevokeRequest {
   /**

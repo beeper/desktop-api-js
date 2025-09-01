@@ -22,19 +22,9 @@ import { APIPromise } from './core/api-promise';
 import { Accounts } from './resources/accounts';
 import { App, AppOpenParams, AppOpenResponse } from './resources/app';
 import { GetAccountsResponse, RevokeRequest, Token, UserInfo } from './resources/token';
-import {
-  ChatArchiveParams,
-  ChatRetrieveParams,
-  ChatRetrieveResponse,
-  ChatSearchParams,
-  ChatSearchResponse,
-  ChatSearchResponsesCursor,
-  Chats,
-} from './resources/chats/chats';
+import { ChatArchiveParams, ChatRetrieveParams, ChatSearchParams, Chats } from './resources/chats/chats';
 import {
   MessageSearchParams,
-  MessageSearchResponse,
-  MessageSearchResponsesCursor,
   MessageSendParams,
   MessageSendResponse,
   Messages,
@@ -801,9 +791,6 @@ export declare namespace BeeperDesktop {
 
   export {
     Chats as Chats,
-    type ChatRetrieveResponse as ChatRetrieveResponse,
-    type ChatSearchResponse as ChatSearchResponse,
-    type ChatSearchResponsesCursor as ChatSearchResponsesCursor,
     type ChatRetrieveParams as ChatRetrieveParams,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatSearchParams as ChatSearchParams,
@@ -811,9 +798,7 @@ export declare namespace BeeperDesktop {
 
   export {
     Messages as Messages,
-    type MessageSearchResponse as MessageSearchResponse,
     type MessageSendResponse as MessageSendResponse,
-    type MessageSearchResponsesCursor as MessageSearchResponsesCursor,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };
