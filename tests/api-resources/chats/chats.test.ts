@@ -9,9 +9,7 @@ const client = new BeeperDesktop({
 
 describe('resource chats', () => {
   test('retrieve: only required params', async () => {
-    const responsePromise = client.chats.retrieve({
-      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
-    });
+    const responsePromise = client.chats.retrieve({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,15 +21,13 @@ describe('resource chats', () => {
 
   test('retrieve: required and optional params', async () => {
     const response = await client.chats.retrieve({
-      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       maxParticipantCount: 50,
     });
   });
 
   test('archive: only required params', async () => {
-    const responsePromise = client.chats.archive({
-      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
-    });
+    const responsePromise = client.chats.archive({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -42,10 +38,7 @@ describe('resource chats', () => {
   });
 
   test('archive: required and optional params', async () => {
-    const response = await client.chats.archive({
-      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
-      archived: true,
-    });
+    const response = await client.chats.archive({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', archived: true });
   });
 
   test('search', async () => {
@@ -64,7 +57,10 @@ describe('resource chats', () => {
     await expect(
       client.chats.search(
         {
-          accountIDs: ['local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc', 'slackgo.T031TC83W'],
+          accountIDs: [
+            'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
+            'local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI',
+          ],
           cursor: 'eyJvZmZzZXQiOjE3MTk5OTk5OTl9',
           direction: 'after',
           inbox: 'primary',

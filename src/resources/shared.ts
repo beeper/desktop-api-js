@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import * as Shared from './shared';
+import { Cursor } from '../core/pagination';
 
 /**
  * A chat account added to Beeper
@@ -128,10 +129,9 @@ export interface Chat {
   title: string;
 
   /**
-   * Chat type: 'single' for direct messages, 'group' for group chats, 'channel' for
-   * channels, 'broadcast' for broadcasts.
+   * Chat type: 'single' for direct messages, 'group' for group chats.
    */
-  type: 'single' | 'group' | 'channel' | 'broadcast';
+  type: 'single' | 'group';
 
   /**
    * Number of unread messages.
@@ -355,3 +355,7 @@ export interface User {
    */
   username?: string;
 }
+
+export type ChatsCursor = Cursor<Chat>;
+
+export type MessagesCursor = Cursor<Message>;

@@ -24,7 +24,7 @@ describe('resource app', () => {
     await expect(
       client.app.open(
         {
-          chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+          chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
           draftText: 'draftText',
           messageSortKey: 'messageSortKey',
         },

@@ -28,11 +28,11 @@ describe('resource messages', () => {
             'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
             'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',
           ],
-          chatIDs: ['!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost'],
+          chatIDs: ['!NCdzlIaMjZUmvmvyHU:beeper.com', '1231073'],
           chatType: 'group',
           cursor: 'eyJvZmZzZXQiOjE3MTk5OTk5OTl9',
-          dateAfter: '2024-07-01T00:00:00Z',
-          dateBefore: '2024-07-31T23:59:59Z',
+          dateAfter: '2025-08-01T00:00:00Z',
+          dateBefore: '2025-08-31T23:59:59Z',
           direction: 'before',
           excludeLowPriority: true,
           includeMuted: true,
@@ -51,9 +51,7 @@ describe('resource messages', () => {
   });
 
   test('send: only required params', async () => {
-    const responsePromise = client.messages.send({
-      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
-    });
+    const responsePromise = client.messages.send({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -65,7 +63,7 @@ describe('resource messages', () => {
 
   test('send: required and optional params', async () => {
     const response = await client.messages.send({
-      chatID: '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       replyToMessageID: 'replyToMessageID',
       text: 'text',
     });

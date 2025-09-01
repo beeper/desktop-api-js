@@ -3,9 +3,7 @@
 export { Attachments, type AttachmentRetrieveResponse, type AttachmentRetrieveParams } from './attachments';
 export {
   Messages,
-  type MessageSearchResponse,
   type MessageSendResponse,
   type MessageSearchParams,
   type MessageSendParams,
-  type MessageSearchResponsesCursor,
 } from './messages';

@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
+import { MessagesCursor } from '../shared';
 import * as AttachmentsAPI from './attachments';
 import { AttachmentRetrieveParams, AttachmentRetrieveResponse, Attachments } from './attachments';
 import { APIPromise } from '../../core/api-promise';
@@ -20,7 +21,7 @@ export class Messages extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const messageSearchResponse of client.messages.search()) {
+   * for await (const message of client.messages.search()) {
    *   // ...
    * }
    * ```
@@ -28,11 +29,8 @@ export class Messages extends APIResource {
   search(
     query: MessageSearchParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<MessageSearchResponsesCursor, MessageSearchResponse> {
-    return this._client.getAPIList('/v0/search-messages', Cursor<MessageSearchResponse>, {
-      query,
-      ...options,
-    });
+  ): PagePromise<MessagesCursor, Shared.Message> {
+    return this._client.getAPIList('/v0/search-messages', Cursor<Shared.Message>, { query, ...options });
   }
 
   /**
@@ -42,84 +40,13 @@ export class Messages extends APIResource {
    * @example
    * ```ts
    * const response = await client.messages.send({
-   *   chatID:
-   *     '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
    * });
    * ```
    */
   send(body: MessageSendParams, options?: RequestOptions): APIPromise<MessageSendResponse> {
     return this._client.post('/v0/send-message', { body, ...options });
   }
-}
-
-export type MessageSearchResponsesCursor = Cursor<MessageSearchResponse>;
-
-export interface MessageSearchResponse {
-  /**
-   * Stable message ID for cursor pagination.
-   */
-  id: string;
-
-  /**
-   * Beeper account ID the message belongs to.
-   */
-  accountID: string;
-
-  /**
-   * Beeper chat/thread/room ID.
-   */
-  chatID: string;
-
-  /**
-   * Stable message ID (same as id).
-   */
-  messageID: string;
-
-  /**
-   * Sender user ID.
-   */
-  senderID: string;
-
-  /**
-   * A unique key used to sort messages
-   */
-  sortKey: string | number;
-
-  /**
-   * Message timestamp.
-   */
-  timestamp: string;
-
-  /**
-   * Attachments included with this message, if any.
-   */
-  attachments?: Array<Shared.Attachment>;
-
-  /**
-   * True if the authenticated user sent the message.
-   */
-  isSender?: boolean;
-
-  /**
-   * True if the message is unread for the authenticated user. May be omitted.
-   */
-  isUnread?: boolean;
-
-  /**
-   * Reactions to the message, if any.
-   */
-  reactions?: Array<Shared.Reaction>;
-
-  /**
-   * Resolved sender display name (impersonator/full name/username/participant name).
-   */
-  senderName?: string;
-
-  /**
-   * Plain-text body if present. May include a JSON fallback with text entities for
-   * rich messages.
-   */
-  text?: string;
 }
 
 export interface MessageSendResponse extends Shared.BaseResponse {
@@ -231,9 +158,7 @@ Messages.Attachments = Attachments;
 
 export declare namespace Messages {
   export {
-    type MessageSearchResponse as MessageSearchResponse,
     type MessageSendResponse as MessageSendResponse,
-    type MessageSearchResponsesCursor as MessageSearchResponsesCursor,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };
@@ -244,3 +169,5 @@ export declare namespace Messages {
     type AttachmentRetrieveParams as AttachmentRetrieveParams,
   };
 }
+
+export { type MessagesCursor };

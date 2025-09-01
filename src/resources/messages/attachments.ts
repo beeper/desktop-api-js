@@ -15,8 +15,7 @@ export class Attachments extends APIResource {
    * ```ts
    * const attachment =
    *   await client.messages.attachments.retrieve({
-   *     chatID:
-   *       '!-5hI_iHR5vSDCtI8PzSDQT0H_3I:ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc.local-whatsapp.localhost',
+   *     chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
    *     messageID: 'messageID',
    *   });
    * ```

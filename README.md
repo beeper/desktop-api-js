@@ -25,9 +25,9 @@ const client = new BeeperDesktop({
 });
 
 const page = await client.chats.search({ includeMuted: true, limit: 3, type: 'single' });
-const chatSearchResponse = page.items[0];
+const chat = page.items[0];
 
-console.log(chatSearchResponse.id);
+console.log(chat.id);
 ```
 
 ### Request & Response types
@@ -129,17 +129,17 @@ List methods in the BeeperDesktop API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllMessageSearchResponses(params) {
-  const allMessageSearchResponses = [];
+async function fetchAllMessages(params) {
+  const allMessages = [];
   // Automatically fetches more pages as needed.
-  for await (const messageSearchResponse of client.messages.search({
+  for await (const message of client.messages.search({
     accountIDs: ['local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI'],
     limit: 10,
     query: 'deployment',
   })) {
-    allMessageSearchResponses.push(messageSearchResponse);
+    allMessages.push(message);
   }
-  return allMessageSearchResponses;
+  return allMessages;
 }
 ```
 
@@ -151,8 +151,8 @@ let page = await client.messages.search({
   limit: 10,
   query: 'deployment',
 });
-for (const messageSearchResponse of page.items) {
-  console.log(messageSearchResponse);
+for (const message of page.items) {
+  console.log(message);
 }
 
 // Convenience methods are provided for manually paginating:
@@ -182,7 +182,7 @@ console.log(response.statusText); // access the underlying Response object
 
 const { data: getAccountsResponse, response: raw } = await client.accounts.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(getAccountsResponse.accounts);
+console.log(getAccountsResponse);
 ```
 
 ### Logging
