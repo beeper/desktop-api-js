@@ -19,9 +19,9 @@ import { AbstractPage, type CursorParams, CursorResponse } from './core/paginati
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { AccountListResponse, Accounts } from './resources/accounts';
+import { Account, AccountListResponse, Accounts } from './resources/accounts';
 import { App, AppOpenParams, AppOpenResponse } from './resources/app';
-import { GetAccountsResponse, RevokeRequest, Token, UserInfo } from './resources/token';
+import { RevokeRequest, Token, UserInfo } from './resources/token';
 import { ChatArchiveParams, ChatRetrieveParams, ChatSearchParams, Chats } from './resources/chats/chats';
 import {
   MessageSearchParams,
@@ -785,7 +785,7 @@ export declare namespace BeeperDesktop {
   export import Cursor = Pagination.Cursor;
   export { type CursorParams as CursorParams, type CursorResponse as CursorResponse };
 
-  export { Accounts as Accounts, type AccountListResponse as AccountListResponse };
+  export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
 
   export { App as App, type AppOpenResponse as AppOpenResponse, type AppOpenParams as AppOpenParams };
 
@@ -803,12 +803,7 @@ export declare namespace BeeperDesktop {
     type MessageSendParams as MessageSendParams,
   };
 
-  export {
-    Token as Token,
-    type GetAccountsResponse as GetAccountsResponse,
-    type RevokeRequest as RevokeRequest,
-    type UserInfo as UserInfo,
-  };
+  export { Token as Token, type RevokeRequest as RevokeRequest, type UserInfo as UserInfo };
 
   export type Attachment = API.Attachment;
   export type BaseResponse = API.BaseResponse;
