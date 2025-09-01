@@ -19,10 +19,18 @@ import { AbstractPage, type CursorParams, CursorResponse } from './core/paginati
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Account, AccountListResponse, Accounts } from './resources/accounts';
+import { AccountListResponse, Accounts } from './resources/accounts';
 import { App, AppOpenParams, AppOpenResponse } from './resources/app';
 import { RevokeRequest, Token, UserInfo } from './resources/token';
-import { ChatArchiveParams, ChatRetrieveParams, ChatSearchParams, Chats } from './resources/chats/chats';
+import {
+  ChatArchiveParams,
+  ChatRetrieveParams,
+  ChatRetrieveResponse,
+  ChatSearchParams,
+  ChatSearchResponse,
+  ChatSearchResponsesCursor,
+  Chats,
+} from './resources/chats/chats';
 import {
   MessageSearchParams,
   MessageSendParams,
@@ -791,6 +799,9 @@ export declare namespace BeeperDesktop {
 
   export {
     Chats as Chats,
+    type ChatRetrieveResponse as ChatRetrieveResponse,
+    type ChatSearchResponse as ChatSearchResponse,
+    type ChatSearchResponsesCursor as ChatSearchResponsesCursor,
     type ChatRetrieveParams as ChatRetrieveParams,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatSearchParams as ChatSearchParams,
@@ -805,6 +816,7 @@ export declare namespace BeeperDesktop {
 
   export { Token as Token, type RevokeRequest as RevokeRequest, type UserInfo as UserInfo };
 
+  export type Account = API.Account;
   export type Attachment = API.Attachment;
   export type BaseResponse = API.BaseResponse;
   export type Chat = API.Chat;
