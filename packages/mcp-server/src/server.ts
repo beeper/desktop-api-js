@@ -5,8 +5,9 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { Endpoint, endpoints, HandlerFunction, query } from './tools';
 import {
   CallToolRequestSchema,
-  Implementation,
   ListToolsRequestSchema,
+  SetLevelRequestSchema,
+  Implementation,
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
 import { ClientOptions } from '@beeper/desktop-api';
@@ -89,7 +90,7 @@ export function initMcpServer(params: {
     error: logAtLevel('error'),
   };
 
-  const client = new BeeperDesktop({
+  let client = new BeeperDesktop({
     logger,
     ...params.clientOptions,
     defaultHeaders: {
@@ -118,6 +119,29 @@ export function initMcpServer(params: {
     }
 
     return executeHandler(endpoint.tool, endpoint.handler, client, args, mcpOptions.capabilities);
+  });
+
+  server.setRequestHandler(SetLevelRequestSchema, async (request) => {
+    const { level } = request.params;
+    switch (level) {
+      case 'debug':
+        client = client.withOptions({ logLevel: 'debug' });
+        break;
+      case 'info':
+        client = client.withOptions({ logLevel: 'info' });
+        break;
+      case 'notice':
+      case 'warning':
+        client = client.withOptions({ logLevel: 'warn' });
+        break;
+      case 'error':
+        client = client.withOptions({ logLevel: 'error' });
+        break;
+      default:
+        client = client.withOptions({ logLevel: 'off' });
+        break;
+    }
+    return {};
   });
 }
 
