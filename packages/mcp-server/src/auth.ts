@@ -6,7 +6,7 @@ import { fromError } from 'zod-validation-error/v3';
 
 export const BEEPER_DESKTOP_BASE_URL = readEnv('BEEPER_DESKTOP_BASE_URL') || 'http://localhost:23373';
 export const BEEPER_MCP_BASE_URL = readEnv('BEEPER_MCP_BASE_URL') || 'http://localhost:3000';
-export const BEEPER_AUTH_TOKEN = readEnv('AUTH_TOKEN') || '';
+export const BEEPER_ACCESS_TOKEN = readEnv('BEEPER_ACCESS_TOKEN') || '';
 
 export const createProxyProvider = (redirect_uris?: string[]): ProxyOAuthServerProvider => {
   return new ProxyOAuthServerProvider({
@@ -91,7 +91,7 @@ export const sendUnauthorizedResponse = (res: express.Response, error?: any) => 
 };
 
 export const getTokenForStdio = async (): Promise<string> => {
-  if (BEEPER_AUTH_TOKEN) return BEEPER_AUTH_TOKEN;
+  if (BEEPER_ACCESS_TOKEN) return BEEPER_ACCESS_TOKEN;
 
   // Needs to be implemented
   const response = await fetch(`${BEEPER_DESKTOP_BASE_URL}/oauth/token`, {
