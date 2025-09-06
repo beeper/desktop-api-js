@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.2.0 (2025-09-06)
+
+Full Changelog: [v0.1.4...v0.2.0](https://github.com/beeper/desktop-api-js/compare/v0.1.4...v0.2.0)
+
+### Features
+
+* **mcp:** allow setting logging level ([6f2169f](https://github.com/beeper/desktop-api-js/commit/6f2169fd4bb1aaf12dbc7765c304fc9b722b0c32))
+* **mcp:** expose client options in `streamableHTTPApp` ([9afd751](https://github.com/beeper/desktop-api-js/commit/9afd7510b1c96fe5624d1f37f84521c1be1a6353))
+
+
+### Bug Fixes
+
+* **mcp:** fix query options parsing ([4f00241](https://github.com/beeper/desktop-api-js/commit/4f00241e35309ff7441fd842ba787a87caf17cae))
+
+
+### Chores
+
+* ci build action ([b63fda2](https://github.com/beeper/desktop-api-js/commit/b63fda25086cfcc8758df9b5fcb32b49a78df28c))
+* **internal:** codegen related update ([b961076](https://github.com/beeper/desktop-api-js/commit/b961076bf7533638f00eebb1b2a81508db35ad7b))
+* **internal:** codegen related update ([dd44c80](https://github.com/beeper/desktop-api-js/commit/dd44c803559a85fe7bc1f34fe7a5c4a356ec3460))
+
 ## 0.1.4 (2025-09-01)
 
 Full Changelog: [v0.1.3...v0.1.4](https://github.com/beeper/desktop-api-js/compare/v0.1.3...v0.1.4)
