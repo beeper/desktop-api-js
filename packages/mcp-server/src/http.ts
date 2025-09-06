@@ -1,28 +1,21 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-
-import cors from 'cors';
 import express from 'express';
 import { fromError } from 'zod-validation-error/v3';
 import { McpOptions, parseQueryOptions } from './options';
 import { initMcpServer, newMcpServer } from './server';
 import { parseAuthHeaders } from './headers';
-
-const oauthResourceIdentifier = (req: express.Request): string => {
-  const protocol = req.headers['x-forwarded-proto'] ?? req.protocol;
-  return `${protocol}://${req.get('host')}/`;
-};
+import { createMCPAuthRouter, customWellKnownEndpoint, sendUnauthorizedResponse } from './auth';
 
 const newServer = (
   defaultMcpOptions: McpOptions,
   req: express.Request,
   res: express.Response,
+  port: number | string | undefined,
 ): McpServer | null => {
   const server = newMcpServer();
-
   let mcpOptions: McpOptions;
+
   try {
     mcpOptions = parseQueryOptions(defaultMcpOptions, req.query);
   } catch (error) {
@@ -38,6 +31,12 @@ const newServer = (
 
   try {
     const authOptions = parseAuthHeaders(req);
+
+    if (!authOptions.accessToken) {
+      sendUnauthorizedResponse(res, port);
+      return null;
+    }
+
     initMcpServer({
       server: server,
       clientOptions: {
@@ -48,36 +47,29 @@ const newServer = (
       },
       mcpOptions,
     });
-  } catch {
-    const resourceIdentifier = oauthResourceIdentifier(req);
-    res.set(
-      'WWW-Authenticate',
-      `Bearer resource_metadata="${resourceIdentifier}.well-known/oauth-protected-resource"`,
-    );
-    res.status(401).json({
-      jsonrpc: '2.0',
-      error: {
-        code: -32000,
-        message: 'Unauthorized',
-      },
-    });
+  } catch (error) {
+    sendUnauthorizedResponse(res, port);
     return null;
   }
 
   return server;
 };
 
-const post = (defaultOptions: McpOptions) => async (req: express.Request, res: express.Response) => {
-  const server = newServer(defaultOptions, req, res);
-  // If we return null, we already set the authorization error.
-  if (server === null) return;
-  const transport = new StreamableHTTPServerTransport({
-    // Stateless server
-    sessionIdGenerator: undefined,
-  });
-  await server.connect(transport);
-  await transport.handleRequest(req, res, req.body);
-};
+const post =
+  (defaultOptions: McpOptions, port: number | string | undefined) =>
+  async (req: express.Request, res: express.Response) => {
+    const server = newServer(defaultOptions, req, res, port);
+
+    if (server === null) return;
+
+    const transport = new StreamableHTTPServerTransport({
+      // Stateless server
+      sessionIdGenerator: undefined,
+    });
+
+    await server.connect(transport);
+    await transport.handleRequest(req, res, req.body);
+  };
 
 const get = async (req: express.Request, res: express.Response) => {
   res.status(405).json({
@@ -99,31 +91,28 @@ const del = async (req: express.Request, res: express.Response) => {
   });
 };
 
-const oauthMetadata = (req: express.Request, res: express.Response) => {
-  const resourceIdentifier = oauthResourceIdentifier(req);
-  res.json({
-    resource: resourceIdentifier,
-    authorization_servers: ['http://localhost:23373/oauth/authorize'],
-    bearer_methods_supported: ['header'],
-    scopes_supported: 'read write',
-  });
-};
-
-export const streamableHTTPApp = (options: McpOptions): express.Express => {
+export const streamableHTTPApp = (
+  options: McpOptions,
+  port: number | string | undefined,
+): express.Express => {
   const app = express();
+
   app.set('query parser', 'extended');
   app.use(express.json());
 
-  app.get('/.well-known/oauth-protected-resource', cors(), oauthMetadata);
+  const beeperMCPAuthRouter = createMCPAuthRouter(port);
+  app.get('/.well-known/oauth-protected-resource', (req, res) => customWellKnownEndpoint(req, res, port));
+  app.use(beeperMCPAuthRouter);
+
   app.get('/', get);
-  app.post('/', post(options));
+  app.post('/', post(options, port));
   app.delete('/', del);
 
   return app;
 };
 
 export const launchStreamableHTTPServer = async (options: McpOptions, port: number | string | undefined) => {
-  const app = streamableHTTPApp(options);
+  const app = streamableHTTPApp(options, port);
   const server = app.listen(port);
   const address = server.address();
 

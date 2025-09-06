@@ -273,6 +273,9 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@beeper/desktop-api@file:../../dist":
+  version "0.1.4"
+
 "@cloudflare/cabidela@^0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@cloudflare/cabidela/-/cabidela-0.2.4.tgz#9a3e9212e636a24d796a8f16741c24885b326a1a"
@@ -725,6 +728,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/cors@^2.8.19":
+  version "2.8.19"
+  resolved "https://registry.yarnpkg.com/@types/cors/-/cors-2.8.19.tgz#d93ea2673fd8c9f697367f5eeefc2bbfa94f0342"
+  integrity sha512-mFNylyeyqN93lfe/9CSxOGREz8cpzAhH+E93xJ4xWQf62V8sQ/24reV2nyzUWM6H6Xji+GGHpkbLe7pVoUEskg==
+  dependencies:
+    "@types/node" "*"
+
 "@types/express-serve-static-core@^5.0.0":
   version "5.0.7"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-5.0.7.tgz#2fa94879c9d46b11a5df4c74ac75befd6b283de6"
@@ -795,7 +805,7 @@
   dependencies:
     undici-types "~6.21.0"
 
-"@types/qs@*":
+"@types/qs@*", "@types/qs@^6.14.0":
   version "6.14.0"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.14.0.tgz#d8b60cecf62f2db0fb68e5e006077b9178b85de5"
   integrity sha512-eOunJqu0K1923aExK6y8p6fsihYEn/BYuQ4g0CxAAgFc4b/ZLN4CrsRZ55srTdqoiLzU2B2evC+apEIxprEzkQ==
@@ -924,6 +934,11 @@
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.3.0.tgz#d06bbb384ebcf6c505fde1c3d0ed4ddffe0aaff8"
   integrity sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==
+
+"@valtown/deno-http-worker@^0.0.21":
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/@valtown/deno-http-worker/-/deno-http-worker-0.0.21.tgz#9ce3b5c1d0db211fe7ea8297881fe551838474ad"
+  integrity sha512-16kFuUykann75lNytnXXIQlmpzreZjzdyT27ebT3yNGCS3kKaS1iZYWHc3Si9An54Cphwr4qEcviChQkEeJBlA==
 
 accepts@^2.0.0:
   version "2.0.0"
@@ -3387,9 +3402,9 @@ ts-node@^10.5.0:
     v8-compile-cache-lib "^3.0.1"
     yn "3.1.1"
 
-"tsc-multi@https://github.com/stainless-api/tsc-multi/releases/download/v1.1.8/tsc-multi.tgz":
-  version "1.1.8"
-  resolved "https://github.com/stainless-api/tsc-multi/releases/download/v1.1.8/tsc-multi.tgz#f544b359b8f05e607771ffacc280e58201476b04"
+"tsc-multi@https://github.com/stainless-api/tsc-multi/releases/download/v1.1.9/tsc-multi.tgz":
+  version "1.1.9"
+  resolved "https://github.com/stainless-api/tsc-multi/releases/download/v1.1.9/tsc-multi.tgz#777f6f5d9e26bf0e94e5170990dd3a841d6707cd"
   dependencies:
     debug "^4.3.7"
     fast-glob "^3.3.2"
