@@ -129,6 +129,11 @@ export interface ClientOptions {
    * Defaults to globalThis.console.
    */
   logger?: Logger | undefined;
+
+  /**
+   * Skip access token check for stdio MCP server
+   */
+  skipAccessToken?: boolean | undefined;
 }
 
 /**
@@ -165,9 +170,10 @@ export class BeeperDesktop {
   constructor({
     baseURL = readEnv('BEEPER_DESKTOP_BASE_URL'),
     accessToken = readEnv('BEEPER_ACCESS_TOKEN'),
+    skipAccessToken,
     ...opts
   }: ClientOptions = {}) {
-    if (accessToken === undefined) {
+    if (accessToken === undefined && !skipAccessToken) {
       throw new Errors.BeeperDesktopError(
         "The BEEPER_ACCESS_TOKEN environment variable is missing or empty; either provide it, or instantiate the BeeperDesktop client with an accessToken option, like new BeeperDesktop({ accessToken: 'My Access Token' }).",
       );
@@ -202,7 +208,7 @@ export class BeeperDesktop {
 
     this._options = options;
 
-    this.accessToken = accessToken;
+    this.accessToken = accessToken || '';
   }
 
   /**

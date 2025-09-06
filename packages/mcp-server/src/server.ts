@@ -7,6 +7,7 @@ import {
   CallToolRequestSchema,
   Implementation,
   ListToolsRequestSchema,
+  SetLevelRequestSchema,
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
 import { ClientOptions } from '@beeper/desktop-api';
@@ -91,6 +92,7 @@ export function initMcpServer(params: {
 
   const client = new BeeperDesktop({
     logger,
+    skipAccessToken: true,
     ...params.clientOptions,
     defaultHeaders: {
       ...params.clientOptions?.defaultHeaders,
@@ -118,6 +120,12 @@ export function initMcpServer(params: {
     }
 
     return executeHandler(endpoint.tool, endpoint.handler, client, args, mcpOptions.capabilities);
+  });
+
+  server.setRequestHandler(SetLevelRequestSchema, async (request) => {
+    const { level } = request.params;
+    logger.info(`Log level set to: ${level}`);
+    return {};
   });
 }
 
