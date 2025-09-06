@@ -92,6 +92,7 @@ export function initMcpServer(params: {
 
   const client = new BeeperDesktop({
     logger,
+    skipAccessToken: true,
     ...params.clientOptions,
     defaultHeaders: {
       ...params.clientOptions?.defaultHeaders,
