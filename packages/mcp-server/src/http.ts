@@ -47,7 +47,7 @@ const newServer = (
       mcpOptions,
     });
   } catch (error) {
-    sendUnauthorizedResponse(res);
+    sendUnauthorizedResponse(res, error);
     return null;
   }
 

@@ -59,8 +59,8 @@ export const createProxyProvider = (redirect_uris?: string[]): ProxyOAuthServerP
   });
 };
 
-export const createMCPAuthRouter = (): express.RequestHandler => {
-  const proxyProvider = createProxyProvider();
+export const createMCPAuthRouter = (redirect_uris?: string[]): express.RequestHandler => {
+  const proxyProvider = createProxyProvider(redirect_uris);
 
   return mcpAuthRouter({
     provider: proxyProvider,
