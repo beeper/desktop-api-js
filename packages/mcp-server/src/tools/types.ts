@@ -58,7 +58,6 @@ export function asTextContentResult(result: unknown): ToolCallResult {
   };
 }
 
-
 export async function asBinaryContentResult(response: Response): Promise<ToolCallResult> {
   const blob = await response.blob();
   const mimeType = blob.type;

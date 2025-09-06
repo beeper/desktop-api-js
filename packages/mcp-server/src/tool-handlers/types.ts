@@ -10,7 +10,7 @@ export type CustomHandlerFunction = (
   args: Record<string, unknown> | undefined,
 ) => Promise<ToolCallResult>;
 
-export function asFormattedMCPContentResult(result: string): ToolCallResult {
+export function asFormattedMCPContentResult(result: string, opts?: { isError?: boolean }): ToolCallResult {
   return {
     content: [
       {
@@ -18,5 +18,6 @@ export function asFormattedMCPContentResult(result: string): ToolCallResult {
         text: result,
       },
     ],
+    ...(opts?.isError ? { isError: true } : {}),
   };
 }

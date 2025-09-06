@@ -11,7 +11,6 @@ const newServer = (
   defaultMcpOptions: McpOptions,
   req: express.Request,
   res: express.Response,
-  port: number | string | undefined,
 ): McpServer | null => {
   const server = newMcpServer();
   let mcpOptions: McpOptions;
@@ -33,7 +32,7 @@ const newServer = (
     const authOptions = parseAuthHeaders(req);
 
     if (!authOptions.accessToken) {
-      sendUnauthorizedResponse(res, port);
+      sendUnauthorizedResponse(res);
       return null;
     }
 
@@ -48,28 +47,26 @@ const newServer = (
       mcpOptions,
     });
   } catch (error) {
-    sendUnauthorizedResponse(res, port);
+    sendUnauthorizedResponse(res);
     return null;
   }
 
   return server;
 };
 
-const post =
-  (defaultOptions: McpOptions, port: number | string | undefined) =>
-  async (req: express.Request, res: express.Response) => {
-    const server = newServer(defaultOptions, req, res, port);
+const post = (defaultOptions: McpOptions) => async (req: express.Request, res: express.Response) => {
+  const server = newServer(defaultOptions, req, res);
 
-    if (server === null) return;
+  if (server === null) return;
 
-    const transport = new StreamableHTTPServerTransport({
-      // Stateless server
-      sessionIdGenerator: undefined,
-    });
+  const transport = new StreamableHTTPServerTransport({
+    // Stateless server
+    sessionIdGenerator: undefined,
+  });
 
-    await server.connect(transport);
-    await transport.handleRequest(req, res, req.body);
-  };
+  await server.connect(transport);
+  await transport.handleRequest(req, res, req.body);
+};
 
 const get = async (req: express.Request, res: express.Response) => {
   res.status(405).json({
@@ -91,28 +88,25 @@ const del = async (req: express.Request, res: express.Response) => {
   });
 };
 
-export const streamableHTTPApp = (
-  options: McpOptions,
-  port: number | string | undefined,
-): express.Express => {
+export const streamableHTTPApp = (options: McpOptions): express.Express => {
   const app = express();
 
   app.set('query parser', 'extended');
   app.use(express.json());
 
-  const beeperMCPAuthRouter = createMCPAuthRouter(port);
-  app.get('/.well-known/oauth-protected-resource', (req, res) => customWellKnownEndpoint(req, res, port));
-  app.use(beeperMCPAuthRouter);
+  const beeperProxyRouter = createMCPAuthRouter();
+  app.get('/.well-known/oauth-protected-resource', (req, res) => customWellKnownEndpoint(req, res));
+  app.use(beeperProxyRouter);
 
   app.get('/', get);
-  app.post('/', post(options, port));
+  app.post('/', post(options));
   app.delete('/', del);
 
   return app;
 };
 
 export const launchStreamableHTTPServer = async (options: McpOptions, port: number | string | undefined) => {
-  const app = streamableHTTPApp(options, port);
+  const app = streamableHTTPApp(options);
   const server = app.listen(port);
   const address = server.address();
 

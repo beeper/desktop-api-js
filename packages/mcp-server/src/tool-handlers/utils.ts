@@ -3,13 +3,14 @@ import { Message, Reaction, User } from '@beeper/desktop-api/resources/shared';
 
 // TODO : Participants type missing
 export const getParticipantName = (participant: any, preferFirstName?: boolean): string | null => {
-  return participant ?
-      participant.nickname ||
-        (preferFirstName ? participant.fullName?.split(' ')[0] : participant.fullName) ||
-        participant.username ||
-        participant.email ||
-        participant.id
-    : null;
+  if (!participant) return null;
+  return (
+    participant.nickname ||
+    (preferFirstName ? participant.fullName?.split(' ')[0] : participant.fullName) ||
+    participant.username ||
+    participant.email ||
+    (participant.id != null ? String(participant.id) : null)
+  );
 };
 
 const skinToneRegex = /\uD83C[\uDFFB-\uDFFF]/g;

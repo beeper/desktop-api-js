@@ -1,11 +1,5 @@
-import { CustomHandlerFunction, asFormattedMCPContentResult } from '../types';
+import { CustomHandlerFunction } from '../types';
 import { asTextContentResult } from '@beeper/desktop-mcp/tools/types';
-import {
-  formatParticipantsToMarkdown,
-  formatReactionsToMarkdown,
-  formatRelativeDate,
-  createOpenLink,
-} from '../utils';
 
 export const searchMessagesHandler: CustomHandlerFunction = async (client, args) => {
   const currArgs = args as any;
