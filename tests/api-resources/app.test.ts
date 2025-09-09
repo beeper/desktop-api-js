@@ -25,8 +25,9 @@ describe('resource app', () => {
       client.app.open(
         {
           chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+          draftAttachmentPath: 'draftAttachmentPath',
           draftText: 'draftText',
-          messageSortKey: 'messageSortKey',
+          messageID: 'messageID',
         },
         { path: '/_stainless_unknown_path' },
       ),

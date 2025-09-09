@@ -51,9 +51,14 @@ export class Messages extends APIResource {
 
 export interface MessageSendResponse extends Shared.BaseResponse {
   /**
-   * Stable message ID.
+   * Unique identifier of the chat (a.k.a. room or thread).
    */
-  messageID: string;
+  chatID: string;
+
+  /**
+   * Pending message ID
+   */
+  pendingMessageID: string;
 }
 
 export interface MessageSearchParams extends CursorParams {
@@ -88,38 +93,19 @@ export interface MessageSearchParams extends CursorParams {
    * Exclude messages marked Low Priority by the user. Default: true. Set to false to
    * include all.
    */
-  excludeLowPriority?: boolean;
+  excludeLowPriority?: boolean | null;
 
   /**
    * Include messages in chats marked as Muted by the user, which are usually less
    * important. Default: true. Set to false if the user wants a more refined search.
    */
-  includeMuted?: boolean;
+  includeMuted?: boolean | null;
 
   /**
-   * Only return messages that contain file attachments.
+   * Filter messages by media types. Use ['any'] for any media type, or specify exact
+   * types like ['video', 'image']. Omit for no media filtering.
    */
-  onlyWithFile?: boolean;
-
-  /**
-   * Only return messages that contain image attachments.
-   */
-  onlyWithImage?: boolean;
-
-  /**
-   * Only return messages that contain link attachments.
-   */
-  onlyWithLink?: boolean;
-
-  /**
-   * Only return messages that contain any type of media attachment.
-   */
-  onlyWithMedia?: boolean;
-
-  /**
-   * Only return messages that contain video attachments.
-   */
-  onlyWithVideo?: boolean;
+  mediaTypes?: Array<'any' | 'video' | 'image' | 'link' | 'file'>;
 
   /**
    * Literal word search (NOT semantic). Finds messages containing these EXACT words
@@ -138,8 +124,7 @@ export interface MessageSearchParams extends CursorParams {
 
 export interface MessageSendParams {
   /**
-   * The identifier of the chat where the message will send (accepts both chatID and
-   * local chat ID)
+   * Unique identifier of the chat (a.k.a. room or thread).
    */
   chatID: string;
 

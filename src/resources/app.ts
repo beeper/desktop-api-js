@@ -10,7 +10,7 @@ import { RequestOptions } from '../internal/request-options';
 export class App extends APIResource {
   /**
    * Open Beeper Desktop and optionally navigate to a specific chat, message, or
-   * pre-fill draft text
+   * pre-fill draft text and attachment.
    *
    * @example
    * ```ts
@@ -40,14 +40,19 @@ export interface AppOpenParams {
   chatID?: string;
 
   /**
+   * Optional draft attachment path to populate in the message input field.
+   */
+  draftAttachmentPath?: string;
+
+  /**
    * Optional draft text to populate in the message input field.
    */
   draftText?: string;
 
   /**
-   * Optional message sort key. Jumps to that message in the chat when opening.
+   * Optional message ID. Jumps to that message in the chat when opening.
    */
-  messageSortKey?: string;
+  messageID?: string;
 }
 
 export declare namespace App {

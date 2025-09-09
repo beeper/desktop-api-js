@@ -138,23 +138,13 @@ over time, you can manually enable or disable certain capabilities:
 
 Launching the client with `--transport=http` launches the server as a remote server using Streamable HTTP transport. The `--port` setting can choose the port it will run on, and the `--socket` setting allows it to run on a Unix socket.
 
-Authorization can be provided via the `Authorization` header using the Bearer scheme.
-
-Additionally, authorization can be provided via the following headers:
-| Header | Equivalent client option | Security scheme |
-| ----------------------- | ------------------------ | --------------- |
-| `x-beeper-access-token` | `accessToken` | bearerAuth |
-
 A configuration JSON for this server might look like this, assuming the server is hosted at `http://localhost:3000`:
 
 ```json
 {
   "mcpServers": {
     "beeper_desktop_api_api": {
-      "url": "http://localhost:3000",
-      "headers": {
-        "Authorization": "Bearer <auth value>"
-      }
+      "url": "http://localhost:3000"
     }
   }
 }
@@ -218,7 +208,7 @@ The following tools are available in this MCP server.
 
 ### Resource `app`:
 
-- `open_in_app` (`write`) tags: [app]: Open Beeper, optionally focusing a chat or message, or pre-filling a draft.
+- `open_in_app` (`write`) tags: [app]: Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.
 
 ### Resource `chats`:
 
@@ -239,8 +229,6 @@ The following tools are available in this MCP server.
     • ✅ RIGHT: query="dinner" or query="sick" or query="error" (single words users type)
     • ❌ WRONG: query="dinner plans tonight" or query="health issues" (phrases/concepts)
     • The query matches ALL words provided (in any order). Example: query="flight booking" finds messages with both "flight" AND "booking".
-  - Media filters: Use onlyWithMedia for any media, or specific filters like onlyWithVideo, onlyWithImage, onlyWithLink, onlyWithFile for specific types.
-  - Pagination: use 'oldestCursor' + direction='before' for older; 'newestCursor' + direction='after' for newer.
   - Performance: provide chatIDs/accountIDs when known. Omitted 'query' returns results based on filters only. Partial matches enabled; 'excludeLowPriority' defaults to true.
   - Workflow tip: To search messages in specific conversations: 1) Use find-chats to get chatIDs, 2) Use search-messages with those chatIDs.
   - IMPORTANT: Chat names vary widely. ASK the user for clarification:

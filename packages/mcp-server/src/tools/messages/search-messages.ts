@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'search_messages',
   description:
-    'Search messages across chats using Beeper\'s message index.\n- When to use: find messages by text and/or filters (chatIDs, accountIDs, chatType, media type filters, sender, date ranges).\n- CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds messages containing these EXACT words.\n  • ✅ RIGHT: query="dinner" or query="sick" or query="error" (single words users type)\n  • ❌ WRONG: query="dinner plans tonight" or query="health issues" (phrases/concepts)\n  • The query matches ALL words provided (in any order). Example: query="flight booking" finds messages with both "flight" AND "booking".\n- Media filters: Use onlyWithMedia for any media, or specific filters like onlyWithVideo, onlyWithImage, onlyWithLink, onlyWithFile for specific types.\n- Pagination: use \'oldestCursor\' + direction=\'before\' for older; \'newestCursor\' + direction=\'after\' for newer.\n- Performance: provide chatIDs/accountIDs when known. Omitted \'query\' returns results based on filters only. Partial matches enabled; \'excludeLowPriority\' defaults to true.\n- Workflow tip: To search messages in specific conversations: 1) Use find-chats to get chatIDs, 2) Use search-messages with those chatIDs.\n- IMPORTANT: Chat names vary widely. ASK the user for clarification:\n  • "Which chat do you mean by family?" (could be "The Smiths", "Mom Dad Kids", etc.)\n  • "What\'s the name of your work chat?" (could be "Team", company name, project name)\n  • "Who are the participants?" (use participantQuery in find-chats)\nReturns: matching messages and referenced chats.',
+    'Search messages across chats using Beeper\'s message index.\n- When to use: find messages by text and/or filters (chatIDs, accountIDs, chatType, media type filters, sender, date ranges).\n- CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds messages containing these EXACT words.\n  • ✅ RIGHT: query="dinner" or query="sick" or query="error" (single words users type)\n  • ❌ WRONG: query="dinner plans tonight" or query="health issues" (phrases/concepts)\n  • The query matches ALL words provided (in any order). Example: query="flight booking" finds messages with both "flight" AND "booking".\n- Performance: provide chatIDs/accountIDs when known. Omitted \'query\' returns results based on filters only. Partial matches enabled; \'excludeLowPriority\' defaults to true.\n- Workflow tip: To search messages in specific conversations: 1) Use find-chats to get chatIDs, 2) Use search-messages with those chatIDs.\n- IMPORTANT: Chat names vary widely. ASK the user for clarification:\n  • "Which chat do you mean by family?" (could be "The Smiths", "Mom Dad Kids", etc.)\n  • "What\'s the name of your work chat?" (could be "Team", company name, project name)\n  • "Who are the participants?" (use participantQuery in find-chats)\nReturns: matching messages and referenced chats.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -77,25 +77,14 @@ export const tool: Tool = {
         type: 'integer',
         description: 'Maximum number of messages to return (1–500). Defaults to 50.',
       },
-      onlyWithFile: {
-        type: 'boolean',
-        description: 'Only return messages that contain file attachments.',
-      },
-      onlyWithImage: {
-        type: 'boolean',
-        description: 'Only return messages that contain image attachments.',
-      },
-      onlyWithLink: {
-        type: 'boolean',
-        description: 'Only return messages that contain link attachments.',
-      },
-      onlyWithMedia: {
-        type: 'boolean',
-        description: 'Only return messages that contain any type of media attachment.',
-      },
-      onlyWithVideo: {
-        type: 'boolean',
-        description: 'Only return messages that contain video attachments.',
+      mediaTypes: {
+        type: 'array',
+        description:
+          "Filter messages by media types. Use ['any'] for any media type, or specify exact types like ['video', 'image']. Omit for no media filtering.",
+        items: {
+          type: 'string',
+          enum: ['any', 'video', 'image', 'link', 'file'],
+        },
       },
       query: {
         type: 'string',
