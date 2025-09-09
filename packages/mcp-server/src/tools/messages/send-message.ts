@@ -23,8 +23,7 @@ export const tool: Tool = {
     properties: {
       chatID: {
         type: 'string',
-        description:
-          'The identifier of the chat where the message will send (accepts both chatID and local chat ID)',
+        description: 'Unique identifier of the chat (a.k.a. room or thread).',
       },
       replyToMessageID: {
         type: 'string',

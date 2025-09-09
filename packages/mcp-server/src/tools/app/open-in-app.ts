@@ -16,7 +16,8 @@ export const metadata: Metadata = {
 
 export const tool: Tool = {
   name: 'open_in_app',
-  description: 'Open Beeper, optionally focusing a chat or message, or pre-filling a draft.',
+  description:
+    'Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -25,13 +26,17 @@ export const tool: Tool = {
         description:
           'Optional Beeper chat ID (or local chat ID) to focus after opening the app. If omitted, only opens/focuses the app.',
       },
+      draftAttachmentPath: {
+        type: 'string',
+        description: 'Optional draft attachment path to populate in the message input field.',
+      },
       draftText: {
         type: 'string',
         description: 'Optional draft text to populate in the message input field.',
       },
-      messageSortKey: {
+      messageID: {
         type: 'string',
-        description: 'Optional message sort key. Jumps to that message in the chat when opening.',
+        description: 'Optional message ID. Jumps to that message in the chat when opening.',
       },
     },
     required: [],

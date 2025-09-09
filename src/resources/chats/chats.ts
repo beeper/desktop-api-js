@@ -199,7 +199,7 @@ export interface ChatSearchParams extends CursorParams {
    * Include chats marked as Muted by the user, which are usually less important.
    * Default: true. Set to false if the user wants a more refined search.
    */
-  includeMuted?: boolean;
+  includeMuted?: boolean | null;
 
   /**
    * Provide an ISO datetime string to only retrieve chats with last activity after
@@ -235,7 +235,7 @@ export interface ChatSearchParams extends CursorParams {
   /**
    * Set to true to only retrieve chats that have unread messages
    */
-  unreadOnly?: boolean;
+  unreadOnly?: boolean | null;
 }
 
 Chats.Reminders = Reminders;

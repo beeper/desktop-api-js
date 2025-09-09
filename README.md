@@ -20,9 +20,7 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import BeeperDesktop from '@beeper/desktop-api';
 
-const client = new BeeperDesktop({
-  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
-});
+const client = new BeeperDesktop();
 
 const page = await client.chats.search({ includeMuted: true, limit: 3, type: 'single' });
 const chat = page.items[0];
@@ -38,9 +36,7 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import BeeperDesktop from '@beeper/desktop-api';
 
-const client = new BeeperDesktop({
-  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
-});
+const client = new BeeperDesktop();
 
 const accounts: BeeperDesktop.AccountListResponse = await client.accounts.list();
 ```
@@ -93,6 +89,7 @@ You can use the `maxRetries` option to configure or disable this:
 ```js
 // Configure the default for all requests:
 const client = new BeeperDesktop({
+  accessToken: 'My Access Token',
   maxRetries: 0, // default is 2
 });
 
@@ -110,6 +107,7 @@ Requests time out after 30 seconds by default. You can configure this with a `ti
 ```ts
 // Configure the default for all requests:
 const client = new BeeperDesktop({
+  accessToken: 'My Access Token',
   timeout: 20 * 1000, // 20 seconds (default is 30 seconds)
 });
 
