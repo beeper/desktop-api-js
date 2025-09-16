@@ -210,12 +210,13 @@ The following tools are available in this MCP server.
 ### Resource `app`:
 
 - `open_in_app` (`write`) tags: [app]: Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.
+- `search` (`read`) tags: [app]: One-shot Cmd+K-style search: chats, in-groups, and messages (first page only). Use search_messages to paginate.
 
 ### Resource `chats`:
 
 - `get_chat` (`read`) tags: [chats]: Get chat details: metadata, participants (limited), last activity.
 - `archive_chat` (`write`) tags: [chats]: Archive or unarchive a chat.
-- `search_chats` (`read`) tags: [chats]: Search chats by inbox, type, unread status, or text. Paginates.
+- `search_chats` (`read`) tags: [chats]: Search chats by title/network or participants using Beeper Desktop's renderer algorithm. Optional 'scope'.
 
 ### Resource `chats.reminders`:
 
@@ -235,10 +236,10 @@ The following tools are available in this MCP server.
   - IMPORTANT: Chat names vary widely. ASK the user for clarification:
     • "Which chat do you mean by family?" (could be "The Smiths", "Mom Dad Kids", etc.)
     • "What's the name of your work chat?" (could be "Team", company name, project name)
-    • "Who are the participants?" (use participantQuery in find-chats)
+    • "Who are the participants?" (use scope="participants" in search-chats)
     Returns: matching messages and referenced chats.
 - `send_message` (`write`) tags: [messages]: Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat
 
 ### Resource `messages.attachments`:
 
-- `download_attachment` (`write`) tags: [messages]: Download a message attachment and return the local file path.
+- `download_attachment` (`write`) tags: [messages]: Download an attachment using its matrix content URL and return the local file path.

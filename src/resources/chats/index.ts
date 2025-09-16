@@ -3,6 +3,8 @@
 export {
   Chats,
   type Chat,
+  type ChatCreateResponse,
+  type ChatCreateParams,
   type ChatRetrieveParams,
   type ChatArchiveParams,
   type ChatSearchParams,
