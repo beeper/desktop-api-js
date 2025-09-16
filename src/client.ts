@@ -20,11 +20,14 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Account, AccountListResponse, Accounts } from './resources/accounts';
-import { App, AppOpenParams, AppOpenResponse } from './resources/app';
+import { App, AppOpenParams, AppOpenResponse, AppSearchParams, AppSearchResponse } from './resources/app';
+import { ContactSearchParams, ContactSearchResponse, Contacts } from './resources/contacts';
 import { RevokeRequest, Token, UserInfo } from './resources/token';
 import {
   Chat,
   ChatArchiveParams,
+  ChatCreateParams,
+  ChatCreateResponse,
   ChatRetrieveParams,
   ChatSearchParams,
   Chats,
@@ -767,6 +770,10 @@ export class BeeperDesktop {
    */
   app: API.App = new API.App(this);
   /**
+   * Contacts operations
+   */
+  contacts: API.Contacts = new API.Contacts(this);
+  /**
    * Chats operations
    */
   chats: API.Chats = new API.Chats(this);
@@ -782,6 +789,7 @@ export class BeeperDesktop {
 
 BeeperDesktop.Accounts = Accounts;
 BeeperDesktop.App = App;
+BeeperDesktop.Contacts = Contacts;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
 BeeperDesktop.Token = Token;
@@ -794,12 +802,26 @@ export declare namespace BeeperDesktop {
 
   export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
 
-  export { App as App, type AppOpenResponse as AppOpenResponse, type AppOpenParams as AppOpenParams };
+  export {
+    App as App,
+    type AppOpenResponse as AppOpenResponse,
+    type AppSearchResponse as AppSearchResponse,
+    type AppOpenParams as AppOpenParams,
+    type AppSearchParams as AppSearchParams,
+  };
+
+  export {
+    Contacts as Contacts,
+    type ContactSearchResponse as ContactSearchResponse,
+    type ContactSearchParams as ContactSearchParams,
+  };
 
   export {
     Chats as Chats,
     type Chat as Chat,
+    type ChatCreateResponse as ChatCreateResponse,
     type ChatsCursor as ChatsCursor,
+    type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatSearchParams as ChatSearchParams,

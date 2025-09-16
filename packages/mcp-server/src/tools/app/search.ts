@@ -6,33 +6,36 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'messages.attachments',
-  operation: 'write',
-  tags: ['messages'],
-  httpMethod: 'post',
-  httpPath: '/v0/download-attachment',
-  operationId: 'download_attachment',
+  resource: 'app',
+  operation: 'read',
+  tags: ['app'],
+  httpMethod: 'get',
+  httpPath: '/v0/search',
+  operationId: 'search',
 };
 
 export const tool: Tool = {
-  name: 'download_attachment',
-  description: 'Download an attachment using its matrix content URL and return the local file path.',
+  name: 'search',
+  description:
+    'One-shot Cmd+K-style search: chats, in-groups, and messages (first page only). Use search_messages to paginate.',
   inputSchema: {
     type: 'object',
     properties: {
-      url: {
+      query: {
         type: 'string',
-        description: 'Matrix content URL (mxc:// or localmxc://) for the attachment to download.',
+        description: 'User-typed search text. Literal word matching (NOT semantic).',
       },
     },
-    required: ['url'],
+    required: ['query'],
   },
-  annotations: {},
+  annotations: {
+    readOnlyHint: true,
+  },
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  return asTextContentResult(await client.messages.attachments.download(body));
+  return asTextContentResult(await client.app.search(body));
 };
 
 export default { metadata, tool, handler };

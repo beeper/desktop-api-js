@@ -25,19 +25,33 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/app.ts">AppOpenResponse</a></code>
+- <code><a href="./src/resources/app.ts">AppSearchResponse</a></code>
 
 Methods:
 
 - <code title="post /v0/open-app">client.app.<a href="./src/resources/app.ts">open</a>({ ...params }) -> AppOpenResponse</code>
+- <code title="get /v0/search">client.app.<a href="./src/resources/app.ts">search</a>({ ...params }) -> AppSearchResponse</code>
+
+# Contacts
+
+Types:
+
+- <code><a href="./src/resources/contacts.ts">ContactSearchResponse</a></code>
+
+Methods:
+
+- <code title="get /v0/search-users">client.contacts.<a href="./src/resources/contacts.ts">search</a>({ ...params }) -> ContactSearchResponse</code>
 
 # Chats
 
 Types:
 
 - <code><a href="./src/resources/chats/chats.ts">Chat</a></code>
+- <code><a href="./src/resources/chats/chats.ts">ChatCreateResponse</a></code>
 
 Methods:
 
+- <code title="post /v0/create-chat">client.chats.<a href="./src/resources/chats/chats.ts">create</a>({ ...params }) -> ChatCreateResponse</code>
 - <code title="get /v0/get-chat">client.chats.<a href="./src/resources/chats/chats.ts">retrieve</a>({ ...params }) -> Chat</code>
 - <code title="post /v0/archive-chat">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>({ ...params }) -> BaseResponse</code>
 - <code title="get /v0/search-chats">client.chats.<a href="./src/resources/chats/chats.ts">search</a>({ ...params }) -> ChatsCursor</code>

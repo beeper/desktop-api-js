@@ -7,9 +7,12 @@ const client = new BeeperDesktop({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource attachments', () => {
-  test('download: only required params', async () => {
-    const responsePromise = client.messages.attachments.download({ url: 'x' });
+describe('resource contacts', () => {
+  test('search: only required params', async () => {
+    const responsePromise = client.contacts.search({
+      accountID: 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
+      query: 'x',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,7 +22,10 @@ describe('resource attachments', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('download: required and optional params', async () => {
-    const response = await client.messages.attachments.download({ url: 'x' });
+  test('search: required and optional params', async () => {
+    const response = await client.contacts.search({
+      accountID: 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
+      query: 'x',
+    });
   });
 });

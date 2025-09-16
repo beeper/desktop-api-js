@@ -9,15 +9,13 @@ import { RequestOptions } from '../../internal/request-options';
  */
 export class Attachments extends APIResource {
   /**
-   * Download an attachment from a message and return the local file path
+   * Download an attachment using its mxc:// or localmxc:// URL and return the local
+   * file path.
    *
    * @example
    * ```ts
    * const response = await client.messages.attachments.download(
-   *   {
-   *     chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-   *     messageID: 'messageID',
-   *   },
+   *   { url: 'x' },
    * );
    * ```
    */
@@ -45,14 +43,9 @@ export interface AttachmentDownloadResponse {
 
 export interface AttachmentDownloadParams {
   /**
-   * Unique identifier of the chat (supports both chatID and localChatID).
+   * Matrix content URL (mxc:// or localmxc://) for the attachment to download.
    */
-  chatID: string;
-
-  /**
-   * The message ID (eventID) containing the attachment.
-   */
-  messageID: string;
+  url: string;
 }
 
 export declare namespace Attachments {

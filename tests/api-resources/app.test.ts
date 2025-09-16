@@ -33,4 +33,19 @@ describe('resource app', () => {
       ),
     ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
+
+  test('search: only required params', async () => {
+    const responsePromise = client.app.search({ query: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('search: required and optional params', async () => {
+    const response = await client.app.search({ query: 'x' });
+  });
 });
