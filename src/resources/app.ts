@@ -24,8 +24,9 @@ export class App extends APIResource {
   }
 
   /**
-   * Return chats and the first page of messages in one call. Paginate messages via
-   * search-messages.
+   * Returns matching chats, participant name matches in groups, and the first page
+   * of messages in one call. Paginate messages via search-messages. Paginate chats
+   * via search-chats. Uses the same sorting as the chat search in the app.
    *
    * @example
    * ```ts
@@ -84,14 +85,14 @@ export namespace AppSearchResponse {
       items: Array<Shared.Message>;
 
       /**
-       * Cursor for fetching newer results (use with direction='after'). Opaque string;
-       * do not inspect.
+       * Combined cursor (bridged + iMessage) for fetching newer results (use with
+       * direction='after'). Treat as opaque.
        */
       newestCursor: string | null;
 
       /**
-       * Cursor for fetching older results (use with direction='before'). Opaque string;
-       * do not inspect.
+       * Combined cursor (bridged + iMessage) for fetching older results (use with
+       * direction='before'). Treat as opaque.
        */
       oldestCursor: string | null;
     }

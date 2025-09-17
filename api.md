@@ -82,7 +82,7 @@ Types:
 
 Methods:
 
-- <code title="post /v0/download-attachment">client.messages.attachments.<a href="./src/resources/messages/attachments.ts">download</a>({ ...params }) -> AttachmentDownloadResponse</code>
+- <code title="post /v0/download-asset">client.messages.attachments.<a href="./src/resources/messages/attachments.ts">download</a>({ ...params }) -> AttachmentDownloadResponse</code>
 
 # Token
 

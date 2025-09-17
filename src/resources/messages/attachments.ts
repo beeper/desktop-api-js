@@ -9,8 +9,8 @@ import { RequestOptions } from '../../internal/request-options';
  */
 export class Attachments extends APIResource {
   /**
-   * Download an attachment using its mxc:// or localmxc:// URL and return the local
-   * file path.
+   * Download a Matrix asset using its mxc:// or localmxc:// URL and return the local
+   * file URL.
    *
    * @example
    * ```ts
@@ -20,30 +20,25 @@ export class Attachments extends APIResource {
    * ```
    */
   download(body: AttachmentDownloadParams, options?: RequestOptions): APIPromise<AttachmentDownloadResponse> {
-    return this._client.post('/v0/download-attachment', { body, ...options });
+    return this._client.post('/v0/download-asset', { body, ...options });
   }
 }
 
 export interface AttachmentDownloadResponse {
-  /**
-   * Whether the attachment was successfully downloaded.
-   */
-  success: boolean;
-
   /**
    * Error message if the download failed.
    */
   error?: string;
 
   /**
-   * Local file system path to the downloaded attachment.
+   * Local file URL to the downloaded asset.
    */
-  filePath?: string;
+  srcURL?: string;
 }
 
 export interface AttachmentDownloadParams {
   /**
-   * Matrix content URL (mxc:// or localmxc://) for the attachment to download.
+   * Matrix content URL (mxc:// or localmxc://) for the asset to download.
    */
   url: string;
 }

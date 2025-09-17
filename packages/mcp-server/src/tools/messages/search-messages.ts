@@ -43,7 +43,8 @@ export const tool: Tool = {
       },
       cursor: {
         type: 'string',
-        description: "Opaque pagination cursor; do not inspect. Use together with 'direction'.",
+        description:
+          "Opaque combined pagination cursor spanning bridged and iMessage data (format: 'bridgedCursor|imessageCursor'). Pass back unchanged with 'direction'.",
       },
       dateAfter: {
         type: 'string',
@@ -75,7 +76,8 @@ export const tool: Tool = {
       },
       limit: {
         type: 'integer',
-        description: 'Maximum number of messages to return (1–500). Defaults to 50.',
+        description:
+          'Maximum number of messages to return (1–500). Defaults to 20. The current implementation caps each page at 20 items even if a higher limit is requested.',
       },
       mediaTypes: {
         type: 'array',
