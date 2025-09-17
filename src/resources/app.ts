@@ -11,6 +11,24 @@ import { RequestOptions } from '../internal/request-options';
  */
 export class App extends APIResource {
   /**
+   * Download a Matrix asset using its mxc:// or localmxc:// URL and return the local
+   * file URL.
+   *
+   * @example
+   * ```ts
+   * const response = await client.app.downloadAsset({
+   *   url: 'x',
+   * });
+   * ```
+   */
+  downloadAsset(
+    body: AppDownloadAssetParams,
+    options?: RequestOptions,
+  ): APIPromise<AppDownloadAssetResponse> {
+    return this._client.post('/v0/download-asset', { body, ...options });
+  }
+
+  /**
    * Open Beeper Desktop and optionally navigate to a specific chat, message, or
    * pre-fill draft text and attachment.
    *
@@ -36,6 +54,18 @@ export class App extends APIResource {
   search(query: AppSearchParams, options?: RequestOptions): APIPromise<AppSearchResponse> {
     return this._client.get('/v0/search', { query, ...options });
   }
+}
+
+export interface AppDownloadAssetResponse {
+  /**
+   * Error message if the download failed.
+   */
+  error?: string;
+
+  /**
+   * Local file URL to the downloaded asset.
+   */
+  srcURL?: string;
 }
 
 /**
@@ -99,6 +129,13 @@ export namespace AppSearchResponse {
   }
 }
 
+export interface AppDownloadAssetParams {
+  /**
+   * Matrix content URL (mxc:// or localmxc://) for the asset to download.
+   */
+  url: string;
+}
+
 export interface AppOpenParams {
   /**
    * Optional Beeper chat ID (or local chat ID) to focus after opening the app. If
@@ -131,8 +168,10 @@ export interface AppSearchParams {
 
 export declare namespace App {
   export {
+    type AppDownloadAssetResponse as AppDownloadAssetResponse,
     type AppOpenResponse as AppOpenResponse,
     type AppSearchResponse as AppSearchResponse,
+    type AppDownloadAssetParams as AppDownloadAssetParams,
     type AppOpenParams as AppOpenParams,
     type AppSearchParams as AppSearchParams,
   };

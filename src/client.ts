@@ -20,8 +20,17 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Account, AccountListResponse, Accounts } from './resources/accounts';
-import { App, AppOpenParams, AppOpenResponse, AppSearchParams, AppSearchResponse } from './resources/app';
+import {
+  App,
+  AppDownloadAssetParams,
+  AppDownloadAssetResponse,
+  AppOpenParams,
+  AppOpenResponse,
+  AppSearchParams,
+  AppSearchResponse,
+} from './resources/app';
 import { ContactSearchParams, ContactSearchResponse, Contacts } from './resources/contacts';
+import { MessageSearchParams, MessageSendParams, MessageSendResponse, Messages } from './resources/messages';
 import { RevokeRequest, Token, UserInfo } from './resources/token';
 import {
   Chat,
@@ -33,12 +42,6 @@ import {
   Chats,
   ChatsCursor,
 } from './resources/chats/chats';
-import {
-  MessageSearchParams,
-  MessageSendParams,
-  MessageSendResponse,
-  Messages,
-} from './resources/messages/messages';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -804,8 +807,10 @@ export declare namespace BeeperDesktop {
 
   export {
     App as App,
+    type AppDownloadAssetResponse as AppDownloadAssetResponse,
     type AppOpenResponse as AppOpenResponse,
     type AppSearchResponse as AppSearchResponse,
+    type AppDownloadAssetParams as AppDownloadAssetParams,
     type AppOpenParams as AppOpenParams,
     type AppSearchParams as AppSearchParams,
   };
