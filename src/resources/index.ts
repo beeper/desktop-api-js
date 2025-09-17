@@ -4,8 +4,10 @@ export * from './shared';
 export { Accounts, type Account, type AccountListResponse } from './accounts';
 export {
   App,
+  type AppDownloadAssetResponse,
   type AppOpenResponse,
   type AppSearchResponse,
+  type AppDownloadAssetParams,
   type AppOpenParams,
   type AppSearchParams,
 } from './app';
@@ -25,5 +27,5 @@ export {
   type MessageSendResponse,
   type MessageSearchParams,
   type MessageSendParams,
-} from './messages/messages';
+} from './messages';
 export { Token, type RevokeRequest, type UserInfo } from './token';

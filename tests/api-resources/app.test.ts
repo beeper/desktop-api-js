@@ -8,6 +8,21 @@ const client = new BeeperDesktop({
 });
 
 describe('resource app', () => {
+  test('downloadAsset: only required params', async () => {
+    const responsePromise = client.app.downloadAsset({ url: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('downloadAsset: required and optional params', async () => {
+    const response = await client.app.downloadAsset({ url: 'x' });
+  });
+
   test('open', async () => {
     const responsePromise = client.app.open();
     const rawResponse = await responsePromise.asResponse();

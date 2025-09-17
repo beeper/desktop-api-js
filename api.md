@@ -24,11 +24,13 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/app.ts">AppDownloadAssetResponse</a></code>
 - <code><a href="./src/resources/app.ts">AppOpenResponse</a></code>
 - <code><a href="./src/resources/app.ts">AppSearchResponse</a></code>
 
 Methods:
 
+- <code title="post /v0/download-asset">client.app.<a href="./src/resources/app.ts">downloadAsset</a>({ ...params }) -> AppDownloadAssetResponse</code>
 - <code title="post /v0/open-app">client.app.<a href="./src/resources/app.ts">open</a>({ ...params }) -> AppOpenResponse</code>
 - <code title="get /v0/search">client.app.<a href="./src/resources/app.ts">search</a>({ ...params }) -> AppSearchResponse</code>
 
@@ -67,22 +69,12 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/messages/messages.ts">MessageSendResponse</a></code>
+- <code><a href="./src/resources/messages.ts">MessageSendResponse</a></code>
 
 Methods:
 
-- <code title="get /v0/search-messages">client.messages.<a href="./src/resources/messages/messages.ts">search</a>({ ...params }) -> MessagesCursor</code>
-- <code title="post /v0/send-message">client.messages.<a href="./src/resources/messages/messages.ts">send</a>({ ...params }) -> MessageSendResponse</code>
-
-## Attachments
-
-Types:
-
-- <code><a href="./src/resources/messages/attachments.ts">AttachmentDownloadResponse</a></code>
-
-Methods:
-
-- <code title="post /v0/download-asset">client.messages.attachments.<a href="./src/resources/messages/attachments.ts">download</a>({ ...params }) -> AttachmentDownloadResponse</code>
+- <code title="get /v0/search-messages">client.messages.<a href="./src/resources/messages.ts">search</a>({ ...params }) -> MessagesCursor</code>
+- <code title="post /v0/send-message">client.messages.<a href="./src/resources/messages.ts">send</a>({ ...params }) -> MessageSendResponse</code>
 
 # Token
 
