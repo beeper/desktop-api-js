@@ -10,7 +10,8 @@ import { RequestOptions } from '../internal/request-options';
  */
 export class Contacts extends APIResource {
   /**
-   * Search users across on a specific account using the network's search API.
+   * Search users across on a specific account using the network's search API. Only
+   * use for creating new chats.
    */
   search(query: ContactSearchParams, options?: RequestOptions): APIPromise<ContactSearchResponse> {
     return this._client.get('/v0/search-users', { query, ...options });

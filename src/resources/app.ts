@@ -85,14 +85,14 @@ export namespace AppSearchResponse {
       items: Array<Shared.Message>;
 
       /**
-       * Combined cursor (bridged + iMessage) for fetching newer results (use with
-       * direction='after'). Treat as opaque.
+       * Cursor for fetching newer results (use with direction='after'). Opaque string;
+       * do not inspect.
        */
       newestCursor: string | null;
 
       /**
-       * Combined cursor (bridged + iMessage) for fetching older results (use with
-       * direction='before'). Treat as opaque.
+       * Cursor for fetching older results (use with direction='before'). Opaque string;
+       * do not inspect.
        */
       oldestCursor: string | null;
     }
