@@ -210,7 +210,7 @@ The following tools are available in this MCP server.
 ### Resource `app`:
 
 - `open_in_app` (`write`) tags: [app]: Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.
-- `search` (`read`) tags: [app]: Returns matching chats, participant name matches in groups, and the first page of messages in one call. Paginate messages via search-messages. Paginate chats via search-chats. Uses the same sorting as the chat search in the app.
+- `search` (`read`) tags: [app]: Search for chats, participant name matches in groups, and the first page of messages in one call. Use this when the user asks for a specific chat, group, or person.
 
 ### Resource `chats`:
 

@@ -43,8 +43,7 @@ export const tool: Tool = {
       },
       cursor: {
         type: 'string',
-        description:
-          "Opaque combined pagination cursor spanning bridged and iMessage data (format: 'bridgedCursor|imessageCursor'). Pass back unchanged with 'direction'.",
+        description: "Opaque pagination cursor; do not inspect. Use together with 'direction'.",
       },
       dateAfter: {
         type: 'string',
