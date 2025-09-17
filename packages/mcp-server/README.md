@@ -210,7 +210,7 @@ The following tools are available in this MCP server.
 ### Resource `app`:
 
 - `open_in_app` (`write`) tags: [app]: Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.
-- `search` (`read`) tags: [app]: One-shot Cmd+K-style search: chats, in-groups, and messages (first page only). Use search_messages to paginate.
+- `search` (`read`) tags: [app]: Returns matching chats, participant name matches in groups, and the first page of messages in one call. Paginate messages via search-messages. Paginate chats via search-chats. Uses the same sorting as the chat search in the app.
 
 ### Resource `chats`:
 
@@ -239,7 +239,3 @@ The following tools are available in this MCP server.
     • "Who are the participants?" (use scope="participants" in search-chats)
     Returns: matching messages and referenced chats.
 - `send_message` (`write`) tags: [messages]: Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat
-
-### Resource `messages.attachments`:
-
-- `download_attachment` (`write`) tags: [messages]: Download an attachment using its matrix content URL and return the local file path.

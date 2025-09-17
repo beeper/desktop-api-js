@@ -93,7 +93,7 @@ describe('resource chats', () => {
           lastActivityAfter: '2019-12-27T18:11:19.117Z',
           lastActivityBefore: '2019-12-27T18:11:19.117Z',
           limit: 1,
-          query: 'query',
+          query: 'x',
           scope: 'titles',
           type: 'single',
           unreadOnly: true,

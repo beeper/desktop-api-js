@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export const tool: Tool = {
   name: 'search',
   description:
-    'One-shot Cmd+K-style search: chats, in-groups, and messages (first page only). Use search_messages to paginate.',
+    'Returns matching chats, participant name matches in groups, and the first page of messages in one call. Paginate messages via search-messages. Paginate chats via search-chats. Uses the same sorting as the chat search in the app.',
   inputSchema: {
     type: 'object',
     properties: {
