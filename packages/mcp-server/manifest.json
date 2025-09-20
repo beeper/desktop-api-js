@@ -1,7 +1,7 @@
 {
   "dxt_version": "0.2",
   "name": "@beeper/desktop-mcp",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "The official MCP Server for the Beeper Desktop API",
   "author": {
     "name": "Beeper Desktop",
