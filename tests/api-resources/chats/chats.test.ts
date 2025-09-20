@@ -8,6 +8,31 @@ const client = new BeeperDesktop({
 });
 
 describe('resource chats', () => {
+  test('create: only required params', async () => {
+    const responsePromise = client.chats.create({
+      accountID: 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
+      participantIDs: ['string'],
+      type: 'single',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('create: required and optional params', async () => {
+    const response = await client.chats.create({
+      accountID: 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
+      participantIDs: ['string'],
+      type: 'single',
+      messageText: 'messageText',
+      title: 'title',
+    });
+  });
+
   test('retrieve: only required params', async () => {
     const responsePromise = client.chats.retrieve({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
     const rawResponse = await responsePromise.asResponse();
@@ -68,8 +93,8 @@ describe('resource chats', () => {
           lastActivityAfter: '2019-12-27T18:11:19.117Z',
           lastActivityBefore: '2019-12-27T18:11:19.117Z',
           limit: 1,
-          participantQuery: 'participantQuery',
-          query: 'query',
+          query: 'x',
+          scope: 'titles',
           type: 'single',
           unreadOnly: true,
         },

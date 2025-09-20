@@ -16,7 +16,8 @@ export const metadata: Metadata = {
 
 export const tool: Tool = {
   name: 'search_chats',
-  description: 'Search chats by inbox, type, unread status, or text. Paginates.',
+  description:
+    "Search chats by title/network or participants using Beeper Desktop's renderer algorithm. Optional 'scope'.",
   inputSchema: {
     type: 'object',
     properties: {
@@ -65,21 +66,22 @@ export const tool: Tool = {
         type: 'integer',
         description: 'Set the maximum number of chats to retrieve. Valid range: 1-200, default is 50',
       },
-      participantQuery: {
-        type: 'string',
-        description:
-          'Search string to filter chats by participant names. When multiple words provided, ALL words must match. Searches in username, displayName, and fullName fields.',
-      },
       query: {
         type: 'string',
         description:
-          'Search string to filter chats by title. When multiple words provided, ALL words must match. Matches are case-insensitive substrings.',
+          'Literal token search (non-semantic). Use single words users type (e.g., "dinner"). When multiple words provided, ALL must match. Case-insensitive.',
+      },
+      scope: {
+        type: 'string',
+        description:
+          "Search scope: 'titles' matches title + network; 'participants' matches participant names.",
+        enum: ['titles', 'participants'],
       },
       type: {
         type: 'string',
         description:
-          'Specify the type of chats to retrieve: use "single" for direct messages, "group" for group chats, "channel" for channels, or "any" to get all types',
-        enum: ['single', 'group', 'channel', 'any'],
+          'Specify the type of chats to retrieve: use "single" for direct messages, "group" for group chats, or "any" to get all types',
+        enum: ['single', 'group', 'any'],
       },
       unreadOnly: {
         type: 'boolean',

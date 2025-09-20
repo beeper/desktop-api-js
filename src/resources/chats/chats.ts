@@ -15,6 +15,24 @@ export class Chats extends APIResource {
   reminders: RemindersAPI.Reminders = new RemindersAPI.Reminders(this._client);
 
   /**
+   * Create a single or group chat on a specific account using participant IDs and
+   * optional title.
+   *
+   * @example
+   * ```ts
+   * const chat = await client.chats.create({
+   *   accountID:
+   *     'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
+   *   participantIDs: ['string'],
+   *   type: 'single',
+   * });
+   * ```
+   */
+  create(body: ChatCreateParams, options?: RequestOptions): APIPromise<ChatCreateResponse> {
+    return this._client.post('/v0/create-chat', { body, ...options });
+  }
+
+  /**
    * Retrieve chat details including metadata, participants, and latest message
    *
    * @example
@@ -44,7 +62,8 @@ export class Chats extends APIResource {
   }
 
   /**
-   * Search and filter conversations across all messaging accounts
+   * Search chats by title/network or participants using Beeper Desktop's renderer
+   * algorithm.
    *
    * @example
    * ```ts
@@ -155,6 +174,41 @@ export namespace Chat {
   }
 }
 
+export interface ChatCreateResponse extends Shared.BaseResponse {
+  /**
+   * Newly created chat if available.
+   */
+  chatID?: string;
+}
+
+export interface ChatCreateParams {
+  /**
+   * Account to create the chat on.
+   */
+  accountID: string;
+
+  /**
+   * User IDs to include in the new chat.
+   */
+  participantIDs: Array<string>;
+
+  /**
+   * Chat type to create: 'single' requires exactly one participantID; 'group'
+   * supports multiple participants and optional title.
+   */
+  type: 'single' | 'group';
+
+  /**
+   * Optional first message content if the platform requires it to create the chat.
+   */
+  messageText?: string;
+
+  /**
+   * Optional title for group chats; ignored for single chats on most platforms.
+   */
+  title?: string;
+}
+
 export interface ChatRetrieveParams {
   /**
    * Unique identifier of the chat to retrieve. Not available for iMessage chats.
@@ -199,7 +253,7 @@ export interface ChatSearchParams extends CursorParams {
    * Include chats marked as Muted by the user, which are usually less important.
    * Default: true. Set to false if the user wants a more refined search.
    */
-  includeMuted?: boolean;
+  includeMuted?: boolean | null;
 
   /**
    * Provide an ISO datetime string to only retrieve chats with last activity after
@@ -214,28 +268,27 @@ export interface ChatSearchParams extends CursorParams {
   lastActivityBefore?: string;
 
   /**
-   * Search string to filter chats by participant names. When multiple words
-   * provided, ALL words must match. Searches in username, displayName, and fullName
-   * fields.
-   */
-  participantQuery?: string;
-
-  /**
-   * Search string to filter chats by title. When multiple words provided, ALL words
-   * must match. Matches are case-insensitive substrings.
+   * Literal token search (non-semantic). Use single words users type (e.g.,
+   * "dinner"). When multiple words provided, ALL must match. Case-insensitive.
    */
   query?: string;
 
   /**
-   * Specify the type of chats to retrieve: use "single" for direct messages, "group"
-   * for group chats, "channel" for channels, or "any" to get all types
+   * Search scope: 'titles' matches title + network; 'participants' matches
+   * participant names.
    */
-  type?: 'single' | 'group' | 'channel' | 'any';
+  scope?: 'titles' | 'participants';
+
+  /**
+   * Specify the type of chats to retrieve: use "single" for direct messages, "group"
+   * for group chats, or "any" to get all types
+   */
+  type?: 'single' | 'group' | 'any';
 
   /**
    * Set to true to only retrieve chats that have unread messages
    */
-  unreadOnly?: boolean;
+  unreadOnly?: boolean | null;
 }
 
 Chats.Reminders = Reminders;
@@ -243,7 +296,9 @@ Chats.Reminders = Reminders;
 export declare namespace Chats {
   export {
     type Chat as Chat,
+    type ChatCreateResponse as ChatCreateResponse,
     type ChatsCursor as ChatsCursor,
+    type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatSearchParams as ChatSearchParams,

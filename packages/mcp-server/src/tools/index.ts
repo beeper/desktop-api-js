@@ -6,6 +6,7 @@ export { Metadata, Endpoint, HandlerFunction };
 
 import get_accounts from './accounts/get-accounts';
 import open_in_app from './app/open-in-app';
+import search from './app/search';
 import get_chat from './chats/get-chat';
 import archive_chat from './chats/archive-chat';
 import search_chats from './chats/search-chats';
@@ -13,7 +14,6 @@ import set_chat_reminder from './chats/reminders/set-chat-reminder';
 import clear_chat_reminder from './chats/reminders/clear-chat-reminder';
 import search_messages from './messages/search-messages';
 import send_message from './messages/send-message';
-import download_attachment from './messages/attachments/download-attachment';
 
 export const endpoints: Endpoint[] = [];
 
@@ -23,6 +23,7 @@ function addEndpoint(endpoint: Endpoint) {
 
 addEndpoint(get_accounts);
 addEndpoint(open_in_app);
+addEndpoint(search);
 addEndpoint(get_chat);
 addEndpoint(archive_chat);
 addEndpoint(search_chats);
@@ -30,7 +31,6 @@ addEndpoint(set_chat_reminder);
 addEndpoint(clear_chat_reminder);
 addEndpoint(search_messages);
 addEndpoint(send_message);
-addEndpoint(download_attachment);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';

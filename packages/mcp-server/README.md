@@ -218,13 +218,14 @@ The following tools are available in this MCP server.
 
 ### Resource `app`:
 
-- `open_in_app` (`write`) tags: [app]: Open Beeper, optionally focusing a chat or message, or pre-filling a draft.
+- `open_in_app` (`write`) tags: [app]: Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.
+- `search` (`read`) tags: [app]: Search for chats, participant name matches in groups, and the first page of messages in one call. Use this when the user asks for a specific chat, group, or person.
 
 ### Resource `chats`:
 
 - `get_chat` (`read`) tags: [chats]: Get chat details: metadata, participants (limited), last activity.
 - `archive_chat` (`write`) tags: [chats]: Archive or unarchive a chat.
-- `search_chats` (`read`) tags: [chats]: Search chats by inbox, type, unread status, or text. Paginates.
+- `search_chats` (`read`) tags: [chats]: Search chats by title/network or participants using Beeper Desktop's renderer algorithm. Optional 'scope'.
 
 ### Resource `chats.reminders`:
 
@@ -239,17 +240,11 @@ The following tools are available in this MCP server.
     • ✅ RIGHT: query="dinner" or query="sick" or query="error" (single words users type)
     • ❌ WRONG: query="dinner plans tonight" or query="health issues" (phrases/concepts)
     • The query matches ALL words provided (in any order). Example: query="flight booking" finds messages with both "flight" AND "booking".
-  - Media filters: Use onlyWithMedia for any media, or specific filters like onlyWithVideo, onlyWithImage, onlyWithLink, onlyWithFile for specific types.
-  - Pagination: use 'oldestCursor' + direction='before' for older; 'newestCursor' + direction='after' for newer.
   - Performance: provide chatIDs/accountIDs when known. Omitted 'query' returns results based on filters only. Partial matches enabled; 'excludeLowPriority' defaults to true.
   - Workflow tip: To search messages in specific conversations: 1) Use find-chats to get chatIDs, 2) Use search-messages with those chatIDs.
   - IMPORTANT: Chat names vary widely. ASK the user for clarification:
     • "Which chat do you mean by family?" (could be "The Smiths", "Mom Dad Kids", etc.)
     • "What's the name of your work chat?" (could be "Team", company name, project name)
-    • "Who are the participants?" (use participantQuery in find-chats)
+    • "Who are the participants?" (use scope="participants" in search-chats)
     Returns: matching messages and referenced chats.
 - `send_message` (`write`) tags: [messages]: Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat
-
-### Resource `messages.attachments`:
-
-- `download_attachment` (`write`) tags: [messages]: Download a message attachment and return the local file path.

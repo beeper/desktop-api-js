@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.1.5 (2025-09-19)
+
+Full Changelog: [v0.1.4...v0.1.5](https://github.com/beeper/desktop-api-js/compare/v0.1.4...v0.1.5)
+
+### Features
+
+* **api:** fix typo in bearerAuth ([76ac2e1](https://github.com/beeper/desktop-api-js/commit/76ac2e16ba6422053a24de98270016f90abe77a7))
+* **api:** manual updates ([3c711d9](https://github.com/beeper/desktop-api-js/commit/3c711d9190aed783a3c80c994bdc1a44107cd1be))
+* **api:** manual updates ([6f43810](https://github.com/beeper/desktop-api-js/commit/6f43810bf528676498df6ee81380fdf181ef5363))
+* **api:** manual updates ([2bc9e1b](https://github.com/beeper/desktop-api-js/commit/2bc9e1b7b6006cf9341b0bbf7ad5fba6ae482822))
+* **api:** manual updates ([49f039b](https://github.com/beeper/desktop-api-js/commit/49f039bbfb9080e425ea0756bdab767107de711d))
+* **api:** small tweaks ([ab7267b](https://github.com/beeper/desktop-api-js/commit/ab7267b120d2f009050bf8944cb43f6a27631de5))
+* **mcp:** add docs search tool ([d90bd86](https://github.com/beeper/desktop-api-js/commit/d90bd86e672737b397e15d388f4e9ad1a8bd43e3))
+* **mcp:** allow setting logging level ([6f2169f](https://github.com/beeper/desktop-api-js/commit/6f2169fd4bb1aaf12dbc7765c304fc9b722b0c32))
+* **mcp:** expose client options in `streamableHTTPApp` ([9afd751](https://github.com/beeper/desktop-api-js/commit/9afd7510b1c96fe5624d1f37f84521c1be1a6353))
+
+
+### Bug Fixes
+
+* **ci:** set permissions for DXT publish action ([5a6b63d](https://github.com/beeper/desktop-api-js/commit/5a6b63d7d7ba2514901ff5524890294feeaa981c))
+* coerce nullable values to undefined ([f43ac68](https://github.com/beeper/desktop-api-js/commit/f43ac6875858be2d27c31cbe7acc3d1fbac76c40))
+* **mcp:** fix query options parsing ([4f00241](https://github.com/beeper/desktop-api-js/commit/4f00241e35309ff7441fd842ba787a87caf17cae))
+* **mcp:** fix uploading dxt release assets ([1189099](https://github.com/beeper/desktop-api-js/commit/118909952860f420b4bc3f63b3de7e31d486c967))
+
+
+### Chores
+
+* ci build action ([b63fda2](https://github.com/beeper/desktop-api-js/commit/b63fda25086cfcc8758df9b5fcb32b49a78df28c))
+* **internal:** codegen related update ([b244e26](https://github.com/beeper/desktop-api-js/commit/b244e2647d3fd792e3764127ebdd8dc0c0f6df7f))
+* **internal:** codegen related update ([b961076](https://github.com/beeper/desktop-api-js/commit/b961076bf7533638f00eebb1b2a81508db35ad7b))
+* **internal:** codegen related update ([dd44c80](https://github.com/beeper/desktop-api-js/commit/dd44c803559a85fe7bc1f34fe7a5c4a356ec3460))
+* **internal:** gitignore .mcpb files ([5a8ade3](https://github.com/beeper/desktop-api-js/commit/5a8ade3b8c2fff3764893114e5eb862604fc5c6b))
+* **mcp:** rename dxt to mcpb ([343d030](https://github.com/beeper/desktop-api-js/commit/343d0303c26c103a763be49e7319bee88aa71b7e))
+* **mcp:** upload dxt as release asset ([55f6005](https://github.com/beeper/desktop-api-js/commit/55f6005d92b7f26a46c49ba76f17f7ea34b8c4b9))
+
 ## 0.1.4 (2025-09-01)
 
 Full Changelog: [v0.1.3...v0.1.4](https://github.com/beeper/desktop-api-js/compare/v0.1.3...v0.1.4)
