@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.1.6 (2025-09-27)
+
+Full Changelog: [v0.1.5...v0.1.6](https://github.com/beeper/desktop-api-js/compare/v0.1.5...v0.1.6)
+
+### Features
+
+* **mcp:** add option for including docs tools ([a521cb8](https://github.com/beeper/desktop-api-js/commit/a521cb8f972778c0253b657b712da7681dd78853))
+* **mcp:** enable experimental docs search tool ([c349699](https://github.com/beeper/desktop-api-js/commit/c349699a05745356ce3d12dc693d643a85a52d5d))
+
+
+### Performance Improvements
+
+* faster formatting ([a4321bf](https://github.com/beeper/desktop-api-js/commit/a4321bf9c91f3043414724486c130f3b0bd25606))
+
+
+### Chores
+
+* do not install brew dependencies in ./scripts/bootstrap by default ([cd62f83](https://github.com/beeper/desktop-api-js/commit/cd62f83fc5e6e93501df72cf49c0ee2838e02476))
+* fix changelog with actual entries ([45de3f5](https://github.com/beeper/desktop-api-js/commit/45de3f5a1d86486b9752e32cbd5283d6efe88434))
+* **internal:** codegen related update ([44137d6](https://github.com/beeper/desktop-api-js/commit/44137d644ffcd7407acc815a68d8df093e17f45d))
+* **internal:** fix incremental formatting in some cases ([697d742](https://github.com/beeper/desktop-api-js/commit/697d742608fead14c628f5d809b6a4beedff4656))
+* **internal:** ignore .eslintcache ([22d7f29](https://github.com/beeper/desktop-api-js/commit/22d7f29cd477bf4d22c68b51cd4b99bcf710efbd))
+* **internal:** remove deprecated `compilerOptions.baseUrl` from tsconfig.json ([ffaa6d6](https://github.com/beeper/desktop-api-js/commit/ffaa6d646236e88ecf997dc9a0b77733029a885b))
+* **mcp:** allow pointing `docs_search` tool at other URLs ([6044c34](https://github.com/beeper/desktop-api-js/commit/6044c3467dd578e2fba46fa10f83ad3240222c3f))
+
 ## 0.1.5 (2025-09-19)
 
 Full Changelog: [v0.1.4...v0.1.5](https://github.com/beeper/desktop-api-js/compare/v0.1.4...v0.1.5)
