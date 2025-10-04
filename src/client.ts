@@ -246,15 +246,7 @@ export class BeeperDesktop {
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    return buildHeaders([await this.bearerAuth(opts), await this.oauth2Auth(opts)]);
-  }
-
-  protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
     return buildHeaders([{ Authorization: `Bearer ${this.accessToken}` }]);
-  }
-
-  protected async oauth2Auth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    return undefined;
   }
 
   protected stringifyQuery(query: Record<string, unknown>): string {
