@@ -1,4 +1,10 @@
-toMCPResponse: (output, input, ctx) => {
+import type { HandlerFunction } from "../tools/types";
+import { mapMessagesToText } from "./utils";
+
+export const handler: HandlerFunction = async (client, args) => {
+  const body = args as any;
+  const output = await client.messages.search(body);
+
   const lines: string[] = []
   lines.push('# Messages')
 
@@ -20,8 +26,8 @@ toMCPResponse: (output, input, ctx) => {
   if (items.length === 0) {
     lines.push('\nNo messages found.')
   } else {
-    lines.push(mapMessagesToText(output, input, ctx))
+    lines.push(mapMessagesToText(output, body, undefined))
   }
 
   return { content: [{ type: 'text', text: lines.join('\n') }] }
-},
+};
