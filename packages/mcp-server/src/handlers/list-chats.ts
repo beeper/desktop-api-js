@@ -28,12 +28,13 @@ export const handler: HandlerFunction = async (client, args) => {
   } else {
     for (const chatWithPreview of items) {
       lines.push(...formatChatToMarkdown(chatWithPreview, undefined))
-      if (chatWithPreview.preview) {
-        lines.push(`**Last message**: ${chatWithPreview.preview.text || '(no text)'}`)
-        if (chatWithPreview.preview.senderName) {
-          lines.push(`**From**: ${chatWithPreview.preview.senderName}`)
+      const preview = (chatWithPreview as any).preview
+      if (preview) {
+        lines.push(`**Last message**: ${preview.text || '(no text)'}`)
+        if (preview.senderName) {
+          lines.push(`**From**: ${preview.senderName}`)
         }
-        lines.push(`**Timestamp**: ${chatWithPreview.preview.timestamp}`)
+        lines.push(`**Timestamp**: ${preview.timestamp}`)
       }
     }
   }
