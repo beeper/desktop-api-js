@@ -1,4 +1,10 @@
-toMCPResponse: (output, _, ctx) => {
+import type { HandlerFunction } from "../tools/types";
+import { formatChatToMarkdown } from "./utils";
+
+export const handler: HandlerFunction = async (client, args) => {
+  const body = args as any;
+  const output = await client.chats.search(body);
+
   const lines: string[] = []
   lines.push('# Chats')
 
@@ -21,11 +27,11 @@ toMCPResponse: (output, _, ctx) => {
     lines.push('\nNo chats found.')
   } else {
     for (const chat of items) {
-      lines.push(...formatChatToMarkdown(chat, ctx?.apiBaseURL))
+      lines.push(...formatChatToMarkdown(chat, undefined))
     }
   }
   lines.push('\n# Using this information\n')
   lines.push('- Pass the "chatID" to get_chat or search_messages for details about a chat, or send_message to send a message to a chat.')
   lines.push('- Link the "open" link to the user to allow them to view the chat in Beeper Desktop.')
   return { content: [{ type: 'text', text: lines.join('\n') }] }
-},
+};
