@@ -8,16 +8,16 @@ export const handler: HandlerFunction = async (client, args) => {
   const lines: string[] = []
   lines.push('# Messages')
 
-  const items = output.items || []
-  const hasMore = !!output.hasMore
+  const items = (output as any).items || []
+  const hasMore = !!(output as any).hasMore
 
   if (hasMore) {
     lines.push(`\nShowing ${items.length} messages (more available)`)
-    if (output.oldestCursor) {
-      lines.push(`Next page (older): cursor='${output.oldestCursor}', direction='before'`)
+    if ((output as any).oldestCursor) {
+      lines.push(`Next page (older): cursor='${(output as any).oldestCursor}', direction='before'`)
     }
-    if (output.newestCursor) {
-      lines.push(`Previous page (newer): cursor='${output.newestCursor}', direction='after'`)
+    if ((output as any).newestCursor) {
+      lines.push(`Previous page (newer): cursor='${(output as any).newestCursor}', direction='after'`)
     }
   } else if (items.length > 0) {
     lines.push(`\nShowing ${items.length} message${items.length === 1 ? '' : 's'}`)
@@ -26,7 +26,7 @@ export const handler: HandlerFunction = async (client, args) => {
   if (items.length === 0) {
     lines.push('\nNo messages found.')
   } else {
-    lines.push(mapMessagesToText(output, body, undefined))
+    lines.push(mapMessagesToText(output as any, body, undefined))
   }
 
   return { content: [{ type: 'text', text: lines.join('\n') }] }
