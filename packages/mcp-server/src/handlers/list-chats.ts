@@ -1,5 +1,10 @@
+import type { HandlerFunction } from "../tools/types";
+import { formatChatToMarkdown } from "./utils";
 
-toMCPResponse: (output, _, ctx) => {
+export const handler: HandlerFunction = async (client, args) => {
+  const body = args as any;
+  const output = await client.chats.search(body);
+
   const lines: string[] = []
   lines.push('# Chats')
 
@@ -22,7 +27,7 @@ toMCPResponse: (output, _, ctx) => {
     lines.push('\nNo chats found.')
   } else {
     for (const chatWithPreview of items) {
-      lines.push(...formatChatToMarkdown(chatWithPreview, ctx?.apiBaseURL))
+      lines.push(...formatChatToMarkdown(chatWithPreview, undefined))
       if (chatWithPreview.preview) {
         lines.push(`**Last message**: ${chatWithPreview.preview.text || '(no text)'}`)
         if (chatWithPreview.preview.senderName) {
@@ -36,4 +41,4 @@ toMCPResponse: (output, _, ctx) => {
   lines.push('- Pass the "chatID" to get_chat or search_messages for details about a chat, or send_message to send a message to a chat.')
   lines.push('- Link the "open" link to the user to allow them to view the chat in Beeper Desktop.')
   return { content: [{ type: 'text', text: lines.join('\n') }] }
-},
+};
