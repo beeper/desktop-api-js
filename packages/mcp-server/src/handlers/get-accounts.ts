@@ -1,7 +1,7 @@
-import type BeeperDesktop from "@beeper/desktop-api";
+import type { HandlerFunction } from "../tools/types";
 import { asTextContentResult } from "../tools/types";
 
-export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
+export const handler: HandlerFunction = async (client) => {
   const accounts = await client.accounts.list()
   if (!accounts || accounts.length === 0) throw new Error('No accounts found. This should never happen, please contact help@beeper.com.')
   const lines: string[] = []
