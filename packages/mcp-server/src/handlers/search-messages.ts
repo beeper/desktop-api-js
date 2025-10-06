@@ -1,5 +1,5 @@
-import type { HandlerFunction } from "../tools/types";
-import { mapMessagesToText } from "./utils";
+import type { HandlerFunction } from '../tools/types';
+import { mapMessagesToText } from './utils';
 
 export const handler: HandlerFunction = async (client, args) => {
   const body = args as any;
@@ -12,5 +12,5 @@ export const handler: HandlerFunction = async (client, args) => {
         text: mapMessagesToText(output as any, body, undefined),
       },
     ],
-  }
+  };
 };

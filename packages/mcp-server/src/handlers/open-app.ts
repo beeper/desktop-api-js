@@ -1,20 +1,20 @@
-import type { HandlerFunction } from "../tools/types";
+import type { HandlerFunction } from '../tools/types';
 
 export const handler: HandlerFunction = async (client, args) => {
   const body = args as any;
   const output = await client.app.open(body);
 
-  const lines: string[] = []
+  const lines: string[] = [];
   if (output.success) {
-    lines.push('Beeper was opened.')
+    lines.push('Beeper was opened.');
     if (body?.chatID) {
-      const chatRef = String(body.chatID)
-      lines.push(`Focused chat: ${chatRef}`)
+      const chatRef = String(body.chatID);
+      lines.push(`Focused chat: ${chatRef}`);
     }
-    if (body?.draftText) lines.push(`Draft text populated: ${body.draftText}`)
-    if (body?.draftAttachmentPath) lines.push(`Draft attachment populated: ${body.draftAttachmentPath}`)
+    if (body?.draftText) lines.push(`Draft text populated: ${body.draftText}`);
+    if (body?.draftAttachmentPath) lines.push(`Draft attachment populated: ${body.draftAttachmentPath}`);
   } else {
-    lines.push('Failed to open Beeper.')
+    lines.push('Failed to open Beeper.');
   }
-  return { content: [{ type: 'text', text: lines.join('\n') }] }
+  return { content: [{ type: 'text', text: lines.join('\n') }] };
 };
