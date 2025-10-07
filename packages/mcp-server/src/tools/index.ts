@@ -4,9 +4,9 @@ import { Metadata, Endpoint, HandlerFunction } from './types';
 
 export { Metadata, Endpoint, HandlerFunction };
 
+import open_in_app from './top-level/open-in-app';
+import search from './top-level/search';
 import get_accounts from './accounts/get-accounts';
-import open_in_app from './app/open-in-app';
-import search from './app/search';
 import get_chat from './chats/get-chat';
 import archive_chat from './chats/archive-chat';
 import search_chats from './chats/search-chats';
@@ -22,9 +22,9 @@ function addEndpoint(endpoint: Endpoint) {
   endpoints.push(mapEndpoint(endpoint));
 }
 
-addEndpoint(get_accounts);
 addEndpoint(open_in_app);
 addEndpoint(search);
+addEndpoint(get_accounts);
 addEndpoint(get_chat);
 addEndpoint(archive_chat);
 addEndpoint(search_chats);

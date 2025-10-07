@@ -7,32 +7,37 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'messages',
+  resource: '$client',
   operation: 'write',
-  tags: ['messages'],
+  tags: ['app'],
   httpMethod: 'post',
-  httpPath: '/v1/messages',
-  operationId: 'sendMessage',
+  httpPath: '/v1/app/open',
+  operationId: 'openApp',
 };
 
 export const tool: Tool = {
-  name: 'send_message',
+  name: 'open_in_app',
   description:
-    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nSend a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat\n\n# Response Schema\n```json\n{\n  allOf: [    {\n      $ref: '#/$defs/base_response'\n    }\n  ],\n  $defs: {\n    base_response: {\n      type: 'object',\n      properties: {\n        success: {\n          type: 'boolean'\n        },\n        error: {\n          type: 'string'\n        }\n      },\n      required: [        'success'\n      ]\n    }\n  }\n}\n```",
+    "When using this tool, always use the `jq_filter` parameter to reduce the response size and improve performance.\n\nOnly omit if you're sure you don't need the data.\n\nOpen Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.\n\n# Response Schema\n```json\n{\n  type: 'object',\n  description: 'Response indicating successful app opening.',\n  properties: {\n    success: {\n      type: 'boolean',\n      description: 'Whether the app was successfully opened/focused.'\n    }\n  },\n  required: [    'success'\n  ]\n}\n```",
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
-        description: 'Unique identifier of the chat.',
+        description:
+          'Optional Beeper chat ID (or local chat ID) to focus after opening the app. If omitted, only opens/focuses the app.',
       },
-      replyToMessageID: {
+      draftAttachmentPath: {
         type: 'string',
-        description: 'Provide a message ID to send this as a reply to an existing message',
+        description: 'Optional draft attachment path to populate in the message input field.',
       },
-      text: {
+      draftText: {
         type: 'string',
-        description: 'Text content of the message you want to send. You may use markdown.',
+        description: 'Optional draft text to populate in the message input field.',
+      },
+      messageID: {
+        type: 'string',
+        description: 'Optional message ID. Jumps to that message in the chat when opening.',
       },
       jq_filter: {
         type: 'string',
@@ -41,14 +46,14 @@ export const tool: Tool = {
           'A jq filter to apply to the response to include certain fields. Consult the output schema in the tool description to see the fields that are available.\n\nFor example: to include only the `name` field in every object of a results array, you can provide ".results[].name".\n\nFor more information, see the [jq documentation](https://jqlang.org/manual/).',
       },
     },
-    required: ['chatID'],
+    required: [],
   },
   annotations: {},
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.messages.send(body)));
+  return asTextContentResult(await maybeFilter(jq_filter, await client.open(body)));
 };
 
 export default { metadata, tool, handler };

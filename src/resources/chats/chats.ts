@@ -3,10 +3,11 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as RemindersAPI from './reminders';
-import { ReminderCreateParams, ReminderDeleteParams, Reminders } from './reminders';
+import { ReminderCreateParams, Reminders } from './reminders';
 import { APIPromise } from '../../core/api-promise';
 import { Cursor, type CursorParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
 
 /**
  * Chats operations
@@ -29,7 +30,7 @@ export class Chats extends APIResource {
    * ```
    */
   create(body: ChatCreateParams, options?: RequestOptions): APIPromise<ChatCreateResponse> {
-    return this._client.post('/v0/create-chat', { body, ...options });
+    return this._client.post('/v1/chats', { body, ...options });
   }
 
   /**
@@ -37,13 +38,36 @@ export class Chats extends APIResource {
    *
    * @example
    * ```ts
-   * const chat = await client.chats.retrieve({
-   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-   * });
+   * const chat = await client.chats.retrieve(
+   *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
+   * );
    * ```
    */
-  retrieve(query: ChatRetrieveParams, options?: RequestOptions): APIPromise<Chat> {
-    return this._client.get('/v0/get-chat', { query, ...options });
+  retrieve(
+    chatID: string,
+    query: ChatRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Chat> {
+    return this._client.get(path`/v1/chats/${chatID}`, { query, ...options });
+  }
+
+  /**
+   * List all chats sorted by last activity (most recent first). Combines all
+   * accounts into a single paginated list.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const chatListResponse of client.chats.list()) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(
+    query: ChatListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<ChatListResponsesCursor, ChatListResponse> {
+    return this._client.getAPIList('/v1/chats', Cursor<ChatListResponse>, { query, ...options });
   }
 
   /**
@@ -52,13 +76,17 @@ export class Chats extends APIResource {
    *
    * @example
    * ```ts
-   * const baseResponse = await client.chats.archive({
-   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-   * });
+   * const baseResponse = await client.chats.archive(
+   *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
+   * );
    * ```
    */
-  archive(body: ChatArchiveParams, options?: RequestOptions): APIPromise<Shared.BaseResponse> {
-    return this._client.post('/v0/archive-chat', { body, ...options });
+  archive(
+    chatID: string,
+    body: ChatArchiveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Shared.BaseResponse> {
+    return this._client.post(path`/v1/chats/${chatID}/archive`, { body, ...options });
   }
 
   /**
@@ -77,9 +105,11 @@ export class Chats extends APIResource {
     query: ChatSearchParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<ChatsCursor, Chat> {
-    return this._client.getAPIList('/v0/search-chats', Cursor<Chat>, { query, ...options });
+    return this._client.getAPIList('/v1/chats/search', Cursor<Chat>, { query, ...options });
   }
 }
+
+export type ChatListResponsesCursor = Cursor<ChatListResponse>;
 
 export type ChatsCursor = Cursor<Chat>;
 
@@ -95,8 +125,7 @@ export interface Chat {
   accountID: string;
 
   /**
-   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
-   * MUST use 'accountID' to perform actions.
+   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger').
    */
   network: string;
 
@@ -181,6 +210,13 @@ export interface ChatCreateResponse extends Shared.BaseResponse {
   chatID?: string;
 }
 
+export interface ChatListResponse extends Chat {
+  /**
+   * Last message preview for this chat, if available.
+   */
+  preview?: Shared.Message;
+}
+
 export interface ChatCreateParams {
   /**
    * Account to create the chat on.
@@ -211,25 +247,20 @@ export interface ChatCreateParams {
 
 export interface ChatRetrieveParams {
   /**
-   * Unique identifier of the chat to retrieve. Not available for iMessage chats.
-   * Participants are limited by 'maxParticipantCount'.
-   */
-  chatID: string;
-
-  /**
    * Maximum number of participants to return. Use -1 for all; otherwise 0–500.
    * Defaults to 20.
    */
   maxParticipantCount?: number | null;
 }
 
-export interface ChatArchiveParams {
+export interface ChatListParams extends CursorParams {
   /**
-   * The identifier of the chat to archive or unarchive (accepts both chatID and
-   * local chat ID)
+   * Limit to specific account IDs. If omitted, fetches from all accounts.
    */
-  chatID: string;
+  accountIDs?: Array<string>;
+}
 
+export interface ChatArchiveParams {
   /**
    * True to archive, false to unarchive
    */
@@ -297,16 +328,15 @@ export declare namespace Chats {
   export {
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
+    type ChatListResponse as ChatListResponse,
+    type ChatListResponsesCursor as ChatListResponsesCursor,
     type ChatsCursor as ChatsCursor,
     type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
+    type ChatListParams as ChatListParams,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatSearchParams as ChatSearchParams,
   };
 
-  export {
-    Reminders as Reminders,
-    type ReminderCreateParams as ReminderCreateParams,
-    type ReminderDeleteParams as ReminderDeleteParams,
-  };
+  export { Reminders as Reminders, type ReminderCreateParams as ReminderCreateParams };
 }

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Metadata, asTextContentResult } from '@beeper/desktop-mcp/tools/types';
+import { Metadata, asTextContentResult } from '@beeper/desktop-api-mcp/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   operation: 'read',
   tags: ['messages'],
   httpMethod: 'get',
-  httpPath: '/v0/search-messages',
-  operationId: 'search_messages',
+  httpPath: '/v1/messages/search',
+  operationId: 'searchMessages',
 };
 
 export const tool: Tool = {
@@ -23,15 +23,15 @@ export const tool: Tool = {
     properties: {
       accountIDs: {
         type: 'array',
-        description: 'Limit search to specific Beeper account IDs (bridge instances).',
+        description: 'Limit search to specific account IDs.',
         items: {
           type: 'string',
-          description: 'Beeper account ID this resource belongs to.',
+          description: 'Account ID this resource belongs to.',
         },
       },
       chatIDs: {
         type: 'array',
-        description: 'Limit search to specific Beeper chat IDs.',
+        description: 'Limit search to specific chat IDs.',
         items: {
           type: 'string',
         },

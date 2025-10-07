@@ -8,6 +8,26 @@ const client = new BeeperDesktop({
 });
 
 describe('resource messages', () => {
+  test('list: only required params', async () => {
+    const responsePromise = client.messages.list({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('list: required and optional params', async () => {
+    const response = await client.messages.list({
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+      cursor: '821744079',
+      direction: 'before',
+      limit: 1,
+    });
+  });
+
   test('search', async () => {
     const responsePromise = client.messages.search();
     const rawResponse = await responsePromise.asResponse();
@@ -25,6 +45,7 @@ describe('resource messages', () => {
       client.messages.search(
         {
           accountIDs: [
+            'whatsapp',
             'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
             'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',
           ],
