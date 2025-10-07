@@ -1,4 +1,4 @@
-import type { Endpoint, HandlerFunction } from "../tools";
+import type { Endpoint, HandlerFunction } from '../tools';
 
 import { handler as get_accounts } from './get-accounts';
 import { handler as open_in_app } from './open-app';
@@ -22,11 +22,11 @@ const HANDLER_OVERRIDES: Record<string, HandlerFunction> = {
   clear_chat_reminder,
   search_messages,
   send_message,
-}
+};
 
 export function mapEndpoint(endpoint: Endpoint): Endpoint {
   if (!HANDLER_OVERRIDES[endpoint.tool.name]) {
-    return endpoint
+    return endpoint;
   }
   return {
     ...endpoint,
