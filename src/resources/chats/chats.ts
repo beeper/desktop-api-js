@@ -5,7 +5,13 @@ import * as Shared from '../shared';
 import * as RemindersAPI from './reminders';
 import { ReminderCreateParams, Reminders } from './reminders';
 import { APIPromise } from '../../core/api-promise';
-import { Cursor, type CursorParams, PagePromise } from '../../core/pagination';
+import {
+  CursorList,
+  type CursorListParams,
+  CursorSearch,
+  type CursorSearchParams,
+  PagePromise,
+} from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -66,8 +72,8 @@ export class Chats extends APIResource {
   list(
     query: ChatListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ChatListResponsesCursor, ChatListResponse> {
-    return this._client.getAPIList('/v1/chats', Cursor<ChatListResponse>, { query, ...options });
+  ): PagePromise<ChatListResponsesCursorList, ChatListResponse> {
+    return this._client.getAPIList('/v1/chats', CursorList<ChatListResponse>, { query, ...options });
   }
 
   /**
@@ -104,14 +110,14 @@ export class Chats extends APIResource {
   search(
     query: ChatSearchParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ChatsCursor, Chat> {
-    return this._client.getAPIList('/v1/chats/search', Cursor<Chat>, { query, ...options });
+  ): PagePromise<ChatsCursorSearch, Chat> {
+    return this._client.getAPIList('/v1/chats/search', CursorSearch<Chat>, { query, ...options });
   }
 }
 
-export type ChatListResponsesCursor = Cursor<ChatListResponse>;
+export type ChatListResponsesCursorList = CursorList<ChatListResponse>;
 
-export type ChatsCursor = Cursor<Chat>;
+export type ChatsCursorSearch = CursorSearch<Chat>;
 
 export interface Chat {
   /**
@@ -253,7 +259,7 @@ export interface ChatRetrieveParams {
   maxParticipantCount?: number | null;
 }
 
-export interface ChatListParams extends CursorParams {
+export interface ChatListParams extends CursorListParams {
   /**
    * Limit to specific account IDs. If omitted, fetches from all accounts.
    */
@@ -267,7 +273,7 @@ export interface ChatArchiveParams {
   archived?: boolean;
 }
 
-export interface ChatSearchParams extends CursorParams {
+export interface ChatSearchParams extends CursorSearchParams {
   /**
    * Provide an array of account IDs to filter chats from specific messaging accounts
    * only
@@ -329,8 +335,8 @@ export declare namespace Chats {
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
-    type ChatListResponsesCursor as ChatListResponsesCursor,
-    type ChatsCursor as ChatsCursor,
+    type ChatListResponsesCursorList as ChatListResponsesCursorList,
+    type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
     type ChatListParams as ChatListParams,

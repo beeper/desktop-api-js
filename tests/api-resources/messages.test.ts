@@ -24,7 +24,6 @@ describe('resource messages', () => {
       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       cursor: '821744079',
       direction: 'before',
-      limit: 1,
     });
   });
 

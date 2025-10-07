@@ -2,9 +2,15 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { MessagesCursor } from './shared';
+import { MessagesCursorList, MessagesCursorSearch } from './shared';
 import { APIPromise } from '../core/api-promise';
-import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
+import {
+  CursorList,
+  type CursorListParams,
+  CursorSearch,
+  type CursorSearchParams,
+  PagePromise,
+} from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 /**
@@ -24,8 +30,8 @@ export class Messages extends APIResource {
    * }
    * ```
    */
-  list(query: MessageListParams, options?: RequestOptions): PagePromise<MessagesCursor, Shared.Message> {
-    return this._client.getAPIList('/v1/messages', Cursor<Shared.Message>, { query, ...options });
+  list(query: MessageListParams, options?: RequestOptions): PagePromise<MessagesCursorList, Shared.Message> {
+    return this._client.getAPIList('/v1/messages', CursorList<Shared.Message>, { query, ...options });
   }
 
   /**
@@ -42,8 +48,11 @@ export class Messages extends APIResource {
   search(
     query: MessageSearchParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<MessagesCursor, Shared.Message> {
-    return this._client.getAPIList('/v1/messages/search', Cursor<Shared.Message>, { query, ...options });
+  ): PagePromise<MessagesCursorSearch, Shared.Message> {
+    return this._client.getAPIList('/v1/messages/search', CursorSearch<Shared.Message>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -74,14 +83,14 @@ export interface MessageSendResponse extends Shared.BaseResponse {
   pendingMessageID: string;
 }
 
-export interface MessageListParams extends CursorParams {
+export interface MessageListParams extends CursorListParams {
   /**
-   * The chat ID to list messages from
+   * Chat ID to list messages from
    */
   chatID: string;
 }
 
-export interface MessageSearchParams extends CursorParams {
+export interface MessageSearchParams extends CursorSearchParams {
   /**
    * Limit search to specific account IDs.
    */
@@ -168,4 +177,4 @@ export declare namespace Messages {
   };
 }
 
-export { type MessagesCursor };
+export { type MessagesCursorList, type MessagesCursorSearch };
