@@ -24,10 +24,9 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const page = await client.chats.search({ includeMuted: true, limit: 3, type: 'single' });
-const chat = page.items[0];
+const userInfo = await client.token.info();
 
-console.log(chat.id);
+console.log(userInfo.sub);
 ```
 
 ### Request & Response types
@@ -42,7 +41,7 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const accounts: BeeperDesktop.AccountListResponse = await client.accounts.list();
+const userInfo: BeeperDesktop.UserInfo = await client.token.info();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -55,17 +54,15 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.messages
-  .send({ chatID: '1229391', text: 'Hello! Just checking in on the project status.' })
-  .catch(async (err) => {
-    if (err instanceof BeeperDesktop.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
+const userInfo = await client.token.info().catch(async (err) => {
+  if (err instanceof BeeperDesktop.APIError) {
+    console.log(err.status); // 400
+    console.log(err.name); // BadRequestError
+    console.log(err.headers); // {server: 'nginx', ...}
+  } else {
+    throw err;
+  }
+});
 ```
 
 Error codes are as follows:
@@ -97,7 +94,7 @@ const client = new BeeperDesktop({
 });
 
 // Or, configure per-request:
-await client.accounts.list({
+await client.token.info({
   maxRetries: 5,
 });
 ```
@@ -114,7 +111,7 @@ const client = new BeeperDesktop({
 });
 
 // Override per-request:
-await client.accounts.list({
+await client.token.info({
   timeout: 5 * 1000,
 });
 ```
@@ -122,45 +119,6 @@ await client.accounts.list({
 On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
-
-## Auto-pagination
-
-List methods in the BeeperDesktop API are paginated.
-You can use the `for await … of` syntax to iterate through items across all pages:
-
-```ts
-async function fetchAllMessages(params) {
-  const allMessages = [];
-  // Automatically fetches more pages as needed.
-  for await (const message of client.messages.search({
-    accountIDs: ['local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI'],
-    limit: 10,
-    query: 'deployment',
-  })) {
-    allMessages.push(message);
-  }
-  return allMessages;
-}
-```
-
-Alternatively, you can request a single page at a time:
-
-```ts
-let page = await client.messages.search({
-  accountIDs: ['local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI'],
-  limit: 10,
-  query: 'deployment',
-});
-for (const message of page.items) {
-  console.log(message);
-}
-
-// Convenience methods are provided for manually paginating:
-while (page.hasNextPage()) {
-  page = await page.getNextPage();
-  // ...
-}
-```
 
 ## Advanced Usage
 
@@ -176,13 +134,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new BeeperDesktop();
 
-const response = await client.accounts.list().asResponse();
+const response = await client.token.info().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: accounts, response: raw } = await client.accounts.list().withResponse();
+const { data: userInfo, response: raw } = await client.token.info().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(accounts);
+console.log(userInfo.sub);
 ```
 
 ### Logging
@@ -262,7 +220,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.chats.search({
+client.token.info({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',

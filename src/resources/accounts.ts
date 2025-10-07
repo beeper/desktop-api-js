@@ -2,25 +2,11 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { APIPromise } from '../core/api-promise';
-import { RequestOptions } from '../internal/request-options';
 
 /**
  * Accounts operations
  */
-export class Accounts extends APIResource {
-  /**
-   * List connected Beeper accounts available on this device
-   *
-   * @example
-   * ```ts
-   * const accounts = await client.accounts.list();
-   * ```
-   */
-  list(options?: RequestOptions): APIPromise<AccountListResponse> {
-    return this._client.get('/v0/get-accounts', options);
-  }
-}
+export class Accounts extends APIResource {}
 
 /**
  * A chat account added to Beeper
@@ -44,12 +30,6 @@ export interface Account {
   user: Shared.User;
 }
 
-/**
- * Connected accounts the user can act through. Includes accountID, network, and
- * user identity.
- */
-export type AccountListResponse = Array<Account>;
-
 export declare namespace Accounts {
-  export { type Account as Account, type AccountListResponse as AccountListResponse };
+  export { type Account as Account };
 }
