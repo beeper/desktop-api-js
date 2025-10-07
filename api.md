@@ -1,3 +1,17 @@
+# BeeperDesktop
+
+Types:
+
+- <code><a href="./src/resources/top-level.ts">DownloadAssetResponse</a></code>
+- <code><a href="./src/resources/top-level.ts">OpenResponse</a></code>
+- <code><a href="./src/resources/top-level.ts">SearchResponse</a></code>
+
+Methods:
+
+- <code title="post /v0/download-asset">client.<a href="./src/index.ts">downloadAsset</a>({ ...params }) -> DownloadAssetResponse</code>
+- <code title="post /v0/open-app">client.<a href="./src/index.ts">open</a>({ ...params }) -> OpenResponse</code>
+- <code title="get /v0/search">client.<a href="./src/index.ts">search</a>({ ...params }) -> SearchResponse</code>
+
 # Shared
 
 Types:
@@ -19,20 +33,6 @@ Types:
 Methods:
 
 - <code title="get /v0/get-accounts">client.accounts.<a href="./src/resources/accounts.ts">list</a>() -> AccountListResponse</code>
-
-# App
-
-Types:
-
-- <code><a href="./src/resources/app.ts">AppDownloadAssetResponse</a></code>
-- <code><a href="./src/resources/app.ts">AppOpenResponse</a></code>
-- <code><a href="./src/resources/app.ts">AppSearchResponse</a></code>
-
-Methods:
-
-- <code title="post /v0/download-asset">client.app.<a href="./src/resources/app.ts">downloadAsset</a>({ ...params }) -> AppDownloadAssetResponse</code>
-- <code title="post /v0/open-app">client.app.<a href="./src/resources/app.ts">open</a>({ ...params }) -> AppOpenResponse</code>
-- <code title="get /v0/search">client.app.<a href="./src/resources/app.ts">search</a>({ ...params }) -> AppSearchResponse</code>
 
 # Contacts
 

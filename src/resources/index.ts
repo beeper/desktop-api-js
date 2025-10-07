@@ -3,15 +3,6 @@
 export * from './shared';
 export { Accounts, type Account, type AccountListResponse } from './accounts';
 export {
-  App,
-  type AppDownloadAssetResponse,
-  type AppOpenResponse,
-  type AppSearchResponse,
-  type AppDownloadAssetParams,
-  type AppOpenParams,
-  type AppSearchParams,
-} from './app';
-export {
   Chats,
   type Chat,
   type ChatCreateResponse,
@@ -29,3 +20,11 @@ export {
   type MessageSendParams,
 } from './messages';
 export { Token, type RevokeRequest, type UserInfo } from './token';
+export {
+  type DownloadAssetResponse,
+  type OpenResponse,
+  type SearchResponse,
+  type DownloadAssetParams,
+  type OpenParams,
+  type SearchParams,
+} from './top-level';

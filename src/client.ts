@@ -18,17 +18,17 @@ import * as Pagination from './core/pagination';
 import { AbstractPage, type CursorParams, CursorResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
+import * as TopLevelAPI from './resources/top-level';
+import {
+  DownloadAssetParams,
+  DownloadAssetResponse,
+  OpenParams,
+  OpenResponse,
+  SearchParams,
+  SearchResponse,
+} from './resources/top-level';
 import { APIPromise } from './core/api-promise';
 import { Account, AccountListResponse, Accounts } from './resources/accounts';
-import {
-  App,
-  AppDownloadAssetParams,
-  AppDownloadAssetResponse,
-  AppOpenParams,
-  AppOpenResponse,
-  AppSearchParams,
-  AppSearchResponse,
-} from './resources/app';
 import { ContactSearchParams, ContactSearchResponse, Contacts } from './resources/contacts';
 import { MessageSearchParams, MessageSendParams, MessageSendResponse, Messages } from './resources/messages';
 import { RevokeRequest, Token, UserInfo } from './resources/token';
@@ -235,6 +235,52 @@ export class BeeperDesktop {
    */
   #baseURLOverridden(): boolean {
     return this.baseURL !== 'http://localhost:23373';
+  }
+
+  /**
+   * Download a Matrix asset using its mxc:// or localmxc:// URL and return the local
+   * file URL.
+   *
+   * @example
+   * ```ts
+   * const response = await client.downloadAsset({ url: 'x' });
+   * ```
+   */
+  downloadAsset(
+    body: TopLevelAPI.DownloadAssetParams,
+    options?: RequestOptions,
+  ): APIPromise<TopLevelAPI.DownloadAssetResponse> {
+    return this.post('/v0/download-asset', { body, ...options });
+  }
+
+  /**
+   * Open Beeper Desktop and optionally navigate to a specific chat, message, or
+   * pre-fill draft text and attachment.
+   *
+   * @example
+   * ```ts
+   * const response = await client.open();
+   * ```
+   */
+  open(
+    body: TopLevelAPI.OpenParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<TopLevelAPI.OpenResponse> {
+    return this.post('/v0/open-app', { body, ...options });
+  }
+
+  /**
+   * Returns matching chats, participant name matches in groups, and the first page
+   * of messages in one call. Paginate messages via search-messages. Paginate chats
+   * via search-chats. Uses the same sorting as the chat search in the app.
+   *
+   * @example
+   * ```ts
+   * const response = await client.search({ query: 'x' });
+   * ```
+   */
+  search(query: TopLevelAPI.SearchParams, options?: RequestOptions): APIPromise<TopLevelAPI.SearchResponse> {
+    return this.get('/v0/search', { query, ...options });
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -761,10 +807,6 @@ export class BeeperDesktop {
    */
   accounts: API.Accounts = new API.Accounts(this);
   /**
-   * App operations
-   */
-  app: API.App = new API.App(this);
-  /**
    * Contacts operations
    */
   contacts: API.Contacts = new API.Contacts(this);
@@ -783,7 +825,6 @@ export class BeeperDesktop {
 }
 
 BeeperDesktop.Accounts = Accounts;
-BeeperDesktop.App = App;
 BeeperDesktop.Contacts = Contacts;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
@@ -795,17 +836,16 @@ export declare namespace BeeperDesktop {
   export import Cursor = Pagination.Cursor;
   export { type CursorParams as CursorParams, type CursorResponse as CursorResponse };
 
-  export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
-
   export {
-    App as App,
-    type AppDownloadAssetResponse as AppDownloadAssetResponse,
-    type AppOpenResponse as AppOpenResponse,
-    type AppSearchResponse as AppSearchResponse,
-    type AppDownloadAssetParams as AppDownloadAssetParams,
-    type AppOpenParams as AppOpenParams,
-    type AppSearchParams as AppSearchParams,
+    type DownloadAssetResponse as DownloadAssetResponse,
+    type OpenResponse as OpenResponse,
+    type SearchResponse as SearchResponse,
+    type DownloadAssetParams as DownloadAssetParams,
+    type OpenParams as OpenParams,
+    type SearchParams as SearchParams,
   };
+
+  export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
 
   export {
     Contacts as Contacts,
