@@ -8,7 +8,7 @@ You can run the MCP Server directly via `npx`:
 
 ```sh
 export BEEPER_ACCESS_TOKEN="My Access Token"
-npx -y @beeper/desktop-api-mcp@latest
+npx -y @beeper/desktop-mcp@latest
 ```
 
 ### Via MCP Client
@@ -23,7 +23,7 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "beeper_desktop_api_api": {
       "command": "npx",
-      "args": ["-y", "@beeper/desktop-api-mcp", "--client=claude", "--tools=all"],
+      "args": ["-y", "@beeper/desktop-mcp", "--client=claude", "--tools=all"],
       "env": {
         "BEEPER_ACCESS_TOKEN": "My Access Token"
       }
@@ -168,10 +168,10 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 
 ```js
 // Import the server, generated endpoints, or the init function
-import { server, endpoints, init } from "@beeper/desktop-api-mcp/server";
+import { server, endpoints, init } from "@beeper/desktop-mcp/server";
 
 // import a specific tool
-import openInApp from "@beeper/desktop-api-mcp/tools/top-level/open-in-app";
+import openInApp from "@beeper/desktop-mcp/tools/top-level/open-in-app";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
