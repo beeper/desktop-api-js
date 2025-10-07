@@ -14,11 +14,12 @@ import set_chat_reminder from './chats/reminders/set-chat-reminder';
 import clear_chat_reminder from './chats/reminders/clear-chat-reminder';
 import search_messages from './messages/search-messages';
 import send_message from './messages/send-message';
+import { mapEndpoint } from '../handlers';
 
 export const endpoints: Endpoint[] = [];
 
 function addEndpoint(endpoint: Endpoint) {
-  endpoints.push(endpoint);
+  endpoints.push(mapEndpoint(endpoint));
 }
 
 addEndpoint(get_accounts);
