@@ -1,4 +1,4 @@
-import type { HandlerFunction } from '../tools/types';
+import { asTextContentResult, type HandlerFunction } from '../tools/types';
 import { formatChatToMarkdown } from './utils';
 
 export const handler: HandlerFunction = async (client, args) => {
@@ -35,5 +35,5 @@ export const handler: HandlerFunction = async (client, args) => {
     '- Pass the "chatID" to get_chat or search_messages for details about a chat, or send_message to send a message to a chat.',
   );
   lines.push('- Link the "open" link to the user to allow them to view the chat in Beeper Desktop.');
-  return { content: [{ type: 'text', text: lines.join('\n') }] };
+  return asTextContentResult(lines.join('\n'));
 };

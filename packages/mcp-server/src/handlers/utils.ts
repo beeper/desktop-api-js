@@ -186,7 +186,7 @@ interface MessagesResponse {
 }
 
 export const mapMessagesToText = (
-  output: MessagesResponse,
+  output: Shared.MessagesCursor,
   input?: {
     query?: string;
     sender?: string;

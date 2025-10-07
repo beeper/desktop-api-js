@@ -1,4 +1,4 @@
-import type { HandlerFunction } from '../tools/types';
+import { asTextContentResult, type HandlerFunction } from '../tools/types';
 import { mapMessagesToText } from './utils';
 
 export const handler: HandlerFunction = async (client, args) => {
@@ -29,5 +29,5 @@ export const handler: HandlerFunction = async (client, args) => {
     lines.push(mapMessagesToText(output as any, body, undefined));
   }
 
-  return { content: [{ type: 'text', text: lines.join('\n') }] };
+  return asTextContentResult(lines.join('\n'));
 };

@@ -1,4 +1,4 @@
-import type { HandlerFunction } from '../tools/types';
+import { asTextContentResult, type HandlerFunction } from '../tools/types';
 
 export const handler: HandlerFunction = async (client, args) => {
   const body = args as any;
@@ -16,5 +16,5 @@ export const handler: HandlerFunction = async (client, args) => {
   } else {
     lines.push('Failed to open Beeper.');
   }
-  return { content: [{ type: 'text', text: lines.join('\n') }] };
+  return asTextContentResult(lines.join('\n'));
 };
