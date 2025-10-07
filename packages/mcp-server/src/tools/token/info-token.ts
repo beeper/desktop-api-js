@@ -6,27 +6,21 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: '$client',
+  resource: 'token',
   operation: 'read',
-  tags: ['app'],
+  tags: [],
   httpMethod: 'get',
-  httpPath: '/v0/search',
-  operationId: 'search',
+  httpPath: '/oauth/userinfo',
+  operationId: 'oauth_get_user_info',
 };
 
 export const tool: Tool = {
-  name: 'search',
-  description:
-    'Search for chats, participant name matches in groups, and the first page of messages in one call. Use this when the user asks for a specific chat, group, or person.',
+  name: 'info_token',
+  description: 'Returns information about the authenticated user/token',
   inputSchema: {
     type: 'object',
-    properties: {
-      query: {
-        type: 'string',
-        description: 'User-typed search text. Literal word matching (NOT semantic).',
-      },
-    },
-    required: ['query'],
+    properties: {},
+    required: [],
   },
   annotations: {
     readOnlyHint: true,
@@ -34,8 +28,7 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
-  const body = args as any;
-  return asTextContentResult(await client.search(body));
+  return asTextContentResult(await client.token.info());
 };
 
 export default { metadata, tool, handler };

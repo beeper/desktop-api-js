@@ -8,7 +8,7 @@ You can run the MCP Server directly via `npx`:
 
 ```sh
 export BEEPER_ACCESS_TOKEN="My Access Token"
-npx -y @beeper/desktop-mcp@latest
+npx -y @beeper/desktop-api-mcp@latest
 ```
 
 ### Via MCP Client
@@ -23,7 +23,7 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "beeper_desktop_api_api": {
       "command": "npx",
-      "args": ["-y", "@beeper/desktop-mcp", "--client=claude", "--tools=all"],
+      "args": ["-y", "@beeper/desktop-api-mcp", "--client=claude", "--tools=all"],
       "env": {
         "BEEPER_ACCESS_TOKEN": "My Access Token"
       }
@@ -168,10 +168,10 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 
 ```js
 // Import the server, generated endpoints, or the init function
-import { server, endpoints, init } from "@beeper/desktop-mcp/server";
+import { server, endpoints, init } from "@beeper/desktop-api-mcp/server";
 
 // import a specific tool
-import openInApp from "@beeper/desktop-mcp/tools/top-level/open-in-app";
+import downloadAssetClient from "@beeper/desktop-api-mcp/tools/top-level/download-asset-client";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
@@ -196,7 +196,7 @@ const myCustomEndpoint = {
 };
 
 // initialize the server with your custom endpoints
-init({ server: myServer, endpoints: [openInApp, myCustomEndpoint] });
+init({ server: myServer, endpoints: [downloadAssetClient, myCustomEndpoint] });
 ```
 
 ## Available Tools
@@ -205,6 +205,7 @@ The following tools are available in this MCP server.
 
 ### Resource `$client`:
 
+- `download_asset_client` (`write`): Download a Matrix asset using its mxc:// or localmxc:// URL and return the local file URL.
 - `open_in_app` (`write`) tags: [app]: Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.
 - `search` (`read`) tags: [app]: Search for chats, participant name matches in groups, and the first page of messages in one call. Use this when the user asks for a specific chat, group, or person.
 
@@ -212,8 +213,13 @@ The following tools are available in this MCP server.
 
 - `get_accounts` (`read`) tags: [accounts]: List connected accounts on this device. Use to pick account context.
 
+### Resource `contacts`:
+
+- `search_contacts` (`read`): Search users across on a specific account using the network's search API. Only use for creating new chats.
+
 ### Resource `chats`:
 
+- `create_chats` (`write`): Create a single or group chat on a specific account using participant IDs and optional title.
 - `get_chat` (`read`) tags: [chats]: Get chat details: metadata, participants (limited), last activity.
 - `archive_chat` (`write`) tags: [chats]: Archive or unarchive a chat.
 - `search_chats` (`read`) tags: [chats]: Search chats by title/network or participants using Beeper Desktop's renderer algorithm. Optional 'scope'.
@@ -239,3 +245,7 @@ The following tools are available in this MCP server.
     • "Who are the participants?" (use scope="participants" in search-chats)
     Returns: matching messages and referenced chats.
 - `send_message` (`write`) tags: [messages]: Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat
+
+### Resource `token`:
+
+- `info_token` (`read`): Returns information about the authenticated user/token
