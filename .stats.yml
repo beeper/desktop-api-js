@@ -1,4 +1,4 @@
 configured_endpoints: 1
 openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/beeper%2Fbeeper-desktop-api-8c712fe19f280b0b89ecc8a3ce61e9f6b165cee97ce33f66c66a7a5db339c755.yml
 openapi_spec_hash: 1ea71129cc1a1ccc3dc8a99566082311
-config_hash: def03aa92de3408ec65438763617f5c7
+config_hash: f83b2b6eb86f2dd68101065998479cb2
