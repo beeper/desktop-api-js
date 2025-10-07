@@ -23,17 +23,6 @@ describe('top level methods', () => {
     const response = await client.downloadAsset({ url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ' });
   });
 
-  test('getTokenInfo', async () => {
-    const responsePromise = client.getTokenInfo();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
   test('open', async () => {
     const responsePromise = client.open();
     const rawResponse = await responsePromise.asResponse();

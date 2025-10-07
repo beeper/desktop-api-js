@@ -25,7 +25,6 @@ export {
 } from './messages';
 export {
   type DownloadAssetResponse,
-  type GetTokenInfoResponse,
   type OpenResponse,
   type SearchResponse,
   type DownloadAssetParams,

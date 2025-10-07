@@ -3,15 +3,13 @@
 Types:
 
 - <code><a href="./src/resources/top-level.ts">DownloadAssetResponse</a></code>
-- <code><a href="./src/resources/top-level.ts">GetTokenInfoResponse</a></code>
 - <code><a href="./src/resources/top-level.ts">OpenResponse</a></code>
 - <code><a href="./src/resources/top-level.ts">SearchResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/app/download-asset">client.<a href="./src/index.ts">downloadAsset</a>({ ...params }) -> DownloadAssetResponse</code>
-- <code title="get /oauth/userinfo">client.<a href="./src/index.ts">getTokenInfo</a>() -> GetTokenInfoResponse</code>
-- <code title="post /v1/app/open">client.<a href="./src/index.ts">open</a>({ ...params }) -> OpenResponse</code>
+- <code title="post /v1/download-asset">client.<a href="./src/index.ts">downloadAsset</a>({ ...params }) -> DownloadAssetResponse</code>
+- <code title="post /v1/open">client.<a href="./src/index.ts">open</a>({ ...params }) -> OpenResponse</code>
 - <code title="get /v1/search">client.<a href="./src/index.ts">search</a>({ ...params }) -> SearchResponse</code>
 
 # Shared
