@@ -22,7 +22,6 @@ import * as TopLevelAPI from './resources/top-level';
 import {
   DownloadAssetParams,
   DownloadAssetResponse,
-  GetTokenInfoResponse,
   OpenParams,
   OpenResponse,
   SearchParams,
@@ -261,19 +260,7 @@ export class BeeperDesktop {
     body: TopLevelAPI.DownloadAssetParams,
     options?: RequestOptions,
   ): APIPromise<TopLevelAPI.DownloadAssetResponse> {
-    return this.post('/v1/app/download-asset', { body, ...options });
-  }
-
-  /**
-   * Returns information about the authenticated user/token
-   *
-   * @example
-   * ```ts
-   * const response = await client.getTokenInfo();
-   * ```
-   */
-  getTokenInfo(options?: RequestOptions): APIPromise<TopLevelAPI.GetTokenInfoResponse> {
-    return this.get('/oauth/userinfo', options);
+    return this.post('/v1/download-asset', { body, ...options });
   }
 
   /**
@@ -289,7 +276,7 @@ export class BeeperDesktop {
     body: TopLevelAPI.OpenParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<TopLevelAPI.OpenResponse> {
-    return this.post('/v1/app/open', { body, ...options });
+    return this.post('/v1/open', { body, ...options });
   }
 
   /**
@@ -856,7 +843,6 @@ export declare namespace BeeperDesktop {
 
   export {
     type DownloadAssetResponse as DownloadAssetResponse,
-    type GetTokenInfoResponse as GetTokenInfoResponse,
     type OpenResponse as OpenResponse,
     type SearchResponse as SearchResponse,
     type DownloadAssetParams as DownloadAssetParams,

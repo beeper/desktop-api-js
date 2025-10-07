@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   operation: 'write',
   tags: ['app'],
   httpMethod: 'post',
-  httpPath: '/v1/app/open',
+  httpPath: '/v1/open',
   operationId: 'openApp',
 };
 
