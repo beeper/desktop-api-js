@@ -7,9 +7,9 @@ const client = new BeeperDesktop({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource app', () => {
+describe('top level methods', () => {
   test('downloadAsset: only required params', async () => {
-    const responsePromise = client.app.downloadAsset({ url: 'x' });
+    const responsePromise = client.downloadAsset({ url: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -20,11 +20,11 @@ describe('resource app', () => {
   });
 
   test('downloadAsset: required and optional params', async () => {
-    const response = await client.app.downloadAsset({ url: 'x' });
+    const response = await client.downloadAsset({ url: 'x' });
   });
 
   test('open', async () => {
-    const responsePromise = client.app.open();
+    const responsePromise = client.open();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -37,7 +37,7 @@ describe('resource app', () => {
   test('open: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.app.open(
+      client.open(
         {
           chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
           draftAttachmentPath: 'draftAttachmentPath',
@@ -50,7 +50,7 @@ describe('resource app', () => {
   });
 
   test('search: only required params', async () => {
-    const responsePromise = client.app.search({ query: 'x' });
+    const responsePromise = client.search({ query: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -61,6 +61,6 @@ describe('resource app', () => {
   });
 
   test('search: required and optional params', async () => {
-    const response = await client.app.search({ query: 'x' });
+    const response = await client.search({ query: 'x' });
   });
 });
