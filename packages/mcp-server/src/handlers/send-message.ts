@@ -1,5 +1,5 @@
-import { asTextContentResult, type HandlerFunction } from '../tools/types';
-import { createOpenLink } from './utils';
+import type { HandlerFunction } from '../tools/types';
+import { asMarkdownContentResult, createOpenLink } from './utils';
 
 export const handler: HandlerFunction = async (client, args) => {
   const body = args as any;
@@ -13,5 +13,5 @@ export const handler: HandlerFunction = async (client, args) => {
     lines.push('Failed to send message.');
   }
 
-  return asTextContentResult(lines.join('\n'));
+  return asMarkdownContentResult(lines);
 };

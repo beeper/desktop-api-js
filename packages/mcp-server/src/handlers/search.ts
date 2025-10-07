@@ -1,5 +1,5 @@
-import { asTextContentResult, type HandlerFunction } from '../tools/types';
-import { formatChatToMarkdown, mapMessagesToText } from './utils';
+import type { HandlerFunction } from '../tools/types';
+import { asMarkdownContentResult, formatChatToMarkdown, mapMessagesToText } from './utils';
 
 export const handler: HandlerFunction = async (client, args) => {
   const body = args as any;
@@ -20,5 +20,5 @@ export const handler: HandlerFunction = async (client, args) => {
     lines.push('\n# Messages');
     lines.push(mapMessagesToText(results.messages as any, body, undefined));
   }
-  return asTextContentResult(lines.join('\n'));
+  return asMarkdownContentResult(lines);
 };

@@ -1,5 +1,5 @@
 import type { HandlerFunction } from '../tools/types';
-import { asTextContentResult } from '../tools/types';
+import { asMarkdownContentResult } from './utils';
 
 export const handler: HandlerFunction = async (client) => {
   const accounts = await client.accounts.list();
@@ -24,5 +24,5 @@ export const handler: HandlerFunction = async (client) => {
   }
   lines.push('\n# Using this information\n');
   lines.push('- Pass accountIDs to narrow chat/message queries when known.');
-  return asTextContentResult(lines.join('\n'));
+  return asMarkdownContentResult(lines);
 };

@@ -10,6 +10,7 @@ import {
 } from 'date-fns';
 import type * as Shared from '@beeper/desktop-api/resources/shared';
 import type * as ChatsAPI from '@beeper/desktop-api/resources/chats/chats';
+import { ToolCallResult } from '../tools/types';
 
 const MILLIS_IN_WEEK = 86400000 * 7;
 
@@ -353,3 +354,14 @@ export const mapMessagesToText = (
 
   return [summary, '', ...chatSections].join('\n');
 };
+
+export function asMarkdownContentResult(text: string | string[]): ToolCallResult {
+  return {
+    content: [
+      {
+        type: 'text',
+        text: Array.isArray(text) ? text.join('\n') : text,
+      },
+    ],
+  };
+}
