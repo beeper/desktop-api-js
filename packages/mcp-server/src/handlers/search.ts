@@ -3,7 +3,7 @@ import { formatChatToMarkdown, mapMessagesToText } from './utils';
 
 export const handler: HandlerFunction = async (client, args) => {
   const body = args as any;
-  const output = await client.app.search(body);
+  const output = await client.search(body);
 
   const lines: string[] = [];
   if (body?.query) lines.push(`Query: "${body.query}"`);

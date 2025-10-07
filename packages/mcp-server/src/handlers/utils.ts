@@ -194,7 +194,8 @@ export const mapMessagesToText = (
   },
   ctx?: { apiBaseURL?: string; maxTextLength?: number },
 ) => {
-  const { items, chats, hasMore } = output;
+  const { items, hasMore } = output;
+  const chats = (output as { chats?: Record<string, Chat> }).chats ?? {};
 
   const messageCount = items.length;
   const chatCount = Object.keys(chats).length;
@@ -281,7 +282,9 @@ export const mapMessagesToText = (
     const sortedDates = Array.from(messagesByDate.keys()).sort();
 
     const participantMap =
-      chat?.participants?.items ? new Map(chat.participants.items.map((p) => [p.id, p])) : undefined;
+      chat?.participants?.items ?
+        new Map<string, User>(chat.participants.items.map((p: User) => [p.id, p]))
+      : undefined;
 
     for (let i = 0; i < sortedDates.length; i++) {
       const dateKey = sortedDates[i]!;
