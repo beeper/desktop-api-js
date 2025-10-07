@@ -23,9 +23,9 @@ export {
   type MessageSearchParams,
   type MessageSendParams,
 } from './messages';
-export { Token, type UserInfo } from './token';
 export {
   type DownloadAssetResponse,
+  type GetTokenInfoResponse,
   type OpenResponse,
   type SearchResponse,
   type DownloadAssetParams,

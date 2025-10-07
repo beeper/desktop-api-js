@@ -6,7 +6,7 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'token',
+  resource: '$client',
   operation: 'read',
   tags: [],
   httpMethod: 'get',
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export const tool: Tool = {
-  name: 'info_token',
+  name: 'get_token_info_client',
   description: 'Returns information about the authenticated user/token',
   inputSchema: {
     type: 'object',
@@ -28,7 +28,7 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
-  return asTextContentResult(await client.token.info());
+  return asTextContentResult(await client.getTokenInfo());
 };
 
 export default { metadata, tool, handler };
