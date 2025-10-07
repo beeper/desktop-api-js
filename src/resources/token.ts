@@ -16,18 +16,6 @@ export class Token extends APIResource {
   }
 }
 
-export interface RevokeRequest {
-  /**
-   * The token to revoke
-   */
-  token: string;
-
-  /**
-   * Hint about the type of token being revoked
-   */
-  token_type_hint?: 'access_token';
-}
-
 export interface UserInfo {
   /**
    * Issued at timestamp (Unix epoch seconds)
@@ -66,5 +54,5 @@ export interface UserInfo {
 }
 
 export declare namespace Token {
-  export { type RevokeRequest as RevokeRequest, type UserInfo as UserInfo };
+  export { type UserInfo as UserInfo };
 }
