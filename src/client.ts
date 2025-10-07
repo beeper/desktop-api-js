@@ -22,6 +22,7 @@ import * as TopLevelAPI from './resources/top-level';
 import {
   DownloadAssetParams,
   DownloadAssetResponse,
+  GetTokenInfoResponse,
   OpenParams,
   OpenResponse,
   SearchParams,
@@ -37,7 +38,6 @@ import {
   MessageSendResponse,
   Messages,
 } from './resources/messages';
-import { Token, UserInfo } from './resources/token';
 import {
   Chat,
   ChatArchiveParams,
@@ -262,6 +262,18 @@ export class BeeperDesktop {
     options?: RequestOptions,
   ): APIPromise<TopLevelAPI.DownloadAssetResponse> {
     return this.post('/v1/app/download-asset', { body, ...options });
+  }
+
+  /**
+   * Returns information about the authenticated user/token
+   *
+   * @example
+   * ```ts
+   * const response = await client.getTokenInfo();
+   * ```
+   */
+  getTokenInfo(options?: RequestOptions): APIPromise<TopLevelAPI.GetTokenInfoResponse> {
+    return this.get('/oauth/userinfo', options);
   }
 
   /**
@@ -829,17 +841,12 @@ export class BeeperDesktop {
    * Messages operations
    */
   messages: API.Messages = new API.Messages(this);
-  /**
-   * Operations related to the current access token
-   */
-  token: API.Token = new API.Token(this);
 }
 
 BeeperDesktop.Accounts = Accounts;
 BeeperDesktop.Contacts = Contacts;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
-BeeperDesktop.Token = Token;
 
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
@@ -849,6 +856,7 @@ export declare namespace BeeperDesktop {
 
   export {
     type DownloadAssetResponse as DownloadAssetResponse,
+    type GetTokenInfoResponse as GetTokenInfoResponse,
     type OpenResponse as OpenResponse,
     type SearchResponse as SearchResponse,
     type DownloadAssetParams as DownloadAssetParams,
@@ -885,8 +893,6 @@ export declare namespace BeeperDesktop {
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };
-
-  export { Token as Token, type UserInfo as UserInfo };
 
   export type Attachment = API.Attachment;
   export type BaseResponse = API.BaseResponse;

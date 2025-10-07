@@ -15,6 +15,43 @@ export interface DownloadAssetResponse {
   srcURL?: string;
 }
 
+export interface GetTokenInfoResponse {
+  /**
+   * Issued at timestamp (Unix epoch seconds)
+   */
+  iat: number;
+
+  /**
+   * Granted scopes
+   */
+  scope: string;
+
+  /**
+   * Subject identifier (token ID)
+   */
+  sub: string;
+
+  /**
+   * Token type
+   */
+  token_use: 'access';
+
+  /**
+   * Audience (client ID)
+   */
+  aud?: string;
+
+  /**
+   * Client identifier
+   */
+  client_id?: string;
+
+  /**
+   * Expiration timestamp (Unix epoch seconds)
+   */
+  exp?: number;
+}
+
 /**
  * Response indicating successful app opening.
  */
@@ -116,6 +153,7 @@ export interface SearchParams {
 export declare namespace TopLevel {
   export {
     type DownloadAssetResponse as DownloadAssetResponse,
+    type GetTokenInfoResponse as GetTokenInfoResponse,
     type OpenResponse as OpenResponse,
     type SearchResponse as SearchResponse,
     type DownloadAssetParams as DownloadAssetParams,

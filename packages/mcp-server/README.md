@@ -215,6 +215,7 @@ The following tools are available in this MCP server.
 ### Resource `$client`:
 
 - `download_asset_client` (`write`): Download a Matrix asset using its mxc:// or localmxc:// URL and return the local file URL.
+- `get_token_info_client` (`read`): Returns information about the authenticated user/token
 - `open_in_app` (`write`) tags: [app]: Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.
 - `search` (`read`) tags: [app]: Search for chats, participant name matches in groups, and the first page of messages in one call. Use this when the user asks for a specific chat, group, or person.
 
@@ -256,7 +257,3 @@ The following tools are available in this MCP server.
     • "Who are the participants?" (use scope="participants" in search-chats)
     Returns: matching messages and referenced chats.
 - `send_message` (`write`) tags: [messages]: Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat
-
-### Resource `token`:
-
-- `info_token` (`read`): Returns information about the authenticated user/token
