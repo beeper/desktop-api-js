@@ -6,16 +6,20 @@ export {
   Chats,
   type Chat,
   type ChatCreateResponse,
+  type ChatListResponse,
   type ChatCreateParams,
   type ChatRetrieveParams,
+  type ChatListParams,
   type ChatArchiveParams,
   type ChatSearchParams,
+  type ChatListResponsesCursor,
   type ChatsCursor,
 } from './chats/chats';
 export { Contacts, type ContactSearchResponse, type ContactSearchParams } from './contacts';
 export {
   Messages,
   type MessageSendResponse,
+  type MessageListParams,
   type MessageSearchParams,
   type MessageSendParams,
 } from './messages';

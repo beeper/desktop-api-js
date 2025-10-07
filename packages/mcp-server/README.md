@@ -211,7 +211,7 @@ The following tools are available in this MCP server.
 
 ### Resource `accounts`:
 
-- `get_accounts` (`read`) tags: [accounts]: List connected accounts on this device. Use to pick account context.
+- `get_accounts` (`read`) tags: [accounts]: List connected accounts on this device.
 
 ### Resource `contacts`:
 
@@ -221,6 +221,7 @@ The following tools are available in this MCP server.
 
 - `create_chats` (`write`): Create a single or group chat on a specific account using participant IDs and optional title.
 - `get_chat` (`read`) tags: [chats]: Get chat details: metadata, participants (limited), last activity.
+- `list_chats` (`read`): List all chats sorted by last activity (most recent first). Combines all accounts into a single paginated list.
 - `archive_chat` (`write`) tags: [chats]: Archive or unarchive a chat.
 - `search_chats` (`read`) tags: [chats]: Search chats by title/network or participants using Beeper Desktop's renderer algorithm. Optional 'scope'.
 
@@ -231,6 +232,7 @@ The following tools are available in this MCP server.
 
 ### Resource `messages`:
 
+- `list_messages` (`read`): List all messages in a chat with cursor-based pagination. Sorted by timestamp.
 - `search_messages` (`read`) tags: [messages]: Search messages across chats using Beeper's message index.
   - When to use: find messages by text and/or filters (chatIDs, accountIDs, chatType, media type filters, sender, date ranges).
   - CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds messages containing these EXACT words.

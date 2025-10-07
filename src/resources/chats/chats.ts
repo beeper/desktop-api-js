@@ -52,6 +52,25 @@ export class Chats extends APIResource {
   }
 
   /**
+   * List all chats sorted by last activity (most recent first). Combines all
+   * accounts into a single paginated list.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const chatListResponse of client.chats.list()) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(
+    query: ChatListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<ChatListResponsesCursor, ChatListResponse> {
+    return this._client.getAPIList('/v1/chats', Cursor<ChatListResponse>, { query, ...options });
+  }
+
+  /**
    * Archive or unarchive a chat. Set archived=true to move to archive,
    * archived=false to move back to inbox
    *
@@ -89,6 +108,8 @@ export class Chats extends APIResource {
     return this._client.getAPIList('/v1/chats/search', Cursor<Chat>, { query, ...options });
   }
 }
+
+export type ChatListResponsesCursor = Cursor<ChatListResponse>;
 
 export type ChatsCursor = Cursor<Chat>;
 
@@ -189,6 +210,13 @@ export interface ChatCreateResponse extends Shared.BaseResponse {
   chatID?: string;
 }
 
+export interface ChatListResponse extends Chat {
+  /**
+   * Last message preview for this chat, if available.
+   */
+  preview?: Shared.Message;
+}
+
 export interface ChatCreateParams {
   /**
    * Account to create the chat on.
@@ -223,6 +251,13 @@ export interface ChatRetrieveParams {
    * Defaults to 20.
    */
   maxParticipantCount?: number | null;
+}
+
+export interface ChatListParams extends CursorParams {
+  /**
+   * Limit to specific account IDs. If omitted, fetches from all accounts.
+   */
+  accountIDs?: Array<string>;
 }
 
 export interface ChatArchiveParams {
@@ -293,9 +328,12 @@ export declare namespace Chats {
   export {
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
+    type ChatListResponse as ChatListResponse,
+    type ChatListResponsesCursor as ChatListResponsesCursor,
     type ChatsCursor as ChatsCursor,
     type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
+    type ChatListParams as ChatListParams,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatSearchParams as ChatSearchParams,
   };
