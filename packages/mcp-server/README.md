@@ -17,7 +17,7 @@ You can run the MCP Server directly via `npx`:
 
 ```sh
 export BEEPER_ACCESS_TOKEN="My Access Token"
-npx -y @beeper/desktop-mcp@latest
+npx -y @beeper/desktop-api-mcp@latest
 ```
 
 ### Via MCP Client
@@ -32,7 +32,7 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "beeper_desktop_api_api": {
       "command": "npx",
-      "args": ["-y", "@beeper/desktop-mcp", "--client=claude", "--tools=all"],
+      "args": ["-y", "@beeper/desktop-api-mcp", "--client=claude", "--tools=all"],
       "env": {
         "BEEPER_ACCESS_TOKEN": "My Access Token"
       }
@@ -175,9 +175,42 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 ## Importing the tools and server individually
 
 ```js
+// Import the server, generated endpoints, or the init function
+import { server, endpoints, init } from "@beeper/desktop-api-mcp/server";
 
+// import a specific tool
+import infoToken from "@beeper/desktop-api-mcp/tools/token/info-token";
+
+// initialize the server and all endpoints
+init({ server, endpoints });
+
+// manually start server
+const transport = new StdioServerTransport();
+await server.connect(transport);
+
+// or initialize your own server with specific tools
+const myServer = new McpServer(...);
+
+// define your own endpoint
+const myCustomEndpoint = {
+  tool: {
+    name: 'my_custom_tool',
+    description: 'My custom tool',
+    inputSchema: zodToJsonSchema(z.object({ a_property: z.string() })),
+  },
+  handler: async (client: client, args: any) => {
+    return { myResponse: 'Hello world!' };
+  })
+};
+
+// initialize the server with your custom endpoints
+init({ server: myServer, endpoints: [infoToken, myCustomEndpoint] });
 ```
 
 ## Available Tools
 
 The following tools are available in this MCP server.
+
+### Resource `token`:
+
+- `info_token` (`read`): Returns information about the authenticated user/token

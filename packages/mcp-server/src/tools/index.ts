@@ -4,11 +4,15 @@ import { Metadata, Endpoint, HandlerFunction } from './types';
 
 export { Metadata, Endpoint, HandlerFunction };
 
+import info_token from './token/info-token';
+
 export const endpoints: Endpoint[] = [];
 
 function addEndpoint(endpoint: Endpoint) {
   endpoints.push(endpoint);
 }
+
+addEndpoint(info_token);
 
 export type Filter = {
   type: 'resource' | 'operation' | 'tag' | 'tool';
