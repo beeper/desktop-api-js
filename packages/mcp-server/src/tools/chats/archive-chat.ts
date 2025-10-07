@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   operation: 'write',
   tags: ['chats'],
   httpMethod: 'post',
-  httpPath: '/v0/archive-chat',
-  operationId: 'archive_chat',
+  httpPath: '/v1/chats/{chatID}/archive',
+  operationId: 'archiveChat',
 };
 
 export const tool: Tool = {
@@ -36,8 +36,8 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
-  const body = args as any;
-  return asTextContentResult(await client.chats.archive(body));
+  const { chatID, ...body } = args as any;
+  return asTextContentResult(await client.chats.archive(chatID, body));
 };
 
 export default { metadata, tool, handler };

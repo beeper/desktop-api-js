@@ -10,11 +10,11 @@ import { RequestOptions } from '../internal/request-options';
  */
 export class Contacts extends APIResource {
   /**
-   * Search users across on a specific account using the network's search API. Only
-   * use for creating new chats.
+   * Search contacts across on a specific account using the network's search API.
+   * Only use for creating new chats.
    */
   search(query: ContactSearchParams, options?: RequestOptions): APIPromise<ContactSearchResponse> {
-    return this._client.get('/v0/search-users', { query, ...options });
+    return this._client.get('/v1/contacts/search', { query, ...options });
   }
 }
 
@@ -24,7 +24,7 @@ export interface ContactSearchResponse {
 
 export interface ContactSearchParams {
   /**
-   * Beeper account ID this resource belongs to.
+   * Account ID this resource belongs to.
    */
   accountID: string;
 

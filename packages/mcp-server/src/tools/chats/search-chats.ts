@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   operation: 'read',
   tags: ['chats'],
   httpMethod: 'get',
-  httpPath: '/v0/search-chats',
-  operationId: 'search_chats',
+  httpPath: '/v1/chats/search',
+  operationId: 'searchChats',
 };
 
 export const tool: Tool = {
@@ -26,7 +26,7 @@ export const tool: Tool = {
         description: 'Provide an array of account IDs to filter chats from specific messaging accounts only',
         items: {
           type: 'string',
-          description: 'Beeper account ID this resource belongs to.',
+          description: 'Account ID this resource belongs to.',
         },
       },
       cursor: {

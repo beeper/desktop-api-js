@@ -2,15 +2,38 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { MessagesCursor } from './shared';
+import { MessagesCursorList, MessagesCursorSearch } from './shared';
 import { APIPromise } from '../core/api-promise';
-import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
+import {
+  CursorList,
+  type CursorListParams,
+  CursorSearch,
+  type CursorSearchParams,
+  PagePromise,
+} from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 /**
  * Messages operations
  */
 export class Messages extends APIResource {
+  /**
+   * List all messages in a chat with cursor-based pagination. Sorted by timestamp.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const message of client.messages.list({
+   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+   * })) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(query: MessageListParams, options?: RequestOptions): PagePromise<MessagesCursorList, Shared.Message> {
+    return this._client.getAPIList('/v1/messages', CursorList<Shared.Message>, { query, ...options });
+  }
+
   /**
    * Search messages across chats using Beeper's message index
    *
@@ -25,8 +48,11 @@ export class Messages extends APIResource {
   search(
     query: MessageSearchParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<MessagesCursor, Shared.Message> {
-    return this._client.getAPIList('/v0/search-messages', Cursor<Shared.Message>, { query, ...options });
+  ): PagePromise<MessagesCursorSearch, Shared.Message> {
+    return this._client.getAPIList('/v1/messages/search', CursorSearch<Shared.Message>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -41,13 +67,13 @@ export class Messages extends APIResource {
    * ```
    */
   send(body: MessageSendParams, options?: RequestOptions): APIPromise<MessageSendResponse> {
-    return this._client.post('/v0/send-message', { body, ...options });
+    return this._client.post('/v1/messages', { body, ...options });
   }
 }
 
 export interface MessageSendResponse extends Shared.BaseResponse {
   /**
-   * Unique identifier of the chat (a.k.a. room or thread).
+   * Unique identifier of the chat.
    */
   chatID: string;
 
@@ -57,14 +83,21 @@ export interface MessageSendResponse extends Shared.BaseResponse {
   pendingMessageID: string;
 }
 
-export interface MessageSearchParams extends CursorParams {
+export interface MessageListParams extends CursorListParams {
   /**
-   * Limit search to specific Beeper account IDs (bridge instances).
+   * Chat ID to list messages from
+   */
+  chatID: string;
+}
+
+export interface MessageSearchParams extends CursorSearchParams {
+  /**
+   * Limit search to specific account IDs.
    */
   accountIDs?: Array<string>;
 
   /**
-   * Limit search to specific Beeper chat IDs.
+   * Limit search to specific chat IDs.
    */
   chatIDs?: Array<string>;
 
@@ -120,7 +153,7 @@ export interface MessageSearchParams extends CursorParams {
 
 export interface MessageSendParams {
   /**
-   * Unique identifier of the chat (a.k.a. room or thread).
+   * Unique identifier of the chat.
    */
   chatID: string;
 
@@ -138,9 +171,10 @@ export interface MessageSendParams {
 export declare namespace Messages {
   export {
     type MessageSendResponse as MessageSendResponse,
+    type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };
 }
 
-export { type MessagesCursor };
+export { type MessagesCursorList, type MessagesCursorSearch };

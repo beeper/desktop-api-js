@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   operation: 'read',
   tags: ['chats'],
   httpMethod: 'get',
-  httpPath: '/v0/get-chat',
-  operationId: 'get_chat',
+  httpPath: '/v1/chats/{chatID}',
+  operationId: 'getChat',
 };
 
 export const tool: Tool = {
@@ -39,8 +39,8 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
-  const body = args as any;
-  return asTextContentResult(await client.chats.retrieve(body));
+  const { chatID, ...body } = args as any;
+  return asTextContentResult(await client.chats.retrieve(chatID, body));
 };
 
 export default { metadata, tool, handler };

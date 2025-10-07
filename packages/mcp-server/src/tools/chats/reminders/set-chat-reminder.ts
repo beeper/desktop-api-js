@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   operation: 'write',
   tags: ['chats'],
   httpMethod: 'post',
-  httpPath: '/v0/set-chat-reminder',
-  operationId: 'set_chat_reminder',
+  httpPath: '/v1/chats/{chatID}/reminders',
+  operationId: 'setChatReminder',
 };
 
 export const tool: Tool = {
@@ -46,8 +46,8 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
-  const body = args as any;
-  return asTextContentResult(await client.chats.reminders.create(body));
+  const { chatID, ...body } = args as any;
+  return asTextContentResult(await client.chats.reminders.create(chatID, body));
 };
 
 export default { metadata, tool, handler };

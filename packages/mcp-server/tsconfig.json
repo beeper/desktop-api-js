@@ -7,10 +7,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": "./",
     "paths": {
-      "@beeper/desktop-mcp/*": ["src/*"],
-      "@beeper/desktop-mcp": ["src/index.ts"]
+      "@beeper/desktop-mcp/*": ["./src/*"],
+      "@beeper/desktop-mcp": ["./src/index.ts"]
     },
     "noEmit": true,
 
