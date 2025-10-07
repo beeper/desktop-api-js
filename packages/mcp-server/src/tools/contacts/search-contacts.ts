@@ -6,32 +6,31 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'chats',
+  resource: 'contacts',
   operation: 'read',
-  tags: ['chats'],
+  tags: [],
   httpMethod: 'get',
-  httpPath: '/v0/get-chat',
-  operationId: 'get_chat',
+  httpPath: '/v0/search-users',
+  operationId: 'search_users',
 };
 
 export const tool: Tool = {
-  name: 'get_chat',
-  description: 'Get chat details: metadata, participants (limited), last activity.',
+  name: 'search_contacts',
+  description:
+    "Search users across on a specific account using the network's search API. Only use for creating new chats.",
   inputSchema: {
     type: 'object',
     properties: {
-      chatID: {
+      accountID: {
         type: 'string',
-        description:
-          "Unique identifier of the chat to retrieve. Not available for iMessage chats. Participants are limited by 'maxParticipantCount'.",
+        description: 'Beeper account ID this resource belongs to.',
       },
-      maxParticipantCount: {
-        type: 'integer',
-        description:
-          'Maximum number of participants to return. Use -1 for all; otherwise 0–500. Defaults to 20.',
+      query: {
+        type: 'string',
+        description: 'Text to search users by. Network-specific behavior.',
       },
     },
-    required: ['chatID'],
+    required: ['accountID', 'query'],
   },
   annotations: {
     readOnlyHint: true,
@@ -40,7 +39,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  return asTextContentResult(await client.chats.retrieve(body));
+  return asTextContentResult(await client.contacts.search(body));
 };
 
 export default { metadata, tool, handler };

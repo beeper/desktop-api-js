@@ -6,38 +6,33 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'chats',
+  resource: '$client',
   operation: 'write',
-  tags: ['chats'],
+  tags: [],
   httpMethod: 'post',
-  httpPath: '/v0/archive-chat',
-  operationId: 'archive_chat',
+  httpPath: '/v0/download-asset',
+  operationId: 'download_asset',
 };
 
 export const tool: Tool = {
-  name: 'archive_chat',
-  description: 'Archive or unarchive a chat.',
+  name: 'download_asset_client',
+  description: 'Download a Matrix asset using its mxc:// or localmxc:// URL and return the local file URL.',
   inputSchema: {
     type: 'object',
     properties: {
-      chatID: {
+      url: {
         type: 'string',
-        description:
-          'The identifier of the chat to archive or unarchive (accepts both chatID and local chat ID)',
-      },
-      archived: {
-        type: 'boolean',
-        description: 'True to archive, false to unarchive',
+        description: 'Matrix content URL (mxc:// or localmxc://) for the asset to download.',
       },
     },
-    required: ['chatID'],
+    required: ['url'],
   },
   annotations: {},
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  return asTextContentResult(await client.chats.archive(body));
+  return asTextContentResult(await client.downloadAsset(body));
 };
 
 export default { metadata, tool, handler };
