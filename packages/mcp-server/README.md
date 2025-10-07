@@ -50,6 +50,7 @@ You can filter by multiple aspects:
 - `--tool` includes a specific tool by name
 - `--resource` includes all tools under a specific resource, and can have wildcards, e.g. `my.resource*`
 - `--operation` includes just read (get/list) or just write operations
+- `--tag` includes a set of endpoints with custom tags provided
 
 ### Dynamic tools
 
@@ -170,7 +171,7 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 import { server, endpoints, init } from "@beeper/desktop-api-mcp/server";
 
 // import a specific tool
-import infoToken from "@beeper/desktop-api-mcp/tools/token/info-token";
+import downloadAssetClient from "@beeper/desktop-api-mcp/tools/top-level/download-asset-client";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
@@ -195,12 +196,55 @@ const myCustomEndpoint = {
 };
 
 // initialize the server with your custom endpoints
-init({ server: myServer, endpoints: [infoToken, myCustomEndpoint] });
+init({ server: myServer, endpoints: [downloadAssetClient, myCustomEndpoint] });
 ```
 
 ## Available Tools
 
 The following tools are available in this MCP server.
+
+### Resource `$client`:
+
+- `download_asset_client` (`write`): Download a Matrix asset using its mxc:// or localmxc:// URL and return the local file URL.
+- `open_in_app` (`write`) tags: [app]: Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.
+- `search` (`read`) tags: [app]: Search for chats, participant name matches in groups, and the first page of messages in one call. Use this when the user asks for a specific chat, group, or person.
+
+### Resource `accounts`:
+
+- `get_accounts` (`read`) tags: [accounts]: List connected accounts on this device. Use to pick account context.
+
+### Resource `contacts`:
+
+- `search_contacts` (`read`): Search contacts across on a specific account using the network's search API. Only use for creating new chats.
+
+### Resource `chats`:
+
+- `create_chats` (`write`): Create a single or group chat on a specific account using participant IDs and optional title.
+- `get_chat` (`read`) tags: [chats]: Get chat details: metadata, participants (limited), last activity.
+- `archive_chat` (`write`) tags: [chats]: Archive or unarchive a chat.
+- `search_chats` (`read`) tags: [chats]: Search chats by title/network or participants using Beeper Desktop's renderer algorithm. Optional 'scope'.
+
+### Resource `chats.reminders`:
+
+- `set_chat_reminder` (`write`) tags: [chats]: Set a reminder for a chat at a specific time.
+- `clear_chat_reminder` (`write`) tags: [chats]: Clear a chat reminder.
+
+### Resource `messages`:
+
+- `search_messages` (`read`) tags: [messages]: Search messages across chats using Beeper's message index.
+  - When to use: find messages by text and/or filters (chatIDs, accountIDs, chatType, media type filters, sender, date ranges).
+  - CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds messages containing these EXACT words.
+    • ✅ RIGHT: query="dinner" or query="sick" or query="error" (single words users type)
+    • ❌ WRONG: query="dinner plans tonight" or query="health issues" (phrases/concepts)
+    • The query matches ALL words provided (in any order). Example: query="flight booking" finds messages with both "flight" AND "booking".
+  - Performance: provide chatIDs/accountIDs when known. Omitted 'query' returns results based on filters only. Partial matches enabled; 'excludeLowPriority' defaults to true.
+  - Workflow tip: To search messages in specific conversations: 1) Use find-chats to get chatIDs, 2) Use search-messages with those chatIDs.
+  - IMPORTANT: Chat names vary widely. ASK the user for clarification:
+    • "Which chat do you mean by family?" (could be "The Smiths", "Mom Dad Kids", etc.)
+    • "What's the name of your work chat?" (could be "Team", company name, project name)
+    • "Who are the participants?" (use scope="participants" in search-chats)
+    Returns: matching messages and referenced chats.
+- `send_message` (`write`) tags: [messages]: Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat
 
 ### Resource `token`:
 

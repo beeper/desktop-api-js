@@ -1,5 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import { Cursor } from '../core/pagination';
+
 export interface Attachment {
   /**
    * Attachment type.
@@ -78,19 +80,36 @@ export interface BaseResponse {
 
 export interface Error {
   /**
-   * Error message
+   * Error details
    */
-  error: string;
+  error: Error.Error;
+}
 
+export namespace Error {
   /**
-   * Error code
+   * Error details
    */
-  code?: string;
+  export interface Error {
+    /**
+     * Machine-readable error code
+     */
+    code: string;
 
-  /**
-   * Additional error details
-   */
-  details?: { [key: string]: string };
+    /**
+     * Error message
+     */
+    message: string;
+
+    /**
+     * Error type (e.g., invalid_request_error, authentication_error, not_found_error)
+     */
+    type: string;
+
+    /**
+     * Parameter that caused the error
+     */
+    param?: string;
+  }
 }
 
 export interface Message {
@@ -192,8 +211,7 @@ export interface Reaction {
 }
 
 /**
- * A person on or reachable through Beeper. Values are best-effort and can vary by
- * network.
+ * User the account belongs to.
  */
 export interface User {
   /**
@@ -239,3 +257,5 @@ export interface User {
    */
   username?: string;
 }
+
+export type MessagesCursor = Cursor<Message>;

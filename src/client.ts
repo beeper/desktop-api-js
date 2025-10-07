@@ -11,18 +11,37 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
+import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
 import { AbstractPage, type CursorParams, CursorResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
+import * as TopLevelAPI from './resources/top-level';
+import {
+  DownloadAssetParams,
+  DownloadAssetResponse,
+  OpenParams,
+  OpenResponse,
+  SearchParams,
+  SearchResponse,
+} from './resources/top-level';
 import { APIPromise } from './core/api-promise';
-import { Account, Accounts } from './resources/accounts';
-import { Contacts } from './resources/contacts';
-import { Messages } from './resources/messages';
+import { Account, AccountListResponse, Accounts } from './resources/accounts';
+import { ContactSearchParams, ContactSearchResponse, Contacts } from './resources/contacts';
+import { MessageSearchParams, MessageSendParams, MessageSendResponse, Messages } from './resources/messages';
 import { Token, UserInfo } from './resources/token';
-import { Chat, Chats } from './resources/chats/chats';
+import {
+  Chat,
+  ChatArchiveParams,
+  ChatCreateParams,
+  ChatCreateResponse,
+  ChatRetrieveParams,
+  ChatSearchParams,
+  Chats,
+  ChatsCursor,
+} from './resources/chats/chats';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -218,6 +237,54 @@ export class BeeperDesktop {
     return this.baseURL !== 'http://localhost:23373';
   }
 
+  /**
+   * Download a Matrix asset using its mxc:// or localmxc:// URL and return the local
+   * file URL.
+   *
+   * @example
+   * ```ts
+   * const response = await client.downloadAsset({
+   *   url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ',
+   * });
+   * ```
+   */
+  downloadAsset(
+    body: TopLevelAPI.DownloadAssetParams,
+    options?: RequestOptions,
+  ): APIPromise<TopLevelAPI.DownloadAssetResponse> {
+    return this.post('/v1/app/download-asset', { body, ...options });
+  }
+
+  /**
+   * Open Beeper Desktop and optionally navigate to a specific chat, message, or
+   * pre-fill draft text and attachment.
+   *
+   * @example
+   * ```ts
+   * const response = await client.open();
+   * ```
+   */
+  open(
+    body: TopLevelAPI.OpenParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<TopLevelAPI.OpenResponse> {
+    return this.post('/v1/app/open', { body, ...options });
+  }
+
+  /**
+   * Returns matching chats, participant name matches in groups, and the first page
+   * of messages in one call. Paginate messages via search-messages. Paginate chats
+   * via search-chats. Uses the same sorting as the chat search in the app.
+   *
+   * @example
+   * ```ts
+   * const response = await client.search({ query: 'x' });
+   * ```
+   */
+  search(query: TopLevelAPI.SearchParams, options?: RequestOptions): APIPromise<TopLevelAPI.SearchResponse> {
+    return this.get('/v1/search', { query, ...options });
+  }
+
   protected defaultQuery(): Record<string, string | undefined> | undefined {
     return this._options.defaultQuery;
   }
@@ -230,24 +297,8 @@ export class BeeperDesktop {
     return buildHeaders([{ Authorization: `Bearer ${this.accessToken}` }]);
   }
 
-  /**
-   * Basic re-implementation of `qs.stringify` for primitive types.
-   */
   protected stringifyQuery(query: Record<string, unknown>): string {
-    return Object.entries(query)
-      .filter(([_, value]) => typeof value !== 'undefined')
-      .map(([key, value]) => {
-        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-        }
-        if (value === null) {
-          return `${encodeURIComponent(key)}=`;
-        }
-        throw new Errors.BeeperDesktopError(
-          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
-        );
-      })
-      .join('&');
+    return qs.stringify(query, { arrayFormat: 'repeat' });
   }
 
   private getUserAgent(): string {
@@ -787,13 +838,40 @@ export declare namespace BeeperDesktop {
   export import Cursor = Pagination.Cursor;
   export { type CursorParams as CursorParams, type CursorResponse as CursorResponse };
 
-  export { Accounts as Accounts, type Account as Account };
+  export {
+    type DownloadAssetResponse as DownloadAssetResponse,
+    type OpenResponse as OpenResponse,
+    type SearchResponse as SearchResponse,
+    type DownloadAssetParams as DownloadAssetParams,
+    type OpenParams as OpenParams,
+    type SearchParams as SearchParams,
+  };
 
-  export { Contacts as Contacts };
+  export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
 
-  export { Chats as Chats, type Chat as Chat };
+  export {
+    Contacts as Contacts,
+    type ContactSearchResponse as ContactSearchResponse,
+    type ContactSearchParams as ContactSearchParams,
+  };
 
-  export { Messages as Messages };
+  export {
+    Chats as Chats,
+    type Chat as Chat,
+    type ChatCreateResponse as ChatCreateResponse,
+    type ChatsCursor as ChatsCursor,
+    type ChatCreateParams as ChatCreateParams,
+    type ChatRetrieveParams as ChatRetrieveParams,
+    type ChatArchiveParams as ChatArchiveParams,
+    type ChatSearchParams as ChatSearchParams,
+  };
+
+  export {
+    Messages as Messages,
+    type MessageSendResponse as MessageSendResponse,
+    type MessageSearchParams as MessageSearchParams,
+    type MessageSendParams as MessageSendParams,
+  };
 
   export { Token as Token, type UserInfo as UserInfo };
 

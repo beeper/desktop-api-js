@@ -2,11 +2,26 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
+import { APIPromise } from '../core/api-promise';
+import { RequestOptions } from '../internal/request-options';
 
 /**
  * Accounts operations
  */
-export class Accounts extends APIResource {}
+export class Accounts extends APIResource {
+  /**
+   * Lists chat accounts across networks (WhatsApp, Telegram, Twitter/X, etc.)
+   * actively connected to this Beeper Desktop instance
+   *
+   * @example
+   * ```ts
+   * const accounts = await client.accounts.list();
+   * ```
+   */
+  list(options?: RequestOptions): APIPromise<AccountListResponse> {
+    return this._client.get('/v1/accounts', options);
+  }
+}
 
 /**
  * A chat account added to Beeper
@@ -18,18 +33,22 @@ export interface Account {
   accountID: string;
 
   /**
-   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
-   * MUST use 'accountID' to perform actions.
+   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger').
    */
   network: string;
 
   /**
-   * A person on or reachable through Beeper. Values are best-effort and can vary by
-   * network.
+   * User the account belongs to.
    */
   user: Shared.User;
 }
 
+/**
+ * Connected accounts the user can act through. Includes accountID, network, and
+ * user identity.
+ */
+export type AccountListResponse = Array<Account>;
+
 export declare namespace Accounts {
-  export { type Account as Account };
+  export { type Account as Account, type AccountListResponse as AccountListResponse };
 }
