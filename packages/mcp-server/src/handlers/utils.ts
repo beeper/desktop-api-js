@@ -1,46 +1,28 @@
+import {
+  differenceInMilliseconds,
+  differenceInDays,
+  endOfDay,
+  format,
+  isToday,
+  isYesterday,
+  isSameYear,
+  parse,
+} from 'date-fns';
 import type * as Shared from '@beeper/desktop-api/resources/shared';
 import type * as ChatsAPI from '@beeper/desktop-api/resources/chats/chats';
-import { differenceInMilliseconds, endOfDay } from 'date-fns';
 
-// Constants for date formatting
 const MILLIS_IN_WEEK = 86400000 * 7;
 
-// Type imports (we'll nouse the types from the API response)
 type Message = Shared.Message;
 type Chat = ChatsAPI.Chat;
 type User = Shared.User;
 type MessageReaction = NonNullable<Message['reactions']>[number];
 
-// Date utilities
-const isToday = (someDate: Date) => {
-  const today = new Date();
-  return (
-    someDate.getDate() === today.getDate() &&
-    someDate.getMonth() === today.getMonth() &&
-    someDate.getFullYear() === today.getFullYear()
-  );
-};
-
-const isDateYesterday = (date: Date): boolean => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const yesterday = new Date();
-  yesterday.setDate(today.getDate() - 1);
-  yesterday.setHours(0, 0, 0, 0);
-
-  const cloned = new Date(date);
-  cloned.setHours(0, 0, 0, 0);
-  return cloned.getTime() === yesterday.getTime();
-};
-
-const isSameCalendarYear = (date: Date) => new Date().getFullYear() === date.getFullYear();
-
 export const formatRelativeDate = (date: Date) => {
   const timeDifference = differenceInMilliseconds(endOfDay(new Date()), date);
 
   if (isToday(date)) return 'Today';
-  if (isDateYesterday(date)) return 'Yesterday';
+  if (isYesterday(date)) return 'Yesterday';
 
   return new Intl.DateTimeFormat(
     'default',
@@ -48,7 +30,7 @@ export const formatRelativeDate = (date: Date) => {
       {
         weekday: 'long',
       }
-    : isSameCalendarYear(date) ?
+    : isSameYear(date, new Date()) ?
       {
         weekday: 'short',
         month: 'short',
@@ -72,7 +54,6 @@ export const formatBytes = (bytes: number, decimals = 0) => {
   return `${Math.floor(parseFloat((bytes / k ** i).toFixed(decimals)))}${sizes[i]}`;
 };
 
-// Emoji utilities
 const skinToneRegex = /\uD83C[\uDFFB-\uDFFF]/g;
 const removeSkinTone = (emojiString: string): string => emojiString.replace(skinToneRegex, '');
 
@@ -87,7 +68,6 @@ export function groupReactions(reactions: MessageReaction[]): { [key: string]: M
   return map;
 }
 
-// Participant utilities
 export const getParticipantName = (participant: User, preferFirstName?: boolean): string =>
   participant.fullName && preferFirstName ?
     participant.fullName.split(' ')[0]!
@@ -97,7 +77,6 @@ export const getParticipantName = (participant: User, preferFirstName?: boolean)
     participant.phoneNumber ||
     participant.id;
 
-// Formatting utilities
 export const createOpenLink = (baseURL: string, localChatIDOrChatID: string, messageKey?: string) =>
   `${baseURL}/open/${encodeURIComponent(localChatIDOrChatID)}${messageKey ? `/${messageKey}` : ''}`;
 
@@ -196,25 +175,8 @@ export const formatChatToMarkdown = (chat: Chat, baseURL: string | undefined) =>
   return lines;
 };
 
-// Message mapping utilities
-const getLocalDateKey = (timestamp: string) => {
-  const date = new Date(timestamp);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
+const parseLocalDateKey = (key: string) => parse(key, 'yyyy-MM-dd', new Date());
 
-const parseLocalDateKey = (key: string) => {
-  const [yearStr, monthStr, dayStr] = key.split('-');
-  const year = Number(yearStr);
-  const month = Number(monthStr) - 1;
-  const day = Number(dayStr);
-  if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) return new Date(key);
-  return new Date(year, month, day);
-};
-
-// Define the response type based on what the handlers receive
 interface MessagesResponse {
   items: Message[];
   chats: Record<string, Chat>;
@@ -252,7 +214,9 @@ export const mapMessagesToText = (
     }
   } else if (hasMore) {
     paginationInfo.push(
-      `Found ${messageCount}+ messages across ${chatCount} chat${chatCount === 1 ? '' : 's'} (showing ${messageCount})`,
+      `Found ${messageCount}+ messages across ${chatCount} chat${
+        chatCount === 1 ? '' : 's'
+      } (showing ${messageCount})`,
     );
     if (output.oldestCursor) {
       paginationInfo.push(`Next page (older): cursor='${output.oldestCursor}', direction='before'`);
@@ -262,7 +226,9 @@ export const mapMessagesToText = (
     }
   } else {
     paginationInfo.push(
-      `Found ${messageCount} message${messageCount === 1 ? '' : 's'} across ${chatCount} chat${chatCount === 1 ? '' : 's'} (complete)`,
+      `Found ${messageCount} message${messageCount === 1 ? '' : 's'} across ${chatCount} chat${
+        chatCount === 1 ? '' : 's'
+      } (complete)`,
     );
   }
 
@@ -306,7 +272,7 @@ export const mapMessagesToText = (
 
     const messagesByDate = new Map<string, Message[]>();
     for (const message of messages) {
-      const dateKey = getLocalDateKey(message.timestamp);
+      const dateKey = format(new Date(message.timestamp), 'yyyy-MM-dd');
       const dateMessages = messagesByDate.get(dateKey) || [];
       dateMessages.push(message);
       messagesByDate.set(dateKey, dateMessages);
@@ -329,9 +295,7 @@ export const mapMessagesToText = (
 
       for (const message of dateMessages) {
         const time = new Date(message.timestamp);
-        const hours = time.getHours().toString().padStart(2, '0');
-        const minutes = time.getMinutes().toString().padStart(2, '0');
-        const timeStr = `${hours}:${minutes}`;
+        const timeStr = format(time, 'HH:mm');
 
         const baseSenderName = message.senderName || message.senderID;
         const senderName = message.isSender ? `${baseSenderName} (You)` : baseSenderName;
@@ -347,13 +311,19 @@ export const mapMessagesToText = (
         const attachmentChatID = chat.localChatID ?? chat.id;
         const attachmentLink =
           attachment && attachmentChatID ?
-            `\n📎 [${attachment.fileName || 'attachment'}](beeper-mcp://attachments/${attachmentChatID}/${message.messageID}/0)`
+            `\n📎 [${attachment.fileName || 'attachment'}](beeper-mcp://attachments/${attachmentChatID}/${
+              message.messageID
+            }/0)`
           : '';
         const reactionsStr = formatReactionsToMarkdown(message.reactions, participantMap);
 
         const sortKeyLink =
           chat.localChatID ?
-            `([open at sort key](${createOpenLink(ctx?.apiBaseURL || '', chat.localChatID, String(message.sortKey))}))`
+            `([open at sort key](${createOpenLink(
+              ctx?.apiBaseURL || '',
+              chat.localChatID,
+              String(message.sortKey),
+            )}))`
           : `(sortKey: ${message.sortKey})`;
         const messageStr = `**${senderName}** (${timeStr}): ${text}${attachmentLink}${reactionsStr} ${sortKeyLink}`;
 
@@ -366,7 +336,7 @@ export const mapMessagesToText = (
         const nextDateKey = sortedDates[i + 1]!;
         const currentDate = parseLocalDateKey(dateKey!);
         const nextDate = parseLocalDateKey(nextDateKey);
-        const dayDiff = Math.floor((nextDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+        const dayDiff = differenceInDays(nextDate, currentDate);
 
         // Only show gap if dates are not consecutive
         if (dayDiff > 1) {
