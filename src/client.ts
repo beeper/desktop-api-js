@@ -15,7 +15,13 @@ import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
-import { AbstractPage, type CursorParams, CursorResponse } from './core/pagination';
+import {
+  AbstractPage,
+  type CursorListParams,
+  CursorListResponse,
+  type CursorSearchParams,
+  CursorSearchResponse,
+} from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
@@ -44,11 +50,11 @@ import {
   ChatCreateResponse,
   ChatListParams,
   ChatListResponse,
-  ChatListResponsesCursor,
+  ChatListResponsesCursorList,
   ChatRetrieveParams,
   ChatSearchParams,
   Chats,
-  ChatsCursor,
+  ChatsCursorSearch,
 } from './resources/chats/chats';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
@@ -838,8 +844,11 @@ BeeperDesktop.Messages = Messages;
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
 
-  export import Cursor = Pagination.Cursor;
-  export { type CursorParams as CursorParams, type CursorResponse as CursorResponse };
+  export import CursorSearch = Pagination.CursorSearch;
+  export { type CursorSearchParams as CursorSearchParams, type CursorSearchResponse as CursorSearchResponse };
+
+  export import CursorList = Pagination.CursorList;
+  export { type CursorListParams as CursorListParams, type CursorListResponse as CursorListResponse };
 
   export {
     type DownloadAssetResponse as DownloadAssetResponse,
@@ -863,8 +872,8 @@ export declare namespace BeeperDesktop {
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
-    type ChatListResponsesCursor as ChatListResponsesCursor,
-    type ChatsCursor as ChatsCursor,
+    type ChatListResponsesCursorList as ChatListResponsesCursorList,
+    type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
     type ChatListParams as ChatListParams,

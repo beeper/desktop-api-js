@@ -12,8 +12,8 @@ export {
   type ChatListParams,
   type ChatArchiveParams,
   type ChatSearchParams,
-  type ChatListResponsesCursor,
-  type ChatsCursor,
+  type ChatListResponsesCursorList,
+  type ChatsCursorSearch,
 } from './chats/chats';
 export { Contacts, type ContactSearchResponse, type ContactSearchParams } from './contacts';
 export {

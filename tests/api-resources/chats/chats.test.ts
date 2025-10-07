@@ -78,7 +78,6 @@ describe('resource chats', () => {
           ],
           cursor: '1725489123456',
           direction: 'before',
-          limit: 1,
         },
         { path: '/_stainless_unknown_path' },
       ),

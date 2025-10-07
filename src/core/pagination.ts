@@ -107,7 +107,7 @@ export class PagePromise<
   }
 }
 
-export interface CursorResponse<Item> {
+export interface CursorSearchResponse<Item> {
   items: Array<Item>;
 
   hasMore: boolean;
@@ -117,7 +117,7 @@ export interface CursorResponse<Item> {
   newestCursor: string | null;
 }
 
-export interface CursorParams {
+export interface CursorSearchParams {
   cursor?: string | null;
 
   direction?: string | null;
@@ -125,7 +125,7 @@ export interface CursorParams {
   limit?: number | null;
 }
 
-export class Cursor<Item> extends AbstractPage<Item> implements CursorResponse<Item> {
+export class CursorSearch<Item> extends AbstractPage<Item> implements CursorSearchResponse<Item> {
   items: Array<Item>;
 
   hasMore: boolean;
@@ -137,7 +137,74 @@ export class Cursor<Item> extends AbstractPage<Item> implements CursorResponse<I
   constructor(
     client: BeeperDesktop,
     response: Response,
-    body: CursorResponse<Item>,
+    body: CursorSearchResponse<Item>,
+    options: FinalRequestOptions,
+  ) {
+    super(client, response, body, options);
+
+    this.items = body.items || [];
+    this.hasMore = body.hasMore || false;
+    this.oldestCursor = body.oldestCursor || null;
+    this.newestCursor = body.newestCursor || null;
+  }
+
+  getPaginatedItems(): Item[] {
+    return this.items ?? [];
+  }
+
+  override hasNextPage(): boolean {
+    if (this.hasMore === false) {
+      return false;
+    }
+
+    return super.hasNextPage();
+  }
+
+  nextPageRequestOptions(): PageRequestOptions | null {
+    const cursor = this.oldestCursor;
+    if (!cursor) {
+      return null;
+    }
+
+    return {
+      ...this.options,
+      query: {
+        ...maybeObj(this.options.query),
+        cursor,
+      },
+    };
+  }
+}
+
+export interface CursorListResponse<Item> {
+  items: Array<Item>;
+
+  hasMore: boolean;
+
+  oldestCursor: string | null;
+
+  newestCursor: string | null;
+}
+
+export interface CursorListParams {
+  cursor?: string | null;
+
+  direction?: string | null;
+}
+
+export class CursorList<Item> extends AbstractPage<Item> implements CursorListResponse<Item> {
+  items: Array<Item>;
+
+  hasMore: boolean;
+
+  oldestCursor: string | null;
+
+  newestCursor: string | null;
+
+  constructor(
+    client: BeeperDesktop,
+    response: Response,
+    body: CursorListResponse<Item>,
     options: FinalRequestOptions,
   ) {
     super(client, response, body, options);
