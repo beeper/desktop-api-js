@@ -12,6 +12,23 @@ import { RequestOptions } from '../internal/request-options';
  */
 export class Messages extends APIResource {
   /**
+   * List all messages in a chat with cursor-based pagination. Sorted by timestamp.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const message of client.messages.list({
+   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+   * })) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(query: MessageListParams, options?: RequestOptions): PagePromise<MessagesCursor, Shared.Message> {
+    return this._client.getAPIList('/v1/messages', Cursor<Shared.Message>, { query, ...options });
+  }
+
+  /**
    * Search messages across chats using Beeper's message index
    *
    * @example
@@ -55,6 +72,13 @@ export interface MessageSendResponse extends Shared.BaseResponse {
    * Pending message ID
    */
   pendingMessageID: string;
+}
+
+export interface MessageListParams extends CursorParams {
+  /**
+   * The chat ID to list messages from
+   */
+  chatID: string;
 }
 
 export interface MessageSearchParams extends CursorParams {
@@ -138,6 +162,7 @@ export interface MessageSendParams {
 export declare namespace Messages {
   export {
     type MessageSendResponse as MessageSendResponse,
+    type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };

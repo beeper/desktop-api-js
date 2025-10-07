@@ -30,13 +30,22 @@ import {
 import { APIPromise } from './core/api-promise';
 import { Account, AccountListResponse, Accounts } from './resources/accounts';
 import { ContactSearchParams, ContactSearchResponse, Contacts } from './resources/contacts';
-import { MessageSearchParams, MessageSendParams, MessageSendResponse, Messages } from './resources/messages';
+import {
+  MessageListParams,
+  MessageSearchParams,
+  MessageSendParams,
+  MessageSendResponse,
+  Messages,
+} from './resources/messages';
 import { Token, UserInfo } from './resources/token';
 import {
   Chat,
   ChatArchiveParams,
   ChatCreateParams,
   ChatCreateResponse,
+  ChatListParams,
+  ChatListResponse,
+  ChatListResponsesCursor,
   ChatRetrieveParams,
   ChatSearchParams,
   Chats,
@@ -805,7 +814,7 @@ export class BeeperDesktop {
   static toFile = Uploads.toFile;
 
   /**
-   * Accounts operations
+   * Manage connected chat accounts
    */
   accounts: API.Accounts = new API.Accounts(this);
   /**
@@ -859,9 +868,12 @@ export declare namespace BeeperDesktop {
     Chats as Chats,
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
+    type ChatListResponse as ChatListResponse,
+    type ChatListResponsesCursor as ChatListResponsesCursor,
     type ChatsCursor as ChatsCursor,
     type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
+    type ChatListParams as ChatListParams,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatSearchParams as ChatSearchParams,
   };
@@ -869,6 +881,7 @@ export declare namespace BeeperDesktop {
   export {
     Messages as Messages,
     type MessageSendResponse as MessageSendResponse,
+    type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };

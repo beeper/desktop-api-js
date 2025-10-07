@@ -6,7 +6,7 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
 /**
- * Accounts operations
+ * Manage connected chat accounts
  */
 export class Accounts extends APIResource {
   /**

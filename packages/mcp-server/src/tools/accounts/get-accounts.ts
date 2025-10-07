@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export const tool: Tool = {
   name: 'get_accounts',
-  description: 'List connected accounts on this device. Use to pick account context.',
+  description: 'List connected accounts on this device.',
   inputSchema: {
     type: 'object',
     properties: {},

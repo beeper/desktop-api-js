@@ -50,11 +50,13 @@ Types:
 
 - <code><a href="./src/resources/chats/chats.ts">Chat</a></code>
 - <code><a href="./src/resources/chats/chats.ts">ChatCreateResponse</a></code>
+- <code><a href="./src/resources/chats/chats.ts">ChatListResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">create</a>({ ...params }) -> ChatCreateResponse</code>
 - <code title="get /v1/chats/{chatID}">client.chats.<a href="./src/resources/chats/chats.ts">retrieve</a>(chatID, { ...params }) -> Chat</code>
+- <code title="get /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">list</a>({ ...params }) -> ChatListResponsesCursor</code>
 - <code title="post /v1/chats/{chatID}/archive">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>(chatID, { ...params }) -> BaseResponse</code>
 - <code title="get /v1/chats/search">client.chats.<a href="./src/resources/chats/chats.ts">search</a>({ ...params }) -> ChatsCursor</code>
 
@@ -73,6 +75,7 @@ Types:
 
 Methods:
 
+- <code title="get /v1/messages">client.messages.<a href="./src/resources/messages.ts">list</a>({ ...params }) -> MessagesCursor</code>
 - <code title="get /v1/messages/search">client.messages.<a href="./src/resources/messages.ts">search</a>({ ...params }) -> MessagesCursor</code>
 - <code title="post /v1/messages">client.messages.<a href="./src/resources/messages.ts">send</a>({ ...params }) -> MessageSendResponse</code>
 
