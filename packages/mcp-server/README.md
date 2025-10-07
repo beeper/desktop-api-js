@@ -171,7 +171,7 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 import { server, endpoints, init } from "@beeper/desktop-api-mcp/server";
 
 // import a specific tool
-import downloadAssetClient from "@beeper/desktop-api-mcp/tools/top-level/download-asset-client";
+import openInApp from "@beeper/desktop-api-mcp/tools/top-level/open-in-app";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
@@ -196,7 +196,7 @@ const myCustomEndpoint = {
 };
 
 // initialize the server with your custom endpoints
-init({ server: myServer, endpoints: [downloadAssetClient, myCustomEndpoint] });
+init({ server: myServer, endpoints: [openInApp, myCustomEndpoint] });
 ```
 
 ## Available Tools
@@ -205,8 +205,6 @@ The following tools are available in this MCP server.
 
 ### Resource `$client`:
 
-- `download_asset_client` (`write`): Download a Matrix asset using its mxc:// or localmxc:// URL and return the local file URL.
-- `get_token_info_client` (`read`): Returns information about the authenticated user/token
 - `open_in_app` (`write`) tags: [app]: Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.
 - `search` (`read`) tags: [app]: Search for chats, participant name matches in groups, and the first page of messages in one call. Use this when the user asks for a specific chat, group, or person.
 
@@ -214,15 +212,9 @@ The following tools are available in this MCP server.
 
 - `get_accounts` (`read`) tags: [accounts]: List connected accounts on this device.
 
-### Resource `contacts`:
-
-- `search_contacts` (`read`): Search contacts across on a specific account using the network's search API. Only use for creating new chats.
-
 ### Resource `chats`:
 
-- `create_chats` (`write`): Create a single or group chat on a specific account using participant IDs and optional title.
 - `get_chat` (`read`) tags: [chats]: Get chat details: metadata, participants (limited), last activity.
-- `list_chats` (`read`): List all chats sorted by last activity (most recent first). Combines all accounts into a single paginated list.
 - `archive_chat` (`write`) tags: [chats]: Archive or unarchive a chat.
 - `search_chats` (`read`) tags: [chats]: Search chats by title/network or participants using Beeper Desktop's renderer algorithm. Optional 'scope'.
 
@@ -233,7 +225,6 @@ The following tools are available in this MCP server.
 
 ### Resource `messages`:
 
-- `list_messages` (`read`): List all messages in a chat with cursor-based pagination. Sorted by timestamp.
 - `search_messages` (`read`) tags: [messages]: Search messages across chats using Beeper's message index.
   - When to use: find messages by text and/or filters (chatIDs, accountIDs, chatType, media type filters, sender, date ranges).
   - CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds messages containing these EXACT words.

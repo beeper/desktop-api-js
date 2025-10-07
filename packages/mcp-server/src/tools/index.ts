@@ -4,20 +4,14 @@ import { Metadata, Endpoint, HandlerFunction } from './types';
 
 export { Metadata, Endpoint, HandlerFunction };
 
-import download_asset_client from './top-level/download-asset-client';
-import get_token_info_client from './top-level/get-token-info-client';
 import open_in_app from './top-level/open-in-app';
 import search from './top-level/search';
 import get_accounts from './accounts/get-accounts';
-import search_contacts from './contacts/search-contacts';
-import create_chats from './chats/create-chats';
 import get_chat from './chats/get-chat';
-import list_chats from './chats/list-chats';
 import archive_chat from './chats/archive-chat';
 import search_chats from './chats/search-chats';
 import set_chat_reminder from './chats/reminders/set-chat-reminder';
 import clear_chat_reminder from './chats/reminders/clear-chat-reminder';
-import list_messages from './messages/list-messages';
 import search_messages from './messages/search-messages';
 import send_message from './messages/send-message';
 
@@ -27,20 +21,14 @@ function addEndpoint(endpoint: Endpoint) {
   endpoints.push(endpoint);
 }
 
-addEndpoint(download_asset_client);
-addEndpoint(get_token_info_client);
 addEndpoint(open_in_app);
 addEndpoint(search);
 addEndpoint(get_accounts);
-addEndpoint(search_contacts);
-addEndpoint(create_chats);
 addEndpoint(get_chat);
-addEndpoint(list_chats);
 addEndpoint(archive_chat);
 addEndpoint(search_chats);
 addEndpoint(set_chat_reminder);
 addEndpoint(clear_chat_reminder);
-addEndpoint(list_messages);
 addEndpoint(search_messages);
 addEndpoint(send_message);
 
