@@ -71,7 +71,7 @@ const newServer = ({
   return server;
 };
 
-const post =
+export const post =
   (options: { clientOptions: ClientOptions; mcpOptions: McpOptions }) =>
   async (req: express.Request, res: express.Response) => {
     const server = newServer({ ...options, req, res });
@@ -85,7 +85,7 @@ const post =
     await transport.handleRequest(req, res, req.body);
   };
 
-const get = async (req: express.Request, res: express.Response) => {
+export const get = async (req: express.Request, res: express.Response) => {
   res.status(405).json({
     jsonrpc: '2.0',
     error: {
@@ -95,7 +95,7 @@ const get = async (req: express.Request, res: express.Response) => {
   });
 };
 
-const del = async (req: express.Request, res: express.Response) => {
+export const del = async (req: express.Request, res: express.Response) => {
   res.status(405).json({
     jsonrpc: '2.0',
     error: {
