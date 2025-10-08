@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { CursorList, CursorSearch } from '../core/pagination';
+import { CursorSearch } from '../core/pagination';
 
 export interface Attachment {
   /**
@@ -257,7 +257,5 @@ export interface User {
    */
   username?: string;
 }
-
-export type MessagesCursorList = CursorList<Message>;
 
 export type MessagesCursorSearch = CursorSearch<Message>;

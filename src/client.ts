@@ -38,6 +38,7 @@ import { Account, AccountListResponse, Accounts } from './resources/accounts';
 import { ContactSearchParams, ContactSearchResponse, Contacts } from './resources/contacts';
 import {
   MessageListParams,
+  MessageListResponse,
   MessageSearchParams,
   MessageSendParams,
   MessageSendResponse,
@@ -883,6 +884,7 @@ export declare namespace BeeperDesktop {
 
   export {
     Messages as Messages,
+    type MessageListResponse as MessageListResponse,
     type MessageSendResponse as MessageSendResponse,
     type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,

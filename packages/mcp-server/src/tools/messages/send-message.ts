@@ -34,7 +34,7 @@ export const tool: Tool = {
         description: 'Text content of the message you want to send. You may use markdown.',
       },
     },
-    required: ['chatID'],
+    required: [],
   },
   annotations: {},
 };

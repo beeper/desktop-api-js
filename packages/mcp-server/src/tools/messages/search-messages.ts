@@ -75,8 +75,7 @@ export const tool: Tool = {
       },
       limit: {
         type: 'integer',
-        description:
-          'Maximum number of messages to return (1–500). Defaults to 20. The current implementation caps each page at 20 items even if a higher limit is requested.',
+        description: 'Maximum number of messages to return.',
       },
       mediaTypes: {
         type: 'array',

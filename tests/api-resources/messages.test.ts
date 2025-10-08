@@ -66,8 +66,8 @@ describe('resource messages', () => {
     ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
-  test('send: only required params', async () => {
-    const responsePromise = client.messages.send({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
+  test('send', async () => {
+    const responsePromise = client.messages.send();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -77,11 +77,13 @@ describe('resource messages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('send: required and optional params', async () => {
-    const response = await client.messages.send({
-      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-      replyToMessageID: 'replyToMessageID',
-      text: 'text',
-    });
+  test('send: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.messages.send(
+        { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', replyToMessageID: 'replyToMessageID', text: 'text' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 });

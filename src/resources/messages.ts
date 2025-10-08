@@ -2,15 +2,9 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { MessagesCursorList, MessagesCursorSearch } from './shared';
+import { MessagesCursorSearch } from './shared';
 import { APIPromise } from '../core/api-promise';
-import {
-  CursorList,
-  type CursorListParams,
-  CursorSearch,
-  type CursorSearchParams,
-  PagePromise,
-} from '../core/pagination';
+import { CursorSearch, type CursorSearchParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 /**
@@ -22,16 +16,13 @@ export class Messages extends APIResource {
    *
    * @example
    * ```ts
-   * // Automatically fetches more pages as needed.
-   * for await (const message of client.messages.list({
+   * const messages = await client.messages.list({
    *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-   * })) {
-   *   // ...
-   * }
+   * });
    * ```
    */
-  list(query: MessageListParams, options?: RequestOptions): PagePromise<MessagesCursorList, Shared.Message> {
-    return this._client.getAPIList('/v1/messages', CursorList<Shared.Message>, { query, ...options });
+  list(query: MessageListParams, options?: RequestOptions): APIPromise<MessageListResponse> {
+    return this._client.get('/v1/messages', { query, ...options });
   }
 
   /**
@@ -61,14 +52,28 @@ export class Messages extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.messages.send({
-   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-   * });
+   * const response = await client.messages.send();
    * ```
    */
-  send(body: MessageSendParams, options?: RequestOptions): APIPromise<MessageSendResponse> {
+  send(
+    body: MessageSendParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<MessageSendResponse> {
     return this._client.post('/v1/messages', { body, ...options });
   }
+}
+
+export interface MessageListResponse {
+  /**
+   * True if additional results can be fetched.
+   */
+  hasMore: boolean;
+
+  /**
+   * Messages from the chat, sorted by timestamp. Use message.sortKey as cursor for
+   * pagination.
+   */
+  items: Array<Shared.Message>;
 }
 
 export interface MessageSendResponse extends Shared.BaseResponse {
@@ -83,11 +88,23 @@ export interface MessageSendResponse extends Shared.BaseResponse {
   pendingMessageID: string;
 }
 
-export interface MessageListParams extends CursorListParams {
+export interface MessageListParams {
   /**
    * Chat ID to list messages from
    */
   chatID: string;
+
+  /**
+   * Message cursor for pagination. Use with direction to navigate results.
+   */
+  cursor?: string;
+
+  /**
+   * Pagination direction used with 'cursor': 'before' fetches older messages,
+   * 'after' fetches newer messages. Defaults to 'before' when only 'cursor' is
+   * provided.
+   */
+  direction?: 'after' | 'before';
 }
 
 export interface MessageSearchParams extends CursorSearchParams {
@@ -155,7 +172,7 @@ export interface MessageSendParams {
   /**
    * Unique identifier of the chat.
    */
-  chatID: string;
+  chatID?: string;
 
   /**
    * Provide a message ID to send this as a reply to an existing message
@@ -170,6 +187,7 @@ export interface MessageSendParams {
 
 export declare namespace Messages {
   export {
+    type MessageListResponse as MessageListResponse,
     type MessageSendResponse as MessageSendResponse,
     type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,
@@ -177,4 +195,4 @@ export declare namespace Messages {
   };
 }
 
-export { type MessagesCursorList, type MessagesCursorSearch };
+export { type MessagesCursorSearch };
