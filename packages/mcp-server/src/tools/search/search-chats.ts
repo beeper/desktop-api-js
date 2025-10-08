@@ -6,11 +6,11 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'chats',
+  resource: 'search',
   operation: 'read',
   tags: ['chats'],
   httpMethod: 'get',
-  httpPath: '/v1/chats/search',
+  httpPath: '/v1/search/chats',
   operationId: 'searchChats',
 };
 
@@ -31,12 +31,12 @@ export const tool: Tool = {
       },
       cursor: {
         type: 'string',
-        description: 'Pagination cursor from previous response. Use with direction to navigate results',
+        description: "Opaque pagination cursor; do not inspect. Use together with 'direction'.",
       },
       direction: {
         type: 'string',
         description:
-          'Pagination direction: "after" for newer page, "before" for older page. Defaults to "before" when only cursor is provided.',
+          "Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.",
         enum: ['after', 'before'],
       },
       inbox: {
@@ -97,7 +97,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  const response = await client.chats.search(body).asResponse();
+  const response = await client.search.chats(body).asResponse();
   return asTextContentResult(await response.json());
 };
 

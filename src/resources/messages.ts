@@ -57,7 +57,7 @@ export class Messages extends APIResource {
     query: MessageSearchParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<MessagesCursorSearch, Shared.Message> {
-    return this._client.getAPIList('/v1/messages/search', CursorSearch<Shared.Message>, {
+    return this._client.getAPIList('/v1/search/messages', CursorSearch<Shared.Message>, {
       query,
       ...options,
     });

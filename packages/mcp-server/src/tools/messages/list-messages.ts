@@ -22,16 +22,16 @@ export const tool: Tool = {
     properties: {
       chatID: {
         type: 'string',
-        description: 'Chat ID to list messages from',
+        description: 'Unique identifier of the chat.',
       },
       cursor: {
         type: 'string',
-        description: 'Message cursor for pagination. Use with direction to navigate results.',
+        description: "Opaque pagination cursor; do not inspect. Use together with 'direction'.",
       },
       direction: {
         type: 'string',
         description:
-          "Pagination direction used with 'cursor': 'before' fetches older messages, 'after' fetches newer messages. Defaults to 'before' when only 'cursor' is provided.",
+          "Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.",
         enum: ['after', 'before'],
       },
     },

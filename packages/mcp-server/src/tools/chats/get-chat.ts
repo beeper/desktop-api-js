@@ -22,8 +22,7 @@ export const tool: Tool = {
     properties: {
       chatID: {
         type: 'string',
-        description:
-          "Unique identifier of the chat to retrieve. Not available for iMessage chats. Participants are limited by 'maxParticipantCount'.",
+        description: 'Unique identifier of the chat.',
       },
       maxParticipantCount: {
         type: 'integer',

@@ -3,13 +3,13 @@
 Types:
 
 - <code><a href="./src/resources/top-level.ts">DownloadAssetResponse</a></code>
-- <code><a href="./src/resources/top-level.ts">OpenResponse</a></code>
+- <code><a href="./src/resources/top-level.ts">FocusResponse</a></code>
 - <code><a href="./src/resources/top-level.ts">SearchResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/download-asset">client.<a href="./src/index.ts">downloadAsset</a>({ ...params }) -> DownloadAssetResponse</code>
-- <code title="post /v1/open">client.<a href="./src/index.ts">open</a>({ ...params }) -> OpenResponse</code>
+- <code title="post /v1/focus">client.<a href="./src/index.ts">focus</a>({ ...params }) -> FocusResponse</code>
 - <code title="get /v1/search">client.<a href="./src/index.ts">search</a>({ ...params }) -> SearchResponse</code>
 
 # Shared
@@ -34,15 +34,16 @@ Methods:
 
 - <code title="get /v1/accounts">client.accounts.<a href="./src/resources/accounts.ts">list</a>() -> AccountListResponse</code>
 
-# Contacts
+# Search
 
 Types:
 
-- <code><a href="./src/resources/contacts.ts">ContactSearchResponse</a></code>
+- <code><a href="./src/resources/search.ts">SearchContactsResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/accounts/{accountID}/contacts/search">client.contacts.<a href="./src/resources/contacts.ts">search</a>(accountID, { ...params }) -> ContactSearchResponse</code>
+- <code title="get /v1/search/chats">client.search.<a href="./src/resources/search.ts">chats</a>({ ...params }) -> ChatsCursorSearch</code>
+- <code title="get /v1/search/contacts/{accountID}">client.search.<a href="./src/resources/search.ts">contacts</a>(accountID, { ...params }) -> SearchContactsResponse</code>
 
 # Chats
 
@@ -58,7 +59,6 @@ Methods:
 - <code title="get /v1/chats/{chatID}">client.chats.<a href="./src/resources/chats/chats.ts">retrieve</a>(chatID, { ...params }) -> Chat</code>
 - <code title="get /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">list</a>({ ...params }) -> ChatListResponsesCursorList</code>
 - <code title="post /v1/chats/{chatID}/archive">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>(chatID, { ...params }) -> BaseResponse</code>
-- <code title="get /v1/chats/search">client.chats.<a href="./src/resources/chats/chats.ts">search</a>({ ...params }) -> ChatsCursorSearch</code>
 
 ## Reminders
 
@@ -76,5 +76,5 @@ Types:
 Methods:
 
 - <code title="get /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">list</a>(chatID, { ...params }) -> MessagesCursorList</code>
-- <code title="get /v1/messages/search">client.messages.<a href="./src/resources/messages.ts">search</a>({ ...params }) -> MessagesCursorSearch</code>
+- <code title="get /v1/search/messages">client.messages.<a href="./src/resources/messages.ts">search</a>({ ...params }) -> MessagesCursorSearch</code>
 - <code title="post /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">send</a>(chatID, { ...params }) -> MessageSendResponse</code>

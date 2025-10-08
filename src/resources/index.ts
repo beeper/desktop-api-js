@@ -11,11 +11,9 @@ export {
   type ChatRetrieveParams,
   type ChatListParams,
   type ChatArchiveParams,
-  type ChatSearchParams,
-  type ChatListResponsesCursorList,
   type ChatsCursorSearch,
+  type ChatListResponsesCursorList,
 } from './chats/chats';
-export { Contacts, type ContactSearchResponse, type ContactSearchParams } from './contacts';
 export {
   Messages,
   type MessageSendResponse,
@@ -24,10 +22,16 @@ export {
   type MessageSendParams,
 } from './messages';
 export {
+  Search,
+  type SearchContactsResponse,
+  type SearchChatsParams,
+  type SearchContactsParams,
+} from './search';
+export {
   type DownloadAssetResponse,
-  type OpenResponse,
+  type FocusResponse,
   type SearchResponse,
   type DownloadAssetParams,
-  type OpenParams,
+  type FocusParams,
   type SearchParams,
 } from './top-level';

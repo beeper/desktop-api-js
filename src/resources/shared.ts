@@ -114,7 +114,7 @@ export namespace Error {
 
 export interface Message {
   /**
-   * Stable message ID for cursor pagination.
+   * Message ID.
    */
   id: string;
 
@@ -124,14 +124,9 @@ export interface Message {
   accountID: string;
 
   /**
-   * Beeper chat/thread/room ID.
+   * Unique identifier of the chat.
    */
   chatID: string;
-
-  /**
-   * Stable message ID (same as id).
-   */
-  messageID: string;
 
   /**
    * Sender user ID.
@@ -141,7 +136,7 @@ export interface Message {
   /**
    * A unique key used to sort messages
    */
-  sortKey: string | number;
+  sortKey: string;
 
   /**
    * Message timestamp.

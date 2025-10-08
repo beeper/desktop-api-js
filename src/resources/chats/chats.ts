@@ -5,13 +5,7 @@ import * as Shared from '../shared';
 import * as RemindersAPI from './reminders';
 import { ReminderCreateParams, Reminders } from './reminders';
 import { APIPromise } from '../../core/api-promise';
-import {
-  CursorList,
-  type CursorListParams,
-  CursorSearch,
-  type CursorSearchParams,
-  PagePromise,
-} from '../../core/pagination';
+import { CursorList, type CursorListParams, CursorSearch, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -93,25 +87,6 @@ export class Chats extends APIResource {
     options?: RequestOptions,
   ): APIPromise<Shared.BaseResponse> {
     return this._client.post(path`/v1/chats/${chatID}/archive`, { body, ...options });
-  }
-
-  /**
-   * Search chats by title/network or participants using Beeper Desktop's renderer
-   * algorithm.
-   *
-   * @example
-   * ```ts
-   * // Automatically fetches more pages as needed.
-   * for await (const chat of client.chats.search()) {
-   *   // ...
-   * }
-   * ```
-   */
-  search(
-    query: ChatSearchParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<ChatsCursorSearch, Chat> {
-    return this._client.getAPIList('/v1/chats/search', CursorSearch<Chat>, { query, ...options });
   }
 }
 
@@ -273,61 +248,6 @@ export interface ChatArchiveParams {
   archived?: boolean;
 }
 
-export interface ChatSearchParams extends CursorSearchParams {
-  /**
-   * Provide an array of account IDs to filter chats from specific messaging accounts
-   * only
-   */
-  accountIDs?: Array<string>;
-
-  /**
-   * Filter by inbox type: "primary" (non-archived, non-low-priority),
-   * "low-priority", or "archive". If not specified, shows all chats.
-   */
-  inbox?: 'primary' | 'low-priority' | 'archive';
-
-  /**
-   * Include chats marked as Muted by the user, which are usually less important.
-   * Default: true. Set to false if the user wants a more refined search.
-   */
-  includeMuted?: boolean | null;
-
-  /**
-   * Provide an ISO datetime string to only retrieve chats with last activity after
-   * this time
-   */
-  lastActivityAfter?: string;
-
-  /**
-   * Provide an ISO datetime string to only retrieve chats with last activity before
-   * this time
-   */
-  lastActivityBefore?: string;
-
-  /**
-   * Literal token search (non-semantic). Use single words users type (e.g.,
-   * "dinner"). When multiple words provided, ALL must match. Case-insensitive.
-   */
-  query?: string;
-
-  /**
-   * Search scope: 'titles' matches title + network; 'participants' matches
-   * participant names.
-   */
-  scope?: 'titles' | 'participants';
-
-  /**
-   * Specify the type of chats to retrieve: use "single" for direct messages, "group"
-   * for group chats, or "any" to get all types
-   */
-  type?: 'single' | 'group' | 'any';
-
-  /**
-   * Set to true to only retrieve chats that have unread messages
-   */
-  unreadOnly?: boolean | null;
-}
-
 Chats.Reminders = Reminders;
 
 export declare namespace Chats {
@@ -336,12 +256,10 @@ export declare namespace Chats {
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
     type ChatListResponsesCursorList as ChatListResponsesCursorList,
-    type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
     type ChatListParams as ChatListParams,
     type ChatArchiveParams as ChatArchiveParams,
-    type ChatSearchParams as ChatSearchParams,
   };
 
   export { Reminders as Reminders, type ReminderCreateParams as ReminderCreateParams };

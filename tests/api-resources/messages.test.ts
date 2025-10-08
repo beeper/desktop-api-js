@@ -24,7 +24,7 @@ describe('resource messages', () => {
     await expect(
       client.messages.list(
         '!NCdzlIaMjZUmvmvyHU:beeper.com',
-        { cursor: '821744079', direction: 'before' },
+        { cursor: '1725489123456|c29tZUltc2dQYWdl', direction: 'before' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(BeeperDesktop.NotFoundError);
