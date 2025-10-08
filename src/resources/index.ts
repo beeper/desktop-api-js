@@ -18,7 +18,6 @@ export {
 export { Contacts, type ContactSearchResponse, type ContactSearchParams } from './contacts';
 export {
   Messages,
-  type MessageListResponse,
   type MessageSendResponse,
   type MessageListParams,
   type MessageSearchParams,

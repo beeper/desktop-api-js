@@ -4,6 +4,7 @@ import { APIResource } from '../core/resource';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
+import { path } from '../internal/utils/path';
 
 /**
  * Contacts operations
@@ -13,8 +14,12 @@ export class Contacts extends APIResource {
    * Search contacts across on a specific account using the network's search API.
    * Only use for creating new chats.
    */
-  search(query: ContactSearchParams, options?: RequestOptions): APIPromise<ContactSearchResponse> {
-    return this._client.get('/v1/contacts/search', { query, ...options });
+  search(
+    accountID: string,
+    query: ContactSearchParams,
+    options?: RequestOptions,
+  ): APIPromise<ContactSearchResponse> {
+    return this._client.get(path`/v1/accounts/${accountID}/contacts/search`, { query, ...options });
   }
 }
 
@@ -23,11 +28,6 @@ export interface ContactSearchResponse {
 }
 
 export interface ContactSearchParams {
-  /**
-   * Account ID this resource belongs to.
-   */
-  accountID: string;
-
   /**
    * Text to search users by. Network-specific behavior.
    */

@@ -180,10 +180,6 @@ export interface CursorListResponse<Item> {
   items: Array<Item>;
 
   hasMore: boolean;
-
-  oldestCursor: string | null;
-
-  newestCursor: string | null;
 }
 
 export interface CursorListParams {
@@ -192,14 +188,13 @@ export interface CursorListParams {
   direction?: string | null;
 }
 
-export class CursorList<Item> extends AbstractPage<Item> implements CursorListResponse<Item> {
+export class CursorList<Item extends { sortKey: string }>
+  extends AbstractPage<Item>
+  implements CursorListResponse<Item>
+{
   items: Array<Item>;
 
   hasMore: boolean;
-
-  oldestCursor: string | null;
-
-  newestCursor: string | null;
 
   constructor(
     client: BeeperDesktop,
@@ -211,8 +206,6 @@ export class CursorList<Item> extends AbstractPage<Item> implements CursorListRe
 
     this.items = body.items || [];
     this.hasMore = body.hasMore || false;
-    this.oldestCursor = body.oldestCursor || null;
-    this.newestCursor = body.newestCursor || null;
   }
 
   getPaginatedItems(): Item[] {
@@ -228,8 +221,9 @@ export class CursorList<Item> extends AbstractPage<Item> implements CursorListRe
   }
 
   nextPageRequestOptions(): PageRequestOptions | null {
-    const cursor = this.oldestCursor;
-    if (!cursor) {
+    const items = this.getPaginatedItems();
+    const sortKey = items[items.length - 1]?.sortKey;
+    if (!sortKey) {
       return null;
     }
 
@@ -237,7 +231,7 @@ export class CursorList<Item> extends AbstractPage<Item> implements CursorListRe
       ...this.options,
       query: {
         ...maybeObj(this.options.query),
-        cursor,
+        cursor: sortKey,
       },
     };
   }

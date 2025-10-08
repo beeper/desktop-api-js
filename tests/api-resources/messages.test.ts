@@ -8,8 +8,8 @@ const client = new BeeperDesktop({
 });
 
 describe('resource messages', () => {
-  test('list: only required params', async () => {
-    const responsePromise = client.messages.list({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
+  test('list', async () => {
+    const responsePromise = client.messages.list('!NCdzlIaMjZUmvmvyHU:beeper.com');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,12 +19,15 @@ describe('resource messages', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('list: required and optional params', async () => {
-    const response = await client.messages.list({
-      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-      cursor: '821744079',
-      direction: 'before',
-    });
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.messages.list(
+        '!NCdzlIaMjZUmvmvyHU:beeper.com',
+        { cursor: '821744079', direction: 'before' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
   test('search', async () => {
@@ -67,7 +70,7 @@ describe('resource messages', () => {
   });
 
   test('send', async () => {
-    const responsePromise = client.messages.send();
+    const responsePromise = client.messages.send('!NCdzlIaMjZUmvmvyHU:beeper.com');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -81,7 +84,8 @@ describe('resource messages', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.messages.send(
-        { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', replyToMessageID: 'replyToMessageID', text: 'text' },
+        '!NCdzlIaMjZUmvmvyHU:beeper.com',
+        { replyToMessageID: 'replyToMessageID', text: 'text' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(BeeperDesktop.NotFoundError);
