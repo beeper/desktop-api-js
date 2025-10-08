@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   operation: 'read',
   tags: ['messages'],
   httpMethod: 'get',
-  httpPath: '/v1/messages/search',
+  httpPath: '/v1/search/messages',
   operationId: 'searchMessages',
 };
 

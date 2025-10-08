@@ -9,8 +9,7 @@ export {
   type ChatRetrieveParams,
   type ChatListParams,
   type ChatArchiveParams,
-  type ChatSearchParams,
-  type ChatListResponsesCursorList,
   type ChatsCursorSearch,
+  type ChatListResponsesCursorList,
 } from './chats';
 export { Reminders, type ReminderCreateParams } from './reminders';

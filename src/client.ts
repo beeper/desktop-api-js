@@ -28,14 +28,13 @@ import * as TopLevelAPI from './resources/top-level';
 import {
   DownloadAssetParams,
   DownloadAssetResponse,
-  OpenParams,
-  OpenResponse,
+  FocusParams,
+  FocusResponse,
   SearchParams,
   SearchResponse,
 } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
 import { Account, AccountListResponse, Accounts } from './resources/accounts';
-import { ContactSearchParams, ContactSearchResponse, Contacts } from './resources/contacts';
 import {
   MessageListParams,
   MessageSearchParams,
@@ -43,6 +42,7 @@ import {
   MessageSendResponse,
   Messages,
 } from './resources/messages';
+import { Search, SearchChatsParams, SearchContactsParams, SearchContactsResponse } from './resources/search';
 import {
   Chat,
   ChatArchiveParams,
@@ -52,9 +52,7 @@ import {
   ChatListResponse,
   ChatListResponsesCursorList,
   ChatRetrieveParams,
-  ChatSearchParams,
   Chats,
-  ChatsCursorSearch,
 } from './resources/chats/chats';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
@@ -270,19 +268,19 @@ export class BeeperDesktop {
   }
 
   /**
-   * Open Beeper Desktop and optionally navigate to a specific chat, message, or
+   * Focus Beeper Desktop and optionally navigate to a specific chat, message, or
    * pre-fill draft text and attachment.
    *
    * @example
    * ```ts
-   * const response = await client.open();
+   * const response = await client.focus();
    * ```
    */
-  open(
-    body: TopLevelAPI.OpenParams | null | undefined = {},
+  focus(
+    body: TopLevelAPI.FocusParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<TopLevelAPI.OpenResponse> {
-    return this.post('/v1/open', { body, ...options });
+  ): APIPromise<TopLevelAPI.FocusResponse> {
+    return this.post('/v1/focus', { body, ...options });
   }
 
   /**
@@ -822,10 +820,7 @@ export class BeeperDesktop {
    * Manage connected chat accounts
    */
   accounts: API.Accounts = new API.Accounts(this);
-  /**
-   * Contacts operations
-   */
-  contacts: API.Contacts = new API.Contacts(this);
+  search: API.Search = new API.Search(this);
   /**
    * Chats operations
    */
@@ -837,7 +832,7 @@ export class BeeperDesktop {
 }
 
 BeeperDesktop.Accounts = Accounts;
-BeeperDesktop.Contacts = Contacts;
+BeeperDesktop.Search = Search;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
 
@@ -852,19 +847,20 @@ export declare namespace BeeperDesktop {
 
   export {
     type DownloadAssetResponse as DownloadAssetResponse,
-    type OpenResponse as OpenResponse,
+    type FocusResponse as FocusResponse,
     type SearchResponse as SearchResponse,
     type DownloadAssetParams as DownloadAssetParams,
-    type OpenParams as OpenParams,
+    type FocusParams as FocusParams,
     type SearchParams as SearchParams,
   };
 
   export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
 
   export {
-    Contacts as Contacts,
-    type ContactSearchResponse as ContactSearchResponse,
-    type ContactSearchParams as ContactSearchParams,
+    Search as Search,
+    type SearchContactsResponse as SearchContactsResponse,
+    type SearchChatsParams as SearchChatsParams,
+    type SearchContactsParams as SearchContactsParams,
   };
 
   export {
@@ -873,12 +869,10 @@ export declare namespace BeeperDesktop {
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
     type ChatListResponsesCursorList as ChatListResponsesCursorList,
-    type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
     type ChatListParams as ChatListParams,
     type ChatArchiveParams as ChatArchiveParams,
-    type ChatSearchParams as ChatSearchParams,
   };
 
   export {

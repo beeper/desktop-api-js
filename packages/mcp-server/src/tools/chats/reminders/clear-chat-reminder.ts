@@ -22,8 +22,7 @@ export const tool: Tool = {
     properties: {
       chatID: {
         type: 'string',
-        description:
-          'The identifier of the chat to clear reminder from (accepts both chatID and local chat ID)',
+        description: 'Unique identifier of the chat.',
       },
     },
     required: ['chatID'],
