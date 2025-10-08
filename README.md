@@ -56,7 +56,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 const response = await client.messages
-  .send({ chatID: '1229391', text: 'Hello! Just checking in on the project status.' })
+  .send('1229391', { text: 'Hello! Just checking in on the project status.' })
   .catch(async (err) => {
     if (err instanceof BeeperDesktop.APIError) {
       console.log(err.status); // 400

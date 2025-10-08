@@ -12,6 +12,7 @@ import archive_chat from './chats/archive-chat';
 import search_chats from './chats/search-chats';
 import set_chat_reminder from './chats/reminders/set-chat-reminder';
 import clear_chat_reminder from './chats/reminders/clear-chat-reminder';
+import list_messages from './messages/list-messages';
 import search_messages from './messages/search-messages';
 import send_message from './messages/send-message';
 
@@ -29,6 +30,7 @@ addEndpoint(archive_chat);
 addEndpoint(search_chats);
 addEndpoint(set_chat_reminder);
 addEndpoint(clear_chat_reminder);
+addEndpoint(list_messages);
 addEndpoint(search_messages);
 addEndpoint(send_message);
 

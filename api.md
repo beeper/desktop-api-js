@@ -42,7 +42,7 @@ Types:
 
 Methods:
 
-- <code title="get /v1/contacts/search">client.contacts.<a href="./src/resources/contacts.ts">search</a>({ ...params }) -> ContactSearchResponse</code>
+- <code title="get /v1/accounts/{accountID}/contacts/search">client.contacts.<a href="./src/resources/contacts.ts">search</a>(accountID, { ...params }) -> ContactSearchResponse</code>
 
 # Chats
 
@@ -71,11 +71,10 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/messages.ts">MessageListResponse</a></code>
 - <code><a href="./src/resources/messages.ts">MessageSendResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/messages">client.messages.<a href="./src/resources/messages.ts">list</a>({ ...params }) -> MessageListResponse</code>
+- <code title="get /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">list</a>(chatID, { ...params }) -> MessagesCursorList</code>
 - <code title="get /v1/messages/search">client.messages.<a href="./src/resources/messages.ts">search</a>({ ...params }) -> MessagesCursorSearch</code>
-- <code title="post /v1/messages">client.messages.<a href="./src/resources/messages.ts">send</a>({ ...params }) -> MessageSendResponse</code>
+- <code title="post /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">send</a>(chatID, { ...params }) -> MessageSendResponse</code>

@@ -7,41 +7,45 @@ import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
   resource: 'messages',
-  operation: 'write',
+  operation: 'read',
   tags: ['messages'],
-  httpMethod: 'post',
+  httpMethod: 'get',
   httpPath: '/v1/chats/{chatID}/messages',
-  operationId: 'sendMessage',
+  operationId: 'listMessages',
 };
 
 export const tool: Tool = {
-  name: 'send_message',
-  description:
-    'Send a text message to a specific chat. Supports replying to existing messages. Returns the sent message ID and a deeplink to the chat',
+  name: 'list_messages',
+  description: 'List messages from a specific chat with pagination support.',
   inputSchema: {
     type: 'object',
     properties: {
       chatID: {
         type: 'string',
-        description: 'Unique identifier of the chat.',
+        description: 'Chat ID to list messages from',
       },
-      replyToMessageID: {
+      cursor: {
         type: 'string',
-        description: 'Provide a message ID to send this as a reply to an existing message',
+        description: 'Message cursor for pagination. Use with direction to navigate results.',
       },
-      text: {
+      direction: {
         type: 'string',
-        description: 'Text content of the message you want to send. You may use markdown.',
+        description:
+          "Pagination direction used with 'cursor': 'before' fetches older messages, 'after' fetches newer messages. Defaults to 'before' when only 'cursor' is provided.",
+        enum: ['after', 'before'],
       },
     },
     required: ['chatID'],
   },
-  annotations: {},
+  annotations: {
+    readOnlyHint: true,
+  },
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { chatID, ...body } = args as any;
-  return asTextContentResult(await client.messages.send(chatID, body));
+  const response = await client.messages.list(chatID, body).asResponse();
+  return asTextContentResult(await response.json());
 };
 
 export default { metadata, tool, handler };

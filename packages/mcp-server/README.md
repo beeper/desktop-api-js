@@ -234,6 +234,7 @@ The following tools are available in this MCP server.
 
 ### Resource `messages`:
 
+- `list_messages` (`read`) tags: [messages]: List messages from a specific chat with pagination support.
 - `search_messages` (`read`) tags: [messages]: Search messages across chats using Beeper's message index.
   - When to use: find messages by text and/or filters (chatIDs, accountIDs, chatType, media type filters, sender, date ranges).
   - CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds messages containing these EXACT words.
