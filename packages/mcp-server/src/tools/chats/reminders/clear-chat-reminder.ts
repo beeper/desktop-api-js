@@ -9,9 +9,9 @@ export const metadata: Metadata = {
   resource: 'chats.reminders',
   operation: 'write',
   tags: ['chats'],
-  httpMethod: 'delete',
-  httpPath: '/v1/chats/{chatID}/reminders',
-  operationId: 'clearChatReminder',
+  httpMethod: 'post',
+  httpPath: '/v0/clear-chat-reminder',
+  operationId: 'clear_chat_reminder',
 };
 
 export const tool: Tool = {
@@ -22,19 +22,18 @@ export const tool: Tool = {
     properties: {
       chatID: {
         type: 'string',
-        description: 'Unique identifier of the chat.',
+        description:
+          'The identifier of the chat to clear reminder from (accepts both chatID and local chat ID)',
       },
     },
     required: ['chatID'],
   },
-  annotations: {
-    idempotentHint: true,
-  },
+  annotations: {},
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
-  const { chatID, ...body } = args as any;
-  return asTextContentResult(await client.chats.reminders.delete(chatID));
+  const body = args as any;
+  return asTextContentResult(await client.chats.reminders.delete(body));
 };
 
 export default { metadata, tool, handler };

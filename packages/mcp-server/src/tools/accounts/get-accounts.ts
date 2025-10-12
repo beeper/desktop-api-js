@@ -10,13 +10,13 @@ export const metadata: Metadata = {
   operation: 'read',
   tags: ['accounts'],
   httpMethod: 'get',
-  httpPath: '/v1/accounts',
-  operationId: 'getAccounts',
+  httpPath: '/v0/get-accounts',
+  operationId: 'get_accounts',
 };
 
 export const tool: Tool = {
   name: 'get_accounts',
-  description: 'List connected accounts on this device.',
+  description: 'List connected accounts on this device. Use to pick account context.',
   inputSchema: {
     type: 'object',
     properties: {},

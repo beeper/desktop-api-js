@@ -107,7 +107,7 @@ export class PagePromise<
   }
 }
 
-export interface CursorSearchResponse<Item> {
+export interface CursorResponse<Item> {
   items: Array<Item>;
 
   hasMore: boolean;
@@ -117,7 +117,7 @@ export interface CursorSearchResponse<Item> {
   newestCursor: string | null;
 }
 
-export interface CursorSearchParams {
+export interface CursorParams {
   cursor?: string | null;
 
   direction?: string | null;
@@ -125,7 +125,7 @@ export interface CursorSearchParams {
   limit?: number | null;
 }
 
-export class CursorSearch<Item> extends AbstractPage<Item> implements CursorSearchResponse<Item> {
+export class Cursor<Item> extends AbstractPage<Item> implements CursorResponse<Item> {
   items: Array<Item>;
 
   hasMore: boolean;
@@ -137,7 +137,7 @@ export class CursorSearch<Item> extends AbstractPage<Item> implements CursorSear
   constructor(
     client: BeeperDesktop,
     response: Response,
-    body: CursorSearchResponse<Item>,
+    body: CursorResponse<Item>,
     options: FinalRequestOptions,
   ) {
     super(client, response, body, options);
@@ -171,67 +171,6 @@ export class CursorSearch<Item> extends AbstractPage<Item> implements CursorSear
       query: {
         ...maybeObj(this.options.query),
         cursor,
-      },
-    };
-  }
-}
-
-export interface CursorListResponse<Item> {
-  items: Array<Item>;
-
-  hasMore: boolean;
-}
-
-export interface CursorListParams {
-  cursor?: string | null;
-
-  direction?: string | null;
-}
-
-export class CursorList<Item extends { sortKey: string }>
-  extends AbstractPage<Item>
-  implements CursorListResponse<Item>
-{
-  items: Array<Item>;
-
-  hasMore: boolean;
-
-  constructor(
-    client: BeeperDesktop,
-    response: Response,
-    body: CursorListResponse<Item>,
-    options: FinalRequestOptions,
-  ) {
-    super(client, response, body, options);
-
-    this.items = body.items || [];
-    this.hasMore = body.hasMore || false;
-  }
-
-  getPaginatedItems(): Item[] {
-    return this.items ?? [];
-  }
-
-  override hasNextPage(): boolean {
-    if (this.hasMore === false) {
-      return false;
-    }
-
-    return super.hasNextPage();
-  }
-
-  nextPageRequestOptions(): PageRequestOptions | null {
-    const items = this.getPaginatedItems();
-    const sortKey = items[items.length - 1]?.sortKey;
-    if (!sortKey) {
-      return null;
-    }
-
-    return {
-      ...this.options,
-      query: {
-        ...maybeObj(this.options.query),
-        cursor: sortKey,
       },
     };
   }

@@ -33,8 +33,8 @@ describe('resource chats', () => {
     });
   });
 
-  test('retrieve', async () => {
-    const responsePromise = client.chats.retrieve('!NCdzlIaMjZUmvmvyHU:beeper.com');
+  test('retrieve: only required params', async () => {
+    const responsePromise = client.chats.retrieve({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -44,19 +44,15 @@ describe('resource chats', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.chats.retrieve(
-        '!NCdzlIaMjZUmvmvyHU:beeper.com',
-        { maxParticipantCount: 50 },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(BeeperDesktop.NotFoundError);
+  test('retrieve: required and optional params', async () => {
+    const response = await client.chats.retrieve({
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+      maxParticipantCount: 50,
+    });
   });
 
-  test('list', async () => {
-    const responsePromise = client.chats.list();
+  test('archive: only required params', async () => {
+    const responsePromise = client.chats.archive({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -66,41 +62,42 @@ describe('resource chats', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('list: request options and params are passed correctly', async () => {
+  test('archive: required and optional params', async () => {
+    const response = await client.chats.archive({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', archived: true });
+  });
+
+  test('search', async () => {
+    const responsePromise = client.chats.search();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('search: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.chats.list(
+      client.chats.search(
         {
           accountIDs: [
-            'whatsapp',
             'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
-            'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',
+            'local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI',
           ],
-          cursor: '1725489123456|c29tZUltc2dQYWdl',
-          direction: 'before',
+          cursor: 'eyJvZmZzZXQiOjE3MTk5OTk5OTl9',
+          direction: 'after',
+          inbox: 'primary',
+          includeMuted: true,
+          lastActivityAfter: '2019-12-27T18:11:19.117Z',
+          lastActivityBefore: '2019-12-27T18:11:19.117Z',
+          limit: 1,
+          query: 'x',
+          scope: 'titles',
+          type: 'single',
+          unreadOnly: true,
         },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(BeeperDesktop.NotFoundError);
-  });
-
-  test('archive', async () => {
-    const responsePromise = client.chats.archive('!NCdzlIaMjZUmvmvyHU:beeper.com');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('archive: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.chats.archive(
-        '!NCdzlIaMjZUmvmvyHU:beeper.com',
-        { archived: true },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(BeeperDesktop.NotFoundError);

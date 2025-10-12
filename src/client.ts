@@ -15,44 +15,32 @@ import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
-import {
-  AbstractPage,
-  type CursorListParams,
-  CursorListResponse,
-  type CursorSearchParams,
-  CursorSearchResponse,
-} from './core/pagination';
+import { AbstractPage, type CursorParams, CursorResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
-import * as TopLevelAPI from './resources/top-level';
-import {
-  DownloadAssetParams,
-  DownloadAssetResponse,
-  FocusParams,
-  FocusResponse,
-  SearchParams,
-  SearchResponse,
-} from './resources/top-level';
 import { APIPromise } from './core/api-promise';
 import { Account, AccountListResponse, Accounts } from './resources/accounts';
 import {
-  MessageListParams,
-  MessageSearchParams,
-  MessageSendParams,
-  MessageSendResponse,
-  Messages,
-} from './resources/messages';
-import { Search, SearchChatsParams, SearchContactsParams, SearchContactsResponse } from './resources/search';
+  App,
+  AppDownloadAssetParams,
+  AppDownloadAssetResponse,
+  AppOpenParams,
+  AppOpenResponse,
+  AppSearchParams,
+  AppSearchResponse,
+} from './resources/app';
+import { ContactSearchParams, ContactSearchResponse, Contacts } from './resources/contacts';
+import { MessageSearchParams, MessageSendParams, MessageSendResponse, Messages } from './resources/messages';
+import { RevokeRequest, Token, UserInfo } from './resources/token';
 import {
   Chat,
   ChatArchiveParams,
   ChatCreateParams,
   ChatCreateResponse,
-  ChatListParams,
-  ChatListResponse,
-  ChatListResponsesCursorList,
   ChatRetrieveParams,
+  ChatSearchParams,
   Chats,
+  ChatsCursor,
 } from './resources/chats/chats';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
@@ -247,54 +235,6 @@ export class BeeperDesktop {
    */
   #baseURLOverridden(): boolean {
     return this.baseURL !== 'http://localhost:23373';
-  }
-
-  /**
-   * Download a Matrix asset using its mxc:// or localmxc:// URL and return the local
-   * file URL.
-   *
-   * @example
-   * ```ts
-   * const response = await client.downloadAsset({
-   *   url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ',
-   * });
-   * ```
-   */
-  downloadAsset(
-    body: TopLevelAPI.DownloadAssetParams,
-    options?: RequestOptions,
-  ): APIPromise<TopLevelAPI.DownloadAssetResponse> {
-    return this.post('/v1/download-asset', { body, ...options });
-  }
-
-  /**
-   * Focus Beeper Desktop and optionally navigate to a specific chat, message, or
-   * pre-fill draft text and attachment.
-   *
-   * @example
-   * ```ts
-   * const response = await client.focus();
-   * ```
-   */
-  focus(
-    body: TopLevelAPI.FocusParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TopLevelAPI.FocusResponse> {
-    return this.post('/v1/focus', { body, ...options });
-  }
-
-  /**
-   * Returns matching chats, participant name matches in groups, and the first page
-   * of messages in one call. Paginate messages via search-messages. Paginate chats
-   * via search-chats. Uses the same sorting as the chat search in the app.
-   *
-   * @example
-   * ```ts
-   * const response = await client.search({ query: 'x' });
-   * ```
-   */
-  search(query: TopLevelAPI.SearchParams, options?: RequestOptions): APIPromise<TopLevelAPI.SearchResponse> {
-    return this.get('/v1/search', { query, ...options });
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -817,10 +757,17 @@ export class BeeperDesktop {
   static toFile = Uploads.toFile;
 
   /**
-   * Manage connected chat accounts
+   * Accounts operations
    */
   accounts: API.Accounts = new API.Accounts(this);
-  search: API.Search = new API.Search(this);
+  /**
+   * App operations
+   */
+  app: API.App = new API.App(this);
+  /**
+   * Contacts operations
+   */
+  contacts: API.Contacts = new API.Contacts(this);
   /**
    * Chats operations
    */
@@ -829,59 +776,62 @@ export class BeeperDesktop {
    * Messages operations
    */
   messages: API.Messages = new API.Messages(this);
+  /**
+   * Operations related to the current access token
+   */
+  token: API.Token = new API.Token(this);
 }
 
 BeeperDesktop.Accounts = Accounts;
-BeeperDesktop.Search = Search;
+BeeperDesktop.App = App;
+BeeperDesktop.Contacts = Contacts;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
+BeeperDesktop.Token = Token;
 
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
 
-  export import CursorSearch = Pagination.CursorSearch;
-  export { type CursorSearchParams as CursorSearchParams, type CursorSearchResponse as CursorSearchResponse };
-
-  export import CursorList = Pagination.CursorList;
-  export { type CursorListParams as CursorListParams, type CursorListResponse as CursorListResponse };
-
-  export {
-    type DownloadAssetResponse as DownloadAssetResponse,
-    type FocusResponse as FocusResponse,
-    type SearchResponse as SearchResponse,
-    type DownloadAssetParams as DownloadAssetParams,
-    type FocusParams as FocusParams,
-    type SearchParams as SearchParams,
-  };
+  export import Cursor = Pagination.Cursor;
+  export { type CursorParams as CursorParams, type CursorResponse as CursorResponse };
 
   export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
 
   export {
-    Search as Search,
-    type SearchContactsResponse as SearchContactsResponse,
-    type SearchChatsParams as SearchChatsParams,
-    type SearchContactsParams as SearchContactsParams,
+    App as App,
+    type AppDownloadAssetResponse as AppDownloadAssetResponse,
+    type AppOpenResponse as AppOpenResponse,
+    type AppSearchResponse as AppSearchResponse,
+    type AppDownloadAssetParams as AppDownloadAssetParams,
+    type AppOpenParams as AppOpenParams,
+    type AppSearchParams as AppSearchParams,
+  };
+
+  export {
+    Contacts as Contacts,
+    type ContactSearchResponse as ContactSearchResponse,
+    type ContactSearchParams as ContactSearchParams,
   };
 
   export {
     Chats as Chats,
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
-    type ChatListResponse as ChatListResponse,
-    type ChatListResponsesCursorList as ChatListResponsesCursorList,
+    type ChatsCursor as ChatsCursor,
     type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
-    type ChatListParams as ChatListParams,
     type ChatArchiveParams as ChatArchiveParams,
+    type ChatSearchParams as ChatSearchParams,
   };
 
   export {
     Messages as Messages,
     type MessageSendResponse as MessageSendResponse,
-    type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };
+
+  export { Token as Token, type RevokeRequest as RevokeRequest, type UserInfo as UserInfo };
 
   export type Attachment = API.Attachment;
   export type BaseResponse = API.BaseResponse;

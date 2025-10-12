@@ -1,17 +1,3 @@
-# BeeperDesktop
-
-Types:
-
-- <code><a href="./src/resources/top-level.ts">DownloadAssetResponse</a></code>
-- <code><a href="./src/resources/top-level.ts">FocusResponse</a></code>
-- <code><a href="./src/resources/top-level.ts">SearchResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/download-asset">client.<a href="./src/index.ts">downloadAsset</a>({ ...params }) -> DownloadAssetResponse</code>
-- <code title="post /v1/focus">client.<a href="./src/index.ts">focus</a>({ ...params }) -> FocusResponse</code>
-- <code title="get /v1/search">client.<a href="./src/index.ts">search</a>({ ...params }) -> SearchResponse</code>
-
 # Shared
 
 Types:
@@ -32,18 +18,31 @@ Types:
 
 Methods:
 
-- <code title="get /v1/accounts">client.accounts.<a href="./src/resources/accounts.ts">list</a>() -> AccountListResponse</code>
+- <code title="get /v0/get-accounts">client.accounts.<a href="./src/resources/accounts.ts">list</a>() -> AccountListResponse</code>
 
-# Search
+# App
 
 Types:
 
-- <code><a href="./src/resources/search.ts">SearchContactsResponse</a></code>
+- <code><a href="./src/resources/app.ts">AppDownloadAssetResponse</a></code>
+- <code><a href="./src/resources/app.ts">AppOpenResponse</a></code>
+- <code><a href="./src/resources/app.ts">AppSearchResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/search/chats">client.search.<a href="./src/resources/search.ts">chats</a>({ ...params }) -> ChatsCursorSearch</code>
-- <code title="get /v1/search/contacts/{accountID}">client.search.<a href="./src/resources/search.ts">contacts</a>(accountID, { ...params }) -> SearchContactsResponse</code>
+- <code title="post /v0/download-asset">client.app.<a href="./src/resources/app.ts">downloadAsset</a>({ ...params }) -> AppDownloadAssetResponse</code>
+- <code title="post /v0/open-app">client.app.<a href="./src/resources/app.ts">open</a>({ ...params }) -> AppOpenResponse</code>
+- <code title="get /v0/search">client.app.<a href="./src/resources/app.ts">search</a>({ ...params }) -> AppSearchResponse</code>
+
+# Contacts
+
+Types:
+
+- <code><a href="./src/resources/contacts.ts">ContactSearchResponse</a></code>
+
+Methods:
+
+- <code title="get /v0/search-users">client.contacts.<a href="./src/resources/contacts.ts">search</a>({ ...params }) -> ContactSearchResponse</code>
 
 # Chats
 
@@ -51,21 +50,20 @@ Types:
 
 - <code><a href="./src/resources/chats/chats.ts">Chat</a></code>
 - <code><a href="./src/resources/chats/chats.ts">ChatCreateResponse</a></code>
-- <code><a href="./src/resources/chats/chats.ts">ChatListResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">create</a>({ ...params }) -> ChatCreateResponse</code>
-- <code title="get /v1/chats/{chatID}">client.chats.<a href="./src/resources/chats/chats.ts">retrieve</a>(chatID, { ...params }) -> Chat</code>
-- <code title="get /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">list</a>({ ...params }) -> ChatListResponsesCursorList</code>
-- <code title="post /v1/chats/{chatID}/archive">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>(chatID, { ...params }) -> BaseResponse</code>
+- <code title="post /v0/create-chat">client.chats.<a href="./src/resources/chats/chats.ts">create</a>({ ...params }) -> ChatCreateResponse</code>
+- <code title="get /v0/get-chat">client.chats.<a href="./src/resources/chats/chats.ts">retrieve</a>({ ...params }) -> Chat</code>
+- <code title="post /v0/archive-chat">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>({ ...params }) -> BaseResponse</code>
+- <code title="get /v0/search-chats">client.chats.<a href="./src/resources/chats/chats.ts">search</a>({ ...params }) -> ChatsCursor</code>
 
 ## Reminders
 
 Methods:
 
-- <code title="post /v1/chats/{chatID}/reminders">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">create</a>(chatID, { ...params }) -> BaseResponse</code>
-- <code title="delete /v1/chats/{chatID}/reminders">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">delete</a>(chatID) -> BaseResponse</code>
+- <code title="post /v0/set-chat-reminder">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">create</a>({ ...params }) -> BaseResponse</code>
+- <code title="post /v0/clear-chat-reminder">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">delete</a>({ ...params }) -> BaseResponse</code>
 
 # Messages
 
@@ -75,6 +73,16 @@ Types:
 
 Methods:
 
-- <code title="get /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">list</a>(chatID, { ...params }) -> MessagesCursorList</code>
-- <code title="get /v1/search/messages">client.messages.<a href="./src/resources/messages.ts">search</a>({ ...params }) -> MessagesCursorSearch</code>
-- <code title="post /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">send</a>(chatID, { ...params }) -> MessageSendResponse</code>
+- <code title="get /v0/search-messages">client.messages.<a href="./src/resources/messages.ts">search</a>({ ...params }) -> MessagesCursor</code>
+- <code title="post /v0/send-message">client.messages.<a href="./src/resources/messages.ts">send</a>({ ...params }) -> MessageSendResponse</code>
+
+# Token
+
+Types:
+
+- <code><a href="./src/resources/token.ts">RevokeRequest</a></code>
+- <code><a href="./src/resources/token.ts">UserInfo</a></code>
+
+Methods:
+
+- <code title="get /oauth/userinfo">client.token.<a href="./src/resources/token.ts">info</a>() -> UserInfo</code>
