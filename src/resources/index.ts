@@ -3,35 +3,29 @@
 export * from './shared';
 export { Accounts, type Account, type AccountListResponse } from './accounts';
 export {
+  App,
+  type AppDownloadAssetResponse,
+  type AppOpenResponse,
+  type AppSearchResponse,
+  type AppDownloadAssetParams,
+  type AppOpenParams,
+  type AppSearchParams,
+} from './app';
+export {
   Chats,
   type Chat,
   type ChatCreateResponse,
-  type ChatListResponse,
   type ChatCreateParams,
   type ChatRetrieveParams,
-  type ChatListParams,
   type ChatArchiveParams,
-  type ChatsCursorSearch,
-  type ChatListResponsesCursorList,
+  type ChatSearchParams,
+  type ChatsCursor,
 } from './chats/chats';
+export { Contacts, type ContactSearchResponse, type ContactSearchParams } from './contacts';
 export {
   Messages,
   type MessageSendResponse,
-  type MessageListParams,
   type MessageSearchParams,
   type MessageSendParams,
 } from './messages';
-export {
-  Search,
-  type SearchContactsResponse,
-  type SearchChatsParams,
-  type SearchContactsParams,
-} from './search';
-export {
-  type DownloadAssetResponse,
-  type FocusResponse,
-  type SearchResponse,
-  type DownloadAssetParams,
-  type FocusParams,
-  type SearchParams,
-} from './top-level';
+export { Token, type RevokeRequest, type UserInfo } from './token';

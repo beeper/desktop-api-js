@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { CursorList, CursorSearch } from '../core/pagination';
+import { Cursor } from '../core/pagination';
 
 export interface Attachment {
   /**
@@ -80,41 +80,24 @@ export interface BaseResponse {
 
 export interface Error {
   /**
-   * Error details
+   * Error message
    */
-  error: Error.Error;
-}
+  error: string;
 
-export namespace Error {
   /**
-   * Error details
+   * Error code
    */
-  export interface Error {
-    /**
-     * Machine-readable error code
-     */
-    code: string;
+  code?: string;
 
-    /**
-     * Error message
-     */
-    message: string;
-
-    /**
-     * Error type (e.g., invalid_request_error, authentication_error, not_found_error)
-     */
-    type: string;
-
-    /**
-     * Parameter that caused the error
-     */
-    param?: string;
-  }
+  /**
+   * Additional error details
+   */
+  details?: { [key: string]: string };
 }
 
 export interface Message {
   /**
-   * Message ID.
+   * Stable message ID for cursor pagination.
    */
   id: string;
 
@@ -124,9 +107,14 @@ export interface Message {
   accountID: string;
 
   /**
-   * Unique identifier of the chat.
+   * Beeper chat/thread/room ID.
    */
   chatID: string;
+
+  /**
+   * Stable message ID (same as id).
+   */
+  messageID: string;
 
   /**
    * Sender user ID.
@@ -136,7 +124,7 @@ export interface Message {
   /**
    * A unique key used to sort messages
    */
-  sortKey: string;
+  sortKey: string | number;
 
   /**
    * Message timestamp.
@@ -206,7 +194,8 @@ export interface Reaction {
 }
 
 /**
- * User the account belongs to.
+ * A person on or reachable through Beeper. Values are best-effort and can vary by
+ * network.
  */
 export interface User {
   /**
@@ -253,6 +242,4 @@ export interface User {
   username?: string;
 }
 
-export type MessagesCursorList = CursorList<Message>;
-
-export type MessagesCursorSearch = CursorSearch<Message>;
+export type MessagesCursor = Cursor<Message>;

@@ -9,7 +9,8 @@ const client = new BeeperDesktop({
 
 describe('resource reminders', () => {
   test('create: only required params', async () => {
-    const responsePromise = client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', {
+    const responsePromise = client.chats.reminders.create({
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       reminder: { remindAtMs: 0 },
     });
     const rawResponse = await responsePromise.asResponse();
@@ -22,13 +23,14 @@ describe('resource reminders', () => {
   });
 
   test('create: required and optional params', async () => {
-    const response = await client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', {
+    const response = await client.chats.reminders.create({
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       reminder: { remindAtMs: 0, dismissOnIncomingMessage: true },
     });
   });
 
-  test('delete', async () => {
-    const responsePromise = client.chats.reminders.delete('!NCdzlIaMjZUmvmvyHU:beeper.com');
+  test('delete: only required params', async () => {
+    const responsePromise = client.chats.reminders.delete({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -36,5 +38,9 @@ describe('resource reminders', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('delete: required and optional params', async () => {
+    const response = await client.chats.reminders.delete({ chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
   });
 });

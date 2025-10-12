@@ -4,12 +4,10 @@ export {
   Chats,
   type Chat,
   type ChatCreateResponse,
-  type ChatListResponse,
   type ChatCreateParams,
   type ChatRetrieveParams,
-  type ChatListParams,
   type ChatArchiveParams,
-  type ChatsCursorSearch,
-  type ChatListResponsesCursorList,
+  type ChatSearchParams,
+  type ChatsCursor,
 } from './chats';
-export { Reminders, type ReminderCreateParams } from './reminders';
+export { Reminders, type ReminderCreateParams, type ReminderDeleteParams } from './reminders';

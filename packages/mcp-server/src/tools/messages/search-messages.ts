@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   operation: 'read',
   tags: ['messages'],
   httpMethod: 'get',
-  httpPath: '/v1/search/messages',
-  operationId: 'searchMessages',
+  httpPath: '/v0/search-messages',
+  operationId: 'search_messages',
 };
 
 export const tool: Tool = {
@@ -23,15 +23,15 @@ export const tool: Tool = {
     properties: {
       accountIDs: {
         type: 'array',
-        description: 'Limit search to specific account IDs.',
+        description: 'Limit search to specific Beeper account IDs (bridge instances).',
         items: {
           type: 'string',
-          description: 'Account ID this resource belongs to.',
+          description: 'Beeper account ID this resource belongs to.',
         },
       },
       chatIDs: {
         type: 'array',
-        description: 'Limit search to specific chat IDs.',
+        description: 'Limit search to specific Beeper chat IDs.',
         items: {
           type: 'string',
         },
@@ -75,7 +75,8 @@ export const tool: Tool = {
       },
       limit: {
         type: 'integer',
-        description: 'Maximum number of messages to return.',
+        description:
+          'Maximum number of messages to return (1–500). Defaults to 20. The current implementation caps each page at 20 items even if a higher limit is requested.',
       },
       mediaTypes: {
         type: 'array',

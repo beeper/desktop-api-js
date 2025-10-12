@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   operation: 'read',
   tags: ['chats'],
   httpMethod: 'get',
-  httpPath: '/v1/chats/{chatID}',
-  operationId: 'getChat',
+  httpPath: '/v0/get-chat',
+  operationId: 'get_chat',
 };
 
 export const tool: Tool = {
@@ -22,7 +22,8 @@ export const tool: Tool = {
     properties: {
       chatID: {
         type: 'string',
-        description: 'Unique identifier of the chat.',
+        description:
+          "Unique identifier of the chat to retrieve. Not available for iMessage chats. Participants are limited by 'maxParticipantCount'.",
       },
       maxParticipantCount: {
         type: 'integer',
@@ -38,8 +39,8 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
-  const { chatID, ...body } = args as any;
-  return asTextContentResult(await client.chats.retrieve(chatID, body));
+  const body = args as any;
+  return asTextContentResult(await client.chats.retrieve(body));
 };
 
 export default { metadata, tool, handler };

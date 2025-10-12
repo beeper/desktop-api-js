@@ -6,12 +6,12 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'search',
+  resource: 'chats',
   operation: 'read',
   tags: ['chats'],
   httpMethod: 'get',
-  httpPath: '/v1/search/chats',
-  operationId: 'searchChats',
+  httpPath: '/v0/search-chats',
+  operationId: 'search_chats',
 };
 
 export const tool: Tool = {
@@ -26,17 +26,17 @@ export const tool: Tool = {
         description: 'Provide an array of account IDs to filter chats from specific messaging accounts only',
         items: {
           type: 'string',
-          description: 'Account ID this resource belongs to.',
+          description: 'Beeper account ID this resource belongs to.',
         },
       },
       cursor: {
         type: 'string',
-        description: "Opaque pagination cursor; do not inspect. Use together with 'direction'.",
+        description: 'Pagination cursor from previous response. Use with direction to navigate results',
       },
       direction: {
         type: 'string',
         description:
-          "Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.",
+          'Pagination direction: "after" for newer page, "before" for older page. Defaults to "before" when only cursor is provided.',
         enum: ['after', 'before'],
       },
       inbox: {
@@ -97,7 +97,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  const response = await client.search.chats(body).asResponse();
+  const response = await client.chats.search(body).asResponse();
   return asTextContentResult(await response.json());
 };
 

@@ -6,12 +6,11 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
 /**
- * Manage connected chat accounts
+ * Accounts operations
  */
 export class Accounts extends APIResource {
   /**
-   * Lists chat accounts across networks (WhatsApp, Telegram, Twitter/X, etc.)
-   * actively connected to this Beeper Desktop instance
+   * List connected Beeper accounts available on this device
    *
    * @example
    * ```ts
@@ -19,7 +18,7 @@ export class Accounts extends APIResource {
    * ```
    */
   list(options?: RequestOptions): APIPromise<AccountListResponse> {
-    return this._client.get('/v1/accounts', options);
+    return this._client.get('/v0/get-accounts', options);
   }
 }
 
@@ -33,12 +32,14 @@ export interface Account {
   accountID: string;
 
   /**
-   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger').
+   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger'). You
+   * MUST use 'accountID' to perform actions.
    */
   network: string;
 
   /**
-   * User the account belongs to.
+   * A person on or reachable through Beeper. Values are best-effort and can vary by
+   * network.
    */
   user: Shared.User;
 }
