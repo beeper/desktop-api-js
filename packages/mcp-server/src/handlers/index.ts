@@ -19,11 +19,10 @@ const HANDLER_OVERRIDES: Record<string, HandlerFunction> = {
 };
 
 export function mapEndpoint(endpoint: Endpoint): Endpoint {
-  if (!HANDLER_OVERRIDES[endpoint.tool.name]) {
-    return endpoint;
-  }
+  const handler = HANDLER_OVERRIDES[endpoint.tool.name];
+  if (!handler) return endpoint;
   return {
     ...endpoint,
-    handler: HANDLER_OVERRIDES[endpoint.tool.name]!,
+    handler,
   };
 }
