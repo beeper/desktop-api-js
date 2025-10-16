@@ -6,17 +6,17 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'chats',
+  resource: 'messages',
   operation: 'read',
-  tags: ['chats'],
+  tags: ['messages'],
   httpMethod: 'get',
-  httpPath: '/v1/chats/{chatID}',
-  operationId: 'getChat',
+  httpPath: '/v1/chats/{chatID}/messages',
+  operationId: 'listMessages',
 };
 
 export const tool: Tool = {
-  name: 'get_chat',
-  description: 'Get chat details: metadata, participants (limited), last activity.',
+  name: 'list_messages',
+  description: 'List messages from a specific chat with pagination support.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -24,10 +24,15 @@ export const tool: Tool = {
         type: 'string',
         description: 'Unique identifier of the chat.',
       },
-      maxParticipantCount: {
-        type: 'integer',
+      cursor: {
+        type: 'string',
+        description: "Opaque pagination cursor; do not inspect. Use together with 'direction'.",
+      },
+      direction: {
+        type: 'string',
         description:
-          'Maximum number of participants to return. Use -1 for all; otherwise 0–500. Defaults to all (-1).',
+          "Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.",
+        enum: ['after', 'before'],
       },
     },
     required: ['chatID'],
@@ -39,7 +44,8 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { chatID, ...body } = args as any;
-  return asTextContentResult(await client.chats.retrieve(chatID, body));
+  const response = await client.messages.list(chatID, body).asResponse();
+  return asTextContentResult(await response.json());
 };
 
 export default { metadata, tool, handler };

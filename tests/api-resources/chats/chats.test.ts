@@ -10,7 +10,7 @@ const client = new BeeperDesktop({
 describe('resource chats', () => {
   test('create: only required params', async () => {
     const responsePromise = client.chats.create({
-      accountID: 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
+      accountID: 'accountID',
       participantIDs: ['string'],
       type: 'single',
     });
@@ -25,7 +25,7 @@ describe('resource chats', () => {
 
   test('create: required and optional params', async () => {
     const response = await client.chats.create({
-      accountID: 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
+      accountID: 'accountID',
       participantIDs: ['string'],
       type: 'single',
       messageText: 'messageText',
@@ -76,9 +76,8 @@ describe('resource chats', () => {
             'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
             'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',
           ],
-          cursor: '1725489123456',
+          cursor: '1725489123456|c29tZUltc2dQYWdl',
           direction: 'before',
-          limit: 1,
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -127,8 +126,8 @@ describe('resource chats', () => {
             'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
             'local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI',
           ],
-          cursor: 'eyJvZmZzZXQiOjE3MTk5OTk5OTl9',
-          direction: 'after',
+          cursor: '1725489123456|c29tZUltc2dQYWdl',
+          direction: 'before',
           inbox: 'primary',
           includeMuted: true,
           lastActivityAfter: '2019-12-27T18:11:19.117Z',

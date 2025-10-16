@@ -1,11 +1,27 @@
 # Changelog
 
-## 0.1.6 (2025-10-02)
+## 4.1.293 (2025-10-16)
 
-Full Changelog: [v0.1.5...v0.1.6](https://github.com/beeper/desktop-api-js/compare/v0.1.5...v0.1.6)
+Full Changelog: [v0.1.5...v4.1.293](https://github.com/beeper/desktop-api-js/compare/v0.1.5...v4.1.293)
 
 ### Features
 
+* **api:** bump for new endpoints ([8b4b937](https://github.com/beeper/desktop-api-js/commit/8b4b9379cc2bf313e684e4883996274cb3c45624))
+* **api:** manual updates ([f35c718](https://github.com/beeper/desktop-api-js/commit/f35c71843c8d3692e2cf9d5d3f060b925653ea12))
+* **api:** manual updates ([41bbaa1](https://github.com/beeper/desktop-api-js/commit/41bbaa182be124d0bd0b5cf5265b3fa2793bc0e1))
+* **api:** manual updates ([27afe3a](https://github.com/beeper/desktop-api-js/commit/27afe3a031672191b4837e996f11c6425c0c692f))
+* **api:** manual updates ([e12ab16](https://github.com/beeper/desktop-api-js/commit/e12ab16a4664ef6b770750225dc0e9ea53005b89))
+* **api:** manual updates ([914badc](https://github.com/beeper/desktop-api-js/commit/914badc5d98d1b3ab5b7d1b404c687110ef34913))
+* **api:** manual updates ([e657efe](https://github.com/beeper/desktop-api-js/commit/e657efe6bf48b6c76e09060ac00c8e0403213982))
+* **api:** manual updates ([0de85a3](https://github.com/beeper/desktop-api-js/commit/0de85a39f784415474e73187609e4ef4c5fe2cf1))
+* **api:** manual updates ([d7c35d2](https://github.com/beeper/desktop-api-js/commit/d7c35d27538be9752a6e15a4d17c4b5354b44b3f))
+* **api:** manual updates ([80f8804](https://github.com/beeper/desktop-api-js/commit/80f880478414edcba479e4717c5a1033a2545d3d))
+* **api:** manual updates ([e404d7e](https://github.com/beeper/desktop-api-js/commit/e404d7ebd08830f115f7468598cc275db637d508))
+* **api:** manual updates ([540c168](https://github.com/beeper/desktop-api-js/commit/540c168bfa982178e5ab743c9ef3986784438617))
+* **api:** manual updates ([3501ff9](https://github.com/beeper/desktop-api-js/commit/3501ff900847979fcf7b6e543a99364b74a979a5))
+* **api:** manual updates ([d1a5970](https://github.com/beeper/desktop-api-js/commit/d1a5970f917e9ddfe1060a4129feee7bb1be1414))
+* **api:** remove limit from list routes ([c145154](https://github.com/beeper/desktop-api-js/commit/c1451540df373793b5fd90e780faab8acf38a1dc))
+* **api:** revert work in progress changes ([50eb07e](https://github.com/beeper/desktop-api-js/commit/50eb07e2412770c28316f25349a6894dfca88004))
 * **mcp:** add option for including docs tools ([a521cb8](https://github.com/beeper/desktop-api-js/commit/a521cb8f972778c0253b657b712da7681dd78853))
 * **mcp:** enable experimental docs search tool ([c349699](https://github.com/beeper/desktop-api-js/commit/c349699a05745356ce3d12dc693d643a85a52d5d))
 
@@ -23,6 +39,8 @@ Full Changelog: [v0.1.5...v0.1.6](https://github.com/beeper/desktop-api-js/compa
 
 ### Chores
 
+* configure new SDK language ([f50310b](https://github.com/beeper/desktop-api-js/commit/f50310b4a7cc3e2286430530c8ffc867f77f7ef9))
+* configure new SDK language ([fee94ba](https://github.com/beeper/desktop-api-js/commit/fee94ba4b23ec91abc030ddbb872c08af43e2df8))
 * do not install brew dependencies in ./scripts/bootstrap by default ([cd62f83](https://github.com/beeper/desktop-api-js/commit/cd62f83fc5e6e93501df72cf49c0ee2838e02476))
 * fix changelog with actual entries ([45de3f5](https://github.com/beeper/desktop-api-js/commit/45de3f5a1d86486b9752e32cbd5283d6efe88434))
 * **internal:** codegen related update ([3598172](https://github.com/beeper/desktop-api-js/commit/3598172f0839f111c6000c9f29502d21afabee0c))
@@ -31,6 +49,8 @@ Full Changelog: [v0.1.5...v0.1.6](https://github.com/beeper/desktop-api-js/compa
 * **internal:** ignore .eslintcache ([22d7f29](https://github.com/beeper/desktop-api-js/commit/22d7f29cd477bf4d22c68b51cd4b99bcf710efbd))
 * **internal:** remove .eslintcache ([f2a0dfb](https://github.com/beeper/desktop-api-js/commit/f2a0dfbd7930292f715ab530a6dedbf53e6ae8e3))
 * **internal:** remove deprecated `compilerOptions.baseUrl` from tsconfig.json ([ffaa6d6](https://github.com/beeper/desktop-api-js/commit/ffaa6d646236e88ecf997dc9a0b77733029a885b))
+* **internal:** use npm pack for build uploads ([31e0341](https://github.com/beeper/desktop-api-js/commit/31e0341efbad7c4b9abc13d145c477eb3676cc0b))
+* **jsdoc:** fix [@link](https://github.com/link) annotations to refer only to parts of the package‘s public interface ([8cf89a9](https://github.com/beeper/desktop-api-js/commit/8cf89a9e31969a45d24179342955b2a4e931ae6f))
 * **mcp:** allow pointing `docs_search` tool at other URLs ([6044c34](https://github.com/beeper/desktop-api-js/commit/6044c3467dd578e2fba46fa10f83ad3240222c3f))
 * update lockfile ([a9a736f](https://github.com/beeper/desktop-api-js/commit/a9a736fba58dde3c39bc2f5501be1ae30f380367))
 

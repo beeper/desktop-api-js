@@ -9,10 +9,7 @@ const client = new BeeperDesktop({
 
 describe('resource contacts', () => {
   test('search: only required params', async () => {
-    const responsePromise = client.contacts.search({
-      accountID: 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
-      query: 'x',
-    });
+    const responsePromise = client.accounts.contacts.search('accountID', { query: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,9 +20,6 @@ describe('resource contacts', () => {
   });
 
   test('search: required and optional params', async () => {
-    const response = await client.contacts.search({
-      accountID: 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
-      query: 'x',
-    });
+    const response = await client.accounts.contacts.search('accountID', { query: 'x' });
   });
 });

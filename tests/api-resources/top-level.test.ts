@@ -8,8 +8,8 @@ const client = new BeeperDesktop({
 });
 
 describe('top level methods', () => {
-  test('downloadAsset: only required params', async () => {
-    const responsePromise = client.downloadAsset({ url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ' });
+  test('focus', async () => {
+    const responsePromise = client.focus();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,25 +19,10 @@ describe('top level methods', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('downloadAsset: required and optional params', async () => {
-    const response = await client.downloadAsset({ url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ' });
-  });
-
-  test('open', async () => {
-    const responsePromise = client.open();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('open: request options and params are passed correctly', async () => {
+  test('focus: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.open(
+      client.focus(
         {
           chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
           draftAttachmentPath: 'draftAttachmentPath',

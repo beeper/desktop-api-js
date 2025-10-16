@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   operation: 'write',
   tags: ['messages'],
   httpMethod: 'post',
-  httpPath: '/v1/messages',
+  httpPath: '/v1/chats/{chatID}/messages',
   operationId: 'sendMessage',
 };
 
@@ -40,8 +40,8 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
-  const body = args as any;
-  return asTextContentResult(await client.messages.send(body));
+  const { chatID, ...body } = args as any;
+  return asTextContentResult(await client.messages.send(chatID, body));
 };
 
 export default { metadata, tool, handler };

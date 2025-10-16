@@ -3,22 +3,10 @@
 import * as Shared from './shared';
 import * as ChatsAPI from './chats/chats';
 
-export interface DownloadAssetResponse {
-  /**
-   * Error message if the download failed.
-   */
-  error?: string;
-
-  /**
-   * Local file URL to the downloaded asset.
-   */
-  srcURL?: string;
-}
-
 /**
- * Response indicating successful app opening.
+ * Response indicating successful app focus action.
  */
-export interface OpenResponse {
+export interface FocusResponse {
   /**
    * Whether the app was successfully opened/focused.
    */
@@ -76,14 +64,7 @@ export namespace SearchResponse {
   }
 }
 
-export interface DownloadAssetParams {
-  /**
-   * Matrix content URL (mxc:// or localmxc://) for the asset to download.
-   */
-  url: string;
-}
-
-export interface OpenParams {
+export interface FocusParams {
   /**
    * Optional Beeper chat ID (or local chat ID) to focus after opening the app. If
    * omitted, only opens/focuses the app.
@@ -115,11 +96,9 @@ export interface SearchParams {
 
 export declare namespace TopLevel {
   export {
-    type DownloadAssetResponse as DownloadAssetResponse,
-    type OpenResponse as OpenResponse,
+    type FocusResponse as FocusResponse,
     type SearchResponse as SearchResponse,
-    type DownloadAssetParams as DownloadAssetParams,
-    type OpenParams as OpenParams,
+    type FocusParams as FocusParams,
     type SearchParams as SearchParams,
   };
 }

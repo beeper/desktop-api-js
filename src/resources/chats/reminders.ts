@@ -1,13 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * Reminders operations
+ * Manage reminders for chats
  */
 export class Reminders extends APIResource {
   /**
@@ -15,18 +15,18 @@ export class Reminders extends APIResource {
    *
    * @example
    * ```ts
-   * const baseResponse = await client.chats.reminders.create(
+   * await client.chats.reminders.create(
    *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
    *   { reminder: { remindAtMs: 0 } },
    * );
    * ```
    */
-  create(
-    chatID: string,
-    body: ReminderCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<Shared.BaseResponse> {
-    return this._client.post(path`/v1/chats/${chatID}/reminders`, { body, ...options });
+  create(chatID: string, body: ReminderCreateParams, options?: RequestOptions): APIPromise<void> {
+    return this._client.post(path`/v1/chats/${chatID}/reminders`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -34,13 +34,16 @@ export class Reminders extends APIResource {
    *
    * @example
    * ```ts
-   * const baseResponse = await client.chats.reminders.delete(
+   * await client.chats.reminders.delete(
    *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
    * );
    * ```
    */
-  delete(chatID: string, options?: RequestOptions): APIPromise<Shared.BaseResponse> {
-    return this._client.delete(path`/v1/chats/${chatID}/reminders`, options);
+  delete(chatID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/v1/chats/${chatID}/reminders`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 }
 

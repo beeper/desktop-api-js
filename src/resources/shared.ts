@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Cursor } from '../core/pagination';
+import { CursorSearch, CursorSortKey } from '../core/pagination';
 
 export interface Attachment {
   /**
@@ -72,49 +72,57 @@ export namespace Attachment {
   }
 }
 
-export interface BaseResponse {
-  success: boolean;
-
-  error?: string;
-}
-
 export interface Error {
   /**
-   * Error details
+   * Machine-readable error code
    */
-  error: Error.Error;
+  code: string;
+
+  /**
+   * Error message
+   */
+  message: string;
+
+  /**
+   * Additional error details for debugging
+   */
+  details?: Error.Issues | { [key: string]: unknown } | unknown;
 }
 
 export namespace Error {
   /**
-   * Error details
+   * Validation error details
    */
-  export interface Error {
+  export interface Issues {
     /**
-     * Machine-readable error code
+     * List of validation issues
      */
-    code: string;
+    issues: Array<Issues.Issue>;
+  }
 
-    /**
-     * Error message
-     */
-    message: string;
+  export namespace Issues {
+    export interface Issue {
+      /**
+       * Validation issue code
+       */
+      code: string;
 
-    /**
-     * Error type (e.g., invalid_request_error, authentication_error, not_found_error)
-     */
-    type: string;
+      /**
+       * Human-readable description of the validation issue
+       */
+      message: string;
 
-    /**
-     * Parameter that caused the error
-     */
-    param?: string;
+      /**
+       * Path pointing to the invalid field within the payload
+       */
+      path: Array<string | number>;
+    }
   }
 }
 
 export interface Message {
   /**
-   * Stable message ID for cursor pagination.
+   * Message ID.
    */
   id: string;
 
@@ -124,14 +132,9 @@ export interface Message {
   accountID: string;
 
   /**
-   * Beeper chat/thread/room ID.
+   * Unique identifier of the chat.
    */
   chatID: string;
-
-  /**
-   * Stable message ID (same as id).
-   */
-  messageID: string;
 
   /**
    * Sender user ID.
@@ -139,9 +142,9 @@ export interface Message {
   senderID: string;
 
   /**
-   * A unique key used to sort messages
+   * A unique, sortable key used to sort messages.
    */
-  sortKey: string | number;
+  sortKey: string;
 
   /**
    * Message timestamp.
@@ -258,4 +261,6 @@ export interface User {
   username?: string;
 }
 
-export type MessagesCursor = Cursor<Message>;
+export type MessagesCursorSortKey = CursorSortKey<Message>;
+
+export type MessagesCursorSearch = CursorSearch<Message>;

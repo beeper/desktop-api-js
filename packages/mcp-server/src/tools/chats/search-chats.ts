@@ -31,12 +31,12 @@ export const tool: Tool = {
       },
       cursor: {
         type: 'string',
-        description: 'Pagination cursor from previous response. Use with direction to navigate results',
+        description: "Opaque pagination cursor; do not inspect. Use together with 'direction'.",
       },
       direction: {
         type: 'string',
         description:
-          'Pagination direction: "after" for newer page, "before" for older page. Defaults to "before" when only cursor is provided.',
+          "Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.",
         enum: ['after', 'before'],
       },
       inbox: {

@@ -10,7 +10,7 @@ export {
   type ChatListParams,
   type ChatArchiveParams,
   type ChatSearchParams,
-  type ChatListResponsesCursor,
-  type ChatsCursor,
+  type ChatListResponsesCursorNoLimit,
+  type ChatsCursorSearch,
 } from './chats';
 export { Reminders, type ReminderCreateParams } from './reminders';

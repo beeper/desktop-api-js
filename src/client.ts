@@ -15,21 +15,21 @@ import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
-import { AbstractPage, type CursorParams, CursorResponse } from './core/pagination';
+import {
+  AbstractPage,
+  type CursorNoLimitParams,
+  CursorNoLimitResponse,
+  type CursorSearchParams,
+  CursorSearchResponse,
+  type CursorSortKeyParams,
+  CursorSortKeyResponse,
+} from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
-import {
-  DownloadAssetParams,
-  DownloadAssetResponse,
-  OpenParams,
-  OpenResponse,
-  SearchParams,
-  SearchResponse,
-} from './resources/top-level';
+import { FocusParams, FocusResponse, SearchParams, SearchResponse } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
-import { Account, AccountListResponse, Accounts } from './resources/accounts';
-import { ContactSearchParams, ContactSearchResponse, Contacts } from './resources/contacts';
+import { AssetDownloadParams, AssetDownloadResponse, Assets } from './resources/assets';
 import {
   MessageListParams,
   MessageSearchParams,
@@ -37,6 +37,7 @@ import {
   MessageSendResponse,
   Messages,
 } from './resources/messages';
+import { Account, AccountListResponse, Accounts } from './resources/accounts/accounts';
 import {
   Chat,
   ChatArchiveParams,
@@ -44,11 +45,11 @@ import {
   ChatCreateResponse,
   ChatListParams,
   ChatListResponse,
-  ChatListResponsesCursor,
+  ChatListResponsesCursorNoLimit,
   ChatRetrieveParams,
   ChatSearchParams,
   Chats,
-  ChatsCursor,
+  ChatsCursorSearch,
 } from './resources/chats/chats';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
@@ -246,37 +247,19 @@ export class BeeperDesktop {
   }
 
   /**
-   * Download a Matrix asset using its mxc:// or localmxc:// URL and return the local
-   * file URL.
-   *
-   * @example
-   * ```ts
-   * const response = await client.downloadAsset({
-   *   url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ',
-   * });
-   * ```
-   */
-  downloadAsset(
-    body: TopLevelAPI.DownloadAssetParams,
-    options?: RequestOptions,
-  ): APIPromise<TopLevelAPI.DownloadAssetResponse> {
-    return this.post('/v1/download-asset', { body, ...options });
-  }
-
-  /**
-   * Open Beeper Desktop and optionally navigate to a specific chat, message, or
+   * Focus Beeper Desktop and optionally navigate to a specific chat, message, or
    * pre-fill draft text and attachment.
    *
    * @example
    * ```ts
-   * const response = await client.open();
+   * const response = await client.focus();
    * ```
    */
-  open(
-    body: TopLevelAPI.OpenParams | null | undefined = {},
+  focus(
+    body: TopLevelAPI.FocusParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<TopLevelAPI.OpenResponse> {
-    return this.post('/v1/open', { body, ...options });
+  ): APIPromise<TopLevelAPI.FocusResponse> {
+    return this.post('/v1/focus', { body, ...options });
   }
 
   /**
@@ -817,54 +800,58 @@ export class BeeperDesktop {
    */
   accounts: API.Accounts = new API.Accounts(this);
   /**
-   * Contacts operations
-   */
-  contacts: API.Contacts = new API.Contacts(this);
-  /**
-   * Chats operations
+   * Manage chats
    */
   chats: API.Chats = new API.Chats(this);
   /**
-   * Messages operations
+   * Manage messages in chats
    */
   messages: API.Messages = new API.Messages(this);
+  /**
+   * Manage assets in Beeper Desktop, like message attachments
+   */
+  assets: API.Assets = new API.Assets(this);
 }
 
 BeeperDesktop.Accounts = Accounts;
-BeeperDesktop.Contacts = Contacts;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
+BeeperDesktop.Assets = Assets;
 
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
 
-  export import Cursor = Pagination.Cursor;
-  export { type CursorParams as CursorParams, type CursorResponse as CursorResponse };
+  export import CursorSearch = Pagination.CursorSearch;
+  export { type CursorSearchParams as CursorSearchParams, type CursorSearchResponse as CursorSearchResponse };
+
+  export import CursorNoLimit = Pagination.CursorNoLimit;
+  export {
+    type CursorNoLimitParams as CursorNoLimitParams,
+    type CursorNoLimitResponse as CursorNoLimitResponse,
+  };
+
+  export import CursorSortKey = Pagination.CursorSortKey;
+  export {
+    type CursorSortKeyParams as CursorSortKeyParams,
+    type CursorSortKeyResponse as CursorSortKeyResponse,
+  };
 
   export {
-    type DownloadAssetResponse as DownloadAssetResponse,
-    type OpenResponse as OpenResponse,
+    type FocusResponse as FocusResponse,
     type SearchResponse as SearchResponse,
-    type DownloadAssetParams as DownloadAssetParams,
-    type OpenParams as OpenParams,
+    type FocusParams as FocusParams,
     type SearchParams as SearchParams,
   };
 
   export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
 
   export {
-    Contacts as Contacts,
-    type ContactSearchResponse as ContactSearchResponse,
-    type ContactSearchParams as ContactSearchParams,
-  };
-
-  export {
     Chats as Chats,
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
-    type ChatListResponsesCursor as ChatListResponsesCursor,
-    type ChatsCursor as ChatsCursor,
+    type ChatListResponsesCursorNoLimit as ChatListResponsesCursorNoLimit,
+    type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
     type ChatListParams as ChatListParams,
@@ -880,8 +867,13 @@ export declare namespace BeeperDesktop {
     type MessageSendParams as MessageSendParams,
   };
 
+  export {
+    Assets as Assets,
+    type AssetDownloadResponse as AssetDownloadResponse,
+    type AssetDownloadParams as AssetDownloadParams,
+  };
+
   export type Attachment = API.Attachment;
-  export type BaseResponse = API.BaseResponse;
   export type Error = API.Error;
   export type Message = API.Message;
   export type Reaction = API.Reaction;
