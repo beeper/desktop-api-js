@@ -145,15 +145,23 @@ export const formatAttachmentToMarkdown = (attachment: Shared.Attachment | undef
 
   const fileName = attachment.fileName || 'file';
   const url = attachment.srcURL || '';
-  const sizeInfo = attachment.fileSize ? ` (${formatBytes(attachment.fileSize)}` : ' (';
   const hasBothDimensions =
     typeof attachment.size?.width === 'number' && typeof attachment.size?.height === 'number';
-  const dimensions = hasBothDimensions ? `, ${attachment.size!.width}x${attachment.size!.height})` : ')';
 
-  return `\n${typeEmoji} [${fileName}](${url})${sizeInfo}${dimensions}`;
+  const metaInfo: string[] = [];
+  if (attachment.fileSize) {
+    metaInfo.push(formatBytes(attachment.fileSize));
+  }
+  if (hasBothDimensions) {
+    metaInfo.push(`${attachment.size!.width}x${attachment.size!.height}`);
+  }
+
+  const metaString = metaInfo.length > 0 ? ` (${metaInfo.join(', ')})` : '';
+
+  return `\n${typeEmoji} [${fileName}](${url})${metaString}`;
 };
 
-export const formatChatToMarkdown = (chat: Chat, baseURL: string | undefined) => {
+export const formatChatToMarkdown = (chat: Chat, baseURL: string | undefined): string => {
   const openURL = baseURL ? createOpenLink(baseURL, chat.localChatID ?? chat.id) : undefined;
   const title = openURL ? `[${chat.title}](${openURL})` : chat.title;
   const participantList =
@@ -173,10 +181,16 @@ export const formatChatToMarkdown = (chat: Chat, baseURL: string | undefined) =>
   if (chat.isMuted) status.push('muted');
   if (chat.isPinned) status.push('pinned');
   if (status.length > 0) lines.push(`This chat is ${status.join(', ')}.`);
-  return lines;
+  return lines.join('\n');
 };
 
-const parseLocalDateKey = (key: string) => parse(key, 'yyyy-MM-dd', new Date());
+const parseLocalDateKey = (key: string): Date => {
+  const parsed = parse(key, 'yyyy-MM-dd', new Date());
+  if (isNaN(parsed.getTime())) {
+    throw new Error(`Invalid date key: ${key}`);
+  }
+  return parsed;
+};
 
 interface MessagesResponse {
   items: Message[];

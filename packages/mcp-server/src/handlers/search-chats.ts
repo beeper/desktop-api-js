@@ -27,7 +27,7 @@ export const handler: HandlerFunction = async (client, args) => {
     lines.push('\nNo chats found.');
   } else {
     for (const chat of items) {
-      lines.push(...formatChatToMarkdown(chat, undefined));
+      lines.push(formatChatToMarkdown(chat, undefined));
     }
   }
   lines.push('\n# Using this information\n');

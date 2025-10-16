@@ -27,7 +27,7 @@ export const handler: HandlerFunction = async (client, args) => {
     lines.push('\nNo chats found.');
   } else {
     for (const chatWithPreview of items) {
-      lines.push(...formatChatToMarkdown(chatWithPreview, undefined));
+      lines.push(formatChatToMarkdown(chatWithPreview, undefined));
       const preview = (chatWithPreview as any).preview;
       if (preview) {
         lines.push(`**Last message**: ${preview.text || '(no text)'}`);
