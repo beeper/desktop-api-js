@@ -1,12 +1,7 @@
 # Beeper Desktop API MCP Server
 
-> **⚠️ Warning: Work in Progress**
->
-> This project is work in progress and should not be used.
-> Please use the built-in MCP server Beeper Desktop comes with for now.
->
-> We plan to migrate the built-in server to this package soon.
->
+> Beeper Desktop already comes with this MCP server, use this package directly for custom integrations.
+> 
 > [Learn more about the built-in Beeper Desktop MCP server here.](https://developers.beeper.com/desktop-api/mcp/)
 
 ## Installation
