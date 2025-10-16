@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Cursor } from '../core/pagination';
+import { CursorSearch, CursorSortKey } from '../core/pagination';
 
 export interface Attachment {
   /**
@@ -72,32 +72,57 @@ export namespace Attachment {
   }
 }
 
-export interface BaseResponse {
-  success: boolean;
-
-  error?: string;
-}
-
 export interface Error {
+  /**
+   * Machine-readable error code
+   */
+  code: string;
+
   /**
    * Error message
    */
-  error: string;
+  message: string;
 
   /**
-   * Error code
+   * Additional error details for debugging
    */
-  code?: string;
+  details?: Error.Issues | { [key: string]: unknown } | unknown;
+}
 
+export namespace Error {
   /**
-   * Additional error details
+   * Validation error details
    */
-  details?: { [key: string]: string };
+  export interface Issues {
+    /**
+     * List of validation issues
+     */
+    issues: Array<Issues.Issue>;
+  }
+
+  export namespace Issues {
+    export interface Issue {
+      /**
+       * Validation issue code
+       */
+      code: string;
+
+      /**
+       * Human-readable description of the validation issue
+       */
+      message: string;
+
+      /**
+       * Path pointing to the invalid field within the payload
+       */
+      path: Array<string | number>;
+    }
+  }
 }
 
 export interface Message {
   /**
-   * Stable message ID for cursor pagination.
+   * Message ID.
    */
   id: string;
 
@@ -107,14 +132,9 @@ export interface Message {
   accountID: string;
 
   /**
-   * Beeper chat/thread/room ID.
+   * Unique identifier of the chat.
    */
   chatID: string;
-
-  /**
-   * Stable message ID (same as id).
-   */
-  messageID: string;
 
   /**
    * Sender user ID.
@@ -122,9 +142,9 @@ export interface Message {
   senderID: string;
 
   /**
-   * A unique key used to sort messages
+   * A unique, sortable key used to sort messages.
    */
-  sortKey: string | number;
+  sortKey: string;
 
   /**
    * Message timestamp.
@@ -194,8 +214,7 @@ export interface Reaction {
 }
 
 /**
- * A person on or reachable through Beeper. Values are best-effort and can vary by
- * network.
+ * User the account belongs to.
  */
 export interface User {
   /**
@@ -242,4 +261,6 @@ export interface User {
   username?: string;
 }
 
-export type MessagesCursor = Cursor<Message>;
+export type MessagesCursorSortKey = CursorSortKey<Message>;
+
+export type MessagesCursorSearch = CursorSearch<Message>;
