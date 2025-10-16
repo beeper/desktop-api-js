@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.2.0 (2025-10-16)
+
+Full Changelog: [v4.1.293...v4.2.0](https://github.com/beeper/desktop-api-js/compare/v4.1.293...v4.2.0)
+
+### Features
+
+* **mcp:** customize MCP outputs ([#15](https://github.com/beeper/desktop-api-js/issues/15)) ([21f3016](https://github.com/beeper/desktop-api-js/commit/21f30161ea06481f442648d03fd904a4e8395e99))
+
 ## 4.1.293 (2025-10-16)
 
 Full Changelog: [v0.1.5...v4.1.293](https://github.com/beeper/desktop-api-js/compare/v0.1.5...v4.1.293)
