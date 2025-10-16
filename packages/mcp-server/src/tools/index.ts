@@ -15,11 +15,12 @@ import clear_chat_reminder from './chats/reminders/clear-chat-reminder';
 import list_messages from './messages/list-messages';
 import search_messages from './messages/search-messages';
 import send_message from './messages/send-message';
+import { mapEndpoint } from '../handlers';
 
 export const endpoints: Endpoint[] = [];
 
 function addEndpoint(endpoint: Endpoint) {
-  endpoints.push(endpoint);
+  endpoints.push(mapEndpoint(endpoint));
 }
 
 addEndpoint(focus_app);
