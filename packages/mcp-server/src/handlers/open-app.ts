@@ -2,7 +2,7 @@ import { asTextContentResult, type HandlerFunction } from '../tools/types';
 
 export const handler: HandlerFunction = async (client, args) => {
   const body = args as any;
-  const output = await client.open(body);
+  const output = await client.focus(body);
 
   const lines: string[] = [];
   if (output.success) {

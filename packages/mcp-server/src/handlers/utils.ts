@@ -187,7 +187,7 @@ interface MessagesResponse {
 }
 
 export const mapMessagesToText = (
-  output: Shared.MessagesCursor,
+  output: Shared.MessagesCursorSearch,
   input?: {
     query?: string;
     sender?: string;
@@ -316,7 +316,7 @@ export const mapMessagesToText = (
         const attachmentLink =
           attachment && attachmentChatID ?
             `\n📎 [${attachment.fileName || 'attachment'}](beeper-mcp://attachments/${attachmentChatID}/${
-              message.messageID
+              message.id
             }/0)`
           : '';
         const reactionsStr = formatReactionsToMarkdown(message.reactions, participantMap);

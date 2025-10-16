@@ -6,7 +6,7 @@ export const handler: HandlerFunction = async (client, args) => {
   const output = await client.messages.send(body);
 
   const lines: string[] = [];
-  if (output.success) {
+  if (output.pendingMessageID) {
     const deeplink = createOpenLink('', body?.chatID ?? '');
     if (deeplink) lines.push(`**Open the chat in Beeper**: ${deeplink}`);
   } else {
