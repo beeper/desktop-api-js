@@ -2,8 +2,8 @@ import type { HandlerFunction } from '../tools/types';
 import { asMarkdownContentResult, formatChatToMarkdown } from './utils';
 
 export const handler: HandlerFunction = async (client, args) => {
-  const body = args as any;
-  const chat = await client.chats.retrieve(body);
+  const { chatID, ...queryParams } = args as any;
+  const chat = await client.chats.retrieve(chatID, queryParams);
 
   const lines: string[] = [];
   if (!chat) {

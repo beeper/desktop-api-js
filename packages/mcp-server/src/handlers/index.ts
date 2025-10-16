@@ -11,6 +11,7 @@ import { handler as send_message } from './send-message';
 const HANDLER_OVERRIDES: Record<string, HandlerFunction> = {
   get_accounts,
   open_in_app,
+  focus_app: open_in_app,
   search,
   get_chat,
   search_chats,

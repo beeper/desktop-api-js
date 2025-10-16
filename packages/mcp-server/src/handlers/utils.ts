@@ -196,7 +196,7 @@ export const mapMessagesToText = (
   ctx?: { apiBaseURL?: string; maxTextLength?: number },
 ) => {
   const { items, hasMore } = output;
-  const chats = (output as { chats?: Record<string, Chat> }).chats ?? {};
+  const chats = (output as any)?.body?.chats ?? {};
 
   const messageCount = items.length;
   const chatCount = Object.keys(chats).length;
