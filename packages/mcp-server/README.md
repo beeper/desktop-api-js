@@ -180,7 +180,7 @@ http://localhost:3000?client=cursor&capability=tool-name-length%3D40
 import { server, endpoints, init } from "@beeper/desktop-mcp/server";
 
 // import a specific tool
-import getAccounts from "@beeper/desktop-mcp/tools/accounts/get-accounts";
+import focusApp from "@beeper/desktop-mcp/tools/top-level/focus-app";
 
 // initialize the server and all endpoints
 init({ server, endpoints });
@@ -205,21 +205,21 @@ const myCustomEndpoint = {
 };
 
 // initialize the server with your custom endpoints
-init({ server: myServer, endpoints: [getAccounts, myCustomEndpoint] });
+init({ server: myServer, endpoints: [focusApp, myCustomEndpoint] });
 ```
 
 ## Available Tools
 
 The following tools are available in this MCP server.
 
+### Resource `$client`:
+
+- `focus_app` (`write`) tags: [app]: Focus Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.
+- `search` (`read`) tags: [app]: Search for chats, participant name matches in groups, and the first page of messages in one call. Use this when the user asks for a specific chat, group, or person.
+
 ### Resource `accounts`:
 
-- `get_accounts` (`read`) tags: [accounts]: List connected accounts on this device. Use to pick account context.
-
-### Resource `app`:
-
-- `open_in_app` (`write`) tags: [app]: Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.
-- `search` (`read`) tags: [app]: Search for chats, participant name matches in groups, and the first page of messages in one call. Use this when the user asks for a specific chat, group, or person.
+- `get_accounts` (`read`) tags: [accounts]: List connected accounts on this device.
 
 ### Resource `chats`:
 
@@ -234,6 +234,7 @@ The following tools are available in this MCP server.
 
 ### Resource `messages`:
 
+- `list_messages` (`read`) tags: [messages]: List messages from a specific chat with pagination support.
 - `search_messages` (`read`) tags: [messages]: Search messages across chats using Beeper's message index.
   - When to use: find messages by text and/or filters (chatIDs, accountIDs, chatType, media type filters, sender, date ranges).
   - CRITICAL: Query is LITERAL WORD MATCHING, NOT semantic search! Only finds messages containing these EXACT words.

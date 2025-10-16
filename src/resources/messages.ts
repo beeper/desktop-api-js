@@ -2,15 +2,46 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { MessagesCursor } from './shared';
+import { MessagesCursorSearch, MessagesCursorSortKey } from './shared';
 import { APIPromise } from '../core/api-promise';
-import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
+import {
+  CursorSearch,
+  type CursorSearchParams,
+  CursorSortKey,
+  type CursorSortKeyParams,
+  PagePromise,
+} from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
+import { path } from '../internal/utils/path';
 
 /**
- * Messages operations
+ * Manage messages in chats
  */
 export class Messages extends APIResource {
+  /**
+   * List all messages in a chat with cursor-based pagination. Sorted by timestamp.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const message of client.messages.list(
+   *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
+   * )) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(
+    chatID: string,
+    query: MessageListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<MessagesCursorSortKey, Shared.Message> {
+    return this._client.getAPIList(path`/v1/chats/${chatID}/messages`, CursorSortKey<Shared.Message>, {
+      query,
+      ...options,
+    });
+  }
+
   /**
    * Search messages across chats using Beeper's message index
    *
@@ -25,8 +56,11 @@ export class Messages extends APIResource {
   search(
     query: MessageSearchParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<MessagesCursor, Shared.Message> {
-    return this._client.getAPIList('/v0/search-messages', Cursor<Shared.Message>, { query, ...options });
+  ): PagePromise<MessagesCursorSearch, Shared.Message> {
+    return this._client.getAPIList('/v1/messages/search', CursorSearch<Shared.Message>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -35,19 +69,23 @@ export class Messages extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.messages.send({
-   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-   * });
+   * const response = await client.messages.send(
+   *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
+   * );
    * ```
    */
-  send(body: MessageSendParams, options?: RequestOptions): APIPromise<MessageSendResponse> {
-    return this._client.post('/v0/send-message', { body, ...options });
+  send(
+    chatID: string,
+    body: MessageSendParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<MessageSendResponse> {
+    return this._client.post(path`/v1/chats/${chatID}/messages`, { body, ...options });
   }
 }
 
-export interface MessageSendResponse extends Shared.BaseResponse {
+export interface MessageSendResponse {
   /**
-   * Unique identifier of the chat (a.k.a. room or thread).
+   * Unique identifier of the chat.
    */
   chatID: string;
 
@@ -57,14 +95,16 @@ export interface MessageSendResponse extends Shared.BaseResponse {
   pendingMessageID: string;
 }
 
-export interface MessageSearchParams extends CursorParams {
+export interface MessageListParams extends CursorSortKeyParams {}
+
+export interface MessageSearchParams extends CursorSearchParams {
   /**
-   * Limit search to specific Beeper account IDs (bridge instances).
+   * Limit search to specific account IDs.
    */
   accountIDs?: Array<string>;
 
   /**
-   * Limit search to specific Beeper chat IDs.
+   * Limit search to specific chat IDs.
    */
   chatIDs?: Array<string>;
 
@@ -120,11 +160,6 @@ export interface MessageSearchParams extends CursorParams {
 
 export interface MessageSendParams {
   /**
-   * Unique identifier of the chat (a.k.a. room or thread).
-   */
-  chatID: string;
-
-  /**
    * Provide a message ID to send this as a reply to an existing message
    */
   replyToMessageID?: string;
@@ -138,9 +173,10 @@ export interface MessageSendParams {
 export declare namespace Messages {
   export {
     type MessageSendResponse as MessageSendResponse,
+    type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };
 }
 
-export { type MessagesCursor };
+export { type MessagesCursorSortKey, type MessagesCursorSearch };

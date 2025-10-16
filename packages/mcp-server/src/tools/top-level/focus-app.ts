@@ -6,18 +6,18 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
 
 export const metadata: Metadata = {
-  resource: 'app',
+  resource: '$client',
   operation: 'write',
   tags: ['app'],
   httpMethod: 'post',
-  httpPath: '/v0/open-app',
-  operationId: 'open_app',
+  httpPath: '/v1/focus',
+  operationId: 'focusApp',
 };
 
 export const tool: Tool = {
-  name: 'open_in_app',
+  name: 'focus_app',
   description:
-    'Open Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.',
+    'Focus Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -46,7 +46,7 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const body = args as any;
-  return asTextContentResult(await client.app.open(body));
+  return asTextContentResult(await client.focus(body));
 };
 
 export default { metadata, tool, handler };
