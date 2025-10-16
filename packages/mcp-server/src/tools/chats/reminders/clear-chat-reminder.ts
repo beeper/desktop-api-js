@@ -22,8 +22,7 @@ export const tool: Tool = {
     properties: {
       chatID: {
         type: 'string',
-        description:
-          'The identifier of the chat to clear reminder from (accepts both chatID and local chat ID)',
+        description: 'Unique identifier of the chat.',
       },
     },
     required: ['chatID'],
@@ -35,7 +34,8 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { chatID, ...body } = args as any;
-  return asTextContentResult(await client.chats.reminders.delete(chatID));
+  const response = await client.chats.reminders.delete(chatID).asResponse();
+  return asTextContentResult(await response.text());
 };
 
 export default { metadata, tool, handler };

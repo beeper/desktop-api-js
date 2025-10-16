@@ -22,7 +22,7 @@ export const tool: Tool = {
     properties: {
       chatID: {
         type: 'string',
-        description: 'The identifier of the chat to set reminder for (accepts both chatID and local chat ID)',
+        description: 'Unique identifier of the chat.',
       },
       reminder: {
         type: 'object',
@@ -47,7 +47,8 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { chatID, ...body } = args as any;
-  return asTextContentResult(await client.chats.reminders.create(chatID, body));
+  const response = await client.chats.reminders.create(chatID, body).asResponse();
+  return asTextContentResult(await response.text());
 };
 
 export default { metadata, tool, handler };
