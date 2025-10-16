@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   operation: 'write',
   tags: ['messages'],
   httpMethod: 'post',
-  httpPath: '/v0/send-message',
-  operationId: 'send_message',
+  httpPath: '/v1/chats/{chatID}/messages',
+  operationId: 'sendMessage',
 };
 
 export const tool: Tool = {
@@ -23,7 +23,7 @@ export const tool: Tool = {
     properties: {
       chatID: {
         type: 'string',
-        description: 'Unique identifier of the chat (a.k.a. room or thread).',
+        description: 'Unique identifier of the chat.',
       },
       replyToMessageID: {
         type: 'string',
@@ -40,8 +40,8 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
-  const body = args as any;
-  return asTextContentResult(await client.messages.send(body));
+  const { chatID, ...body } = args as any;
+  return asTextContentResult(await client.messages.send(chatID, body));
 };
 
 export default { metadata, tool, handler };

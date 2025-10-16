@@ -55,17 +55,15 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.messages
-  .send({ chatID: '1229391', text: 'Hello! Just checking in on the project status.' })
-  .catch(async (err) => {
-    if (err instanceof BeeperDesktop.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
+const accounts = await client.accounts.list().catch(async (err) => {
+  if (err instanceof BeeperDesktop.APIError) {
+    console.log(err.status); // 400
+    console.log(err.name); // BadRequestError
+    console.log(err.headers); // {server: 'nginx', ...}
+  } else {
+    throw err;
+  }
+});
 ```
 
 Error codes are as follows:

@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   operation: 'read',
   tags: ['chats'],
   httpMethod: 'get',
-  httpPath: '/v0/search-chats',
-  operationId: 'search_chats',
+  httpPath: '/v1/chats/search',
+  operationId: 'searchChats',
 };
 
 export const tool: Tool = {
@@ -26,17 +26,17 @@ export const tool: Tool = {
         description: 'Provide an array of account IDs to filter chats from specific messaging accounts only',
         items: {
           type: 'string',
-          description: 'Beeper account ID this resource belongs to.',
+          description: 'Account ID this resource belongs to.',
         },
       },
       cursor: {
         type: 'string',
-        description: 'Pagination cursor from previous response. Use with direction to navigate results',
+        description: "Opaque pagination cursor; do not inspect. Use together with 'direction'.",
       },
       direction: {
         type: 'string',
         description:
-          'Pagination direction: "after" for newer page, "before" for older page. Defaults to "before" when only cursor is provided.',
+          "Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.",
         enum: ['after', 'before'],
       },
       inbox: {

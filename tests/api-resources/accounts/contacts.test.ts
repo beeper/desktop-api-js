@@ -7,9 +7,9 @@ const client = new BeeperDesktop({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource token', () => {
-  test('info', async () => {
-    const responsePromise = client.token.info();
+describe('resource contacts', () => {
+  test('search: only required params', async () => {
+    const responsePromise = client.accounts.contacts.search('accountID', { query: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -17,5 +17,9 @@ describe('resource token', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('search: required and optional params', async () => {
+    const response = await client.accounts.contacts.search('accountID', { query: 'x' });
   });
 });
