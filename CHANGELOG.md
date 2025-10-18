@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.2.2 (2025-10-18)
+
+Full Changelog: [v4.2.1...v4.2.2](https://github.com/beeper/desktop-api-js/compare/v4.2.1...v4.2.2)
+
+### Bug Fixes
+
+* **mcp:** set chatID for send message ([0d9ae3b](https://github.com/beeper/desktop-api-js/commit/0d9ae3b9d15364906c49701cec8690e516ec6d39))
+
 ## 4.2.1 (2025-10-16)
 
 Full Changelog: [v4.2.0...v4.2.1](https://github.com/beeper/desktop-api-js/compare/v4.2.0...v4.2.1)
