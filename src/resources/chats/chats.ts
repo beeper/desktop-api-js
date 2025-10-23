@@ -146,11 +146,6 @@ export interface Chat {
   participants: Chat.Participants;
 
   /**
-   * Display title of the chat as computed by the client/server.
-   */
-  title: string;
-
-  /**
    * Chat type: 'single' for direct messages, 'group' for group chats.
    */
   type: 'single' | 'group';
@@ -161,17 +156,22 @@ export interface Chat {
   unreadCount: number;
 
   /**
+   * Description of the chat.
+   */
+  description?: string | null;
+
+  /**
    * True if chat is archived.
    */
   isArchived?: boolean;
 
   /**
-   * True if chat notifications are muted.
+   * True if the chat is muted.
    */
   isMuted?: boolean;
 
   /**
-   * True if chat is pinned.
+   * True if the chat is pinned.
    */
   isPinned?: boolean;
 
@@ -189,6 +189,11 @@ export interface Chat {
    * Local chat ID specific to this Beeper Desktop installation.
    */
   localChatID?: string | null;
+
+  /**
+   * Display title of the chat.
+   */
+  title?: string | null;
 }
 
 export namespace Chat {
