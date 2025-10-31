@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.2.3 (2025-10-31)
+
+Full Changelog: [v4.2.2...v4.2.3](https://github.com/beeper/desktop-api-js/compare/v4.2.2...v4.2.3)
+
+### Features
+
+* **api:** add `description` field to chats, make `title` optional ([b18ee1e](https://github.com/beeper/desktop-api-js/commit/b18ee1edc0d59fedaf31c71f7d5cae677061d1e6))
+
+
+### Bug Fixes
+
+* **mcpb:** pin @anthropic-ai/mcpb version ([7592b25](https://github.com/beeper/desktop-api-js/commit/7592b25fd496231d0991b74ef1b4887235edba5e))
+
 ## 4.2.2 (2025-10-18)
 
 Full Changelog: [v4.2.1...v4.2.2](https://github.com/beeper/desktop-api-js/compare/v4.2.1...v4.2.2)
