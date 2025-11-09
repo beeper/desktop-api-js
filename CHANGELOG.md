@@ -1,5 +1,36 @@
 # Changelog
 
+## 4.2.3 (2025-11-08)
+
+Full Changelog: [v4.2.2...v4.2.3](https://github.com/beeper/desktop-api-js/compare/v4.2.2...v4.2.3)
+
+### Features
+
+* **api:** add `description` field to chats, make `title` optional ([b18ee1e](https://github.com/beeper/desktop-api-js/commit/b18ee1edc0d59fedaf31c71f7d5cae677061d1e6))
+* **mcp:** enable optional code execution tool on http mcp servers ([02de91e](https://github.com/beeper/desktop-api-js/commit/02de91e3fd9b820b471fa31690da7b1de98dda07))
+
+
+### Bug Fixes
+
+* **mcpb:** pin @anthropic-ai/mcpb version ([7592b25](https://github.com/beeper/desktop-api-js/commit/7592b25fd496231d0991b74ef1b4887235edba5e))
+
+
+### Chores
+
+* **internal:** codegen related update ([e45eb2c](https://github.com/beeper/desktop-api-js/commit/e45eb2ce64c47e5e1558d9558ead0fd21e40a447))
+* **internal:** codegen related update ([06efc95](https://github.com/beeper/desktop-api-js/commit/06efc9525352b8deec8fa9cc8180c02cd1ebb139))
+* **internal:** grammar fix (it's -&gt; its) ([10090e9](https://github.com/beeper/desktop-api-js/commit/10090e9af4b4aefa51df078357710493f518888f))
+* mcp code tool explicit error message when missing a run function ([1bc0f3e](https://github.com/beeper/desktop-api-js/commit/1bc0f3ee57009ecb1e4153165feac2c5fc74ff3b))
+* **mcp:** add friendlier MCP code tool errors on incorrect method invocations ([a2c4ebe](https://github.com/beeper/desktop-api-js/commit/a2c4ebef0fb8d807348281385a856bb73f1bc0e2))
+* **mcp:** add line numbers to code tool errors ([e9eb036](https://github.com/beeper/desktop-api-js/commit/e9eb036ce4bef49f1a9f2c18c1509e4a83f1e604))
+* use structured error when code execution tool errors ([ee2d35b](https://github.com/beeper/desktop-api-js/commit/ee2d35be66aa8dd332c69ac8ec1b83fd2cbb8d49))
+
+
+### Documentation
+
+* **mcp:** add a README button for one-click add to Cursor ([238e178](https://github.com/beeper/desktop-api-js/commit/238e1787c5d6e34cf49def65b2de48fefd2822c7))
+* **mcp:** add a README link to add server to VS Code or Claude Code ([0f7efe8](https://github.com/beeper/desktop-api-js/commit/0f7efe85bbbbcfd50c472f4654bb8b2bf8fb991a))
+
 ## 4.2.2 (2025-10-18)
 
 Full Changelog: [v4.2.1...v4.2.2](https://github.com/beeper/desktop-api-js/compare/v4.2.1...v4.2.2)
