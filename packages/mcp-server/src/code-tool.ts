@@ -39,6 +39,7 @@ export async function codeTool() {
       },
       body: JSON.stringify({
         project_name: 'beeper-desktop-api',
+        client_opts: {},
         code,
       }),
     });
