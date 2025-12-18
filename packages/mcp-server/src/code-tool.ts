@@ -35,7 +35,10 @@ export async function codeTool() {
       headers: {
         ...(stainlessAPIKey && { Authorization: stainlessAPIKey }),
         'Content-Type': 'application/json',
-        client_envs: JSON.stringify({ BEEPER_ACCESS_TOKEN: readEnv('BEEPER_ACCESS_TOKEN') }),
+        client_envs: JSON.stringify({
+          BEEPER_ACCESS_TOKEN: readEnv('BEEPER_ACCESS_TOKEN'),
+          BEEPER_DESKTOP_BASE_URL: readEnv('BEEPER_DESKTOP_BASE_URL'),
+        }),
       },
       body: JSON.stringify({
         project_name: 'beeper-desktop-api',
