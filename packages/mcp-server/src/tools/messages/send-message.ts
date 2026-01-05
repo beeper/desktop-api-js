@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Metadata, asTextContentResult } from '@beeper/desktop-mcp/tools/types';
+import { Metadata, asErrorResult, asTextContentResult } from '@beeper/desktop-mcp/tools/types';
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import BeeperDesktop from '@beeper/desktop-api';
@@ -41,7 +41,14 @@ export const tool: Tool = {
 
 export const handler = async (client: BeeperDesktop, args: Record<string, unknown> | undefined) => {
   const { chatID, ...body } = args as any;
-  return asTextContentResult(await client.messages.send(chatID, body));
+  try {
+    return asTextContentResult(await client.messages.send(chatID, body));
+  } catch (error) {
+    if (error instanceof BeeperDesktop.APIError) {
+      return asErrorResult(error.message);
+    }
+    throw error;
+  }
 };
 
 export default { metadata, tool, handler };

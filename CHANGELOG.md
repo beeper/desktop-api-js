@@ -1,5 +1,38 @@
 # Changelog
 
+## 4.2.4 (2026-01-05)
+
+Full Changelog: [v4.2.3...v4.2.4](https://github.com/beeper/desktop-api-js/compare/v4.2.3...v4.2.4)
+
+### Features
+
+* **mcp:** add detail field to docs search tool ([94efb53](https://github.com/beeper/desktop-api-js/commit/94efb539eb6279bd5e8076e9652aaac821d7e465))
+* **mcp:** add typescript check to code execution tool ([dd5606a](https://github.com/beeper/desktop-api-js/commit/dd5606aeb6f72a2b7383a7a52d47a3786adb7fe8))
+* **mcp:** handle code mode calls in the Stainless API ([0583d4a](https://github.com/beeper/desktop-api-js/commit/0583d4a1b97f825d9c3e76c9eae155d09e108f4c))
+* **mcp:** return logs on code tool errors ([d635e28](https://github.com/beeper/desktop-api-js/commit/d635e28ce32796e0e71b8ee21a579fbca061f1f5))
+
+
+### Bug Fixes
+
+* **mcp:** add client instantiation options to code tool ([cd6605d](https://github.com/beeper/desktop-api-js/commit/cd6605d032e7b43da7e1dfd8c03d9d700171a582))
+* **mcp:** correct code tool API endpoint ([e4d8fd3](https://github.com/beeper/desktop-api-js/commit/e4d8fd374547a678ae125358bcbc52f092df00cb))
+* **mcp:** pass base url to code tool ([9acc424](https://github.com/beeper/desktop-api-js/commit/9acc4245a280c08467c1112843d3610d1b33fe71))
+* **mcp:** return correct lines on typescript errors ([2670800](https://github.com/beeper/desktop-api-js/commit/267080003620b463563fbe0fa1808a12d471a692))
+* **mcp:** return tool execution error on api error ([7886dae](https://github.com/beeper/desktop-api-js/commit/7886dae7ae5da785ef4bea988f253e35007ee16a))
+* **mcp:** return tool execution error on jq failure ([cadbf31](https://github.com/beeper/desktop-api-js/commit/cadbf3111d4aff52467527cbad99abba90164cc8))
+
+
+### Chores
+
+* **client:** fix logger property type ([6ecc636](https://github.com/beeper/desktop-api-js/commit/6ecc636c5e0c2a2aeaed7da6e57a1663b3d711e7))
+* **internal:** codegen related update ([a44f1e6](https://github.com/beeper/desktop-api-js/commit/a44f1e6e5afca1513ef3484f853fe45599e4a1ee))
+* **internal:** codegen related update ([6148100](https://github.com/beeper/desktop-api-js/commit/61481002797da513cdf64b33161fb6399de710aa))
+* **internal:** upgrade eslint ([7256acf](https://github.com/beeper/desktop-api-js/commit/7256acf2e8fdd02aae2b169e15547fddb10fb250))
+* **mcp:** clarify http auth error ([79374fd](https://github.com/beeper/desktop-api-js/commit/79374fd11b48ad2c96097184b492b6f6f7710593))
+* **mcp:** update lockfile ([bd05467](https://github.com/beeper/desktop-api-js/commit/bd05467d2c78dac5e50153b8470ccc0b79a63fd1))
+* **mcp:** upgrade jq-web ([298fec2](https://github.com/beeper/desktop-api-js/commit/298fec2720697f7c36077104a2325ecd05d9a839))
+* use latest @modelcontextprotocol/sdk ([6400f79](https://github.com/beeper/desktop-api-js/commit/6400f79bf4d6fd5bc46a11ccf2336327910a39e9))
+
 ## 4.2.3 (2025-11-08)
 
 Full Changelog: [v4.2.2...v4.2.3](https://github.com/beeper/desktop-api-js/compare/v4.2.2...v4.2.3)
