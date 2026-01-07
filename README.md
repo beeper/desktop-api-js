@@ -33,7 +33,11 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const page = await client.chats.search({ includeMuted: true, limit: 3, type: 'single' });
+const page = await client.chats.search({
+  includeMuted: true,
+  limit: 3,
+  type: 'single',
+});
 const chat = page.items[0];
 
 console.log(chat.id);
