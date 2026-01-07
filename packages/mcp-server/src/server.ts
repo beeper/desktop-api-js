@@ -24,7 +24,10 @@ export const newMcpServer = () =>
       version: '4.2.4',
     },
     {
-      capabilities: { tools: {}, logging: {} },
+      capabilities: {
+        tools: {},
+        logging: {},
+      },
       instructions:
         'Access to all chats and messages across networks using Beeper Desktop. Can be used to find, get, send, and manage messages and chats.',
     },
