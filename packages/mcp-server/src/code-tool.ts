@@ -2,7 +2,7 @@
 
 import { McpTool, Metadata, ToolCallResult, asErrorResult, asTextContentResult } from './types';
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { readEnv } from './server';
+import { readEnv, readEnvOrError } from './server';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
 /**
  * A tool that runs code against a copy of the SDK.
@@ -36,7 +36,7 @@ export function codeTool(): McpTool {
         ...(stainlessAPIKey && { Authorization: stainlessAPIKey }),
         'Content-Type': 'application/json',
         client_envs: JSON.stringify({
-          BEEPER_ACCESS_TOKEN: readEnv('BEEPER_ACCESS_TOKEN'),
+          BEEPER_ACCESS_TOKEN: readEnvOrError('BEEPER_ACCESS_TOKEN'),
           BEEPER_DESKTOP_BASE_URL: readEnv('BEEPER_DESKTOP_BASE_URL'),
         }),
       },
