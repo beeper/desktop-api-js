@@ -31,20 +31,13 @@
   },
   "dependencies": {
     "@beeper/desktop-api": "file:../../dist/",
-    "@cloudflare/cabidela": "^0.2.4",
     "@modelcontextprotocol/sdk": "^1.24.0",
-    "@valtown/deno-http-worker": "^0.0.21",
     "cors": "^2.8.5",
-    "date-fns": "^4.1.0",
     "express": "^5.1.0",
-    "fuse.js": "^7.1.0",
-    "jq-web": "https://github.com/stainless-api/jq-web/releases/download/v0.8.8/jq-web.tar.gz",
     "qs": "^6.14.0",
     "typescript": "5.8.3",
     "yargs": "^17.7.2",
-    "zod": "^3.25.20",
-    "zod-to-json-schema": "^3.24.5",
-    "zod-validation-error": "^4.0.1"
+    "zod": "^3.25.20"
   },
   "bin": {
     "mcp-server": "dist/index.js"
