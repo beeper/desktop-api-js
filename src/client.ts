@@ -32,6 +32,8 @@ import { APIPromise } from './core/api-promise';
 import {
   AssetDownloadParams,
   AssetDownloadResponse,
+  AssetUploadBase64Params,
+  AssetUploadBase64Response,
   AssetUploadParams,
   AssetUploadResponse,
   Assets,
@@ -881,8 +883,10 @@ export declare namespace BeeperDesktop {
     Assets as Assets,
     type AssetDownloadResponse as AssetDownloadResponse,
     type AssetUploadResponse as AssetUploadResponse,
+    type AssetUploadBase64Response as AssetUploadBase64Response,
     type AssetDownloadParams as AssetDownloadParams,
     type AssetUploadParams as AssetUploadParams,
+    type AssetUploadBase64Params as AssetUploadBase64Params,
   };
 
   export type Attachment = API.Attachment;

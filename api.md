@@ -84,8 +84,10 @@ Types:
 
 - <code><a href="./src/resources/assets.ts">AssetDownloadResponse</a></code>
 - <code><a href="./src/resources/assets.ts">AssetUploadResponse</a></code>
+- <code><a href="./src/resources/assets.ts">AssetUploadBase64Response</a></code>
 
 Methods:
 
 - <code title="post /v1/assets/download">client.assets.<a href="./src/resources/assets.ts">download</a>({ ...params }) -> AssetDownloadResponse</code>
 - <code title="post /v1/assets/upload">client.assets.<a href="./src/resources/assets.ts">upload</a>({ ...params }) -> AssetUploadResponse</code>
+- <code title="post /v1/assets/upload/base64">client.assets.<a href="./src/resources/assets.ts">uploadBase64</a>({ ...params }) -> AssetUploadBase64Response</code>
