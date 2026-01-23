@@ -9,6 +9,12 @@ export interface Attachment {
   type: 'unknown' | 'img' | 'video' | 'audio';
 
   /**
+   * Attachment identifier (typically an mxc:// URL). Use with /v1/assets/download to
+   * get a local file path.
+   */
+  id?: string;
+
+  /**
    * Duration in seconds (audio/video).
    */
   duration?: number;
@@ -167,6 +173,11 @@ export interface Message {
   isUnread?: boolean;
 
   /**
+   * ID of the message this is a reply to, if any.
+   */
+  linkedMessageID?: string;
+
+  /**
    * Reactions to the message, if any.
    */
   reactions?: Array<Reaction>;
@@ -181,6 +192,22 @@ export interface Message {
    * rich messages.
    */
   text?: string;
+
+  /**
+   * Message content type. Useful for distinguishing reactions, media messages, and
+   * state events from regular text messages.
+   */
+  type?:
+    | 'TEXT'
+    | 'NOTICE'
+    | 'IMAGE'
+    | 'VIDEO'
+    | 'VOICE'
+    | 'AUDIO'
+    | 'FILE'
+    | 'STICKER'
+    | 'LOCATION'
+    | 'REACTION';
 }
 
 export interface Reaction {

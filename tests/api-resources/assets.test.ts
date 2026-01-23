@@ -22,4 +22,23 @@ describe('resource assets', () => {
   test('download: required and optional params', async () => {
     const response = await client.assets.download({ url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ' });
   });
+
+  test('upload: only required params', async () => {
+    const responsePromise = client.assets.upload({ content: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('upload: required and optional params', async () => {
+    const response = await client.assets.upload({
+      content: 'x',
+      fileName: 'fileName',
+      mimeType: 'mimeType',
+    });
+  });
 });

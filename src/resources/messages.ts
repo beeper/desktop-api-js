@@ -19,6 +19,27 @@ import { path } from '../internal/utils/path';
  */
 export class Messages extends APIResource {
   /**
+   * Edit the text content of an existing message. Messages with attachments cannot
+   * be edited.
+   *
+   * @example
+   * ```ts
+   * const message = await client.messages.update('messageID', {
+   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+   *   text: 'x',
+   * });
+   * ```
+   */
+  update(
+    messageID: string,
+    params: MessageUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<MessageUpdateResponse> {
+    const { chatID, ...body } = params;
+    return this._client.put(path`/v1/chats/${chatID}/messages/${messageID}`, { body, ...options });
+  }
+
+  /**
    * List all messages in a chat with cursor-based pagination. Sorted by timestamp.
    *
    * @example
@@ -65,7 +86,7 @@ export class Messages extends APIResource {
 
   /**
    * Send a text message to a specific chat. Supports replying to existing messages.
-   * Returns the sent message ID.
+   * Returns a pending message ID.
    *
    * @example
    * ```ts
@@ -83,6 +104,23 @@ export class Messages extends APIResource {
   }
 }
 
+export interface MessageUpdateResponse {
+  /**
+   * Unique identifier of the chat.
+   */
+  chatID: string;
+
+  /**
+   * Message ID.
+   */
+  messageID: string;
+
+  /**
+   * Whether the message was successfully edited
+   */
+  success: boolean;
+}
+
 export interface MessageSendResponse {
   /**
    * Unique identifier of the chat.
@@ -93,6 +131,18 @@ export interface MessageSendResponse {
    * Pending message ID
    */
   pendingMessageID: string;
+}
+
+export interface MessageUpdateParams {
+  /**
+   * Path param: Unique identifier of the chat.
+   */
+  chatID: string;
+
+  /**
+   * Body param: New text content for the message
+   */
+  text: string;
 }
 
 export interface MessageListParams extends CursorSortKeyParams {}
@@ -144,7 +194,7 @@ export interface MessageSearchParams extends CursorSearchParams {
   mediaTypes?: Array<'any' | 'video' | 'image' | 'link' | 'file'>;
 
   /**
-   * Literal word search (NOT semantic). Finds messages containing these EXACT words
+   * Literal word search (non-semantic). Finds messages containing these EXACT words
    * in any order. Use single words users actually type, not concepts or phrases.
    * Example: use "dinner" not "dinner plans", use "sick" not "health issues". If
    * omitted, returns results filtered only by other parameters.
@@ -160,6 +210,11 @@ export interface MessageSearchParams extends CursorSearchParams {
 
 export interface MessageSendParams {
   /**
+   * Single attachment to send with the message
+   */
+  attachment?: MessageSendParams.Attachment;
+
+  /**
    * Provide a message ID to send this as a reply to an existing message
    */
   replyToMessageID?: string;
@@ -170,9 +225,60 @@ export interface MessageSendParams {
   text?: string;
 }
 
+export namespace MessageSendParams {
+  /**
+   * Single attachment to send with the message
+   */
+  export interface Attachment {
+    /**
+     * Upload ID from uploadAsset endpoint. Required to reference uploaded files.
+     */
+    uploadID: string;
+
+    /**
+     * Duration in seconds (optional override of cached value)
+     */
+    duration?: number;
+
+    /**
+     * Filename (optional override of cached value)
+     */
+    fileName?: string;
+
+    /**
+     * MIME type (optional override of cached value)
+     */
+    mimeType?: string;
+
+    /**
+     * Dimensions (optional override of cached value)
+     */
+    size?: Attachment.Size;
+
+    /**
+     * Special attachment type (gif, voiceNote, sticker). If omitted, auto-detected
+     * from mimeType
+     */
+    type?: 'gif' | 'voiceNote' | 'sticker';
+  }
+
+  export namespace Attachment {
+    /**
+     * Dimensions (optional override of cached value)
+     */
+    export interface Size {
+      height: number;
+
+      width: number;
+    }
+  }
+}
+
 export declare namespace Messages {
   export {
+    type MessageUpdateResponse as MessageUpdateResponse,
     type MessageSendResponse as MessageSendResponse,
+    type MessageUpdateParams as MessageUpdateParams,
     type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,

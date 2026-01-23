@@ -29,12 +29,20 @@ import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
 import { FocusParams, FocusResponse, SearchParams, SearchResponse } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
-import { AssetDownloadParams, AssetDownloadResponse, Assets } from './resources/assets';
+import {
+  AssetDownloadParams,
+  AssetDownloadResponse,
+  AssetUploadParams,
+  AssetUploadResponse,
+  Assets,
+} from './resources/assets';
 import {
   MessageListParams,
   MessageSearchParams,
   MessageSendParams,
   MessageSendResponse,
+  MessageUpdateParams,
+  MessageUpdateResponse,
   Messages,
 } from './resources/messages';
 import { Account, AccountListResponse, Accounts } from './resources/accounts/accounts';
@@ -861,7 +869,9 @@ export declare namespace BeeperDesktop {
 
   export {
     Messages as Messages,
+    type MessageUpdateResponse as MessageUpdateResponse,
     type MessageSendResponse as MessageSendResponse,
+    type MessageUpdateParams as MessageUpdateParams,
     type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
@@ -870,7 +880,9 @@ export declare namespace BeeperDesktop {
   export {
     Assets as Assets,
     type AssetDownloadResponse as AssetDownloadResponse,
+    type AssetUploadResponse as AssetUploadResponse,
     type AssetDownloadParams as AssetDownloadParams,
+    type AssetUploadParams as AssetUploadParams,
   };
 
   export type Attachment = API.Attachment;
