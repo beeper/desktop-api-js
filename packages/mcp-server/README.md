@@ -8,7 +8,7 @@ You can run the MCP Server directly via `npx`:
 
 ```sh
 export BEEPER_ACCESS_TOKEN="My Access Token"
-npx -y @beeper/desktop-api-mcp@latest
+npx -y @beeper/desktop-mcp@latest
 ```
 
 ### Via MCP Client
@@ -23,7 +23,7 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "beeper_desktop_api_api": {
       "command": "npx",
-      "args": ["-y", "@beeper/desktop-api-mcp"],
+      "args": ["-y", "@beeper/desktop-mcp"],
       "env": {
         "BEEPER_ACCESS_TOKEN": "My Access Token"
       }
@@ -37,14 +37,14 @@ For clients with a configuration JSON, it might look something like this:
 If you use Cursor, you can install the MCP server by using the button below. You will need to set your environment variables
 in Cursor's `mcp.json`, which can be found in Cursor Settings > Tools & MCP > New MCP Server.
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40beeper%2Fdesktop-api-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBiZWVwZXIvZGVza3RvcC1hcGktbWNwIl0sImVudiI6eyJCRUVQRVJfQUNDRVNTX1RPS0VOIjoiU2V0IHlvdXIgQkVFUEVSX0FDQ0VTU19UT0tFTiBoZXJlLiJ9fQ)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40beeper%2Fdesktop-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBiZWVwZXIvZGVza3RvcC1tY3AiXSwiZW52Ijp7IkJFRVBFUl9BQ0NFU1NfVE9LRU4iOiJTZXQgeW91ciBCRUVQRVJfQUNDRVNTX1RPS0VOIGhlcmUuIn19)
 
 ### VS Code
 
 If you use MCP, you can install the MCP server by clicking the link below. You will need to set your environment variables
 in VS Code's `mcp.json`, which can be found via Command Palette > MCP: Open User Configuration.
 
-[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40beeper%2Fdesktop-api-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40beeper%2Fdesktop-api-mcp%22%5D%2C%22env%22%3A%7B%22BEEPER_ACCESS_TOKEN%22%3A%22Set%20your%20BEEPER_ACCESS_TOKEN%20here.%22%7D%7D)
+[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40beeper%2Fdesktop-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40beeper%2Fdesktop-mcp%22%5D%2C%22env%22%3A%7B%22BEEPER_ACCESS_TOKEN%22%3A%22Set%20your%20BEEPER_ACCESS_TOKEN%20here.%22%7D%7D)
 
 ### Claude Code
 
@@ -52,7 +52,7 @@ If you use Claude Code, you can install the MCP server by running the command be
 environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
 
 ```
-claude mcp add beeper_desktop_api_mcp_api --env BEEPER_ACCESS_TOKEN="Your BEEPER_ACCESS_TOKEN here." -- npx -y @beeper/desktop-api-mcp
+claude mcp add beeper_desktop_mcp_api --env BEEPER_ACCESS_TOKEN="Your BEEPER_ACCESS_TOKEN here." -- npx -y @beeper/desktop-mcp
 ```
 
 ## Code Mode

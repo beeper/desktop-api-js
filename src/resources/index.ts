@@ -6,8 +6,10 @@ export {
   Assets,
   type AssetDownloadResponse,
   type AssetUploadResponse,
+  type AssetUploadBase64Response,
   type AssetDownloadParams,
   type AssetUploadParams,
+  type AssetUploadBase64Params,
 } from './assets';
 export {
   Chats,
