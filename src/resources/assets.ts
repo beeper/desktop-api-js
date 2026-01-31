@@ -69,6 +69,13 @@ export interface AssetServeParams {
   url: string;
 }
 
+export interface AssetServeParams {
+  /**
+   * Asset URL to serve. Accepts mxc://, localmxc://, or file:// URLs.
+   */
+  url: string;
+}
+
 export declare namespace Assets {
   export {
     type AssetDownloadResponse as AssetDownloadResponse,
