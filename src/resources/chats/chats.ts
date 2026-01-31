@@ -3,7 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as RemindersAPI from './reminders';
-import { ReminderCreateParams, Reminders } from './reminders';
+import { ReminderCreateParams, ReminderCreateResponse, ReminderDeleteResponse, Reminders } from './reminders';
 import { APIPromise } from '../../core/api-promise';
 import {
   CursorNoLimit,
@@ -12,7 +12,6 @@ import {
   type CursorSearchParams,
   PagePromise,
 } from '../../core/pagination';
-import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -82,7 +81,7 @@ export class Chats extends APIResource {
    *
    * @example
    * ```ts
-   * await client.chats.archive(
+   * const response = await client.chats.archive(
    *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
    * );
    * ```
@@ -91,12 +90,8 @@ export class Chats extends APIResource {
     chatID: string,
     body: ChatArchiveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<void> {
-    return this._client.post(path`/v1/chats/${chatID}/archive`, {
-      body,
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+  ): APIPromise<ChatArchiveResponse> {
+    return this._client.post(path`/v1/chats/${chatID}/archive`, { body, ...options });
   }
 
   /**
@@ -133,12 +128,6 @@ export interface Chat {
    * Account ID this chat belongs to.
    */
   accountID: string;
-
-  /**
-   * @deprecated Display-only human-readable network name (e.g., 'WhatsApp',
-   * 'Messenger').
-   */
-  network: string;
 
   /**
    * Chat participants information.
@@ -236,6 +225,13 @@ export interface ChatListResponse extends Chat {
    * Last message preview for this chat, if available.
    */
   preview?: Shared.Message;
+}
+
+export interface ChatArchiveResponse {
+  /**
+   * Indicates the operation completed successfully
+   */
+  success: true;
 }
 
 export type ChatCreateParams = ChatCreateParams.Variant0 | ChatCreateParams.Variant1;
@@ -418,6 +414,7 @@ export declare namespace Chats {
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
+    type ChatArchiveResponse as ChatArchiveResponse,
     type ChatListResponsesCursorNoLimit as ChatListResponsesCursorNoLimit,
     type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
@@ -427,5 +424,10 @@ export declare namespace Chats {
     type ChatSearchParams as ChatSearchParams,
   };
 
-  export { Reminders as Reminders, type ReminderCreateParams as ReminderCreateParams };
+  export {
+    Reminders as Reminders,
+    type ReminderCreateResponse as ReminderCreateResponse,
+    type ReminderDeleteResponse as ReminderDeleteResponse,
+    type ReminderCreateParams as ReminderCreateParams,
+  };
 }

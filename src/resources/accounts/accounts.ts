@@ -37,8 +37,7 @@ export interface Account {
   accountID: string;
 
   /**
-   * @deprecated Display-only human-readable network name (e.g., 'WhatsApp',
-   * 'Messenger').
+   * Display-only human-readable network name (e.g., 'WhatsApp', 'Messenger').
    */
   network: string;
 
