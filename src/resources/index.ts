@@ -8,6 +8,7 @@ export {
   type AssetUploadResponse,
   type AssetUploadBase64Response,
   type AssetDownloadParams,
+  type AssetServeParams,
   type AssetUploadParams,
   type AssetUploadBase64Params,
 } from './assets';
@@ -16,6 +17,7 @@ export {
   type Chat,
   type ChatCreateResponse,
   type ChatListResponse,
+  type ChatArchiveResponse,
   type ChatCreateParams,
   type ChatRetrieveParams,
   type ChatListParams,

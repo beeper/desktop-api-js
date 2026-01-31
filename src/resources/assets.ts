@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
 import { type Uploadable } from '../core/uploads';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { multipartFormRequestOptions } from '../internal/uploads';
 
@@ -23,6 +24,23 @@ export class Assets extends APIResource {
    */
   download(body: AssetDownloadParams, options?: RequestOptions): APIPromise<AssetDownloadResponse> {
     return this._client.post('/v1/assets/download', { body, ...options });
+  }
+
+  /**
+   * Stream a file given an mxc://, localmxc://, or file:// URL. Downloads first if
+   * not cached. Supports Range requests for seeking in large files.
+   *
+   * @example
+   * ```ts
+   * await client.assets.serve({ url: 'x' });
+   * ```
+   */
+  serve(query: AssetServeParams, options?: RequestOptions): APIPromise<void> {
+    return this._client.get('/v1/assets/serve', {
+      query,
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -176,6 +194,13 @@ export interface AssetDownloadParams {
   url: string;
 }
 
+export interface AssetServeParams {
+  /**
+   * Asset URL to serve. Accepts mxc://, localmxc://, or file:// URLs.
+   */
+  url: string;
+}
+
 export interface AssetUploadParams {
   /**
    * The file to upload (max 500 MB).
@@ -216,6 +241,7 @@ export declare namespace Assets {
     type AssetUploadResponse as AssetUploadResponse,
     type AssetUploadBase64Response as AssetUploadBase64Response,
     type AssetDownloadParams as AssetDownloadParams,
+    type AssetServeParams as AssetServeParams,
     type AssetUploadParams as AssetUploadParams,
     type AssetUploadBase64Params as AssetUploadBase64Params,
   };

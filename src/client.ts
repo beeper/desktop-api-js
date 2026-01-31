@@ -32,6 +32,7 @@ import { APIPromise } from './core/api-promise';
 import {
   AssetDownloadParams,
   AssetDownloadResponse,
+  AssetServeParams,
   AssetUploadBase64Params,
   AssetUploadBase64Response,
   AssetUploadParams,
@@ -51,6 +52,7 @@ import { Account, AccountListResponse, Accounts } from './resources/accounts/acc
 import {
   Chat,
   ChatArchiveParams,
+  ChatArchiveResponse,
   ChatCreateParams,
   ChatCreateResponse,
   ChatListParams,
@@ -860,6 +862,7 @@ export declare namespace BeeperDesktop {
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
+    type ChatArchiveResponse as ChatArchiveResponse,
     type ChatListResponsesCursorNoLimit as ChatListResponsesCursorNoLimit,
     type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
@@ -885,6 +888,7 @@ export declare namespace BeeperDesktop {
     type AssetUploadResponse as AssetUploadResponse,
     type AssetUploadBase64Response as AssetUploadBase64Response,
     type AssetDownloadParams as AssetDownloadParams,
+    type AssetServeParams as AssetServeParams,
     type AssetUploadParams as AssetUploadParams,
     type AssetUploadBase64Params as AssetUploadBase64Params,
   };
