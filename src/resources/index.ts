@@ -2,12 +2,22 @@
 
 export * from './shared';
 export { Accounts, type Account, type AccountListResponse } from './accounts/accounts';
-export { Assets, type AssetDownloadResponse, type AssetDownloadParams } from './assets';
+export {
+  Assets,
+  type AssetDownloadResponse,
+  type AssetUploadResponse,
+  type AssetUploadBase64Response,
+  type AssetDownloadParams,
+  type AssetServeParams,
+  type AssetUploadParams,
+  type AssetUploadBase64Params,
+} from './assets';
 export {
   Chats,
   type Chat,
   type ChatCreateResponse,
   type ChatListResponse,
+  type ChatArchiveResponse,
   type ChatCreateParams,
   type ChatRetrieveParams,
   type ChatListParams,
@@ -18,7 +28,9 @@ export {
 } from './chats/chats';
 export {
   Messages,
+  type MessageUpdateResponse,
   type MessageSendResponse,
+  type MessageUpdateParams,
   type MessageListParams,
   type MessageSearchParams,
   type MessageSendParams,
