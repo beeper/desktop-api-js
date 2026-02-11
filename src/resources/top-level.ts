@@ -89,7 +89,7 @@ export interface FocusParams {
 
 export interface SearchParams {
   /**
-   * User-typed search text. Literal word matching (NOT semantic).
+   * User-typed search text. Literal word matching (non-semantic).
    */
   query: string;
 }

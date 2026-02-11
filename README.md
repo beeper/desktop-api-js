@@ -1,10 +1,10 @@
-# TypeScript SDK for Beeper Desktop API
+# TypeScript SDK for Beeper Desktop API Library
 
 [![NPM version](<https://img.shields.io/npm/v/@beeper/desktop-api.svg?label=npm%20(stable)>)](https://npmjs.org/package/@beeper/desktop-api) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@beeper/desktop-api)
 
-This library provides convenient access to the Beeper Desktop API from server-side TypeScript or JavaScript.
+This library provides convenient access to the Beeper Desktop REST API from server-side TypeScript or JavaScript.
 
-The documentation for Beeper Desktop API can be found on [developers.beeper.com/desktop-api](https://developers.beeper.com/desktop-api/). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [developers.beeper.com](https://developers.beeper.com/desktop-api/). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -24,7 +24,11 @@ const client = new BeeperDesktop({
   accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted
 });
 
-const page = await client.chats.search({ includeMuted: true, limit: 3, type: 'single' });
+const page = await client.chats.search({
+  includeMuted: true,
+  limit: 3,
+  type: 'single',
+});
 const chat = page.items[0];
 
 console.log(chat.id);
@@ -46,6 +50,35 @@ const accounts: BeeperDesktop.AccountListResponse = await client.accounts.list()
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
+
+## File uploads
+
+Request parameters that correspond to file uploads can be passed in many different forms:
+
+- `File` (or an object with the same structure)
+- a `fetch` `Response` (or an object with the same structure)
+- an `fs.ReadStream`
+- the return value of our `toFile` helper
+
+```ts
+import fs from 'fs';
+import BeeperDesktop, { toFile } from '@beeper/desktop-api';
+
+const client = new BeeperDesktop();
+
+// If you have access to Node `fs` we recommend using `fs.createReadStream()`:
+await client.assets.upload({ file: fs.createReadStream('/path/to/file') });
+
+// Or if you have the web `File` API you can pass a `File` instance:
+await client.assets.upload({ file: new File(['my bytes'], 'file') });
+
+// You can also pass a `fetch` `Response`:
+await client.assets.upload({ file: await fetch('https://somesite/file') });
+
+// Finally, if none of the above are convenient, you can use our `toFile` helper:
+await client.assets.upload({ file: await toFile(Buffer.from('my bytes'), 'file') });
+await client.assets.upload({ file: await toFile(new Uint8Array([0, 1, 2]), 'file') });
+```
 
 ## Handling errors
 
