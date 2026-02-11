@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.3.0 (2026-02-11)
+
+Full Changelog: [v4.2.4...v4.3.0](https://github.com/beeper/desktop-api-js/compare/v4.2.4...v4.3.0)
+
+### ⚠ BREAKING CHANGES
+
+* **mcp:** remove deprecated tool schemes
+* **mcp:** **Migration:** To migrate, simply modify the command used to invoke the MCP server. Currently, the only supported tool scheme is code mode. Now, starting the server with just `node /path/to/mcp/server` or `npx package-name` will invoke code tools: changing your command to one of these is likely all you will need to do.
+
+### Chores
+
+* **mcp:** remove deprecated tool schemes ([8969ed3](https://github.com/beeper/desktop-api-js/commit/8969ed3ec12417996c0306e380795d2f810d753d))
+* remove custom MCP server code, align with Stainless generated output ([74db9f7](https://github.com/beeper/desktop-api-js/commit/74db9f7f9a1a59ce6c36c1ab5b6a2d71767f4ff7))
+
 ## 4.2.4 (2026-01-05)
 
 Full Changelog: [v4.2.3...v4.2.4](https://github.com/beeper/desktop-api-js/compare/v4.2.3...v4.2.4)
