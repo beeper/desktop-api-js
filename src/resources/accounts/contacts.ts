@@ -11,8 +11,8 @@ import { path } from '../../internal/utils/path';
  */
 export class Contacts extends APIResource {
   /**
-   * Search contacts on a specific account using the network's search API. Only use
-   * for creating new chats.
+   * Search contacts on a specific account using merged account contacts, network
+   * search, and exact identifier lookup.
    *
    * @example
    * ```ts
