@@ -3,7 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as RemindersAPI from './reminders';
-import { ReminderCreateParams, ReminderCreateResponse, ReminderDeleteResponse, Reminders } from './reminders';
+import { ReminderCreateParams, Reminders } from './reminders';
 import { APIPromise } from '../../core/api-promise';
 import {
   CursorNoLimit,
@@ -12,6 +12,7 @@ import {
   type CursorSearchParams,
   PagePromise,
 } from '../../core/pagination';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -22,8 +23,8 @@ export class Chats extends APIResource {
   reminders: RemindersAPI.Reminders = new RemindersAPI.Reminders(this._client);
 
   /**
-   * Create a single or group chat on a specific account using participant IDs and
-   * optional title.
+   * Create a single/group chat (mode='create') or start a direct chat from merged
+   * user data (mode='start').
    *
    * @example
    * ```ts
@@ -81,7 +82,7 @@ export class Chats extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.chats.archive(
+   * await client.chats.archive(
    *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
    * );
    * ```
@@ -90,8 +91,12 @@ export class Chats extends APIResource {
     chatID: string,
     body: ChatArchiveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ChatArchiveResponse> {
-    return this._client.post(path`/v1/chats/${chatID}/archive`, { body, ...options });
+  ): APIPromise<void> {
+    return this._client.post(path`/v1/chats/${chatID}/archive`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -128,6 +133,12 @@ export interface Chat {
    * Account ID this chat belongs to.
    */
   accountID: string;
+
+  /**
+   * @deprecated Display-only human-readable network name (e.g., 'WhatsApp',
+   * 'Messenger').
+   */
+  network: string;
 
   /**
    * Chat participants information.
@@ -207,6 +218,12 @@ export interface ChatCreateResponse {
    * Newly created chat ID.
    */
   chatID: string;
+
+  /**
+   * Only returned in start mode. 'existing' means an existing chat was reused;
+   * 'created' means a new chat was created.
+   */
+  status?: 'existing' | 'created';
 }
 
 export interface ChatListResponse extends Chat {
@@ -216,39 +233,100 @@ export interface ChatListResponse extends Chat {
   preview?: Shared.Message;
 }
 
-export interface ChatArchiveResponse {
-  /**
-   * Indicates the operation completed successfully
-   */
-  success: true;
-}
+export type ChatCreateParams = ChatCreateParams.Variant0 | ChatCreateParams.Variant1;
 
-export interface ChatCreateParams {
-  /**
-   * Account to create the chat on.
-   */
-  accountID: string;
+export declare namespace ChatCreateParams {
+  export interface Variant0 {
+    /**
+     * Account to create the chat on.
+     */
+    accountID: string;
 
-  /**
-   * User IDs to include in the new chat.
-   */
-  participantIDs: Array<string>;
+    /**
+     * User IDs to include in the new chat.
+     */
+    participantIDs: Array<string>;
 
-  /**
-   * Chat type to create: 'single' requires exactly one participantID; 'group'
-   * supports multiple participants and optional title.
-   */
-  type: 'single' | 'group';
+    /**
+     * Chat type to create: 'single' requires exactly one participantID; 'group'
+     * supports multiple participants and optional title.
+     */
+    type: 'single' | 'group';
 
-  /**
-   * Optional first message content if the platform requires it to create the chat.
-   */
-  messageText?: string;
+    /**
+     * Optional first message content if the platform requires it to create the chat.
+     */
+    messageText?: string;
 
-  /**
-   * Optional title for group chats; ignored for single chats on most platforms.
-   */
-  title?: string;
+    /**
+     * Create mode. Defaults to 'create' when omitted.
+     */
+    mode?: 'create';
+
+    /**
+     * Optional title for group chats; ignored for single chats on most platforms.
+     */
+    title?: string;
+  }
+
+  export interface Variant1 {
+    /**
+     * Account to start the chat on.
+     */
+    accountID: string;
+
+    /**
+     * Start mode for resolving/creating a direct chat from merged contact data.
+     */
+    mode: 'start';
+
+    /**
+     * Merged user-like contact payload used to resolve the best identifier.
+     */
+    user: Variant1.User;
+
+    /**
+     * Whether invite-based DM creation is allowed when required by the platform.
+     */
+    allowInvite?: boolean;
+
+    /**
+     * Optional first message content if the platform requires it to create the chat.
+     */
+    messageText?: string;
+  }
+
+  export namespace Variant1 {
+    /**
+     * Merged user-like contact payload used to resolve the best identifier.
+     */
+    export interface User {
+      /**
+       * Known user ID when available.
+       */
+      id?: string;
+
+      /**
+       * Email candidate.
+       */
+      email?: string;
+
+      /**
+       * Display name hint used for ranking only.
+       */
+      fullName?: string;
+
+      /**
+       * Phone number candidate (E.164 preferred).
+       */
+      phoneNumber?: string;
+
+      /**
+       * Username/handle candidate.
+       */
+      username?: string;
+    }
+  }
 }
 
 export interface ChatRetrieveParams {
@@ -335,7 +413,6 @@ export declare namespace Chats {
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
-    type ChatArchiveResponse as ChatArchiveResponse,
     type ChatListResponsesCursorNoLimit as ChatListResponsesCursorNoLimit,
     type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
@@ -345,10 +422,5 @@ export declare namespace Chats {
     type ChatSearchParams as ChatSearchParams,
   };
 
-  export {
-    Reminders as Reminders,
-    type ReminderCreateResponse as ReminderCreateResponse,
-    type ReminderDeleteResponse as ReminderDeleteResponse,
-    type ReminderCreateParams as ReminderCreateParams,
-  };
+  export { Reminders as Reminders, type ReminderCreateParams as ReminderCreateParams };
 }

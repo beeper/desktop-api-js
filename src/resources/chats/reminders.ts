@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import { APIPromise } from '../../core/api-promise';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -14,18 +15,18 @@ export class Reminders extends APIResource {
    *
    * @example
    * ```ts
-   * const reminder = await client.chats.reminders.create(
+   * await client.chats.reminders.create(
    *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
    *   { reminder: { remindAtMs: 0 } },
    * );
    * ```
    */
-  create(
-    chatID: string,
-    body: ReminderCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<ReminderCreateResponse> {
-    return this._client.post(path`/v1/chats/${chatID}/reminders`, { body, ...options });
+  create(chatID: string, body: ReminderCreateParams, options?: RequestOptions): APIPromise<void> {
+    return this._client.post(path`/v1/chats/${chatID}/reminders`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -33,28 +34,17 @@ export class Reminders extends APIResource {
    *
    * @example
    * ```ts
-   * const reminder = await client.chats.reminders.delete(
+   * await client.chats.reminders.delete(
    *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
    * );
    * ```
    */
-  delete(chatID: string, options?: RequestOptions): APIPromise<ReminderDeleteResponse> {
-    return this._client.delete(path`/v1/chats/${chatID}/reminders`, options);
+  delete(chatID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/v1/chats/${chatID}/reminders`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
-}
-
-export interface ReminderCreateResponse {
-  /**
-   * Indicates the operation completed successfully
-   */
-  success: true;
-}
-
-export interface ReminderDeleteResponse {
-  /**
-   * Indicates the operation completed successfully
-   */
-  success: true;
 }
 
 export interface ReminderCreateParams {
@@ -82,9 +72,5 @@ export namespace ReminderCreateParams {
 }
 
 export declare namespace Reminders {
-  export {
-    type ReminderCreateResponse as ReminderCreateResponse,
-    type ReminderDeleteResponse as ReminderDeleteResponse,
-    type ReminderCreateParams as ReminderCreateParams,
-  };
+  export { type ReminderCreateParams as ReminderCreateParams };
 }

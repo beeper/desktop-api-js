@@ -17,7 +17,6 @@ export {
   type Chat,
   type ChatCreateResponse,
   type ChatListResponse,
-  type ChatArchiveResponse,
   type ChatCreateParams,
   type ChatRetrieveParams,
   type ChatListParams,
