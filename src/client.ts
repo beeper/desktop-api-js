@@ -39,6 +39,7 @@ import {
   AssetUploadResponse,
   Assets,
 } from './resources/assets';
+import { Info, InfoRetrieveResponse } from './resources/info';
 import {
   MessageListParams,
   MessageSearchParams,
@@ -842,12 +843,14 @@ export class BeeperDesktop {
    * Manage assets in Beeper Desktop, like message attachments
    */
   assets: API.Assets = new API.Assets(this);
+  info: API.Info = new API.Info(this);
 }
 
 BeeperDesktop.Accounts = Accounts;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
 BeeperDesktop.Assets = Assets;
+BeeperDesktop.Info = Info;
 
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
@@ -910,6 +913,8 @@ export declare namespace BeeperDesktop {
     type AssetUploadParams as AssetUploadParams,
     type AssetUploadBase64Params as AssetUploadBase64Params,
   };
+
+  export { Info as Info, type InfoRetrieveResponse as InfoRetrieveResponse };
 
   export type Attachment = API.Attachment;
   export type Error = API.Error;

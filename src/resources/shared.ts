@@ -288,6 +288,8 @@ export interface User {
   username?: string;
 }
 
+export type UsersCursorSearch = CursorSearch<User>;
+
 export type MessagesCursorSortKey = CursorSortKey<Message>;
 
 export type MessagesCursorSearch = CursorSearch<Message>;

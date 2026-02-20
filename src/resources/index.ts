@@ -25,6 +25,7 @@ export {
   type ChatListResponsesCursorNoLimit,
   type ChatsCursorSearch,
 } from './chats/chats';
+export { Info, type InfoRetrieveResponse } from './info';
 export {
   Messages,
   type MessageUpdateResponse,
