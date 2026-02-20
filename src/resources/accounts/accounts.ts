@@ -3,7 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as ContactsAPI from './contacts';
-import { ContactListParams, ContactSearchParams, ContactSearchResponse, Contacts } from './contacts';
+import { ContactSearchParams, ContactSearchResponse, Contacts } from './contacts';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -37,14 +37,20 @@ export interface Account {
   accountID: string;
 
   /**
+   * @deprecated Display-only human-readable network name (e.g., 'WhatsApp',
+   * 'Messenger').
+   */
+  network: string;
+
+  /**
    * User the account belongs to.
    */
   user: Shared.User;
 }
 
 /**
- * Connected accounts the user can act through. Includes accountID and user
- * identity.
+ * Connected accounts the user can act through. Includes accountID, network, and
+ * user identity.
  */
 export type AccountListResponse = Array<Account>;
 
@@ -56,7 +62,6 @@ export declare namespace Accounts {
   export {
     Contacts as Contacts,
     type ContactSearchResponse as ContactSearchResponse,
-    type ContactListParams as ContactListParams,
     type ContactSearchParams as ContactSearchParams,
   };
 }

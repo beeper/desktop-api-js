@@ -8,33 +8,6 @@ const client = new BeeperDesktop({
 });
 
 describe('resource contacts', () => {
-  test('list', async () => {
-    const responsePromise = client.accounts.contacts.list('accountID');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.accounts.contacts.list(
-        'accountID',
-        {
-          cursor: '1725489123456|c29tZUltc2dQYWdl',
-          direction: 'before',
-          limit: 1,
-          query: 'x',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(BeeperDesktop.NotFoundError);
-  });
-
   test('search: only required params', async () => {
     const responsePromise = client.accounts.contacts.search('accountID', { query: 'x' });
     const rawResponse = await responsePromise.asResponse();

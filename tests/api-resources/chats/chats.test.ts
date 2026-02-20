@@ -9,7 +9,11 @@ const client = new BeeperDesktop({
 
 describe('resource chats', () => {
   test('create: only required params', async () => {
-    const responsePromise = client.chats.create({ chat: { accountID: 'accountID' } });
+    const responsePromise = client.chats.create({
+      accountID: 'accountID',
+      participantIDs: ['string'],
+      type: 'single',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,22 +25,11 @@ describe('resource chats', () => {
 
   test('create: required and optional params', async () => {
     const response = await client.chats.create({
-      chat: {
-        accountID: 'accountID',
-        allowInvite: true,
-        messageText: 'messageText',
-        mode: 'create',
-        participantIDs: ['string'],
-        title: 'title',
-        type: 'single',
-        user: {
-          id: 'id',
-          email: 'email',
-          fullName: 'fullName',
-          phoneNumber: 'phoneNumber',
-          username: 'username',
-        },
-      },
+      accountID: 'accountID',
+      participantIDs: ['string'],
+      type: 'single',
+      messageText: 'messageText',
+      title: 'title',
     });
   });
 
@@ -79,6 +72,7 @@ describe('resource chats', () => {
       client.chats.list(
         {
           accountIDs: [
+            'whatsapp',
             'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
             'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',
           ],

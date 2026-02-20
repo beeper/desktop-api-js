@@ -29,24 +29,12 @@ import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
 import { FocusParams, FocusResponse, SearchParams, SearchResponse } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
-import {
-  AssetDownloadParams,
-  AssetDownloadResponse,
-  AssetServeParams,
-  AssetUploadBase64Params,
-  AssetUploadBase64Response,
-  AssetUploadParams,
-  AssetUploadResponse,
-  Assets,
-} from './resources/assets';
-import { Info, InfoRetrieveResponse } from './resources/info';
+import { AssetDownloadParams, AssetDownloadResponse, Assets } from './resources/assets';
 import {
   MessageListParams,
   MessageSearchParams,
   MessageSendParams,
   MessageSendResponse,
-  MessageUpdateParams,
-  MessageUpdateResponse,
   Messages,
 } from './resources/messages';
 import { Account, AccountListResponse, Accounts } from './resources/accounts/accounts';
@@ -277,7 +265,7 @@ export class BeeperDesktop {
   /**
    * Returns matching chats, participant name matches in groups, and the first page
    * of messages in one call. Paginate messages via search-messages. Paginate chats
-   * via search-chats.
+   * via search-chats. Uses the same sorting as the chat search in the app.
    *
    * @example
    * ```ts
@@ -522,7 +510,7 @@ export class BeeperDesktop {
       loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
 
       const errText = await response.text().catch((err: any) => castToError(err).message);
-      const errJSON = safeJSON(errText) as any;
+      const errJSON = safeJSON(errText);
       const errMessage = errJSON ? undefined : errText;
 
       loggerFor(this).debug(
@@ -559,14 +547,9 @@ export class BeeperDesktop {
   getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
     path: string,
     Page: new (...args: any[]) => PageClass,
-    opts?: PromiseOrValue<RequestOptions>,
+    opts?: RequestOptions,
   ): Pagination.PagePromise<PageClass, Item> {
-    return this.requestAPIList(
-      Page,
-      opts && 'then' in opts ?
-        opts.then((opts) => ({ method: 'get', path, ...opts }))
-      : { method: 'get', path, ...opts },
-    );
+    return this.requestAPIList(Page, { method: 'get', path, ...opts });
   }
 
   requestAPIList<
@@ -574,7 +557,7 @@ export class BeeperDesktop {
     PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
   >(
     Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
-    options: PromiseOrValue<FinalRequestOptions>,
+    options: FinalRequestOptions,
   ): Pagination.PagePromise<PageClass, Item> {
     const request = this.makeRequest(options, null, undefined);
     return new Pagination.PagePromise<PageClass, Item>(this as any as BeeperDesktop, request, Page);
@@ -587,10 +570,9 @@ export class BeeperDesktop {
     controller: AbortController,
   ): Promise<Response> {
     const { signal, method, ...options } = init || {};
-    const abort = this._makeAbort(controller);
-    if (signal) signal.addEventListener('abort', abort, { once: true });
+    if (signal) signal.addEventListener('abort', () => controller.abort());
 
-    const timeout = setTimeout(abort, ms);
+    const timeout = setTimeout(() => controller.abort(), ms);
 
     const isReadableBody =
       ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) ||
@@ -757,12 +739,6 @@ export class BeeperDesktop {
     return headers.values;
   }
 
-  private _makeAbort(controller: AbortController) {
-    // note: we can't just inline this method inside `fetchWithTimeout()` because then the closure
-    //       would capture all request options, and cause a memory leak.
-    return () => controller.abort();
-  }
-
   private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
@@ -795,14 +771,6 @@ export class BeeperDesktop {
         (Symbol.iterator in body && 'next' in body && typeof body.next === 'function'))
     ) {
       return { bodyHeaders: undefined, body: Shims.ReadableStreamFrom(body as AsyncIterable<Uint8Array>) };
-    } else if (
-      typeof body === 'object' &&
-      headers.values.get('content-type') === 'application/x-www-form-urlencoded'
-    ) {
-      return {
-        bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
-        body: this.stringifyQuery(body as Record<string, unknown>),
-      };
     } else {
       return this.#encoder({ body, headers });
     }
@@ -843,14 +811,12 @@ export class BeeperDesktop {
    * Manage assets in Beeper Desktop, like message attachments
    */
   assets: API.Assets = new API.Assets(this);
-  info: API.Info = new API.Info(this);
 }
 
 BeeperDesktop.Accounts = Accounts;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
 BeeperDesktop.Assets = Assets;
-BeeperDesktop.Info = Info;
 
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
@@ -895,9 +861,7 @@ export declare namespace BeeperDesktop {
 
   export {
     Messages as Messages,
-    type MessageUpdateResponse as MessageUpdateResponse,
     type MessageSendResponse as MessageSendResponse,
-    type MessageUpdateParams as MessageUpdateParams,
     type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
@@ -906,15 +870,8 @@ export declare namespace BeeperDesktop {
   export {
     Assets as Assets,
     type AssetDownloadResponse as AssetDownloadResponse,
-    type AssetUploadResponse as AssetUploadResponse,
-    type AssetUploadBase64Response as AssetUploadBase64Response,
     type AssetDownloadParams as AssetDownloadParams,
-    type AssetServeParams as AssetServeParams,
-    type AssetUploadParams as AssetUploadParams,
-    type AssetUploadBase64Params as AssetUploadBase64Params,
   };
-
-  export { Info as Info, type InfoRetrieveResponse as InfoRetrieveResponse };
 
   export type Attachment = API.Attachment;
   export type Error = API.Error;

@@ -1,11 +1,10 @@
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { McpOptions } from './options';
 import { initMcpServer, newMcpServer } from './server';
 
-export const launchStdioServer = async (mcpOptions: McpOptions) => {
-  const server = await newMcpServer(mcpOptions.stainlessApiKey);
+export const launchStdioServer = async () => {
+  const server = newMcpServer();
 
-  await initMcpServer({ server, mcpOptions, stainlessApiKey: mcpOptions.stainlessApiKey });
+  initMcpServer({ server });
 
   const transport = new StdioServerTransport();
   await server.connect(transport);

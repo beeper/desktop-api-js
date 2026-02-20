@@ -3,14 +3,16 @@
 import { ClientOptions } from '@beeper/desktop-api';
 
 export type WorkerInput = {
-  project_name: string;
+  opts: ClientOptions;
   code: string;
-  client_opts: ClientOptions;
-  intent?: string | undefined;
 };
-export type WorkerOutput = {
-  is_error: boolean;
+export type WorkerSuccess = {
   result: unknown | null;
-  log_lines: string[];
-  err_lines: string[];
+  logLines: string[];
+  errLines: string[];
+};
+export type WorkerError = {
+  message: string | undefined;
+  logLines: string[];
+  errLines: string[];
 };

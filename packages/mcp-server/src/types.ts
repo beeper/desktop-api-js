@@ -42,18 +42,10 @@ export type ToolCallResult = {
   isError?: boolean;
 };
 
-export type McpRequestContext = {
-  client: BeeperDesktop;
-  stainlessApiKey?: string | undefined;
-};
-
-export type HandlerFunction = ({
-  reqContext,
-  args,
-}: {
-  reqContext: McpRequestContext;
-  args: Record<string, unknown> | undefined;
-}) => Promise<ToolCallResult>;
+export type HandlerFunction = (
+  client: BeeperDesktop,
+  args: Record<string, unknown> | undefined,
+) => Promise<ToolCallResult>;
 
 export function asTextContentResult(result: unknown): ToolCallResult {
   return {
