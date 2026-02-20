@@ -82,7 +82,7 @@ describe('resource messages', () => {
           limit: 20,
           mediaTypes: ['any'],
           query: 'dinner',
-          sender: 'me',
+          sender: 'sender',
         },
         { path: '/_stainless_unknown_path' },
       ),
