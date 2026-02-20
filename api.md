@@ -48,27 +48,21 @@ Types:
 - <code><a href="./src/resources/chats/chats.ts">Chat</a></code>
 - <code><a href="./src/resources/chats/chats.ts">ChatCreateResponse</a></code>
 - <code><a href="./src/resources/chats/chats.ts">ChatListResponse</a></code>
-- <code><a href="./src/resources/chats/chats.ts">ChatArchiveResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">create</a>({ ...params }) -> ChatCreateResponse</code>
 - <code title="get /v1/chats/{chatID}">client.chats.<a href="./src/resources/chats/chats.ts">retrieve</a>(chatID, { ...params }) -> Chat</code>
 - <code title="get /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">list</a>({ ...params }) -> ChatListResponsesCursorNoLimit</code>
-- <code title="post /v1/chats/{chatID}/archive">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>(chatID, { ...params }) -> ChatArchiveResponse</code>
+- <code title="post /v1/chats/{chatID}/archive">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>(chatID, { ...params }) -> void</code>
 - <code title="get /v1/chats/search">client.chats.<a href="./src/resources/chats/chats.ts">search</a>({ ...params }) -> ChatsCursorSearch</code>
 
 ## Reminders
 
-Types:
-
-- <code><a href="./src/resources/chats/reminders.ts">ReminderCreateResponse</a></code>
-- <code><a href="./src/resources/chats/reminders.ts">ReminderDeleteResponse</a></code>
-
 Methods:
 
-- <code title="post /v1/chats/{chatID}/reminders">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">create</a>(chatID, { ...params }) -> ReminderCreateResponse</code>
-- <code title="delete /v1/chats/{chatID}/reminders">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">delete</a>(chatID) -> ReminderDeleteResponse</code>
+- <code title="post /v1/chats/{chatID}/reminders">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">create</a>(chatID, { ...params }) -> void</code>
+- <code title="delete /v1/chats/{chatID}/reminders">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">delete</a>(chatID) -> void</code>
 
 # Messages
 

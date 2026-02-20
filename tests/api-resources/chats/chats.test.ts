@@ -29,6 +29,7 @@ describe('resource chats', () => {
       participantIDs: ['string'],
       type: 'single',
       messageText: 'messageText',
+      mode: 'create',
       title: 'title',
     });
   });
