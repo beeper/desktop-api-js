@@ -68,10 +68,12 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/messages.ts">MessageUpdateResponse</a></code>
 - <code><a href="./src/resources/messages.ts">MessageSendResponse</a></code>
 
 Methods:
 
+- <code title="put /v1/chats/{chatID}/messages/{messageID}">client.messages.<a href="./src/resources/messages.ts">update</a>(messageID, { ...params }) -> MessageUpdateResponse</code>
 - <code title="get /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">list</a>(chatID, { ...params }) -> MessagesCursorSortKey</code>
 - <code title="get /v1/messages/search">client.messages.<a href="./src/resources/messages.ts">search</a>({ ...params }) -> MessagesCursorSearch</code>
 - <code title="post /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">send</a>(chatID, { ...params }) -> MessageSendResponse</code>
@@ -81,7 +83,11 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/assets.ts">AssetDownloadResponse</a></code>
+- <code><a href="./src/resources/assets.ts">AssetUploadResponse</a></code>
+- <code><a href="./src/resources/assets.ts">AssetUploadBase64Response</a></code>
 
 Methods:
 
 - <code title="post /v1/assets/download">client.assets.<a href="./src/resources/assets.ts">download</a>({ ...params }) -> AssetDownloadResponse</code>
+- <code title="post /v1/assets/upload">client.assets.<a href="./src/resources/assets.ts">upload</a>({ ...params }) -> AssetUploadResponse</code>
+- <code title="post /v1/assets/upload/base64">client.assets.<a href="./src/resources/assets.ts">uploadBase64</a>({ ...params }) -> AssetUploadBase64Response</code>
