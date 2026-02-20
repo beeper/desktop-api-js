@@ -4,6 +4,8 @@ import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as RemindersAPI from './reminders';
 import { ReminderCreateParams, Reminders } from './reminders';
+import * as MessagesAPI from './messages/messages';
+import { Messages } from './messages/messages';
 import { APIPromise } from '../../core/api-promise';
 import {
   CursorNoLimit,
@@ -21,6 +23,7 @@ import { path } from '../../internal/utils/path';
  */
 export class Chats extends APIResource {
   reminders: RemindersAPI.Reminders = new RemindersAPI.Reminders(this._client);
+  messages: MessagesAPI.Messages = new MessagesAPI.Messages(this._client);
 
   /**
    * Create a single/group chat (mode='create') or start a direct chat from merged
@@ -28,15 +31,15 @@ export class Chats extends APIResource {
    *
    * @example
    * ```ts
-   * const chat = await client.chats.create({
-   *   accountID: 'accountID',
-   *   participantIDs: ['string'],
-   *   type: 'single',
-   * });
+   * const chat = await client.chats.create();
    * ```
    */
-  create(body: ChatCreateParams, options?: RequestOptions): APIPromise<ChatCreateResponse> {
-    return this._client.post('/v1/chats', { body, ...options });
+  create(
+    params: ChatCreateParams | null | undefined = undefined,
+    options?: RequestOptions,
+  ): APIPromise<ChatCreateResponse> {
+    const { chat } = params ?? {};
+    return this._client.post('/v1/chats', { body: chat, ...options });
   }
 
   /**
@@ -135,12 +138,6 @@ export interface Chat {
   accountID: string;
 
   /**
-   * @deprecated Display-only human-readable network name (e.g., 'WhatsApp',
-   * 'Messenger').
-   */
-  network: string;
-
-  /**
    * Chat participants information.
    */
   participants: Chat.Participants;
@@ -233,10 +230,12 @@ export interface ChatListResponse extends Chat {
   preview?: Shared.Message;
 }
 
-export type ChatCreateParams = ChatCreateParams.Variant0 | ChatCreateParams.Variant1;
+export interface ChatCreateParams {
+  chat?: ChatCreateParams.UnionMember0 | ChatCreateParams.UnionMember1;
+}
 
-export declare namespace ChatCreateParams {
-  export interface Variant0 {
+export namespace ChatCreateParams {
+  export interface UnionMember0 {
     /**
      * Account to create the chat on.
      */
@@ -269,7 +268,7 @@ export declare namespace ChatCreateParams {
     title?: string;
   }
 
-  export interface Variant1 {
+  export interface UnionMember1 {
     /**
      * Account to start the chat on.
      */
@@ -283,7 +282,7 @@ export declare namespace ChatCreateParams {
     /**
      * Merged user-like contact payload used to resolve the best identifier.
      */
-    user: Variant1.User;
+    user: UnionMember1.User;
 
     /**
      * Whether invite-based DM creation is allowed when required by the platform.
@@ -296,7 +295,7 @@ export declare namespace ChatCreateParams {
     messageText?: string;
   }
 
-  export namespace Variant1 {
+  export namespace UnionMember1 {
     /**
      * Merged user-like contact payload used to resolve the best identifier.
      */
@@ -407,6 +406,7 @@ export interface ChatSearchParams extends CursorSearchParams {
 }
 
 Chats.Reminders = Reminders;
+Chats.Messages = Messages;
 
 export declare namespace Chats {
   export {
@@ -423,4 +423,6 @@ export declare namespace Chats {
   };
 
   export { Reminders as Reminders, type ReminderCreateParams as ReminderCreateParams };
+
+  export { Messages as Messages };
 }

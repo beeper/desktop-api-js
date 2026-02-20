@@ -13,4 +13,5 @@ export {
   type ChatListResponsesCursorNoLimit,
   type ChatsCursorSearch,
 } from './chats';
+export { Messages } from './messages/index';
 export { Reminders, type ReminderCreateParams } from './reminders';

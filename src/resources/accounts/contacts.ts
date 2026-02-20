@@ -2,7 +2,9 @@
 
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
+import { UsersCursorSearch } from '../shared';
 import { APIPromise } from '../../core/api-promise';
+import { CursorSearch, type CursorSearchParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -10,6 +12,30 @@ import { path } from '../../internal/utils/path';
  * Manage contacts on a specific account
  */
 export class Contacts extends APIResource {
+  /**
+   * List merged contacts for a specific account with cursor-based pagination.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const user of client.accounts.contacts.list(
+   *   'accountID',
+   * )) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(
+    accountID: string,
+    query: ContactListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<UsersCursorSearch, Shared.User> {
+    return this._client.getAPIList(path`/v1/accounts/${accountID}/contacts/list`, CursorSearch<Shared.User>, {
+      query,
+      ...options,
+    });
+  }
+
   /**
    * Search contacts on a specific account using merged account contacts, network
    * search, and exact identifier lookup.
@@ -35,6 +61,13 @@ export interface ContactSearchResponse {
   items: Array<Shared.User>;
 }
 
+export interface ContactListParams extends CursorSearchParams {
+  /**
+   * Optional search query for blended contact lookup.
+   */
+  query?: string;
+}
+
 export interface ContactSearchParams {
   /**
    * Text to search users by. Network-specific behavior.
@@ -45,6 +78,9 @@ export interface ContactSearchParams {
 export declare namespace Contacts {
   export {
     type ContactSearchResponse as ContactSearchResponse,
+    type ContactListParams as ContactListParams,
     type ContactSearchParams as ContactSearchParams,
   };
 }
+
+export { type UsersCursorSearch };

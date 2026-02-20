@@ -7,9 +7,12 @@ const client = new BeeperDesktop({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource contacts', () => {
-  test('list', async () => {
-    const responsePromise = client.accounts.contacts.list('accountID');
+describe('resource reactions', () => {
+  test('delete: only required params', async () => {
+    const responsePromise = client.chats.messages.reactions.delete('messageID', {
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+      reactionKey: 'x',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,24 +22,18 @@ describe('resource contacts', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.accounts.contacts.list(
-        'accountID',
-        {
-          cursor: '1725489123456|c29tZUltc2dQYWdl',
-          direction: 'before',
-          limit: 1,
-          query: 'x',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(BeeperDesktop.NotFoundError);
+  test('delete: required and optional params', async () => {
+    const response = await client.chats.messages.reactions.delete('messageID', {
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+      reactionKey: 'x',
+    });
   });
 
-  test('search: only required params', async () => {
-    const responsePromise = client.accounts.contacts.search('accountID', { query: 'x' });
+  test('add: only required params', async () => {
+    const responsePromise = client.chats.messages.reactions.add('messageID', {
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+      reactionKey: 'x',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -46,7 +43,11 @@ describe('resource contacts', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('search: required and optional params', async () => {
-    const response = await client.accounts.contacts.search('accountID', { query: 'x' });
+  test('add: required and optional params', async () => {
+    const response = await client.chats.messages.reactions.add('messageID', {
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+      reactionKey: 'x',
+      transactionID: 'transactionID',
+    });
   });
 });
