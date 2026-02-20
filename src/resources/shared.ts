@@ -92,21 +92,21 @@ export interface Error {
   /**
    * Additional error details for debugging
    */
-  details?: Error.Issues | { [key: string]: unknown } | unknown;
+  details?: Error.ValidationDetails | { [key: string]: unknown } | unknown;
 }
 
 export namespace Error {
   /**
    * Validation error details
    */
-  export interface Issues {
+  export interface ValidationDetails {
     /**
      * List of validation issues
      */
-    issues: Array<Issues.Issue>;
+    issues: Array<ValidationDetails.Issue>;
   }
 
-  export namespace Issues {
+  export namespace ValidationDetails {
     export interface Issue {
       /**
        * Validation issue code

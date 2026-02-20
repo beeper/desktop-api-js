@@ -205,7 +205,7 @@ export interface MessageSearchParams extends CursorSearchParams {
    * Filter by sender: 'me' (messages sent by the authenticated user), 'others'
    * (messages sent by others), or a specific user ID string (user.id).
    */
-  sender?: 'me' | 'others' | (string & {});
+  sender?: string;
 }
 
 export interface MessageSendParams {
