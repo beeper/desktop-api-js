@@ -72,6 +72,7 @@ describe('resource chats', () => {
       client.chats.list(
         {
           accountIDs: [
+            'whatsapp',
             'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
             'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',
           ],
