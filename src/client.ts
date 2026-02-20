@@ -29,19 +29,30 @@ import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
 import { FocusParams, FocusResponse, SearchParams, SearchResponse } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
-import { AssetDownloadParams, AssetDownloadResponse, Assets, AssetServeParams, } from './resources/assets';
+import {
+  AssetDownloadParams,
+  AssetDownloadResponse,
+  AssetServeParams,
+  AssetUploadBase64Params,
+  AssetUploadBase64Response,
+  AssetUploadParams,
+  AssetUploadResponse,
+  Assets,
+} from './resources/assets';
+import { Info, InfoRetrieveResponse } from './resources/info';
 import {
   MessageListParams,
   MessageSearchParams,
   MessageSendParams,
   MessageSendResponse,
+  MessageUpdateParams,
+  MessageUpdateResponse,
   Messages,
 } from './resources/messages';
 import { Account, AccountListResponse, Accounts } from './resources/accounts/accounts';
 import {
   Chat,
   ChatArchiveParams,
-  ChatArchiveResponse,
   ChatCreateParams,
   ChatCreateResponse,
   ChatListParams,
@@ -602,7 +613,6 @@ export class BeeperDesktop {
       return await this.fetch.call(undefined, url, fetchOptions);
     } finally {
       clearTimeout(timeout);
-      if (signal) signal.removeEventListener('abort', abort);
     }
   }
 
@@ -785,6 +795,14 @@ export class BeeperDesktop {
         (Symbol.iterator in body && 'next' in body && typeof body.next === 'function'))
     ) {
       return { bodyHeaders: undefined, body: Shims.ReadableStreamFrom(body as AsyncIterable<Uint8Array>) };
+    } else if (
+      typeof body === 'object' &&
+      headers.values.get('content-type') === 'application/x-www-form-urlencoded'
+    ) {
+      return {
+        bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: this.stringifyQuery(body as Record<string, unknown>),
+      };
     } else {
       return this.#encoder({ body, headers });
     }
@@ -825,12 +843,14 @@ export class BeeperDesktop {
    * Manage assets in Beeper Desktop, like message attachments
    */
   assets: API.Assets = new API.Assets(this);
+  info: API.Info = new API.Info(this);
 }
 
 BeeperDesktop.Accounts = Accounts;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
 BeeperDesktop.Assets = Assets;
+BeeperDesktop.Info = Info;
 
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
@@ -864,7 +884,6 @@ export declare namespace BeeperDesktop {
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
-    type ChatArchiveResponse as ChatArchiveResponse,
     type ChatListResponsesCursorNoLimit as ChatListResponsesCursorNoLimit,
     type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
@@ -876,7 +895,9 @@ export declare namespace BeeperDesktop {
 
   export {
     Messages as Messages,
+    type MessageUpdateResponse as MessageUpdateResponse,
     type MessageSendResponse as MessageSendResponse,
+    type MessageUpdateParams as MessageUpdateParams,
     type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
@@ -885,11 +906,15 @@ export declare namespace BeeperDesktop {
   export {
     Assets as Assets,
     type AssetDownloadResponse as AssetDownloadResponse,
+    type AssetUploadResponse as AssetUploadResponse,
+    type AssetUploadBase64Response as AssetUploadBase64Response,
     type AssetDownloadParams as AssetDownloadParams,
     type AssetServeParams as AssetServeParams,
     type AssetUploadParams as AssetUploadParams,
     type AssetUploadBase64Params as AssetUploadBase64Params,
   };
+
+  export { Info as Info, type InfoRetrieveResponse as InfoRetrieveResponse };
 
   export type Attachment = API.Attachment;
   export type Error = API.Error;

@@ -5,7 +5,6 @@ export {
   type Chat,
   type ChatCreateResponse,
   type ChatListResponse,
-  type ChatArchiveResponse,
   type ChatCreateParams,
   type ChatRetrieveParams,
   type ChatListParams,
@@ -14,9 +13,5 @@ export {
   type ChatListResponsesCursorNoLimit,
   type ChatsCursorSearch,
 } from './chats';
-export {
-  Reminders,
-  type ReminderCreateResponse,
-  type ReminderDeleteResponse,
-  type ReminderCreateParams,
-} from './reminders';
+export { Messages } from './messages/index';
+export { Reminders, type ReminderCreateParams } from './reminders';

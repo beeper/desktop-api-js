@@ -1,9 +1,17 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { McpTool, Metadata, ToolCallResult, asErrorResult, asTextContentResult } from './types';
+import {
+  McpRequestContext,
+  McpTool,
+  Metadata,
+  ToolCallResult,
+  asErrorResult,
+  asTextContentResult,
+} from './types';
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { readEnv, readEnvOrError } from './server';
+import { readEnv, requireValue } from './util';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
+import { SdkMethod } from './methods';
 
 const prompt = `Runs JavaScript code to interact with the Beeper Desktop API.
 
@@ -30,10 +38,6 @@ Do not add comments unless necessary for generating better code.
 Code will run in a container, and cannot interact with the network outside of the given SDK client.
 Variables will not persist between calls, so make sure to return or log any data you might need later.`;
 
-
-
-
-
 /**
  * A tool that runs code against a copy of the SDK.
  *
@@ -43,7 +47,7 @@ Variables will not persist between calls, so make sure to return or log any data
  *
  * @param endpoints - The endpoints to include in the list.
  */
-export function codeTool(): McpTool {
+export function codeTool({ blockedMethods }: { blockedMethods: SdkMethod[] | undefined }): McpTool {
   const metadata: Metadata = { resource: 'all', operation: 'write', tags: [] };
   const tool: Tool = {
     name: 'execute',
@@ -63,24 +67,48 @@ export function codeTool(): McpTool {
       required: ['code'],
     },
   };
-  const handler = async (_: unknown, args: any): Promise<ToolCallResult> => {
+  const handler = async ({
+    reqContext,
+    args,
+  }: {
+    reqContext: McpRequestContext;
+    args: any;
+  }): Promise<ToolCallResult> => {
     const code = args.code as string;
     const intent = args.intent as string | undefined;
+    const client = reqContext.client;
 
-    // this is not required, but passing a Stainless API key for the matching project_name
-    // will allow you to run code-mode queries against non-published versions of your SDK.
-    const stainlessAPIKey = readEnv('STAINLESS_API_KEY');
+    // Do very basic blocking of code that includes forbidden method names.
+    //
+    // WARNING: This is not secure against obfuscation and other evasion methods. If
+    // stronger security blocks are required, then these should be enforced in the downstream
+    // API (e.g., by having users call the MCP server with API keys with limited permissions).
+    if (blockedMethods) {
+      const blockedMatches = blockedMethods.filter((method) => code.includes(method.fullyQualifiedName));
+      if (blockedMatches.length > 0) {
+        return asErrorResult(
+          `The following methods have been blocked by the MCP server and cannot be used in code execution: ${blockedMatches
+            .map((m) => m.fullyQualifiedName)
+            .join(', ')}`,
+        );
+      }
+    }
+
     const codeModeEndpoint =
       readEnv('CODE_MODE_ENDPOINT_URL') ?? 'https://api.stainless.com/api/ai/code-tool';
 
+    // Setting a Stainless API key authenticates requests to the code tool endpoint.
     const res = await fetch(codeModeEndpoint, {
       method: 'POST',
       headers: {
-        ...(stainlessAPIKey && { Authorization: stainlessAPIKey }),
+        ...(reqContext.stainlessApiKey && { Authorization: reqContext.stainlessApiKey }),
         'Content-Type': 'application/json',
         client_envs: JSON.stringify({
-          BEEPER_ACCESS_TOKEN: readEnvOrError('BEEPER_ACCESS_TOKEN'),
-          BEEPER_DESKTOP_BASE_URL: readEnv('BEEPER_DESKTOP_BASE_URL'),
+          BEEPER_ACCESS_TOKEN: requireValue(
+            readEnv('BEEPER_ACCESS_TOKEN') ?? client.accessToken,
+            'set BEEPER_ACCESS_TOKEN environment variable or provide accessToken client option',
+          ),
+          BEEPER_DESKTOP_BASE_URL: readEnv('BEEPER_DESKTOP_BASE_URL') ?? client.baseURL ?? undefined,
         }),
       },
       body: JSON.stringify({

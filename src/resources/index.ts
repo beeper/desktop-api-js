@@ -17,7 +17,6 @@ export {
   type Chat,
   type ChatCreateResponse,
   type ChatListResponse,
-  type ChatArchiveResponse,
   type ChatCreateParams,
   type ChatRetrieveParams,
   type ChatListParams,
@@ -26,9 +25,12 @@ export {
   type ChatListResponsesCursorNoLimit,
   type ChatsCursorSearch,
 } from './chats/chats';
+export { Info, type InfoRetrieveResponse } from './info';
 export {
   Messages,
+  type MessageUpdateResponse,
   type MessageSendResponse,
+  type MessageUpdateParams,
   type MessageListParams,
   type MessageSearchParams,
   type MessageSendParams,

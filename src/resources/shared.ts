@@ -9,6 +9,12 @@ export interface Attachment {
   type: 'unknown' | 'img' | 'video' | 'audio';
 
   /**
+   * Attachment identifier (typically an mxc:// URL). Use with /v1/assets/download to
+   * get a local file path.
+   */
+  id?: string;
+
+  /**
    * Duration in seconds (audio/video).
    */
   duration?: number;
@@ -86,21 +92,21 @@ export interface Error {
   /**
    * Additional error details for debugging
    */
-  details?: Error.Issues | { [key: string]: unknown } | unknown;
+  details?: Error.ValidationDetails | { [key: string]: unknown } | unknown;
 }
 
 export namespace Error {
   /**
    * Validation error details
    */
-  export interface Issues {
+  export interface ValidationDetails {
     /**
      * List of validation issues
      */
-    issues: Array<Issues.Issue>;
+    issues: Array<ValidationDetails.Issue>;
   }
 
-  export namespace Issues {
+  export namespace ValidationDetails {
     export interface Issue {
       /**
        * Validation issue code
@@ -167,6 +173,11 @@ export interface Message {
   isUnread?: boolean;
 
   /**
+   * ID of the message this is a reply to, if any.
+   */
+  linkedMessageID?: string;
+
+  /**
    * Reactions to the message, if any.
    */
   reactions?: Array<Reaction>;
@@ -181,6 +192,22 @@ export interface Message {
    * rich messages.
    */
   text?: string;
+
+  /**
+   * Message content type. Useful for distinguishing reactions, media messages, and
+   * state events from regular text messages.
+   */
+  type?:
+    | 'TEXT'
+    | 'NOTICE'
+    | 'IMAGE'
+    | 'VIDEO'
+    | 'VOICE'
+    | 'AUDIO'
+    | 'FILE'
+    | 'STICKER'
+    | 'LOCATION'
+    | 'REACTION';
 }
 
 export interface Reaction {
@@ -260,6 +287,8 @@ export interface User {
    */
   username?: string;
 }
+
+export type UsersCursorSearch = CursorSearch<User>;
 
 export type MessagesCursorSortKey = CursorSortKey<Message>;
 
