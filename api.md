@@ -48,38 +48,30 @@ Types:
 - <code><a href="./src/resources/chats/chats.ts">Chat</a></code>
 - <code><a href="./src/resources/chats/chats.ts">ChatCreateResponse</a></code>
 - <code><a href="./src/resources/chats/chats.ts">ChatListResponse</a></code>
-- <code><a href="./src/resources/chats/chats.ts">ChatArchiveResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">create</a>({ ...params }) -> ChatCreateResponse</code>
 - <code title="get /v1/chats/{chatID}">client.chats.<a href="./src/resources/chats/chats.ts">retrieve</a>(chatID, { ...params }) -> Chat</code>
 - <code title="get /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">list</a>({ ...params }) -> ChatListResponsesCursorNoLimit</code>
-- <code title="post /v1/chats/{chatID}/archive">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>(chatID, { ...params }) -> ChatArchiveResponse</code>
+- <code title="post /v1/chats/{chatID}/archive">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>(chatID, { ...params }) -> void</code>
 - <code title="get /v1/chats/search">client.chats.<a href="./src/resources/chats/chats.ts">search</a>({ ...params }) -> ChatsCursorSearch</code>
 
 ## Reminders
 
-Types:
-
-- <code><a href="./src/resources/chats/reminders.ts">ReminderCreateResponse</a></code>
-- <code><a href="./src/resources/chats/reminders.ts">ReminderDeleteResponse</a></code>
-
 Methods:
 
-- <code title="post /v1/chats/{chatID}/reminders">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">create</a>(chatID, { ...params }) -> ReminderCreateResponse</code>
-- <code title="delete /v1/chats/{chatID}/reminders">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">delete</a>(chatID) -> ReminderDeleteResponse</code>
+- <code title="post /v1/chats/{chatID}/reminders">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">create</a>(chatID, { ...params }) -> void</code>
+- <code title="delete /v1/chats/{chatID}/reminders">client.chats.reminders.<a href="./src/resources/chats/reminders.ts">delete</a>(chatID) -> void</code>
 
 # Messages
 
 Types:
 
-- <code><a href="./src/resources/messages.ts">MessageUpdateResponse</a></code>
 - <code><a href="./src/resources/messages.ts">MessageSendResponse</a></code>
 
 Methods:
 
-- <code title="put /v1/chats/{chatID}/messages/{messageID}">client.messages.<a href="./src/resources/messages.ts">update</a>(messageID, { ...params }) -> MessageUpdateResponse</code>
 - <code title="get /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">list</a>(chatID, { ...params }) -> MessagesCursorSortKey</code>
 - <code title="get /v1/messages/search">client.messages.<a href="./src/resources/messages.ts">search</a>({ ...params }) -> MessagesCursorSearch</code>
 - <code title="post /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">send</a>(chatID, { ...params }) -> MessageSendResponse</code>
@@ -89,12 +81,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/assets.ts">AssetDownloadResponse</a></code>
-- <code><a href="./src/resources/assets.ts">AssetUploadResponse</a></code>
-- <code><a href="./src/resources/assets.ts">AssetUploadBase64Response</a></code>
 
 Methods:
 
 - <code title="post /v1/assets/download">client.assets.<a href="./src/resources/assets.ts">download</a>({ ...params }) -> AssetDownloadResponse</code>
-- <code title="get /v1/assets/serve">client.assets.<a href="./src/resources/assets.ts">serve</a>({ ...params }) -> void</code>
-- <code title="post /v1/assets/upload">client.assets.<a href="./src/resources/assets.ts">upload</a>({ ...params }) -> AssetUploadResponse</code>
-- <code title="post /v1/assets/upload/base64">client.assets.<a href="./src/resources/assets.ts">uploadBase64</a>({ ...params }) -> AssetUploadBase64Response</code>

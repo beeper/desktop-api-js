@@ -3,7 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as RemindersAPI from './reminders';
-import { ReminderCreateParams, ReminderCreateResponse, ReminderDeleteResponse, Reminders } from './reminders';
+import { ReminderCreateParams, Reminders } from './reminders';
 import { APIPromise } from '../../core/api-promise';
 import {
   CursorNoLimit,
@@ -12,6 +12,7 @@ import {
   type CursorSearchParams,
   PagePromise,
 } from '../../core/pagination';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -81,7 +82,7 @@ export class Chats extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.chats.archive(
+   * await client.chats.archive(
    *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
    * );
    * ```
@@ -90,8 +91,12 @@ export class Chats extends APIResource {
     chatID: string,
     body: ChatArchiveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ChatArchiveResponse> {
-    return this._client.post(path`/v1/chats/${chatID}/archive`, { body, ...options });
+  ): APIPromise<void> {
+    return this._client.post(path`/v1/chats/${chatID}/archive`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -130,14 +135,15 @@ export interface Chat {
   accountID: string;
 
   /**
+   * @deprecated Display-only human-readable network name (e.g., 'WhatsApp',
+   * 'Messenger').
+   */
+  network: string;
+
+  /**
    * Chat participants information.
    */
   participants: Chat.Participants;
-
-  /**
-   * Display title of the chat as computed by the client/server.
-   */
-  title: string;
 
   /**
    * Chat type: 'single' for direct messages, 'group' for group chats.
@@ -150,17 +156,22 @@ export interface Chat {
   unreadCount: number;
 
   /**
+   * Description of the chat.
+   */
+  description?: string | null;
+
+  /**
    * True if chat is archived.
    */
   isArchived?: boolean;
 
   /**
-   * True if chat notifications are muted.
+   * True if the chat is muted.
    */
   isMuted?: boolean;
 
   /**
-   * True if chat is pinned.
+   * True if the chat is pinned.
    */
   isPinned?: boolean;
 
@@ -178,6 +189,11 @@ export interface Chat {
    * Local chat ID specific to this Beeper Desktop installation.
    */
   localChatID?: string | null;
+
+  /**
+   * Display title of the chat.
+   */
+  title?: string | null;
 }
 
 export namespace Chat {
@@ -214,13 +230,6 @@ export interface ChatListResponse extends Chat {
    * Last message preview for this chat, if available.
    */
   preview?: Shared.Message;
-}
-
-export interface ChatArchiveResponse {
-  /**
-   * Indicates the operation completed successfully
-   */
-  success: true;
 }
 
 export interface ChatCreateParams {
@@ -335,7 +344,6 @@ export declare namespace Chats {
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
-    type ChatArchiveResponse as ChatArchiveResponse,
     type ChatListResponsesCursorNoLimit as ChatListResponsesCursorNoLimit,
     type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
@@ -345,10 +353,5 @@ export declare namespace Chats {
     type ChatSearchParams as ChatSearchParams,
   };
 
-  export {
-    Reminders as Reminders,
-    type ReminderCreateResponse as ReminderCreateResponse,
-    type ReminderDeleteResponse as ReminderDeleteResponse,
-    type ReminderCreateParams as ReminderCreateParams,
-  };
+  export { Reminders as Reminders, type ReminderCreateParams as ReminderCreateParams };
 }
