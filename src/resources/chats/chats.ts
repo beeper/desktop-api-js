@@ -32,13 +32,12 @@ export class Chats extends APIResource {
    * @example
    * ```ts
    * const chat = await client.chats.create({
-   *   chat: { accountID: 'accountID' },
+   *   accountID: 'accountID',
    * });
    * ```
    */
-  create(params: ChatCreateParams, options?: RequestOptions): APIPromise<ChatCreateResponse> {
-    const { chat } = params;
-    return this._client.post('/v1/chats', { body: chat, ...options });
+  create(body: ChatCreateParams, options?: RequestOptions): APIPromise<ChatCreateResponse> {
+    return this._client.post('/v1/chats', { body, ...options });
   }
 
   /**
@@ -230,87 +229,81 @@ export interface ChatListResponse extends Chat {
 }
 
 export interface ChatCreateParams {
-  chat: ChatCreateParams.Chat;
+  /**
+   * Account to create or start the chat on.
+   */
+  accountID: string;
+
+  /**
+   * Whether invite-based DM creation is allowed when required by the platform. Used
+   * for mode='start'.
+   */
+  allowInvite?: boolean;
+
+  /**
+   * Optional first message content if the platform requires it to create the chat.
+   */
+  messageText?: string;
+
+  /**
+   * Operation mode. Defaults to 'create' when omitted.
+   */
+  mode?: 'create' | 'start';
+
+  /**
+   * Required when mode='create'. User IDs to include in the new chat.
+   */
+  participantIDs?: Array<string>;
+
+  /**
+   * Optional title for group chats when mode='create'; ignored for single chats on
+   * most platforms.
+   */
+  title?: string;
+
+  /**
+   * Required when mode='create'. 'single' requires exactly one participantID;
+   * 'group' supports multiple participants and optional title.
+   */
+  type?: 'single' | 'group';
+
+  /**
+   * Required when mode='start'. Merged user-like contact payload used to resolve the
+   * best identifier.
+   */
+  user?: ChatCreateParams.User;
 }
 
 export namespace ChatCreateParams {
-  export interface Chat {
+  /**
+   * Required when mode='start'. Merged user-like contact payload used to resolve the
+   * best identifier.
+   */
+  export interface User {
     /**
-     * Account to create or start the chat on.
+     * Known user ID when available.
      */
-    accountID: string;
-
-    /**
-     * Whether invite-based DM creation is allowed when required by the platform. Used
-     * for mode='start'.
-     */
-    allowInvite?: boolean;
+    id?: string;
 
     /**
-     * Optional first message content if the platform requires it to create the chat.
+     * Email candidate.
      */
-    messageText?: string;
+    email?: string;
 
     /**
-     * Operation mode. Defaults to 'create' when omitted.
+     * Display name hint used for ranking only.
      */
-    mode?: 'create' | 'start';
+    fullName?: string;
 
     /**
-     * Required when mode='create'. User IDs to include in the new chat.
+     * Phone number candidate (E.164 preferred).
      */
-    participantIDs?: Array<string>;
+    phoneNumber?: string;
 
     /**
-     * Optional title for group chats when mode='create'; ignored for single chats on
-     * most platforms.
+     * Username/handle candidate.
      */
-    title?: string;
-
-    /**
-     * Required when mode='create'. 'single' requires exactly one participantID;
-     * 'group' supports multiple participants and optional title.
-     */
-    type?: 'single' | 'group';
-
-    /**
-     * Required when mode='start'. Merged user-like contact payload used to resolve the
-     * best identifier.
-     */
-    user?: Chat.User;
-  }
-
-  export namespace Chat {
-    /**
-     * Required when mode='start'. Merged user-like contact payload used to resolve the
-     * best identifier.
-     */
-    export interface User {
-      /**
-       * Known user ID when available.
-       */
-      id?: string;
-
-      /**
-       * Email candidate.
-       */
-      email?: string;
-
-      /**
-       * Display name hint used for ranking only.
-       */
-      fullName?: string;
-
-      /**
-       * Phone number candidate (E.164 preferred).
-       */
-      phoneNumber?: string;
-
-      /**
-       * Username/handle candidate.
-       */
-      username?: string;
-    }
+    username?: string;
   }
 }
 
