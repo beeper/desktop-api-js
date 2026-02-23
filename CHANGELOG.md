@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.4.1 (2026-02-22)
+
+Full Changelog: [v4.4.0...v4.4.1](https://github.com/beeper/desktop-api-js/compare/v4.4.0...v4.4.1)
+
+### Chores
+
+* remove custom code ([30d58d6](https://github.com/beeper/desktop-api-js/commit/30d58d67d1a775055fe173bdab3131f56830fd32))
+
 ## 4.4.0 (2026-02-20)
 
 Full Changelog: [v4.3.0...v4.4.0](https://github.com/beeper/desktop-api-js/compare/v4.3.0...v4.4.0)
