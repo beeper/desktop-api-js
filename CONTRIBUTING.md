@@ -60,7 +60,7 @@ $ yarn link @beeper/desktop-api
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @beeper/desktop-api
+$ pnpm link --global @beeper/desktop-api
 ```
 
 ## Running tests
