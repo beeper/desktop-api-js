@@ -1,5 +1,5 @@
 {
-  "name": "@beeper/desktop-api-mcp",
+  "name": "@beeper/desktop-mcp",
   "version": "4.4.1",
   "description": "The official MCP Server for the Beeper Desktop API",
   "author": "Beeper Desktop <help@beeper.com>",
@@ -74,8 +74,8 @@
     "tsconfig-paths": "^4.0.0"
   },
   "imports": {
-    "@beeper/desktop-api-mcp": ".",
-    "@beeper/desktop-api-mcp/*": "./src/*"
+    "@beeper/desktop-mcp": ".",
+    "@beeper/desktop-mcp/*": "./src/*"
   },
   "exports": {
     ".": {
