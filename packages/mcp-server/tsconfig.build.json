@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "@beeper/desktop-mcp/*": ["./dist/src/*"],
-      "@beeper/desktop-mcp": ["./dist/src/index.ts"]
+      "@beeper/desktop-api-mcp/*": ["./dist/src/*"],
+      "@beeper/desktop-api-mcp": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
