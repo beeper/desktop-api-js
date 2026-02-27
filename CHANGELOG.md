@@ -1,5 +1,32 @@
 # Changelog
 
+## 4.5.0 (2026-02-27)
+
+Full Changelog: [v4.4.1...v4.5.0](https://github.com/beeper/desktop-api-js/compare/v4.4.1...v4.5.0)
+
+### Features
+
+* **api:** api update ([7944d4b](https://github.com/beeper/desktop-api-js/commit/7944d4b9451ea1c0b9d1ba0cdb565886be581ff9))
+* **mcp:** add an option to disable code tool ([5fdb876](https://github.com/beeper/desktop-api-js/commit/5fdb876a88a07663c3f21a0a87414041a9502cc9))
+
+
+### Bug Fixes
+
+* **docs/contributing:** correct pnpm link command ([324a7c6](https://github.com/beeper/desktop-api-js/commit/324a7c68a64983f81852dff1e80deb2183ace991))
+* **mcp:** update prompt ([48c9305](https://github.com/beeper/desktop-api-js/commit/48c9305e43a1b3901f06782e5bd9942563da0dc7))
+
+
+### Chores
+
+* configure new SDK language ([de34404](https://github.com/beeper/desktop-api-js/commit/de344041a6adc944bb72e26d89867f5847acb213))
+* configure new SDK language ([3588152](https://github.com/beeper/desktop-api-js/commit/358815203aa9d794cf484ed57b53145b3b162d34))
+* **internal:** fix MCP Dockerfiles so they can be built without buildkit ([d5d0007](https://github.com/beeper/desktop-api-js/commit/d5d00077000cbbb36af94b6883312aa8efa2a7fc))
+* **internal:** fix MCP Dockerfiles so they can be built without buildkit ([3e34a94](https://github.com/beeper/desktop-api-js/commit/3e34a9448d3326e7e23abcf584fd9646b733ebc2))
+* **internal:** make MCP code execution location configurable via a flag ([8a66099](https://github.com/beeper/desktop-api-js/commit/8a66099ade73eadac725037ce55554b1940ea165))
+* **internal:** move stringifyQuery implementation to internal function ([b489b1b](https://github.com/beeper/desktop-api-js/commit/b489b1b57a1ff10ebd23100be038556df9f0c236))
+* **internal:** upgrade @modelcontextprotocol/sdk and hono ([d0af8c6](https://github.com/beeper/desktop-api-js/commit/d0af8c65330c253f8b752ee8f8e455803ae3da32))
+* remove custom code ([8c768f8](https://github.com/beeper/desktop-api-js/commit/8c768f8c554105b53805e64c3a95d85e579b6eb3))
+
 ## 4.4.1 (2026-02-22)
 
 Full Changelog: [v4.4.0...v4.4.1](https://github.com/beeper/desktop-api-js/compare/v4.4.0...v4.4.1)

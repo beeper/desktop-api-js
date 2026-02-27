@@ -14,12 +14,16 @@ export type CLIOptions = McpOptions & {
 };
 
 export type McpOptions = {
+  includeCodeTool?: boolean | undefined;
   includeDocsTools?: boolean | undefined;
   stainlessApiKey?: string | undefined;
   codeAllowHttpGets?: boolean | undefined;
   codeAllowedMethods?: string[] | undefined;
   codeBlockedMethods?: string[] | undefined;
+  codeExecutionMode: McpCodeExecutionMode;
 };
+
+export type McpCodeExecutionMode = 'stainless-sandbox' | 'local';
 
 export function parseCLIOptions(): CLIOptions {
   const opts = yargs(hideBin(process.argv))
@@ -39,6 +43,13 @@ export function parseCLIOptions(): CLIOptions {
       array: true,
       description:
         'Methods to explicitly block for code tool. Evaluated as regular expressions against method fully qualified names. If all code-allow-* flags are unset, then everything is allowed.',
+    })
+    .option('code-execution-mode', {
+      type: 'string',
+      choices: ['stainless-sandbox', 'local'],
+      default: 'stainless-sandbox',
+      description:
+        "Where to run code execution in code tool; 'stainless-sandbox' will execute code in Stainless-hosted sandboxes whereas 'local' will execute code locally on the MCP server machine.",
     })
     .option('debug', { type: 'boolean', description: 'Enable debug logging' })
     .option('no-tools', {
@@ -82,17 +93,20 @@ export function parseCLIOptions(): CLIOptions {
     : argv.tools?.includes(toolType) ? true
     : undefined;
 
+  const includeCodeTool = shouldIncludeToolType('code');
   const includeDocsTools = shouldIncludeToolType('docs');
 
   const transport = argv.transport as 'stdio' | 'http';
 
   return {
+    ...(includeCodeTool !== undefined && { includeCodeTool }),
     ...(includeDocsTools !== undefined && { includeDocsTools }),
     debug: !!argv.debug,
     stainlessApiKey: argv.stainlessApiKey,
     codeAllowHttpGets: argv.codeAllowHttpGets,
     codeAllowedMethods: argv.codeAllowedMethods,
     codeBlockedMethods: argv.codeBlockedMethods,
+    codeExecutionMode: argv.codeExecutionMode as McpCodeExecutionMode,
     transport,
     port: argv.port,
     socket: argv.socket,
@@ -118,12 +132,19 @@ export function parseQueryOptions(defaultOptions: McpOptions, query: unknown): M
   const queryObject = typeof query === 'string' ? qs.parse(query) : query;
   const queryOptions = QueryOptions.parse(queryObject);
 
+  let codeTool: boolean | undefined =
+    queryOptions.no_tools && queryOptions.no_tools?.includes('code') ? false
+    : queryOptions.tools?.includes('code') ? true
+    : defaultOptions.includeCodeTool;
+
   let docsTools: boolean | undefined =
     queryOptions.no_tools && queryOptions.no_tools?.includes('docs') ? false
     : queryOptions.tools?.includes('docs') ? true
     : defaultOptions.includeDocsTools;
 
   return {
+    ...(codeTool !== undefined && { includeCodeTool: codeTool }),
     ...(docsTools !== undefined && { includeDocsTools: docsTools }),
+    codeExecutionMode: defaultOptions.codeExecutionMode,
   };
 }
