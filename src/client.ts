@@ -843,6 +843,9 @@ export class BeeperDesktop {
    * Manage assets in Beeper Desktop, like message attachments
    */
   assets: API.Assets = new API.Assets(this);
+  /**
+   * Control the Beeper Desktop application
+   */
   info: API.Info = new API.Info(this);
 }
 

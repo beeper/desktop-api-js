@@ -4,6 +4,9 @@ import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
+/**
+ * Control the Beeper Desktop application
+ */
 export class Info extends APIResource {
   /**
    * Returns app, platform, server, and endpoint discovery metadata for this Beeper
