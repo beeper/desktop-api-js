@@ -160,7 +160,7 @@ const remoteStainlessHandler = async ({
     headers: {
       ...(reqContext.stainlessApiKey && { Authorization: reqContext.stainlessApiKey }),
       'Content-Type': 'application/json',
-      client_envs: JSON.stringify({
+      'x-stainless-mcp-client-envs': JSON.stringify({
         BEEPER_ACCESS_TOKEN: requireValue(
           readEnv('BEEPER_ACCESS_TOKEN') ?? client.accessToken,
           'set BEEPER_ACCESS_TOKEN environment variable or provide accessToken client option',
