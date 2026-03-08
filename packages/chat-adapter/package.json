@@ -1,0 +1,63 @@
+{
+  "name": "@beeper/chat-adapter-desktop-api",
+  "version": "4.5.0",
+  "description": "Beeper Desktop API adapter for Chat SDK",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "Beeper Desktop <help@beeper.com>",
+  "packageManager": "yarn@1.22.22",
+  "private": false,
+  "scripts": {
+    "build": "yarn clean && tsup && node ./scripts/prepare-dist.mjs",
+    "dev": "tsup --watch",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "example:logger": "yarn build && node examples/logger/index.mjs"
+  },
+  "dependencies": {
+    "@beeper/desktop-api": "^4.2.3",
+    "@chat-adapter/shared": "^4.13.4",
+    "chat": "^4.13.4",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.8",
+    "@chat-adapter/state-memory": "^4.13.4",
+    "@types/node": "^22.10.2",
+    "@types/ws": "^8.18.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beeper/desktop-api-js.git",
+    "directory": "packages/chat-adapter"
+  },
+  "homepage": "https://github.com/beeper/desktop-api-js/tree/main/packages/chat-adapter#readme",
+  "bugs": {
+    "url": "https://github.com/beeper/desktop-api-js/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "chat",
+    "beeper-desktop-api",
+    "adapter"
+  ],
+  "license": "MIT"
+}
