@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.5.1 (2026-03-11)
+
+Full Changelog: [v4.5.0...v4.5.1](https://github.com/beeper/desktop-api-js/compare/v4.5.0...v4.5.1)
+
+### Chores
+
+* **internal:** update dependencies to address dependabot vulnerabilities ([a8292db](https://github.com/beeper/desktop-api-js/commit/a8292dbc4ce297dbc4f0f1961e5adc334979d2cd))
+
 ## 4.5.0 (2026-03-07)
 
 Full Changelog: [v4.4.1...v4.5.0](https://github.com/beeper/desktop-api-js/compare/v4.4.1...v4.5.0)
