@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.5.2 (2026-03-12)
+
+Full Changelog: [v4.5.1...v4.5.2](https://github.com/beeper/desktop-api-js/compare/v4.5.1...v4.5.2)
+
+### Chores
+
+* **internal:** bump @modelcontextprotocol/sdk, @hono/node-server, and minimatch ([9b177a1](https://github.com/beeper/desktop-api-js/commit/9b177a1cd32b0467c156f5056023cf8bba15be42))
+* update SDK settings ([09545ee](https://github.com/beeper/desktop-api-js/commit/09545ee38f44a52e57184ac6d126274d2ae78643))
+
 ## 4.5.1 (2026-03-11)
 
 Full Changelog: [v4.5.0...v4.5.1](https://github.com/beeper/desktop-api-js/compare/v4.5.0...v4.5.1)
