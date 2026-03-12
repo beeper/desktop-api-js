@@ -10,7 +10,6 @@ import {
 import { ClientOptions } from '@beeper/desktop-api';
 import BeeperDesktop from '@beeper/desktop-api';
 import { codeTool } from './code-tool';
-import docsSearchTool from './docs-search-tool';
 import { getInstructions } from './instructions';
 import { McpOptions } from './options';
 import { blockedMethodsForCodeTool } from './methods';
@@ -166,9 +165,7 @@ export function selectTools(options?: McpOptions): McpTool[] {
       }),
     );
   }
-  if (options?.includeDocsTools ?? true) {
-    includedTools.push(docsSearchTool);
-  }
+
   return includedTools;
 }
 
