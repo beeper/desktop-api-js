@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^@beeper/desktop-api-mcp$': '<rootDir>/src/index.ts',
-    '^@beeper/desktop-api-mcp/(.*)$': '<rootDir>/src/$1',
+    '^@beeper/desktop-mcp$': '<rootDir>/src/index.ts',
+    '^@beeper/desktop-mcp/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   testPathIgnorePatterns: ['scripts'],
