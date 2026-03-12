@@ -19,7 +19,7 @@ export const newMcpServer = async (stainlessApiKey: string | undefined) =>
   new McpServer(
     {
       name: 'beeper_desktop_api_api',
-      version: '4.5.2',
+      version: '4.6.0',
     },
     {
       instructions: await getInstructions(stainlessApiKey),
