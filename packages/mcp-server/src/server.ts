@@ -10,6 +10,7 @@ import {
 import { ClientOptions } from '@beeper/desktop-api';
 import BeeperDesktop from '@beeper/desktop-api';
 import { codeTool } from './code-tool';
+import docsSearchTool from './docs-search-tool';
 import { getInstructions } from './instructions';
 import { McpOptions } from './options';
 import { blockedMethodsForCodeTool } from './methods';
@@ -19,7 +20,7 @@ export const newMcpServer = async (stainlessApiKey: string | undefined) =>
   new McpServer(
     {
       name: 'beeper_desktop_api_api',
-      version: '4.6.0',
+      version: '4.7.0',
     },
     {
       instructions: await getInstructions(stainlessApiKey),
@@ -165,7 +166,9 @@ export function selectTools(options?: McpOptions): McpTool[] {
       }),
     );
   }
-
+  if (options?.includeDocsTools ?? true) {
+    includedTools.push(docsSearchTool);
+  }
   return includedTools;
 }
 
