@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.7.0 (2026-03-13)
+
+Full Changelog: [v4.6.0...v4.7.0](https://github.com/beeper/desktop-api-js/compare/v4.6.0...v4.7.0)
+
+### Features
+
+* **api:** manual updates ([b7cf413](https://github.com/beeper/desktop-api-js/commit/b7cf4130840f935a2f9ecbad2a7ff010d3c9f2b3))
+
 ## 4.6.0 (2026-03-12)
 
 Full Changelog: [v4.5.2...v4.6.0](https://github.com/beeper/desktop-api-js/compare/v4.5.2...v4.6.0)
