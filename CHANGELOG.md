@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.7.1 (2026-03-14)
+
+Full Changelog: [v4.7.0...v4.7.1](https://github.com/beeper/desktop-api-js/compare/v4.7.0...v4.7.1)
+
+### Chores
+
+* **internal:** make generated MCP servers compatible with Cloudflare worker environments ([51ed091](https://github.com/beeper/desktop-api-js/commit/51ed09114417dd970167ef9e02663f729cc3ffa8))
+* **internal:** support x-stainless-mcp-client-envs header in MCP servers ([f152521](https://github.com/beeper/desktop-api-js/commit/f152521d3d12eebf07826d8494e619f22a856eb5))
+
 ## 4.7.0 (2026-03-13)
 
 Full Changelog: [v4.6.0...v4.7.0](https://github.com/beeper/desktop-api-js/compare/v4.6.0...v4.7.0)
