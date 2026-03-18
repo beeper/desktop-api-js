@@ -57,6 +57,7 @@ async function fetchLatestInstructions(stainlessApiKey: string | undefined): Pro
 
   instructions ??= ((await response.json()) as { instructions: string }).instructions;
 
-  instructions += `\nAccess to all chats and messages across networks using Beeper Desktop. Can be used to find, get, send, and manage messages and chats.`;
+  instructions +=
+    '\nAccess to all chats and messages across networks using Beeper Desktop. Can be used to find, get, send, and manage messages and chats.';
   return instructions;
 }
