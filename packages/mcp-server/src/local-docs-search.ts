@@ -81,6 +81,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example: 'curl http://localhost:23373/v1/focus \\\n    -X POST',
       },
+      php: {
+        method: 'focus',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$response = $client->focus(\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  draftAttachmentPath: 'draftAttachmentPath',\n  draftText: 'draftText',\n  messageID: 'messageID',\n);\n\nvar_dump($response);",
+      },
       python: {
         method: 'focus',
         example:
@@ -120,6 +125,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example: 'curl http://localhost:23373/v1/search',
       },
+      php: {
+        method: 'search',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$response = $client->search(query: 'x');\n\nvar_dump($response);",
+      },
       python: {
         method: 'search',
         example:
@@ -156,6 +166,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example: 'curl http://localhost:23373/v1/accounts',
+      },
+      php: {
+        method: 'accounts->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$accounts = $client->accounts->list();\n\nvar_dump($accounts);",
       },
       python: {
         method: 'accounts.list',
@@ -195,6 +210,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example: 'curl http://localhost:23373/v1/accounts/$ACCOUNT_ID/contacts',
+      },
+      php: {
+        method: 'accounts->contacts->search',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$response = $client->accounts->contacts->search('accountID', query: 'x');\n\nvar_dump($response);",
       },
       python: {
         method: 'accounts.contacts.search',
@@ -240,6 +260,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example: 'curl http://localhost:23373/v1/accounts/$ACCOUNT_ID/contacts/list',
       },
+      php: {
+        method: 'accounts->contacts->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$page = $client->accounts->contacts->list(\n  'accountID',\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n  limit: 1,\n  query: 'x',\n);\n\nvar_dump($page);",
+      },
       python: {
         method: 'accounts.contacts.list',
         example:
@@ -277,6 +302,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example: 'curl http://localhost:23373/v1/chats/$CHAT_ID',
+      },
+      php: {
+        method: 'chats->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$chat = $client->chats->retrieve(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com', maxParticipantCount: 50\n);\n\nvar_dump($chat);",
       },
       python: {
         method: 'chats.retrieve',
@@ -326,6 +356,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'curl http://localhost:23373/v1/chats \\\n    -H \'Content-Type: application/json\' \\\n    -d \'{\n          "accountID": "accountID"\n        }\'',
       },
+      php: {
+        method: 'chats->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$chat = $client->chats->create(\n  accountID: 'accountID',\n  allowInvite: true,\n  messageText: 'messageText',\n  mode: 'create',\n  participantIDs: ['string'],\n  title: 'title',\n  type: 'single',\n  user: [\n    'id' => 'id',\n    'email' => 'email',\n    'fullName' => 'fullName',\n    'phoneNumber' => 'phoneNumber',\n    'username' => 'username',\n  ],\n);\n\nvar_dump($chat);",
+      },
       python: {
         method: 'chats.create',
         example:
@@ -364,6 +399,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example: 'curl http://localhost:23373/v1/chats',
+      },
+      php: {
+        method: 'chats->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$page = $client->chats->list(\n  accountIDs: [\n    'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',\n    'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',\n  ],\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n);\n\nvar_dump($page);",
       },
       python: {
         method: 'chats.list',
@@ -416,6 +456,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example: 'curl http://localhost:23373/v1/chats/search',
       },
+      php: {
+        method: 'chats->search',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$page = $client->chats->search(\n  accountIDs: [\n    'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',\n    'local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI',\n  ],\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n  inbox: 'primary',\n  includeMuted: true,\n  lastActivityAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  lastActivityBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  limit: 1,\n  query: 'x',\n  scope: 'titles',\n  type: 'single',\n  unreadOnly: true,\n);\n\nvar_dump($page);",
+      },
       python: {
         method: 'chats.search',
         example:
@@ -452,6 +497,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example: 'curl http://localhost:23373/v1/chats/$CHAT_ID/archive \\\n    -X POST',
+      },
+      php: {
+        method: 'chats->archive',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$result = $client->chats->archive(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com', archived: true\n);\n\nvar_dump($result);",
       },
       python: {
         method: 'chats.archive',
@@ -491,6 +541,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'curl http://localhost:23373/v1/chats/$CHAT_ID/reminders \\\n    -H \'Content-Type: application/json\' \\\n    -d \'{\n          "reminder": {\n            "remindAtMs": 0\n          }\n        }\'',
       },
+      php: {
+        method: 'chats->reminders->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$result = $client->chats->reminders->create(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  reminder: ['remindAtMs' => 0, 'dismissOnIncomingMessage' => true],\n);\n\nvar_dump($result);",
+      },
       python: {
         method: 'chats.reminders.create',
         example:
@@ -526,6 +581,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example: 'curl http://localhost:23373/v1/chats/$CHAT_ID/reminders \\\n    -X DELETE',
+      },
+      php: {
+        method: 'chats->reminders->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$result = $client->chats->reminders->delete('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nvar_dump($result);",
       },
       python: {
         method: 'chats.reminders.delete',
@@ -567,6 +627,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'curl http://localhost:23373/v1/chats/$CHAT_ID/messages/$MESSAGE_ID/reactions \\\n    -H \'Content-Type: application/json\' \\\n    -d \'{\n          "reactionKey": "x"\n        }\'',
       },
+      php: {
+        method: 'chats->messages->reactions->add',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$response = $client->chats->messages->reactions->add(\n  'messageID',\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  reactionKey: 'x',\n  transactionID: 'transactionID',\n);\n\nvar_dump($response);",
+      },
       python: {
         method: 'chats.messages.reactions.add',
         example:
@@ -605,6 +670,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl http://localhost:23373/v1/chats/$CHAT_ID/messages/$MESSAGE_ID/reactions \\\n    -X DELETE',
+      },
+      php: {
+        method: 'chats->messages->reactions->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$reaction = $client->chats->messages->reactions->delete(\n  'messageID', chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', reactionKey: 'x'\n);\n\nvar_dump($reaction);",
       },
       python: {
         method: 'chats.messages.reactions.delete',
@@ -658,6 +728,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example: 'curl http://localhost:23373/v1/messages/search',
       },
+      php: {
+        method: 'messages->search',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$page = $client->messages->search(\n  accountIDs: [\n    'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',\n    'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',\n  ],\n  chatIDs: ['!NCdzlIaMjZUmvmvyHU:beeper.com', '1231073'],\n  chatType: 'group',\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  dateAfter: new \\DateTimeImmutable('2025-08-01T00:00:00Z'),\n  dateBefore: new \\DateTimeImmutable('2025-08-31T23:59:59Z'),\n  direction: 'before',\n  excludeLowPriority: true,\n  includeMuted: true,\n  limit: 20,\n  mediaTypes: ['any'],\n  query: 'dinner',\n  sender: 'sender',\n);\n\nvar_dump($page);",
+      },
       python: {
         method: 'messages.search',
         example:
@@ -695,6 +770,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example: 'curl http://localhost:23373/v1/chats/$CHAT_ID/messages',
+      },
+      php: {
+        method: 'messages->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$page = $client->messages->list(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n);\n\nvar_dump($page);",
       },
       python: {
         method: 'messages.list',
@@ -739,6 +819,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example: 'curl http://localhost:23373/v1/chats/$CHAT_ID/messages \\\n    -X POST',
       },
+      php: {
+        method: 'messages->send',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$response = $client->messages->send(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  attachment: [\n    'uploadID' => 'uploadID',\n    'duration' => 0,\n    'fileName' => 'fileName',\n    'mimeType' => 'mimeType',\n    'size' => ['height' => 0, 'width' => 0],\n    'type' => 'gif',\n  ],\n  replyToMessageID: 'replyToMessageID',\n  text: 'text',\n);\n\nvar_dump($response);",
+      },
       python: {
         method: 'messages.send',
         example:
@@ -778,6 +863,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'curl http://localhost:23373/v1/chats/$CHAT_ID/messages/$MESSAGE_ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -d \'{\n          "text": "x"\n        }\'',
       },
+      php: {
+        method: 'messages->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$message = $client->messages->update(\n  'messageID', chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', text: 'x'\n);\n\nvar_dump($message);",
+      },
       python: {
         method: 'messages.update',
         example:
@@ -816,6 +906,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl http://localhost:23373/v1/assets/download \\\n    -H \'Content-Type: application/json\' \\\n    -d \'{\n          "url": "mxc://example.org/Q4x9CqGz1pB3Oa6XgJ"\n        }\'',
+      },
+      php: {
+        method: 'assets->download',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$response = $client->assets->download(\n  url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ'\n);\n\nvar_dump($response);",
       },
       python: {
         method: 'assets.download',
@@ -857,6 +952,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "curl http://localhost:23373/v1/assets/upload \\\n    -H 'Content-Type: multipart/form-data' \\\n    -F 'file=@/path/to/file'",
       },
+      php: {
+        method: 'assets->upload',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$response = $client->assets->upload(\n  file: 'file', fileName: 'fileName', mimeType: 'mimeType'\n);\n\nvar_dump($response);",
+      },
       python: {
         method: 'assets.upload',
         example:
@@ -897,6 +997,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'curl http://localhost:23373/v1/assets/upload/base64 \\\n    -H \'Content-Type: application/json\' \\\n    -d \'{\n          "content": "x"\n        }\'',
       },
+      php: {
+        method: 'assets->uploadBase64',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$response = $client->assets->uploadBase64(\n  content: 'x', fileName: 'fileName', mimeType: 'mimeType'\n);\n\nvar_dump($response);",
+      },
       python: {
         method: 'assets.upload_base64',
         example:
@@ -933,6 +1038,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example: 'curl http://localhost:23373/v1/assets/serve',
+      },
+      php: {
+        method: 'assets->serve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$result = $client->assets->serve(url: 'x');\n\nvar_dump($result);",
       },
       python: {
         method: 'assets.serve',
@@ -973,6 +1083,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'curl http://localhost:23373/v1/info \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
+      php: {
+        method: 'info->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$info = $client->info->retrieve();\n\nvar_dump($info);",
+      },
       python: {
         method: 'info.retrieve',
         example:
@@ -1007,6 +1122,11 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
     language: 'cli',
     content:
       "# Beeper Desktop CLI\n\nThe official CLI for the [Beeper Desktop REST API](https://developers.beeper.com/desktop-api/).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n<!-- x-release-please-start-version -->\n\n## Installation\n\n### Installing with Homebrew\n\n~~~sh\nbrew install beeper/tap/beeper-desktop-cli\n~~~\n\n### Installing with Go\n\nTo test or install the CLI locally, you need [Go](https://go.dev/doc/install) version 1.22 or later installed.\n\n~~~sh\ngo install 'github.com/beeper/desktop-api-cli/cmd/beeper-desktop-cli@latest'\n~~~\n\nOnce you have run `go install`, the binary is placed in your Go bin directory:\n\n- **Default location**: `$HOME/go/bin` (or `$GOPATH/bin` if GOPATH is set)\n- **Check your path**: Run `go env GOPATH` to see the base directory\n\nIf commands aren't found after installation, add the Go bin directory to your PATH:\n\n~~~sh\n# Add to your shell profile (.zshrc, .bashrc, etc.)\nexport PATH=\"$PATH:$(go env GOPATH)/bin\"\n~~~\n\n<!-- x-release-please-end -->\n\n### Running Locally\n\nAfter cloning the git repository for this project, you can use the\n`scripts/run` script to run the tool locally:\n\n~~~sh\n./scripts/run args...\n~~~\n\n## Usage\n\nThe CLI follows a resource-based command structure:\n\n~~~sh\nbeeper-desktop-cli [resource] <command> [flags...]\n~~~\n\n~~~sh\nbeeper-desktop-cli chats search \\\n  --include-muted \\\n  --limit 3 \\\n  --type single\n~~~\n\nFor details about specific commands, use the `--help` flag.\n\n### Environment variables\n\n| Environment variable  | Description                                                                                           | Required |\n| --------------------- | ----------------------------------------------------------------------------------------------------- | -------- |\n| `BEEPER_ACCESS_TOKEN` | Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for all API operations. | yes      |\n\n### Global flags\n\n- `--access-token` - Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for all API operations. (can also be set with `BEEPER_ACCESS_TOKEN` env var)\n- `--help` - Show command line usage\n- `--debug` - Enable debug logging (includes HTTP request/response details)\n- `--version`, `-v` - Show the CLI version\n- `--base-url` - Use a custom API backend URL\n- `--format` - Change the output format (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--format-error` - Change the output format for errors (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--transform` - Transform the data output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n- `--transform-error` - Transform the error output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n\n### Passing files as arguments\n\nTo pass files to your API, you can use the `@myfile.ext` syntax:\n\n~~~bash\nbeeper-desktop-cli <command> --arg @abe.jpg\n~~~\n\nFiles can also be passed inside JSON or YAML blobs:\n\n~~~bash\nbeeper-desktop-cli <command> --arg '{image: \"@abe.jpg\"}'\n# Equivalent:\nbeeper-desktop-cli <command> <<YAML\narg:\n  image: \"@abe.jpg\"\nYAML\n~~~\n\nIf you need to pass a string literal that begins with an `@` sign, you can\nescape the `@` sign to avoid accidentally passing a file.\n\n~~~bash\nbeeper-desktop-cli <command> --username '\\@abe'\n~~~\n\n#### Explicit encoding\n\nFor JSON endpoints, the CLI tool does filetype sniffing to determine whether the\nfile contents should be sent as a string literal (for plain text files) or as a\nbase64-encoded string literal (for binary files). If you need to explicitly send\nthe file as either plain text or base64-encoded data, you can use\n`@file://myfile.txt` (for string encoding) or `@data://myfile.dat` (for\nbase64-encoding). Note that absolute paths will begin with `@file://` or\n`@data://`, followed by a third `/` (for example, `@file:///tmp/file.txt`).\n\n~~~bash\nbeeper-desktop-cli <command> --arg @data://file.txt\n~~~\n",
+  },
+  {
+    language: 'php',
+    content:
+      '# Beeper Desktop PHP API Library\n\nThe Beeper Desktop PHP library provides convenient access to the Beeper Desktop REST API from any PHP 8.1.0+ application.\n\n## Installation\n\nTo use this package, install via Composer by adding the following to your application\'s `composer.json`:\n\n<!-- x-release-please-start-version -->\n```json\n{\n  "repositories": [\n    {\n      "type": "vcs",\n      "url": "git@github.com:beeper/desktop-api-php.git"\n    }\n  ],\n  "require": {\n    "beeper/desktop-api-php": "dev-main"\n  }\n}\n```\n<!-- x-release-please-end -->\n\n## Usage\n\n```php\n<?php\n\n$client = new Client();\n\n$page = $client->chats->search(includeMuted: true, limit: 3, type: \'single\');\n\nvar_dump($page->id);\n```',
   },
 ];
 
