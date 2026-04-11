@@ -955,7 +955,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       php: {
         method: 'assets->upload',
         example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$response = $client->assets->upload(\n  file: 'file', fileName: 'fileName', mimeType: 'mimeType'\n);\n\nvar_dump($response);",
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client();\n\n$response = $client->assets->upload(\n  file: FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n  fileName: 'fileName',\n  mimeType: 'mimeType',\n);\n\nvar_dump($response);",
       },
       python: {
         method: 'assets.upload',
