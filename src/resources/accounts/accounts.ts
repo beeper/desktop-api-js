@@ -37,9 +37,41 @@ export interface Account {
   accountID: string;
 
   /**
+   * Bridge metadata for the account. Available from Beeper Desktop v.4.2.719+.
+   */
+  bridge: Account.Bridge;
+
+  /**
+   * Human-friendly network name for the account.
+   */
+  network: string;
+
+  /**
    * User the account belongs to.
    */
   user: Shared.User;
+}
+
+export namespace Account {
+  /**
+   * Bridge metadata for the account. Available from Beeper Desktop v.4.2.719+.
+   */
+  export interface Bridge {
+    /**
+     * Bridge instance identifier.
+     */
+    id: string;
+
+    /**
+     * Bridge provider for the account.
+     */
+    provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk';
+
+    /**
+     * Bridge type.
+     */
+    type: string;
+  }
 }
 
 /**

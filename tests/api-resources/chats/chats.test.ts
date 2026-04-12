@@ -8,8 +8,8 @@ const client = new BeeperDesktop({
 });
 
 describe('resource chats', () => {
-  test('create: only required params', async () => {
-    const responsePromise = client.chats.create({ accountID: 'accountID' });
+  test('create', async () => {
+    const responsePromise = client.chats.create();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,23 +19,28 @@ describe('resource chats', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('create: required and optional params', async () => {
-    const response = await client.chats.create({
-      accountID: 'accountID',
-      allowInvite: true,
-      messageText: 'messageText',
-      mode: 'create',
-      participantIDs: ['string'],
-      title: 'title',
-      type: 'single',
-      user: {
-        id: 'id',
-        email: 'email',
-        fullName: 'fullName',
-        phoneNumber: 'phoneNumber',
-        username: 'username',
-      },
-    });
+  test('create: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.chats.create(
+        {
+          params: {
+            accountID: 'accountID',
+            mode: 'start',
+            user: {
+              id: 'id',
+              email: 'email',
+              fullName: 'fullName',
+              phoneNumber: 'phoneNumber',
+              username: 'username',
+            },
+            allowInvite: true,
+            messageText: 'messageText',
+          },
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
   test('retrieve', async () => {
