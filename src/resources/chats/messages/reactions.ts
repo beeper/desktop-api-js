@@ -24,16 +24,9 @@ export class Reactions extends APIResource {
    *   );
    * ```
    */
-  delete(
-    messageID: string,
-    params: ReactionDeleteParams,
-    options?: RequestOptions,
-  ): APIPromise<ReactionDeleteResponse> {
-    const { chatID, reactionKey } = params;
-    return this._client.delete(path`/v1/chats/${chatID}/messages/${messageID}/reactions`, {
-      query: { reactionKey },
-      ...options,
-    });
+  delete(messageID: string, params: ReactionDeleteParams, options?: RequestOptions): APIPromise<ReactionDeleteResponse> {
+    const { chatID, reactionKey } = params
+    return this._client.delete(path`/v1/chats/${chatID}/messages/${messageID}/reactions`, { query: { reactionKey }, ...options });
   }
 
   /**
@@ -50,12 +43,8 @@ export class Reactions extends APIResource {
    * );
    * ```
    */
-  add(
-    messageID: string,
-    params: ReactionAddParams,
-    options?: RequestOptions,
-  ): APIPromise<ReactionAddResponse> {
-    const { chatID, ...body } = params;
+  add(messageID: string, params: ReactionAddParams, options?: RequestOptions): APIPromise<ReactionAddResponse> {
+    const { chatID, ...body } = params
     return this._client.post(path`/v1/chats/${chatID}/messages/${messageID}/reactions`, { body, ...options });
   }
 }
@@ -143,6 +132,6 @@ export declare namespace Reactions {
     type ReactionDeleteResponse as ReactionDeleteResponse,
     type ReactionAddResponse as ReactionAddResponse,
     type ReactionDeleteParams as ReactionDeleteParams,
-    type ReactionAddParams as ReactionAddParams,
+    type ReactionAddParams as ReactionAddParams
   };
 }

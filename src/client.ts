@@ -15,66 +15,23 @@ import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
-import {
-  AbstractPage,
-  type CursorNoLimitParams,
-  CursorNoLimitResponse,
-  type CursorSearchParams,
-  CursorSearchResponse,
-  type CursorSortKeyParams,
-  CursorSortKeyResponse,
-} from './core/pagination';
+import { AbstractPage, type CursorNoLimitParams, CursorNoLimitResponse, type CursorSearchParams, CursorSearchResponse, type CursorSortKeyParams, CursorSortKeyResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
 import { FocusParams, FocusResponse, SearchParams, SearchResponse } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
-import {
-  AssetDownloadParams,
-  AssetDownloadResponse,
-  AssetServeParams,
-  AssetUploadBase64Params,
-  AssetUploadBase64Response,
-  AssetUploadParams,
-  AssetUploadResponse,
-  Assets,
-} from './resources/assets';
+import { AssetDownloadParams, AssetDownloadResponse, AssetServeParams, AssetUploadBase64Params, AssetUploadBase64Response, AssetUploadParams, AssetUploadResponse, Assets } from './resources/assets';
 import { Info, InfoRetrieveResponse } from './resources/info';
-import {
-  MessageListParams,
-  MessageSearchParams,
-  MessageSendParams,
-  MessageSendResponse,
-  MessageUpdateParams,
-  MessageUpdateResponse,
-  Messages,
-} from './resources/messages';
+import { MessageListParams, MessageSearchParams, MessageSendParams, MessageSendResponse, MessageUpdateParams, MessageUpdateResponse, Messages } from './resources/messages';
 import { Account, AccountListResponse, Accounts } from './resources/accounts/accounts';
-import {
-  Chat,
-  ChatArchiveParams,
-  ChatCreateParams,
-  ChatCreateResponse,
-  ChatListParams,
-  ChatListResponse,
-  ChatListResponsesCursorNoLimit,
-  ChatRetrieveParams,
-  ChatSearchParams,
-  Chats,
-  ChatsCursorSearch,
-} from './resources/chats/chats';
+import { Chat, ChatArchiveParams, ChatCreateParams, ChatCreateResponse, ChatListParams, ChatListResponse, ChatListResponsesCursorNoLimit, ChatRetrieveParams, ChatSearchParams, Chats, ChatsCursorSearch } from './resources/chats/chats';
 import { type Fetch } from './internal/builtin-types';
 import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import { readEnv } from './internal/utils/env';
-import {
-  type LogLevel,
-  type Logger,
-  formatRequestDetails,
-  loggerFor,
-  parseLogLevel,
-} from './internal/utils/log';
+import { type LogLevel, type Logger, formatRequestDetails, loggerFor, parseLogLevel } from './internal/utils/log';
 import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
@@ -159,7 +116,7 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Beeper Desktop API.
+ * API Client for interfacing with the Beeper Desktop API. 
  */
 export class BeeperDesktop {
   accessToken: string;
@@ -196,7 +153,7 @@ export class BeeperDesktop {
   }: ClientOptions = {}) {
     if (accessToken === undefined) {
       throw new Errors.BeeperDesktopError(
-        "The BEEPER_ACCESS_TOKEN environment variable is missing or empty; either provide it, or instantiate the BeeperDesktop client with an accessToken option, like new BeeperDesktop({ accessToken: 'My Access Token' }).",
+        'The BEEPER_ACCESS_TOKEN environment variable is missing or empty; either provide it, or instantiate the BeeperDesktop client with an accessToken option, like new BeeperDesktop({ accessToken: \'My Access Token\' }).'
       );
     }
 
@@ -207,9 +164,7 @@ export class BeeperDesktop {
     };
 
     if (!options.dangerouslyAllowBrowser && isRunningInBrowser()) {
-      throw new Errors.BeeperDesktopError(
-        'This is disabled by default, as it risks exposing your secret API credentials to attackers.\nIf you understand the risks and have appropriate mitigations in place,\nyou can set the `dangerouslyAllowBrowser` option to `true`, e.g.,\n\nnew BeeperDesktop({ dangerouslyAllowBrowser: true })',
-      );
+      throw new Errors.BeeperDesktopError('This is disabled by default, as it risks exposing your secret API credentials to attackers.\nIf you understand the risks and have appropriate mitigations in place,\nyou can set the `dangerouslyAllowBrowser` option to `true`, e.g.,\n\nnew BeeperDesktop({ dangerouslyAllowBrowser: true })')
     }
 
     this.baseURL = options.baseURL!;
@@ -218,10 +173,7 @@ export class BeeperDesktop {
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
-    this.logLevel =
-      parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('BEEPER_DESKTOP_LOG'), "process.env['BEEPER_DESKTOP_LOG']", this) ??
-      defaultLogLevel;
+    this.logLevel = parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ?? parseLogLevel(readEnv('BEEPER_DESKTOP_LOG'), 'process.env[\'BEEPER_DESKTOP_LOG\']', this) ?? defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
@@ -246,7 +198,7 @@ export class BeeperDesktop {
       fetch: this.fetch,
       fetchOptions: this.fetchOptions,
       accessToken: this.accessToken,
-      ...options,
+      ...options
     });
     return client;
   }
@@ -267,10 +219,7 @@ export class BeeperDesktop {
    * const response = await client.focus();
    * ```
    */
-  focus(
-    body: TopLevelAPI.FocusParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<TopLevelAPI.FocusResponse> {
+  focus(body: TopLevelAPI.FocusParams | null | undefined = {}, options?: RequestOptions): APIPromise<TopLevelAPI.FocusResponse> {
     return this.post('/v1/focus', { body, ...options });
   }
 
@@ -289,7 +238,7 @@ export class BeeperDesktop {
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
-    return this._options.defaultQuery;
+    return this._options.defaultQuery
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
@@ -321,11 +270,7 @@ export class BeeperDesktop {
     return Errors.APIError.generate(status, error, message, headers);
   }
 
-  buildURL(
-    path: string,
-    query: Record<string, unknown> | null | undefined,
-    defaultBaseURL?: string | undefined,
-  ): string {
+  buildURL(path: string, query: Record<string, unknown> | null | undefined, defaultBaseURL?: string | undefined): string {
     const baseURL = (!this.#baseURLOverridden() && defaultBaseURL) || this.baseURL;
     const url =
       isAbsoluteURL(path) ?
@@ -413,9 +358,7 @@ export class BeeperDesktop {
 
     await this.prepareOptions(options);
 
-    const { req, url, timeout } = await this.buildRequest(options, {
-      retryCount: maxRetries - retriesRemaining,
-    });
+    const { req, url, timeout } = await this.buildRequest(options, { retryCount: maxRetries - retriesRemaining });
 
     await this.prepareRequest(req, { url, options });
 
@@ -424,16 +367,7 @@ export class BeeperDesktop {
     const retryLogStr = retryOfRequestLogID === undefined ? '' : `, retryOf: ${retryOfRequestLogID}`;
     const startTime = Date.now();
 
-    loggerFor(this).debug(
-      `[${requestLogID}] sending request`,
-      formatRequestDetails({
-        retryOfRequestLogID,
-        method: options.method,
-        url,
-        options,
-        headers: req.headers,
-      }),
-    );
+    loggerFor(this).debug(`[${requestLogID}] sending request`, formatRequestDetails({ retryOfRequestLogID, method: options.method, url, options, headers: req.headers }));
 
     if (options.signal?.aborted) {
       throw new Errors.APIUserAbortError();
@@ -452,45 +386,21 @@ export class BeeperDesktop {
       // deno throws "TypeError: error sending request for url (https://example/): client error (Connect): tcp connect error: Operation timed out (os error 60): Operation timed out (os error 60)"
       // undici throws "TypeError: fetch failed" with cause "ConnectTimeoutError: Connect Timeout Error (attempted address: example:443, timeout: 1ms)"
       // others do not provide enough information to distinguish timeouts from other connection errors
-      const isTimeout =
-        isAbortError(response) ||
-        /timed? ?out/i.test(String(response) + ('cause' in response ? String(response.cause) : ''));
+      const isTimeout = isAbortError(response) || /timed? ?out/i.test(String(response) + ('cause' in response ? String(response.cause) : ''))
       if (retriesRemaining) {
-        loggerFor(this).info(
-          `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - ${retryMessage}`,
-        );
-        loggerFor(this).debug(
-          `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (${retryMessage})`,
-          formatRequestDetails({
-            retryOfRequestLogID,
-            url,
-            durationMs: headersTime - startTime,
-            message: response.message,
-          }),
-        );
+        loggerFor(this).info(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - ${retryMessage}`)
+        loggerFor(this).debug(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (${retryMessage})`, formatRequestDetails({ retryOfRequestLogID, url, durationMs: headersTime - startTime, message: response.message }));
         return this.retryRequest(options, retriesRemaining, retryOfRequestLogID ?? requestLogID);
       }
-      loggerFor(this).info(
-        `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - error; no more retries left`,
-      );
-      loggerFor(this).debug(
-        `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (error; no more retries left)`,
-        formatRequestDetails({
-          retryOfRequestLogID,
-          url,
-          durationMs: headersTime - startTime,
-          message: response.message,
-        }),
-      );
+      loggerFor(this).info(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - error; no more retries left`)
+      loggerFor(this).debug(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (error; no more retries left)`, formatRequestDetails({ retryOfRequestLogID, url, durationMs: headersTime - startTime, message: response.message }));
       if (isTimeout) {
         throw new Errors.APIConnectionTimeoutError();
       }
       throw new Errors.APIConnectionError({ cause: response });
     }
 
-    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${
-      response.ok ? 'succeeded' : 'failed'
-    } with status ${response.status} in ${headersTime - startTime}ms`;
+    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${response.ok ? 'succeeded' : 'failed'} with status ${response.status} in ${headersTime - startTime}ms`;
 
     if (!response.ok) {
       const shouldRetry = await this.shouldRetry(response);
@@ -499,60 +409,27 @@ export class BeeperDesktop {
 
         // We don't need the body of this response.
         await Shims.CancelReadableStream(response.body);
-        loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
-        loggerFor(this).debug(
-          `[${requestLogID}] response error (${retryMessage})`,
-          formatRequestDetails({
-            retryOfRequestLogID,
-            url: response.url,
-            status: response.status,
-            headers: response.headers,
-            durationMs: headersTime - startTime,
-          }),
-        );
-        return this.retryRequest(
-          options,
-          retriesRemaining,
-          retryOfRequestLogID ?? requestLogID,
-          response.headers,
-        );
+        loggerFor(this).info(`${responseInfo} - ${retryMessage}`)
+        loggerFor(this).debug(`[${requestLogID}] response error (${retryMessage})`, formatRequestDetails({ retryOfRequestLogID, url: response.url, status: response.status, headers: response.headers, durationMs: headersTime - startTime }));
+        return this.retryRequest(options, retriesRemaining, retryOfRequestLogID ?? requestLogID, response.headers);
       }
 
       const retryMessage = shouldRetry ? `error; no more retries left` : `error; not retryable`;
 
-      loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
+      loggerFor(this).info(`${responseInfo} - ${retryMessage}`)
 
       const errText = await response.text().catch((err: any) => castToError(err).message);
       const errJSON = safeJSON(errText) as any;
       const errMessage = errJSON ? undefined : errText;
 
-      loggerFor(this).debug(
-        `[${requestLogID}] response error (${retryMessage})`,
-        formatRequestDetails({
-          retryOfRequestLogID,
-          url: response.url,
-          status: response.status,
-          headers: response.headers,
-          message: errMessage,
-          durationMs: Date.now() - startTime,
-        }),
-      );
+      loggerFor(this).debug(`[${requestLogID}] response error (${retryMessage})`, formatRequestDetails({ retryOfRequestLogID, url: response.url, status: response.status, headers: response.headers, message: errMessage, durationMs: Date.now() - startTime }));
 
       const err = this.makeStatusError(response.status, errJSON, errMessage, response.headers);
       throw err;
     }
 
-    loggerFor(this).info(responseInfo);
-    loggerFor(this).debug(
-      `[${requestLogID}] response start`,
-      formatRequestDetails({
-        retryOfRequestLogID,
-        url: response.url,
-        status: response.status,
-        headers: response.headers,
-        durationMs: headersTime - startTime,
-      }),
-    );
+    loggerFor(this).info(responseInfo)
+    loggerFor(this).debug(`[${requestLogID}] response start`, formatRequestDetails({ retryOfRequestLogID, url: response.url, status: response.status, headers: response.headers, durationMs: headersTime - startTime }));
 
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
@@ -570,10 +447,7 @@ export class BeeperDesktop {
     );
   }
 
-  requestAPIList<
-    Item = unknown,
-    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
-  >(
+  requestAPIList<Item = unknown, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
     Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
     options: PromiseOrValue<FinalRequestOptions>,
   ): Pagination.PagePromise<PageClass, Item> {
@@ -593,9 +467,7 @@ export class BeeperDesktop {
 
     const timeout = setTimeout(abort, ms);
 
-    const isReadableBody =
-      ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) ||
-      (typeof options.body === 'object' && options.body !== null && Symbol.asyncIterator in options.body);
+    const isReadableBody = ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) || (typeof options.body === "object" && options.body !== null && Symbol.asyncIterator in options.body);
 
     const fetchOptions: RequestInit = {
       signal: controller.signal as any,
@@ -610,6 +482,7 @@ export class BeeperDesktop {
     }
 
     try {
+
       // use undefined this binding; fetch errors if bound to something else in browser/cloudflare
       return await this.fetch.call(undefined, url, fetchOptions);
     } finally {
@@ -710,12 +583,11 @@ export class BeeperDesktop {
     const req: FinalizedRequestInit = {
       method,
       headers: reqHeaders,
-      ...(options.signal && { signal: options.signal }),
-      ...((globalThis as any).ReadableStream &&
-        body instanceof (globalThis as any).ReadableStream && { duplex: 'half' }),
+      ...(options.signal && { signal: options.signal}),
+      ...((globalThis as any).ReadableStream && body instanceof (globalThis as any).ReadableStream && { duplex: "half" }),
       ...(body && { body }),
-      ...((this.fetchOptions as any) ?? {}),
-      ...((options.fetchOptions as any) ?? {}),
+      ...(this.fetchOptions as any ?? {}),
+      ...(options.fetchOptions as any ?? {}),
     };
 
     return { req, url, timeout: options.timeout };
@@ -740,17 +612,15 @@ export class BeeperDesktop {
 
     const headers = buildHeaders([
       idempotencyHeaders,
-      {
-        Accept: 'application/json',
-        'User-Agent': this.getUserAgent(),
-        'X-Stainless-Retry-Count': String(retryCount),
-        ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
-        ...getPlatformHeaders(),
-      },
+      {Accept: 'application/json',
+      'User-Agent': this.getUserAgent(),
+      'X-Stainless-Retry-Count': String(retryCount),
+      ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
+      ...getPlatformHeaders()},
       await this.authHeaders(options),
       this._options.defaultHeaders,
       bodyHeaders,
-      options.headers,
+      options.headers
     ]);
 
     this.validateHeaders(headers);
@@ -777,9 +647,11 @@ export class BeeperDesktop {
       ArrayBuffer.isView(body) ||
       body instanceof ArrayBuffer ||
       body instanceof DataView ||
-      (typeof body === 'string' &&
+      (
+        typeof body === 'string' &&
         // Preserve legacy string encoding behavior for now
-        headers.values.has('content-type')) ||
+        headers.values.has('content-type')
+      ) ||
       // `Blob` is superset of `File`
       ((globalThis as any).Blob && body instanceof (globalThis as any).Blob) ||
       // `FormData` -> `multipart/form-data`
@@ -810,7 +682,7 @@ export class BeeperDesktop {
   }
 
   static BeeperDesktop = this;
-  static DEFAULT_TIMEOUT = 30000; // 30 seconds
+  static DEFAULT_TIMEOUT = 30000 // 30 seconds
 
   static BeeperDesktopError = Errors.BeeperDesktopError;
   static APIError = Errors.APIError;
@@ -857,72 +729,82 @@ BeeperDesktop.Assets = Assets;
 BeeperDesktop.Info = Info;
 
 export declare namespace BeeperDesktop {
-  export type RequestOptions = Opts.RequestOptions;
+      export type RequestOptions = Opts.RequestOptions;
 
-  export import CursorSearch = Pagination.CursorSearch;
-  export { type CursorSearchParams as CursorSearchParams, type CursorSearchResponse as CursorSearchResponse };
+      export import CursorSearch = Pagination.CursorSearch;
+export {
+  type CursorSearchParams as CursorSearchParams,
+  type CursorSearchResponse as CursorSearchResponse
+};
 
-  export import CursorNoLimit = Pagination.CursorNoLimit;
-  export {
-    type CursorNoLimitParams as CursorNoLimitParams,
-    type CursorNoLimitResponse as CursorNoLimitResponse,
-  };
+export import CursorNoLimit = Pagination.CursorNoLimit;
+export {
+  type CursorNoLimitParams as CursorNoLimitParams,
+  type CursorNoLimitResponse as CursorNoLimitResponse
+};
 
-  export import CursorSortKey = Pagination.CursorSortKey;
-  export {
-    type CursorSortKeyParams as CursorSortKeyParams,
-    type CursorSortKeyResponse as CursorSortKeyResponse,
-  };
+export import CursorSortKey = Pagination.CursorSortKey;
+export {
+  type CursorSortKeyParams as CursorSortKeyParams,
+  type CursorSortKeyResponse as CursorSortKeyResponse
+};
 
-  export {
-    type FocusResponse as FocusResponse,
-    type SearchResponse as SearchResponse,
-    type FocusParams as FocusParams,
-    type SearchParams as SearchParams,
-  };
+export {
+  type FocusResponse as FocusResponse,
+  type SearchResponse as SearchResponse,
+  type FocusParams as FocusParams,
+  type SearchParams as SearchParams
+};
 
-  export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
+export {
+  Accounts as Accounts,
+  type Account as Account,
+  type AccountListResponse as AccountListResponse
+};
 
-  export {
-    Chats as Chats,
-    type Chat as Chat,
-    type ChatCreateResponse as ChatCreateResponse,
-    type ChatListResponse as ChatListResponse,
-    type ChatListResponsesCursorNoLimit as ChatListResponsesCursorNoLimit,
-    type ChatsCursorSearch as ChatsCursorSearch,
-    type ChatCreateParams as ChatCreateParams,
-    type ChatRetrieveParams as ChatRetrieveParams,
-    type ChatListParams as ChatListParams,
-    type ChatArchiveParams as ChatArchiveParams,
-    type ChatSearchParams as ChatSearchParams,
-  };
+export {
+  Chats as Chats,
+  type Chat as Chat,
+  type ChatCreateResponse as ChatCreateResponse,
+  type ChatListResponse as ChatListResponse,
+  type ChatListResponsesCursorNoLimit as ChatListResponsesCursorNoLimit,
+  type ChatsCursorSearch as ChatsCursorSearch,
+  type ChatCreateParams as ChatCreateParams,
+  type ChatRetrieveParams as ChatRetrieveParams,
+  type ChatListParams as ChatListParams,
+  type ChatArchiveParams as ChatArchiveParams,
+  type ChatSearchParams as ChatSearchParams
+};
 
-  export {
-    Messages as Messages,
-    type MessageUpdateResponse as MessageUpdateResponse,
-    type MessageSendResponse as MessageSendResponse,
-    type MessageUpdateParams as MessageUpdateParams,
-    type MessageListParams as MessageListParams,
-    type MessageSearchParams as MessageSearchParams,
-    type MessageSendParams as MessageSendParams,
-  };
+export {
+  Messages as Messages,
+  type MessageUpdateResponse as MessageUpdateResponse,
+  type MessageSendResponse as MessageSendResponse,
+  type MessageUpdateParams as MessageUpdateParams,
+  type MessageListParams as MessageListParams,
+  type MessageSearchParams as MessageSearchParams,
+  type MessageSendParams as MessageSendParams
+};
 
-  export {
-    Assets as Assets,
-    type AssetDownloadResponse as AssetDownloadResponse,
-    type AssetUploadResponse as AssetUploadResponse,
-    type AssetUploadBase64Response as AssetUploadBase64Response,
-    type AssetDownloadParams as AssetDownloadParams,
-    type AssetServeParams as AssetServeParams,
-    type AssetUploadParams as AssetUploadParams,
-    type AssetUploadBase64Params as AssetUploadBase64Params,
-  };
+export {
+  Assets as Assets,
+  type AssetDownloadResponse as AssetDownloadResponse,
+  type AssetUploadResponse as AssetUploadResponse,
+  type AssetUploadBase64Response as AssetUploadBase64Response,
+  type AssetDownloadParams as AssetDownloadParams,
+  type AssetServeParams as AssetServeParams,
+  type AssetUploadParams as AssetUploadParams,
+  type AssetUploadBase64Params as AssetUploadBase64Params
+};
 
-  export { Info as Info, type InfoRetrieveResponse as InfoRetrieveResponse };
+export {
+  Info as Info,
+  type InfoRetrieveResponse as InfoRetrieveResponse
+};
 
-  export type Attachment = API.Attachment;
-  export type Error = API.Error;
-  export type Message = API.Message;
-  export type Reaction = API.Reaction;
-  export type User = API.User;
-}
+export type Attachment = API.Attachment;
+export type Error = API.Error;
+export type Message = API.Message;
+export type Reaction = API.Reaction;
+export type User = API.User;
+    }
