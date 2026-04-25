@@ -69,33 +69,33 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## focus\n\n`client.focus(chatID?: string, draftAttachmentPath?: string, draftText?: string, messageID?: string): { success: boolean; }`\n\n**post** `/v1/focus`\n\nFocus Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill draft text and attachment.\n\n### Parameters\n\n- `chatID?: string`\n  Optional Beeper chat ID (or local chat ID) to focus after opening the app. If omitted, only opens/focuses the app.\n\n- `draftAttachmentPath?: string`\n  Optional draft attachment path to populate in the message input field.\n\n- `draftText?: string`\n  Optional draft text to populate in the message input field.\n\n- `messageID?: string`\n  Optional message ID. Jumps to that message in the chat when opening.\n\n### Returns\n\n- `{ success: boolean; }`\n  Response indicating successful app focus action.\n\n  - `success: boolean`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.focus();\n\nconsole.log(response);\n```",
     perLanguage: {
-      cli: {
-        method: '$client focus',
-        example: "beeper-desktop-cli focus \\\n  --access-token 'My Access Token'",
-      },
-      go: {
-        method: 'client.Focus',
+      typescript: {
+        method: 'client.focus',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Focus(context.TODO(), beeperdesktopapi.FocusParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Success)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/focus \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'focus',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->focus(\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  draftAttachmentPath: 'draftAttachmentPath',\n  draftText: 'draftText',\n  messageID: 'messageID',\n);\n\nvar_dump($response);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.focus();\n\nconsole.log(response.success);",
       },
       python: {
         method: 'focus',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.focus()\nprint(response.success)',
       },
-      typescript: {
-        method: 'client.focus',
+      go: {
+        method: 'client.Focus',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.focus();\n\nconsole.log(response.success);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Focus(context.TODO(), beeperdesktopapi.FocusParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Success)\n}\n',
+      },
+      cli: {
+        method: '$client focus',
+        example: "beeper-desktop-cli focus \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'focus',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->focus(\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  draftAttachmentPath: 'draftAttachmentPath',\n  draftText: 'draftText',\n  messageID: 'messageID',\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/focus \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -114,33 +114,33 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## search\n\n`client.search(query: string): { results: object; }`\n\n**get** `/v1/search`\n\nReturns matching chats, participant name matches in groups, and the first page of messages in one call. Paginate messages via search-messages. Paginate chats via search-chats.\n\n### Parameters\n\n- `query: string`\n  User-typed search text. Literal word matching (non-semantic).\n\n### Returns\n\n- `{ results: { chats: object[]; in_groups: object[]; messages: { chats: object; hasMore: boolean; items: message[]; newestCursor: string; oldestCursor: string; }; }; }`\n\n  - `results: { chats: { id: string; accountID: string; participants: { hasMore: boolean; items: user[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; isArchived?: boolean; isMuted?: boolean; isPinned?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; }[]; in_groups: { id: string; accountID: string; participants: { hasMore: boolean; items: user[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; isArchived?: boolean; isMuted?: boolean; isPinned?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; }[]; messages: { chats: object; hasMore: boolean; items: { id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: attachment[]; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; reactions?: reaction[]; senderName?: string; text?: string; type?: string; }[]; newestCursor: string; oldestCursor: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.search({ query: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      cli: {
-        method: '$client search',
-        example: "beeper-desktop-cli search \\\n  --access-token 'My Access Token' \\\n  --query x",
-      },
-      go: {
-        method: 'client.Search',
+      typescript: {
+        method: 'client.search',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Search(context.TODO(), beeperdesktopapi.SearchParams{\n\t\tQuery: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Results)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/search \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'search',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->search(query: 'x');\n\nvar_dump($response);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.search({ query: 'x' });\n\nconsole.log(response.results);",
       },
       python: {
         method: 'search',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.search(\n    query="x",\n)\nprint(response.results)',
       },
-      typescript: {
-        method: 'client.search',
+      go: {
+        method: 'client.Search',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.search({ query: 'x' });\n\nconsole.log(response.results);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Search(context.TODO(), beeperdesktopapi.SearchParams{\n\t\tQuery: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Results)\n}\n',
+      },
+      cli: {
+        method: '$client search',
+        example: "beeper-desktop-cli search \\\n  --access-token 'My Access Token' \\\n  --query x",
+      },
+      php: {
+        method: 'search',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->search(query: 'x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/search \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -158,33 +158,33 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## list\n\n`client.accounts.list(): object[]`\n\n**get** `/v1/accounts`\n\nLists chat accounts across networks (WhatsApp, Telegram, Twitter/X, etc.) actively connected to this Beeper Desktop instance\n\n### Returns\n\n- `{ accountID: string; bridge: { id: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; type: string; }; network: string; user: object; }[]`\n  Connected accounts the user can act through. Includes accountID and user identity.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst accounts = await client.accounts.list();\n\nconsole.log(accounts);\n```",
     perLanguage: {
-      cli: {
-        method: 'accounts list',
-        example: "beeper-desktop-cli accounts list \\\n  --access-token 'My Access Token'",
-      },
-      go: {
-        method: 'client.Accounts.List',
+      typescript: {
+        method: 'client.accounts.list',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\taccounts, err := client.Accounts.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accounts)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/accounts \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'accounts->list',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$accounts = $client->accounts->list();\n\nvar_dump($accounts);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst accounts = await client.accounts.list();\n\nconsole.log(accounts);",
       },
       python: {
         method: 'accounts.list',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\naccounts = client.accounts.list()\nprint(accounts)',
       },
-      typescript: {
-        method: 'client.accounts.list',
+      go: {
+        method: 'client.Accounts.List',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst accounts = await client.accounts.list();\n\nconsole.log(accounts);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\taccounts, err := client.Accounts.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accounts)\n}\n',
+      },
+      cli: {
+        method: 'accounts list',
+        example: "beeper-desktop-cli accounts list \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'accounts->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$accounts = $client->accounts->list();\n\nvar_dump($accounts);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/accounts \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -203,34 +203,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## search\n\n`client.accounts.contacts.search(accountID: string, query: string): { items: user[]; }`\n\n**get** `/v1/accounts/{accountID}/contacts`\n\nSearch contacts on a specific account using merged account contacts, network search, and exact identifier lookup.\n\n### Parameters\n\n- `accountID: string`\n  Account ID this resource belongs to.\n\n- `query: string`\n  Text to search users by. Network-specific behavior.\n\n### Returns\n\n- `{ items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; }`\n\n  - `items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.accounts.contacts.search('accountID', { query: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      cli: {
-        method: 'contacts search',
+      typescript: {
+        method: 'client.accounts.contacts.search',
         example:
-          "beeper-desktop-cli accounts:contacts search \\\n  --access-token 'My Access Token' \\\n  --account-id accountID \\\n  --query x",
-      },
-      go: {
-        method: 'client.Accounts.Contacts.Search',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Accounts.Contacts.Search(\n\t\tcontext.TODO(),\n\t\t"accountID",\n\t\tbeeperdesktopapi.AccountContactSearchParams{\n\t\t\tQuery: "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Items)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/accounts/$ACCOUNT_ID/contacts \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'accounts->contacts->search',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->accounts->contacts->search('accountID', query: 'x');\n\nvar_dump($response);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.accounts.contacts.search('accountID', { query: 'x' });\n\nconsole.log(response.items);",
       },
       python: {
         method: 'accounts.contacts.search',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.accounts.contacts.search(\n    account_id="accountID",\n    query="x",\n)\nprint(response.items)',
       },
-      typescript: {
-        method: 'client.accounts.contacts.search',
+      go: {
+        method: 'client.Accounts.Contacts.Search',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.accounts.contacts.search('accountID', { query: 'x' });\n\nconsole.log(response.items);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Accounts.Contacts.Search(\n\t\tcontext.TODO(),\n\t\t"accountID",\n\t\tbeeperdesktopapi.AccountContactSearchParams{\n\t\t\tQuery: "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Items)\n}\n',
+      },
+      cli: {
+        method: 'contacts search',
+        example:
+          "beeper-desktop-cli accounts:contacts search \\\n  --access-token 'My Access Token' \\\n  --account-id accountID \\\n  --query x",
+      },
+      php: {
+        method: 'accounts->contacts->search',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->accounts->contacts->search('accountID', query: 'x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/accounts/$ACCOUNT_ID/contacts \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -254,34 +254,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## list\n\n`client.accounts.contacts.list(accountID: string, cursor?: string, direction?: 'after' | 'before', limit?: number, query?: string): { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }`\n\n**get** `/v1/accounts/{accountID}/contacts/list`\n\nList merged contacts for a specific account with cursor-based pagination.\n\n### Parameters\n\n- `accountID: string`\n  Account ID this resource belongs to.\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n- `limit?: number`\n  Maximum contacts to return per page.\n\n- `query?: string`\n  Optional search query for blended contact lookup.\n\n### Returns\n\n- `{ id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }`\n  User the account belongs to.\n\n  - `id: string`\n  - `cannotMessage?: boolean`\n  - `email?: string`\n  - `fullName?: string`\n  - `imgURL?: string`\n  - `isSelf?: boolean`\n  - `phoneNumber?: string`\n  - `username?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const user of client.accounts.contacts.list('accountID')) {\n  console.log(user);\n}\n```",
     perLanguage: {
-      cli: {
-        method: 'contacts list',
+      typescript: {
+        method: 'client.accounts.contacts.list',
         example:
-          "beeper-desktop-cli accounts:contacts list \\\n  --access-token 'My Access Token' \\\n  --account-id accountID",
-      },
-      go: {
-        method: 'client.Accounts.Contacts.List',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Accounts.Contacts.List(\n\t\tcontext.TODO(),\n\t\t"accountID",\n\t\tbeeperdesktopapi.AccountContactListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/accounts/$ACCOUNT_ID/contacts/list \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'accounts->contacts->list',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$page = $client->accounts->contacts->list(\n  'accountID',\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n  limit: 1,\n  query: 'x',\n);\n\nvar_dump($page);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const user of client.accounts.contacts.list('accountID')) {\n  console.log(user.id);\n}",
       },
       python: {
         method: 'accounts.contacts.list',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\npage = client.accounts.contacts.list(\n    account_id="accountID",\n)\npage = page.items[0]\nprint(page.id)',
       },
-      typescript: {
-        method: 'client.accounts.contacts.list',
+      go: {
+        method: 'client.Accounts.Contacts.List',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const user of client.accounts.contacts.list('accountID')) {\n  console.log(user.id);\n}",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Accounts.Contacts.List(\n\t\tcontext.TODO(),\n\t\t"accountID",\n\t\tbeeperdesktopapi.AccountContactListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      cli: {
+        method: 'contacts list',
+        example:
+          "beeper-desktop-cli accounts:contacts list \\\n  --access-token 'My Access Token' \\\n  --account-id accountID",
+      },
+      php: {
+        method: 'accounts->contacts->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$page = $client->accounts->contacts->list(\n  'accountID',\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n  limit: 1,\n  query: 'x',\n);\n\nvar_dump($page);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/accounts/$ACCOUNT_ID/contacts/list \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -299,34 +299,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## retrieve\n\n`client.chats.retrieve(chatID: string, maxParticipantCount?: number): { id: string; accountID: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; isArchived?: boolean; isMuted?: boolean; isPinned?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; }`\n\n**get** `/v1/chats/{chatID}`\n\nRetrieve chat details including metadata, participants, and latest message\n\n### Parameters\n\n- `chatID: string`\n  Unique identifier of the chat.\n\n- `maxParticipantCount?: number`\n  Maximum number of participants to return. Use -1 for all; otherwise 0–500. Defaults to all (-1).\n\n### Returns\n\n- `{ id: string; accountID: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; isArchived?: boolean; isMuted?: boolean; isPinned?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `isArchived?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.retrieve('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat);\n```",
     perLanguage: {
-      cli: {
-        method: 'chats retrieve',
+      typescript: {
+        method: 'client.chats.retrieve',
         example:
-          "beeper-desktop-cli chats retrieve \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
-      },
-      go: {
-        method: 'client.Chats.Get',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tchat, err := client.Chats.Get(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", chat.ID)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats/$CHAT_ID \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'chats->retrieve',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$chat = $client->chats->retrieve(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com', maxParticipantCount: 50\n);\n\nvar_dump($chat);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst chat = await client.chats.retrieve('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat.id);",
       },
       python: {
         method: 'chats.retrieve',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nchat = client.chats.retrieve(\n    chat_id="!NCdzlIaMjZUmvmvyHU:beeper.com",\n)\nprint(chat.id)',
       },
-      typescript: {
-        method: 'client.chats.retrieve',
+      go: {
+        method: 'client.Chats.Get',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst chat = await client.chats.retrieve('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat.id);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tchat, err := client.Chats.Get(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", chat.ID)\n}\n',
+      },
+      cli: {
+        method: 'chats retrieve',
+        example:
+          "beeper-desktop-cli chats retrieve \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+      },
+      php: {
+        method: 'chats->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$chat = $client->chats->retrieve(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com', maxParticipantCount: 50\n);\n\nvar_dump($chat);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats/$CHAT_ID \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -346,33 +346,33 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## create\n\n`client.chats.create(params?: { accountID: string; mode: 'start'; user: { id?: string; email?: string; fullName?: string; phoneNumber?: string; username?: string; }; allowInvite?: boolean; messageText?: string; } | { accountID: string; participantIDs: string[]; type: 'single' | 'group'; messageText?: string; mode?: 'create'; title?: string; }): { chatID: string; status?: 'existing' | 'created'; }`\n\n**post** `/v1/chats`\n\nCreate a single/group chat (mode='create') or start a direct chat from merged user data (mode='start').\n\n### Parameters\n\n- `params?: { accountID: string; mode: 'start'; user: { id?: string; email?: string; fullName?: string; phoneNumber?: string; username?: string; }; allowInvite?: boolean; messageText?: string; } | { accountID: string; participantIDs: string[]; type: 'single' | 'group'; messageText?: string; mode?: 'create'; title?: string; }`\n\n### Returns\n\n- `{ chatID: string; status?: 'existing' | 'created'; }`\n\n  - `chatID: string`\n  - `status?: 'existing' | 'created'`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.create();\n\nconsole.log(chat);\n```",
     perLanguage: {
-      cli: {
-        method: 'chats create',
-        example: "beeper-desktop-cli chats create \\\n  --access-token 'My Access Token'",
-      },
-      go: {
-        method: 'client.Chats.New',
+      typescript: {
+        method: 'client.chats.create',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tchat, err := client.Chats.New(context.TODO(), beeperdesktopapi.ChatNewParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", chat.ChatID)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'chats->create',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$chat = $client->chats->create(\n  params: [\n    'accountID' => 'accountID',\n    'mode' => 'start',\n    'user' => [\n      'id' => 'id',\n      'email' => 'email',\n      'fullName' => 'fullName',\n      'phoneNumber' => 'phoneNumber',\n      'username' => 'username',\n    ],\n    'allowInvite' => true,\n    'messageText' => 'messageText',\n  ],\n);\n\nvar_dump($chat);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst chat = await client.chats.create();\n\nconsole.log(chat.chatID);",
       },
       python: {
         method: 'chats.create',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nchat = client.chats.create()\nprint(chat.chat_id)',
       },
-      typescript: {
-        method: 'client.chats.create',
+      go: {
+        method: 'client.Chats.New',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst chat = await client.chats.create();\n\nconsole.log(chat.chatID);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tchat, err := client.Chats.New(context.TODO(), beeperdesktopapi.ChatNewParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", chat.ChatID)\n}\n',
+      },
+      cli: {
+        method: 'chats create',
+        example: "beeper-desktop-cli chats create \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'chats->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$chat = $client->chats->create(\n  params: [\n    'accountID' => 'accountID',\n    'mode' => 'start',\n    'user' => [\n      'id' => 'id',\n      'email' => 'email',\n      'fullName' => 'fullName',\n      'phoneNumber' => 'phoneNumber',\n      'username' => 'username',\n    ],\n    'allowInvite' => true,\n    'messageText' => 'messageText',\n  ],\n);\n\nvar_dump($chat);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -391,33 +391,33 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## list\n\n`client.chats.list(accountIDs?: string[], cursor?: string, direction?: 'after' | 'before'): object`\n\n**get** `/v1/chats`\n\nList all chats sorted by last activity (most recent first). Combines all accounts into a single paginated list.\n\n### Parameters\n\n- `accountIDs?: string[]`\n  Limit to specific account IDs. If omitted, fetches from all accounts.\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n### Returns\n\n- `{ id: string; accountID: string; participants: { hasMore: boolean; items: user[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; isArchived?: boolean; isMuted?: boolean; isPinned?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const chatListResponse of client.chats.list()) {\n  console.log(chatListResponse);\n}\n```",
     perLanguage: {
-      cli: {
-        method: 'chats list',
-        example: "beeper-desktop-cli chats list \\\n  --access-token 'My Access Token'",
-      },
-      go: {
-        method: 'client.Chats.List',
+      typescript: {
+        method: 'client.chats.list',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Chats.List(context.TODO(), beeperdesktopapi.ChatListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'chats->list',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$page = $client->chats->list(\n  accountIDs: [\n    'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',\n    'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',\n  ],\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n);\n\nvar_dump($page);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const chatListResponse of client.chats.list()) {\n  console.log(chatListResponse);\n}",
       },
       python: {
         method: 'chats.list',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\npage = client.chats.list()\npage = page.items[0]\nprint(page)',
       },
-      typescript: {
-        method: 'client.chats.list',
+      go: {
+        method: 'client.Chats.List',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const chatListResponse of client.chats.list()) {\n  console.log(chatListResponse);\n}",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Chats.List(context.TODO(), beeperdesktopapi.ChatListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      cli: {
+        method: 'chats list',
+        example: "beeper-desktop-cli chats list \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'chats->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$page = $client->chats->list(\n  accountIDs: [\n    'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',\n    'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',\n  ],\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n);\n\nvar_dump($page);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -448,33 +448,33 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## search\n\n`client.chats.search(accountIDs?: string[], cursor?: string, direction?: 'after' | 'before', inbox?: 'primary' | 'low-priority' | 'archive', includeMuted?: boolean, lastActivityAfter?: string, lastActivityBefore?: string, limit?: number, query?: string, scope?: 'titles' | 'participants', type?: 'single' | 'group' | 'any', unreadOnly?: boolean): { id: string; accountID: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; isArchived?: boolean; isMuted?: boolean; isPinned?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; }`\n\n**get** `/v1/chats/search`\n\nSearch chats by title/network or participants using Beeper Desktop's renderer algorithm.\n\n### Parameters\n\n- `accountIDs?: string[]`\n  Provide an array of account IDs to filter chats from specific messaging accounts only\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n- `inbox?: 'primary' | 'low-priority' | 'archive'`\n  Filter by inbox type: \"primary\" (non-archived, non-low-priority), \"low-priority\", or \"archive\". If not specified, shows all chats.\n\n- `includeMuted?: boolean`\n  Include chats marked as Muted by the user, which are usually less important. Default: true. Set to false if the user wants a more refined search.\n\n- `lastActivityAfter?: string`\n  Provide an ISO datetime string to only retrieve chats with last activity after this time\n\n- `lastActivityBefore?: string`\n  Provide an ISO datetime string to only retrieve chats with last activity before this time\n\n- `limit?: number`\n  Set the maximum number of chats to retrieve. Valid range: 1-200, default is 50\n\n- `query?: string`\n  Literal token search (non-semantic). Use single words users type (e.g., \"dinner\"). When multiple words provided, ALL must match. Case-insensitive.\n\n- `scope?: 'titles' | 'participants'`\n  Search scope: 'titles' matches title + network; 'participants' matches participant names.\n\n- `type?: 'single' | 'group' | 'any'`\n  Specify the type of chats to retrieve: use \"single\" for direct messages, \"group\" for group chats, or \"any\" to get all types\n\n- `unreadOnly?: boolean`\n  Set to true to only retrieve chats that have unread messages\n\n### Returns\n\n- `{ id: string; accountID: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; isArchived?: boolean; isMuted?: boolean; isPinned?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `isArchived?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const chat of client.chats.search()) {\n  console.log(chat);\n}\n```",
     perLanguage: {
-      cli: {
-        method: 'chats search',
-        example: "beeper-desktop-cli chats search \\\n  --access-token 'My Access Token'",
-      },
-      go: {
-        method: 'client.Chats.Search',
+      typescript: {
+        method: 'client.chats.search',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Chats.Search(context.TODO(), beeperdesktopapi.ChatSearchParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats/search \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'chats->search',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$page = $client->chats->search(\n  accountIDs: [\n    'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',\n    'local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI',\n  ],\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n  inbox: 'primary',\n  includeMuted: true,\n  lastActivityAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  lastActivityBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  limit: 1,\n  query: 'x',\n  scope: 'titles',\n  type: 'single',\n  unreadOnly: true,\n);\n\nvar_dump($page);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const chat of client.chats.search()) {\n  console.log(chat.id);\n}",
       },
       python: {
         method: 'chats.search',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\npage = client.chats.search()\npage = page.items[0]\nprint(page.id)',
       },
-      typescript: {
-        method: 'client.chats.search',
+      go: {
+        method: 'client.Chats.Search',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const chat of client.chats.search()) {\n  console.log(chat.id);\n}",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Chats.Search(context.TODO(), beeperdesktopapi.ChatSearchParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      cli: {
+        method: 'chats search',
+        example: "beeper-desktop-cli chats search \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'chats->search',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$page = $client->chats->search(\n  accountIDs: [\n    'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',\n    'local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI',\n  ],\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n  inbox: 'primary',\n  includeMuted: true,\n  lastActivityAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  lastActivityBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  limit: 1,\n  query: 'x',\n  scope: 'titles',\n  type: 'single',\n  unreadOnly: true,\n);\n\nvar_dump($page);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats/search \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -491,34 +491,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## archive\n\n`client.chats.archive(chatID: string, archived?: boolean): void`\n\n**post** `/v1/chats/{chatID}/archive`\n\nArchive or unarchive a chat. Set archived=true to move to archive, archived=false to move back to inbox\n\n### Parameters\n\n- `chatID: string`\n  Unique identifier of the chat.\n\n- `archived?: boolean`\n  True to archive, false to unarchive\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.chats.archive('!NCdzlIaMjZUmvmvyHU:beeper.com')\n```",
     perLanguage: {
-      cli: {
-        method: 'chats archive',
+      typescript: {
+        method: 'client.chats.archive',
         example:
-          "beeper-desktop-cli chats archive \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
-      },
-      go: {
-        method: 'client.Chats.Archive',
-        example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Chats.Archive(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatArchiveParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats/$CHAT_ID/archive \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'chats->archive',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$result = $client->chats->archive(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com', archived: true\n);\n\nvar_dump($result);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nawait client.chats.archive('!NCdzlIaMjZUmvmvyHU:beeper.com');",
       },
       python: {
         method: 'chats.archive',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nclient.chats.archive(\n    chat_id="!NCdzlIaMjZUmvmvyHU:beeper.com",\n)',
       },
-      typescript: {
-        method: 'client.chats.archive',
+      go: {
+        method: 'client.Chats.Archive',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nawait client.chats.archive('!NCdzlIaMjZUmvmvyHU:beeper.com');",
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Chats.Archive(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatArchiveParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'chats archive',
+        example:
+          "beeper-desktop-cli chats archive \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+      },
+      php: {
+        method: 'chats->archive',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$result = $client->chats->archive(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com', archived: true\n);\n\nvar_dump($result);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats/$CHAT_ID/archive \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -534,34 +534,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## create\n\n`client.chats.reminders.create(chatID: string, reminder: { remindAtMs: number; dismissOnIncomingMessage?: boolean; }): void`\n\n**post** `/v1/chats/{chatID}/reminders`\n\nSet a reminder for a chat at a specific time\n\n### Parameters\n\n- `chatID: string`\n  Unique identifier of the chat.\n\n- `reminder: { remindAtMs: number; dismissOnIncomingMessage?: boolean; }`\n  Reminder configuration\n  - `remindAtMs: number`\n    Unix timestamp in milliseconds when reminder should trigger\n  - `dismissOnIncomingMessage?: boolean`\n    Cancel reminder if someone messages in the chat\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', { reminder: { remindAtMs: 0 } })\n```",
     perLanguage: {
-      cli: {
-        method: 'reminders create',
+      typescript: {
+        method: 'client.chats.reminders.create',
         example:
-          "beeper-desktop-cli chats:reminders create \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --reminder '{remindAtMs: 0}'",
-      },
-      go: {
-        method: 'client.Chats.Reminders.New',
-        example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Chats.Reminders.New(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatReminderNewParams{\n\t\t\tReminder: beeperdesktopapi.ChatReminderNewParamsReminder{\n\t\t\t\tRemindAtMs: 0,\n\t\t\t},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats/$CHAT_ID/reminders \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "reminder": {\n            "remindAtMs": 0\n          }\n        }\'',
-      },
-      php: {
-        method: 'chats->reminders->create',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$result = $client->chats->reminders->create(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  reminder: ['remindAtMs' => 0, 'dismissOnIncomingMessage' => true],\n);\n\nvar_dump($result);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nawait client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', {\n  reminder: { remindAtMs: 0 },\n});",
       },
       python: {
         method: 'chats.reminders.create',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nclient.chats.reminders.create(\n    chat_id="!NCdzlIaMjZUmvmvyHU:beeper.com",\n    reminder={\n        "remind_at_ms": 0\n    },\n)',
       },
-      typescript: {
-        method: 'client.chats.reminders.create',
+      go: {
+        method: 'client.Chats.Reminders.New',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nawait client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', {\n  reminder: { remindAtMs: 0 },\n});",
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Chats.Reminders.New(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatReminderNewParams{\n\t\t\tReminder: beeperdesktopapi.ChatReminderNewParamsReminder{\n\t\t\t\tRemindAtMs: 0,\n\t\t\t},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'reminders create',
+        example:
+          "beeper-desktop-cli chats:reminders create \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --reminder '{remindAtMs: 0}'",
+      },
+      php: {
+        method: 'chats->reminders->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$result = $client->chats->reminders->create(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  reminder: ['remindAtMs' => 0, 'dismissOnIncomingMessage' => true],\n);\n\nvar_dump($result);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats/$CHAT_ID/reminders \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "reminder": {\n            "remindAtMs": 0\n          }\n        }\'',
       },
     },
   },
@@ -577,34 +577,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## delete\n\n`client.chats.reminders.delete(chatID: string): void`\n\n**delete** `/v1/chats/{chatID}/reminders`\n\nClear an existing reminder from a chat\n\n### Parameters\n\n- `chatID: string`\n  Unique identifier of the chat.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.chats.reminders.delete('!NCdzlIaMjZUmvmvyHU:beeper.com')\n```",
     perLanguage: {
-      cli: {
-        method: 'reminders delete',
+      typescript: {
+        method: 'client.chats.reminders.delete',
         example:
-          "beeper-desktop-cli chats:reminders delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
-      },
-      go: {
-        method: 'client.Chats.Reminders.Delete',
-        example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Chats.Reminders.Delete(context.TODO(), "!NCdzlIaMjZUmvmvyHU:beeper.com")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats/$CHAT_ID/reminders \\\n    -X DELETE \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'chats->reminders->delete',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$result = $client->chats->reminders->delete('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nvar_dump($result);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nawait client.chats.reminders.delete('!NCdzlIaMjZUmvmvyHU:beeper.com');",
       },
       python: {
         method: 'chats.reminders.delete',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nclient.chats.reminders.delete(\n    "!NCdzlIaMjZUmvmvyHU:beeper.com",\n)',
       },
-      typescript: {
-        method: 'client.chats.reminders.delete',
+      go: {
+        method: 'client.Chats.Reminders.Delete',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nawait client.chats.reminders.delete('!NCdzlIaMjZUmvmvyHU:beeper.com');",
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Chats.Reminders.Delete(context.TODO(), "!NCdzlIaMjZUmvmvyHU:beeper.com")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'reminders delete',
+        example:
+          "beeper-desktop-cli chats:reminders delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+      },
+      php: {
+        method: 'chats->reminders->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$result = $client->chats->reminders->delete('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nvar_dump($result);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats/$CHAT_ID/reminders \\\n    -X DELETE \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -622,34 +622,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## add\n\n`client.chats.messages.reactions.add(chatID: string, messageID: string, reactionKey: string, transactionID?: string): { chatID: string; messageID: string; reactionKey: string; success: true; transactionID: string; }`\n\n**post** `/v1/chats/{chatID}/messages/{messageID}/reactions`\n\nAdd a reaction to an existing message.\n\n### Parameters\n\n- `chatID: string`\n  Unique identifier of the chat.\n\n- `messageID: string`\n\n- `reactionKey: string`\n  Reaction key to add (emoji, shortcode, or custom emoji key)\n\n- `transactionID?: string`\n  Optional transaction ID for deduplication and local echo tracking\n\n### Returns\n\n- `{ chatID: string; messageID: string; reactionKey: string; success: true; transactionID: string; }`\n\n  - `chatID: string`\n  - `messageID: string`\n  - `reactionKey: string`\n  - `success: true`\n  - `transactionID: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.chats.messages.reactions.add('messageID', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', reactionKey: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      cli: {
-        method: 'reactions add',
+      typescript: {
+        method: 'client.chats.messages.reactions.add',
         example:
-          "beeper-desktop-cli chats:messages:reactions add \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id messageID \\\n  --reaction-key x",
-      },
-      go: {
-        method: 'client.Chats.Messages.Reactions.Add',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Chats.Messages.Reactions.Add(\n\t\tcontext.TODO(),\n\t\t"messageID",\n\t\tbeeperdesktopapi.ChatMessageReactionAddParams{\n\t\t\tChatID:      "!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\t\tReactionKey: "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ChatID)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats/$CHAT_ID/messages/$MESSAGE_ID/reactions \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "reactionKey": "x"\n        }\'',
-      },
-      php: {
-        method: 'chats->messages->reactions->add',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->chats->messages->reactions->add(\n  'messageID',\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  reactionKey: 'x',\n  transactionID: 'transactionID',\n);\n\nvar_dump($response);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.chats.messages.reactions.add('messageID', {\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  reactionKey: 'x',\n});\n\nconsole.log(response.chatID);",
       },
       python: {
         method: 'chats.messages.reactions.add',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.chats.messages.reactions.add(\n    message_id="messageID",\n    chat_id="!NCdzlIaMjZUmvmvyHU:beeper.com",\n    reaction_key="x",\n)\nprint(response.chat_id)',
       },
-      typescript: {
-        method: 'client.chats.messages.reactions.add',
+      go: {
+        method: 'client.Chats.Messages.Reactions.Add',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.chats.messages.reactions.add('messageID', {\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  reactionKey: 'x',\n});\n\nconsole.log(response.chatID);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Chats.Messages.Reactions.Add(\n\t\tcontext.TODO(),\n\t\t"messageID",\n\t\tbeeperdesktopapi.ChatMessageReactionAddParams{\n\t\t\tChatID:      "!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\t\tReactionKey: "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ChatID)\n}\n',
+      },
+      cli: {
+        method: 'reactions add',
+        example:
+          "beeper-desktop-cli chats:messages:reactions add \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id messageID \\\n  --reaction-key x",
+      },
+      php: {
+        method: 'chats->messages->reactions->add',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->chats->messages->reactions->add(\n  'messageID',\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  reactionKey: 'x',\n  transactionID: 'transactionID',\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats/$CHAT_ID/messages/$MESSAGE_ID/reactions \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "reactionKey": "x"\n        }\'',
       },
     },
   },
@@ -666,34 +666,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## delete\n\n`client.chats.messages.reactions.delete(chatID: string, messageID: string, reactionKey: string): { chatID: string; messageID: string; reactionKey: string; success: true; }`\n\n**delete** `/v1/chats/{chatID}/messages/{messageID}/reactions`\n\nRemove the authenticated user's reaction from an existing message.\n\n### Parameters\n\n- `chatID: string`\n  Unique identifier of the chat.\n\n- `messageID: string`\n\n- `reactionKey: string`\n  Reaction key to remove\n\n### Returns\n\n- `{ chatID: string; messageID: string; reactionKey: string; success: true; }`\n\n  - `chatID: string`\n  - `messageID: string`\n  - `reactionKey: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst reaction = await client.chats.messages.reactions.delete('messageID', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', reactionKey: 'x' });\n\nconsole.log(reaction);\n```",
     perLanguage: {
-      cli: {
-        method: 'reactions delete',
+      typescript: {
+        method: 'client.chats.messages.reactions.delete',
         example:
-          "beeper-desktop-cli chats:messages:reactions delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id messageID \\\n  --reaction-key x",
-      },
-      go: {
-        method: 'client.Chats.Messages.Reactions.Delete',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\treaction, err := client.Chats.Messages.Reactions.Delete(\n\t\tcontext.TODO(),\n\t\t"messageID",\n\t\tbeeperdesktopapi.ChatMessageReactionDeleteParams{\n\t\t\tChatID:      "!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\t\tReactionKey: "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", reaction.ChatID)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats/$CHAT_ID/messages/$MESSAGE_ID/reactions \\\n    -X DELETE \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'chats->messages->reactions->delete',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$reaction = $client->chats->messages->reactions->delete(\n  'messageID', chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', reactionKey: 'x'\n);\n\nvar_dump($reaction);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst reaction = await client.chats.messages.reactions.delete('messageID', {\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  reactionKey: 'x',\n});\n\nconsole.log(reaction.chatID);",
       },
       python: {
         method: 'chats.messages.reactions.delete',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nreaction = client.chats.messages.reactions.delete(\n    message_id="messageID",\n    chat_id="!NCdzlIaMjZUmvmvyHU:beeper.com",\n    reaction_key="x",\n)\nprint(reaction.chat_id)',
       },
-      typescript: {
-        method: 'client.chats.messages.reactions.delete',
+      go: {
+        method: 'client.Chats.Messages.Reactions.Delete',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst reaction = await client.chats.messages.reactions.delete('messageID', {\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  reactionKey: 'x',\n});\n\nconsole.log(reaction.chatID);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\treaction, err := client.Chats.Messages.Reactions.Delete(\n\t\tcontext.TODO(),\n\t\t"messageID",\n\t\tbeeperdesktopapi.ChatMessageReactionDeleteParams{\n\t\t\tChatID:      "!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\t\tReactionKey: "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", reaction.ChatID)\n}\n',
+      },
+      cli: {
+        method: 'reactions delete',
+        example:
+          "beeper-desktop-cli chats:messages:reactions delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id messageID \\\n  --reaction-key x",
+      },
+      php: {
+        method: 'chats->messages->reactions->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$reaction = $client->chats->messages->reactions->delete(\n  'messageID', chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', reactionKey: 'x'\n);\n\nvar_dump($reaction);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats/$CHAT_ID/messages/$MESSAGE_ID/reactions \\\n    -X DELETE \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -725,33 +725,33 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## search\n\n`client.messages.search(accountIDs?: string[], chatIDs?: string[], chatType?: 'group' | 'single', cursor?: string, dateAfter?: string, dateBefore?: string, direction?: 'after' | 'before', excludeLowPriority?: boolean, includeMuted?: boolean, limit?: number, mediaTypes?: 'any' | 'video' | 'image' | 'link' | 'file'[], query?: string, sender?: string): { id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: attachment[]; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; reactions?: reaction[]; senderName?: string; text?: string; type?: string; }`\n\n**get** `/v1/messages/search`\n\nSearch messages across chats using Beeper's message index\n\n### Parameters\n\n- `accountIDs?: string[]`\n  Limit search to specific account IDs.\n\n- `chatIDs?: string[]`\n  Limit search to specific chat IDs.\n\n- `chatType?: 'group' | 'single'`\n  Filter by chat type: 'group' for group chats, 'single' for 1:1 chats.\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `dateAfter?: string`\n  Only include messages with timestamp strictly after this ISO 8601 datetime (e.g., '2024-07-01T00:00:00Z' or '2024-07-01T00:00:00+02:00').\n\n- `dateBefore?: string`\n  Only include messages with timestamp strictly before this ISO 8601 datetime (e.g., '2024-07-31T23:59:59Z' or '2024-07-31T23:59:59+02:00').\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n- `excludeLowPriority?: boolean`\n  Exclude messages marked Low Priority by the user. Default: true. Set to false to include all.\n\n- `includeMuted?: boolean`\n  Include messages in chats marked as Muted by the user, which are usually less important. Default: true. Set to false if the user wants a more refined search.\n\n- `limit?: number`\n  Maximum number of messages to return.\n\n- `mediaTypes?: 'any' | 'video' | 'image' | 'link' | 'file'[]`\n  Filter messages by media types. Use ['any'] for any media type, or specify exact types like ['video', 'image']. Omit for no media filtering.\n\n- `query?: string`\n  Literal word search (non-semantic). Finds messages containing these EXACT words in any order. Use single words users actually type, not concepts or phrases. Example: use \"dinner\" not \"dinner plans\", use \"sick\" not \"health issues\". If omitted, returns results filtered only by other parameters.\n\n- `sender?: string`\n  Filter by sender: 'me' (messages sent by the authenticated user), 'others' (messages sent by others), or a specific user ID string (user.id).\n\n### Returns\n\n- `{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: object; srcURL?: string; }[]; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]; senderName?: string; text?: string; type?: string; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `chatID: string`\n  - `senderID: string`\n  - `sortKey: string`\n  - `timestamp: string`\n  - `attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: { height?: number; width?: number; }; srcURL?: string; }[]`\n  - `isSender?: boolean`\n  - `isUnread?: boolean`\n  - `linkedMessageID?: string`\n  - `reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]`\n  - `senderName?: string`\n  - `text?: string`\n  - `type?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const message of client.messages.search()) {\n  console.log(message);\n}\n```",
     perLanguage: {
-      cli: {
-        method: 'messages search',
-        example: "beeper-desktop-cli messages search \\\n  --access-token 'My Access Token'",
-      },
-      go: {
-        method: 'client.Messages.Search',
+      typescript: {
+        method: 'client.messages.search',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Messages.Search(context.TODO(), beeperdesktopapi.MessageSearchParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/messages/search \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'messages->search',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$page = $client->messages->search(\n  accountIDs: [\n    'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',\n    'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',\n  ],\n  chatIDs: ['!NCdzlIaMjZUmvmvyHU:beeper.com', '1231073'],\n  chatType: 'group',\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  dateAfter: new \\DateTimeImmutable('2025-08-01T00:00:00Z'),\n  dateBefore: new \\DateTimeImmutable('2025-08-31T23:59:59Z'),\n  direction: 'before',\n  excludeLowPriority: true,\n  includeMuted: true,\n  limit: 20,\n  mediaTypes: ['any'],\n  query: 'dinner',\n  sender: 'sender',\n);\n\nvar_dump($page);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const message of client.messages.search()) {\n  console.log(message.id);\n}",
       },
       python: {
         method: 'messages.search',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\npage = client.messages.search()\npage = page.items[0]\nprint(page.id)',
       },
-      typescript: {
-        method: 'client.messages.search',
+      go: {
+        method: 'client.Messages.Search',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const message of client.messages.search()) {\n  console.log(message.id);\n}",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Messages.Search(context.TODO(), beeperdesktopapi.MessageSearchParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      cli: {
+        method: 'messages search',
+        example: "beeper-desktop-cli messages search \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'messages->search',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$page = $client->messages->search(\n  accountIDs: [\n    'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',\n    'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',\n  ],\n  chatIDs: ['!NCdzlIaMjZUmvmvyHU:beeper.com', '1231073'],\n  chatType: 'group',\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  dateAfter: new \\DateTimeImmutable('2025-08-01T00:00:00Z'),\n  dateBefore: new \\DateTimeImmutable('2025-08-31T23:59:59Z'),\n  direction: 'before',\n  excludeLowPriority: true,\n  includeMuted: true,\n  limit: 20,\n  mediaTypes: ['any'],\n  query: 'dinner',\n  sender: 'sender',\n);\n\nvar_dump($page);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/messages/search \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -769,34 +769,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## list\n\n`client.messages.list(chatID: string, cursor?: string, direction?: 'after' | 'before'): { id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: attachment[]; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; reactions?: reaction[]; senderName?: string; text?: string; type?: string; }`\n\n**get** `/v1/chats/{chatID}/messages`\n\nList all messages in a chat with cursor-based pagination. Sorted by timestamp.\n\n### Parameters\n\n- `chatID: string`\n  Unique identifier of the chat.\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n### Returns\n\n- `{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: object; srcURL?: string; }[]; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]; senderName?: string; text?: string; type?: string; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `chatID: string`\n  - `senderID: string`\n  - `sortKey: string`\n  - `timestamp: string`\n  - `attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: { height?: number; width?: number; }; srcURL?: string; }[]`\n  - `isSender?: boolean`\n  - `isUnread?: boolean`\n  - `linkedMessageID?: string`\n  - `reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]`\n  - `senderName?: string`\n  - `text?: string`\n  - `type?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const message of client.messages.list('!NCdzlIaMjZUmvmvyHU:beeper.com')) {\n  console.log(message);\n}\n```",
     perLanguage: {
-      cli: {
-        method: 'messages list',
+      typescript: {
+        method: 'client.messages.list',
         example:
-          "beeper-desktop-cli messages list \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
-      },
-      go: {
-        method: 'client.Messages.List',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Messages.List(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.MessageListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats/$CHAT_ID/messages \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'messages->list',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$page = $client->messages->list(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n);\n\nvar_dump($page);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const message of client.messages.list('!NCdzlIaMjZUmvmvyHU:beeper.com')) {\n  console.log(message.id);\n}",
       },
       python: {
         method: 'messages.list',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\npage = client.messages.list(\n    chat_id="!NCdzlIaMjZUmvmvyHU:beeper.com",\n)\npage = page.items[0]\nprint(page.id)',
       },
-      typescript: {
-        method: 'client.messages.list',
+      go: {
+        method: 'client.Messages.List',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const message of client.messages.list('!NCdzlIaMjZUmvmvyHU:beeper.com')) {\n  console.log(message.id);\n}",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Messages.List(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.MessageListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      cli: {
+        method: 'messages list',
+        example:
+          "beeper-desktop-cli messages list \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+      },
+      php: {
+        method: 'messages->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$page = $client->messages->list(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  cursor: '1725489123456|c29tZUltc2dQYWdl',\n  direction: 'before',\n);\n\nvar_dump($page);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats/$CHAT_ID/messages \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -819,34 +819,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## send\n\n`client.messages.send(chatID: string, attachment?: { uploadID: string; duration?: number; fileName?: string; mimeType?: string; size?: { height: number; width: number; }; type?: 'gif' | 'voiceNote' | 'sticker'; }, replyToMessageID?: string, text?: string): { chatID: string; pendingMessageID: string; }`\n\n**post** `/v1/chats/{chatID}/messages`\n\nSend a text message to a specific chat. Supports replying to existing messages. Returns a pending message ID.\n\n### Parameters\n\n- `chatID: string`\n  Unique identifier of the chat.\n\n- `attachment?: { uploadID: string; duration?: number; fileName?: string; mimeType?: string; size?: { height: number; width: number; }; type?: 'gif' | 'voiceNote' | 'sticker'; }`\n  Single attachment to send with the message\n  - `uploadID: string`\n    Upload ID from uploadAsset endpoint. Required to reference uploaded files.\n  - `duration?: number`\n    Duration in seconds (optional override of cached value)\n  - `fileName?: string`\n    Filename (optional override of cached value)\n  - `mimeType?: string`\n    MIME type (optional override of cached value)\n  - `size?: { height: number; width: number; }`\n    Dimensions (optional override of cached value)\n  - `type?: 'gif' | 'voiceNote' | 'sticker'`\n    Special attachment type (gif, voiceNote, sticker). If omitted, auto-detected from mimeType\n\n- `replyToMessageID?: string`\n  Provide a message ID to send this as a reply to an existing message\n\n- `text?: string`\n  Text content of the message you want to send. You may use markdown.\n\n### Returns\n\n- `{ chatID: string; pendingMessageID: string; }`\n\n  - `chatID: string`\n  - `pendingMessageID: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.messages.send('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(response);\n```",
     perLanguage: {
-      cli: {
-        method: 'messages send',
+      typescript: {
+        method: 'client.messages.send',
         example:
-          "beeper-desktop-cli messages send \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
-      },
-      go: {
-        method: 'client.Messages.Send',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Messages.Send(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.MessageSendParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.PendingMessageID)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats/$CHAT_ID/messages \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'messages->send',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->messages->send(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  attachment: [\n    'uploadID' => 'uploadID',\n    'duration' => 0,\n    'fileName' => 'fileName',\n    'mimeType' => 'mimeType',\n    'size' => ['height' => 0, 'width' => 0],\n    'type' => 'gif',\n  ],\n  replyToMessageID: 'replyToMessageID',\n  text: 'text',\n);\n\nvar_dump($response);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.messages.send('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(response.pendingMessageID);",
       },
       python: {
         method: 'messages.send',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.messages.send(\n    chat_id="!NCdzlIaMjZUmvmvyHU:beeper.com",\n)\nprint(response.pending_message_id)',
       },
-      typescript: {
-        method: 'client.messages.send',
+      go: {
+        method: 'client.Messages.Send',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.messages.send('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(response.pendingMessageID);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Messages.Send(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.MessageSendParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.PendingMessageID)\n}\n',
+      },
+      cli: {
+        method: 'messages send',
+        example:
+          "beeper-desktop-cli messages send \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+      },
+      php: {
+        method: 'messages->send',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->messages->send(\n  '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  attachment: [\n    'uploadID' => 'uploadID',\n    'duration' => 0,\n    'fileName' => 'fileName',\n    'mimeType' => 'mimeType',\n    'size' => ['height' => 0, 'width' => 0],\n    'type' => 'gif',\n  ],\n  replyToMessageID: 'replyToMessageID',\n  text: 'text',\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats/$CHAT_ID/messages \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -863,34 +863,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## update\n\n`client.messages.update(chatID: string, messageID: string, text: string): { chatID: string; messageID: string; success: boolean; }`\n\n**put** `/v1/chats/{chatID}/messages/{messageID}`\n\nEdit the text content of an existing message. Messages with attachments cannot be edited.\n\n### Parameters\n\n- `chatID: string`\n  Unique identifier of the chat.\n\n- `messageID: string`\n\n- `text: string`\n  New text content for the message\n\n### Returns\n\n- `{ chatID: string; messageID: string; success: boolean; }`\n\n  - `chatID: string`\n  - `messageID: string`\n  - `success: boolean`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst message = await client.messages.update('messageID', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', text: 'x' });\n\nconsole.log(message);\n```",
     perLanguage: {
-      cli: {
-        method: 'messages update',
+      typescript: {
+        method: 'client.messages.update',
         example:
-          "beeper-desktop-cli messages update \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id messageID \\\n  --text x",
-      },
-      go: {
-        method: 'client.Messages.Update',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tmessage, err := client.Messages.Update(\n\t\tcontext.TODO(),\n\t\t"messageID",\n\t\tbeeperdesktopapi.MessageUpdateParams{\n\t\t\tChatID: "!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\t\tText:   "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message.ChatID)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/chats/$CHAT_ID/messages/$MESSAGE_ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "text": "x"\n        }\'',
-      },
-      php: {
-        method: 'messages->update',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$message = $client->messages->update(\n  'messageID', chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', text: 'x'\n);\n\nvar_dump($message);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst message = await client.messages.update('messageID', {\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  text: 'x',\n});\n\nconsole.log(message.chatID);",
       },
       python: {
         method: 'messages.update',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nmessage = client.messages.update(\n    message_id="messageID",\n    chat_id="!NCdzlIaMjZUmvmvyHU:beeper.com",\n    text="x",\n)\nprint(message.chat_id)',
       },
-      typescript: {
-        method: 'client.messages.update',
+      go: {
+        method: 'client.Messages.Update',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst message = await client.messages.update('messageID', {\n  chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',\n  text: 'x',\n});\n\nconsole.log(message.chatID);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tmessage, err := client.Messages.Update(\n\t\tcontext.TODO(),\n\t\t"messageID",\n\t\tbeeperdesktopapi.MessageUpdateParams{\n\t\t\tChatID: "!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\t\tText:   "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message.ChatID)\n}\n',
+      },
+      cli: {
+        method: 'messages update',
+        example:
+          "beeper-desktop-cli messages update \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id messageID \\\n  --text x",
+      },
+      php: {
+        method: 'messages->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$message = $client->messages->update(\n  'messageID', chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', text: 'x'\n);\n\nvar_dump($message);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/chats/$CHAT_ID/messages/$MESSAGE_ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "text": "x"\n        }\'',
       },
     },
   },
@@ -908,34 +908,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## download\n\n`client.assets.download(url: string): { error?: string; srcURL?: string; }`\n\n**post** `/v1/assets/download`\n\nDownload a Matrix asset using its mxc:// or localmxc:// URL to the device running Beeper Desktop and return the local file URL.\n\n### Parameters\n\n- `url: string`\n  Matrix content URL (mxc:// or localmxc://) for the asset to download.\n\n### Returns\n\n- `{ error?: string; srcURL?: string; }`\n\n  - `error?: string`\n  - `srcURL?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.assets.download({ url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      cli: {
-        method: 'assets download',
+      typescript: {
+        method: 'client.assets.download',
         example:
-          "beeper-desktop-cli assets download \\\n  --access-token 'My Access Token' \\\n  --url mxc://example.org/Q4x9CqGz1pB3Oa6XgJ",
-      },
-      go: {
-        method: 'client.Assets.Download',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Assets.Download(context.TODO(), beeperdesktopapi.AssetDownloadParams{\n\t\tURL: "mxc://example.org/Q4x9CqGz1pB3Oa6XgJ",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Error)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/assets/download \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "url": "mxc://example.org/Q4x9CqGz1pB3Oa6XgJ"\n        }\'',
-      },
-      php: {
-        method: 'assets->download',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->assets->download(\n  url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ'\n);\n\nvar_dump($response);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.assets.download({ url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ' });\n\nconsole.log(response.error);",
       },
       python: {
         method: 'assets.download',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.assets.download(\n    url="mxc://example.org/Q4x9CqGz1pB3Oa6XgJ",\n)\nprint(response.error)',
       },
-      typescript: {
-        method: 'client.assets.download',
+      go: {
+        method: 'client.Assets.Download',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.assets.download({ url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ' });\n\nconsole.log(response.error);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Assets.Download(context.TODO(), beeperdesktopapi.AssetDownloadParams{\n\t\tURL: "mxc://example.org/Q4x9CqGz1pB3Oa6XgJ",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Error)\n}\n',
+      },
+      cli: {
+        method: 'assets download',
+        example:
+          "beeper-desktop-cli assets download \\\n  --access-token 'My Access Token' \\\n  --url mxc://example.org/Q4x9CqGz1pB3Oa6XgJ",
+      },
+      php: {
+        method: 'assets->download',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->assets->download(\n  url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ'\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/assets/download \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "url": "mxc://example.org/Q4x9CqGz1pB3Oa6XgJ"\n        }\'',
       },
     },
   },
@@ -954,34 +954,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## upload\n\n`client.assets.upload(file: string, fileName?: string, mimeType?: string): { duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n**post** `/v1/assets/upload`\n\nUpload a file to a temporary location using multipart/form-data. Returns an uploadID that can be referenced when sending messages with attachments.\n\n### Parameters\n\n- `file: string`\n  The file to upload (max 500 MB).\n\n- `fileName?: string`\n  Original filename. Defaults to the uploaded file name if omitted\n\n- `mimeType?: string`\n  MIME type. Auto-detected from magic bytes if omitted\n\n### Returns\n\n- `{ duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n  - `duration?: number`\n  - `error?: string`\n  - `fileName?: string`\n  - `fileSize?: number`\n  - `height?: number`\n  - `mimeType?: string`\n  - `srcURL?: string`\n  - `uploadID?: string`\n  - `width?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.assets.upload({ file: fs.createReadStream('path/to/file') });\n\nconsole.log(response);\n```",
     perLanguage: {
-      cli: {
-        method: 'assets upload',
+      typescript: {
+        method: 'client.assets.upload',
         example:
-          "beeper-desktop-cli assets upload \\\n  --access-token 'My Access Token' \\\n  --file 'Example data'",
-      },
-      go: {
-        method: 'client.Assets.Upload',
-        example:
-          'package main\n\nimport (\n\t"bytes"\n\t"context"\n\t"fmt"\n\t"io"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Assets.Upload(context.TODO(), beeperdesktopapi.AssetUploadParams{\n\t\tFile: io.Reader(bytes.NewBuffer([]byte("Example data"))),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Width)\n}\n',
-      },
-      http: {
-        example:
-          "curl http://localhost:23373/v1/assets/upload \\\n    -H 'Content-Type: multipart/form-data' \\\n    -H \"Authorization: Bearer $BEEPER_ACCESS_TOKEN\" \\\n    -F 'file=@/path/to/file'",
-      },
-      php: {
-        method: 'assets->upload',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->assets->upload(\n  file: FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n  fileName: 'fileName',\n  mimeType: 'mimeType',\n);\n\nvar_dump($response);",
+          "import fs from 'fs';\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.assets.upload({ file: fs.createReadStream('path/to/file') });\n\nconsole.log(response.width);",
       },
       python: {
         method: 'assets.upload',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.assets.upload(\n    file=b"Example data",\n)\nprint(response.width)',
       },
-      typescript: {
-        method: 'client.assets.upload',
+      go: {
+        method: 'client.Assets.Upload',
         example:
-          "import fs from 'fs';\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.assets.upload({ file: fs.createReadStream('path/to/file') });\n\nconsole.log(response.width);",
+          'package main\n\nimport (\n\t"bytes"\n\t"context"\n\t"fmt"\n\t"io"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Assets.Upload(context.TODO(), beeperdesktopapi.AssetUploadParams{\n\t\tFile: io.Reader(bytes.NewBuffer([]byte("Example data"))),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Width)\n}\n',
+      },
+      cli: {
+        method: 'assets upload',
+        example:
+          "beeper-desktop-cli assets upload \\\n  --access-token 'My Access Token' \\\n  --file 'Example data'",
+      },
+      php: {
+        method: 'assets->upload',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->assets->upload(\n  file: FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n  fileName: 'fileName',\n  mimeType: 'mimeType',\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          "curl http://localhost:23373/v1/assets/upload \\\n    -H 'Content-Type: multipart/form-data' \\\n    -H \"Authorization: Bearer $BEEPER_ACCESS_TOKEN\" \\\n    -F 'file=@/path/to/file'",
       },
     },
   },
@@ -1000,34 +1000,34 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## upload_base64\n\n`client.assets.uploadBase64(content: string, fileName?: string, mimeType?: string): { duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n**post** `/v1/assets/upload/base64`\n\nUpload a file using a JSON body with base64-encoded content. Returns an uploadID that can be referenced when sending messages with attachments. Alternative to the multipart upload endpoint.\n\n### Parameters\n\n- `content: string`\n  Base64-encoded file content (max ~500MB decoded)\n\n- `fileName?: string`\n  Original filename. Generated if omitted\n\n- `mimeType?: string`\n  MIME type. Auto-detected from magic bytes if omitted\n\n### Returns\n\n- `{ duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n  - `duration?: number`\n  - `error?: string`\n  - `fileName?: string`\n  - `fileSize?: number`\n  - `height?: number`\n  - `mimeType?: string`\n  - `srcURL?: string`\n  - `uploadID?: string`\n  - `width?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.assets.uploadBase64({ content: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
-      cli: {
-        method: 'assets upload_base64',
+      typescript: {
+        method: 'client.assets.uploadBase64',
         example:
-          "beeper-desktop-cli assets upload-base64 \\\n  --access-token 'My Access Token' \\\n  --content x",
-      },
-      go: {
-        method: 'client.Assets.UploadBase64',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Assets.UploadBase64(context.TODO(), beeperdesktopapi.AssetUploadBase64Params{\n\t\tContent: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Width)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/assets/upload/base64 \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "content": "x"\n        }\'',
-      },
-      php: {
-        method: 'assets->uploadBase64',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->assets->uploadBase64(\n  content: 'x', fileName: 'fileName', mimeType: 'mimeType'\n);\n\nvar_dump($response);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.assets.uploadBase64({ content: 'x' });\n\nconsole.log(response.width);",
       },
       python: {
         method: 'assets.upload_base64',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.assets.upload_base64(\n    content="x",\n)\nprint(response.width)',
       },
-      typescript: {
-        method: 'client.assets.uploadBase64',
+      go: {
+        method: 'client.Assets.UploadBase64',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.assets.uploadBase64({ content: 'x' });\n\nconsole.log(response.width);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Assets.UploadBase64(context.TODO(), beeperdesktopapi.AssetUploadBase64Params{\n\t\tContent: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Width)\n}\n',
+      },
+      cli: {
+        method: 'assets upload_base64',
+        example:
+          "beeper-desktop-cli assets upload-base64 \\\n  --access-token 'My Access Token' \\\n  --content x",
+      },
+      php: {
+        method: 'assets->uploadBase64',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->assets->uploadBase64(\n  content: 'x', fileName: 'fileName', mimeType: 'mimeType'\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/assets/upload/base64 \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "content": "x"\n        }\'',
       },
     },
   },
@@ -1044,33 +1044,33 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## serve\n\n`client.assets.serve(url: string): void`\n\n**get** `/v1/assets/serve`\n\nStream a file given an mxc://, localmxc://, or file:// URL. Downloads first if not cached. Supports Range requests for seeking in large files.\n\n### Parameters\n\n- `url: string`\n  Asset URL to serve. Accepts mxc://, localmxc://, or file:// URLs.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.assets.serve({ url: 'x' })\n```",
     perLanguage: {
-      cli: {
-        method: 'assets serve',
-        example: "beeper-desktop-cli assets serve \\\n  --access-token 'My Access Token' \\\n  --url x",
-      },
-      go: {
-        method: 'client.Assets.Serve',
+      typescript: {
+        method: 'client.assets.serve',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Assets.Serve(context.TODO(), beeperdesktopapi.AssetServeParams{\n\t\tURL: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/assets/serve \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'assets->serve',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$result = $client->assets->serve(url: 'x');\n\nvar_dump($result);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nawait client.assets.serve({ url: 'x' });",
       },
       python: {
         method: 'assets.serve',
         example:
           'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nclient.assets.serve(\n    url="x",\n)',
       },
-      typescript: {
-        method: 'client.assets.serve',
+      go: {
+        method: 'client.Assets.Serve',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nawait client.assets.serve({ url: 'x' });",
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Assets.Serve(context.TODO(), beeperdesktopapi.AssetServeParams{\n\t\tURL: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'assets serve',
+        example: "beeper-desktop-cli assets serve \\\n  --access-token 'My Access Token' \\\n  --url x",
+      },
+      php: {
+        method: 'assets->serve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$result = $client->assets->serve(url: 'x');\n\nvar_dump($result);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/assets/serve \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -1088,33 +1088,33 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## retrieve\n\n`client.info.retrieve(): { app: object; endpoints: object; platform: object; server: object; }`\n\n**get** `/v1/info`\n\nReturns app, platform, server, and endpoint discovery metadata for this Beeper Desktop instance.\n\n### Returns\n\n- `{ app: { bundle_id: string; name: string; version: string; }; endpoints: { mcp: string; oauth: { authorization_endpoint: string; introspection_endpoint: string; registration_endpoint: string; revocation_endpoint: string; token_endpoint: string; userinfo_endpoint: string; }; spec: string; ws_events: string; }; platform: { arch: string; os: string; release?: string; }; server: { base_url: string; hostname: string; mcp_enabled: boolean; port: number; remote_access: boolean; status: string; }; }`\n\n  - `app: { bundle_id: string; name: string; version: string; }`\n  - `endpoints: { mcp: string; oauth: { authorization_endpoint: string; introspection_endpoint: string; registration_endpoint: string; revocation_endpoint: string; token_endpoint: string; userinfo_endpoint: string; }; spec: string; ws_events: string; }`\n  - `platform: { arch: string; os: string; release?: string; }`\n  - `server: { base_url: string; hostname: string; mcp_enabled: boolean; port: number; remote_access: boolean; status: string; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst info = await client.info.retrieve();\n\nconsole.log(info);\n```",
     perLanguage: {
-      cli: {
-        method: 'info retrieve',
-        example: "beeper-desktop-cli info retrieve \\\n  --access-token 'My Access Token'",
-      },
-      go: {
-        method: 'client.Info.Get',
+      typescript: {
+        method: 'client.info.retrieve',
         example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tinfo, err := client.Info.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", info.App)\n}\n',
-      },
-      http: {
-        example:
-          'curl http://localhost:23373/v1/info \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
-      },
-      php: {
-        method: 'info->retrieve',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$info = $client->info->retrieve();\n\nvar_dump($info);",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst info = await client.info.retrieve();\n\nconsole.log(info.app);",
       },
       python: {
         method: 'info.retrieve',
         example:
           'from beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop()\ninfo = client.info.retrieve()\nprint(info.app)',
       },
-      typescript: {
-        method: 'client.info.retrieve',
+      go: {
+        method: 'client.Info.Get',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst info = await client.info.retrieve();\n\nconsole.log(info.app);",
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tinfo, err := client.Info.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", info.App)\n}\n',
+      },
+      cli: {
+        method: 'info retrieve',
+        example: "beeper-desktop-cli info retrieve \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'info->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$info = $client->info->retrieve();\n\nvar_dump($info);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/info \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
