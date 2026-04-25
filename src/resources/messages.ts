@@ -4,13 +4,7 @@ import { APIResource } from '../core/resource';
 import * as Shared from './shared';
 import { MessagesCursorSearch, MessagesCursorSortKey } from './shared';
 import { APIPromise } from '../core/api-promise';
-import {
-  CursorSearch,
-  type CursorSearchParams,
-  CursorSortKey,
-  type CursorSortKeyParams,
-  PagePromise,
-} from '../core/pagination';
+import { CursorSearch, type CursorSearchParams, CursorSortKey, type CursorSortKeyParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -30,12 +24,8 @@ export class Messages extends APIResource {
    * });
    * ```
    */
-  update(
-    messageID: string,
-    params: MessageUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<MessageUpdateResponse> {
-    const { chatID, ...body } = params;
+  update(messageID: string, params: MessageUpdateParams, options?: RequestOptions): APIPromise<MessageUpdateResponse> {
+    const { chatID, ...body } = params
     return this._client.put(path`/v1/chats/${chatID}/messages/${messageID}`, { body, ...options });
   }
 
@@ -52,15 +42,8 @@ export class Messages extends APIResource {
    * }
    * ```
    */
-  list(
-    chatID: string,
-    query: MessageListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<MessagesCursorSortKey, Shared.Message> {
-    return this._client.getAPIList(path`/v1/chats/${chatID}/messages`, CursorSortKey<Shared.Message>, {
-      query,
-      ...options,
-    });
+  list(chatID: string, query: MessageListParams | null | undefined = {}, options?: RequestOptions): PagePromise<MessagesCursorSortKey, Shared.Message> {
+    return this._client.getAPIList(path`/v1/chats/${chatID}/messages`, CursorSortKey<Shared.Message>, { query, ...options });
   }
 
   /**
@@ -74,14 +57,8 @@ export class Messages extends APIResource {
    * }
    * ```
    */
-  search(
-    query: MessageSearchParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<MessagesCursorSearch, Shared.Message> {
-    return this._client.getAPIList('/v1/messages/search', CursorSearch<Shared.Message>, {
-      query,
-      ...options,
-    });
+  search(query: MessageSearchParams | null | undefined = {}, options?: RequestOptions): PagePromise<MessagesCursorSearch, Shared.Message> {
+    return this._client.getAPIList('/v1/messages/search', CursorSearch<Shared.Message>, { query, ...options });
   }
 
   /**
@@ -95,11 +72,7 @@ export class Messages extends APIResource {
    * );
    * ```
    */
-  send(
-    chatID: string,
-    body: MessageSendParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<MessageSendResponse> {
+  send(chatID: string, body: MessageSendParams | null | undefined = {}, options?: RequestOptions): APIPromise<MessageSendResponse> {
     return this._client.post(path`/v1/chats/${chatID}/messages`, { body, ...options });
   }
 }
@@ -145,7 +118,8 @@ export interface MessageUpdateParams {
   text: string;
 }
 
-export interface MessageListParams extends CursorSortKeyParams {}
+export interface MessageListParams extends CursorSortKeyParams {
+}
 
 export interface MessageSearchParams extends CursorSearchParams {
   /**
@@ -281,8 +255,8 @@ export declare namespace Messages {
     type MessageUpdateParams as MessageUpdateParams,
     type MessageListParams as MessageListParams,
     type MessageSearchParams as MessageSearchParams,
-    type MessageSendParams as MessageSendParams,
+    type MessageSendParams as MessageSendParams
   };
 }
 
-export { type MessagesCursorSortKey, type MessagesCursorSearch };
+export { type MessagesCursorSortKey, type MessagesCursorSearch }

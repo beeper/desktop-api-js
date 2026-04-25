@@ -10,7 +10,9 @@ const config: JestConfigWithTsJest = {
     '^@beeper/desktop-mcp$': '<rootDir>/src/index.ts',
     '^@beeper/desktop-mcp/(.*)$': '<rootDir>/src/$1',
   },
-  modulePathIgnorePatterns: ['<rootDir>/dist/'],
+  modulePathIgnorePatterns: [
+    '<rootDir>/dist/',
+  ],
   testPathIgnorePatterns: ['scripts'],
 };
 

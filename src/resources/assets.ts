@@ -36,11 +36,7 @@ export class Assets extends APIResource {
    * ```
    */
   serve(query: AssetServeParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.get('/v1/assets/serve', {
-      query,
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+    return this._client.get('/v1/assets/serve', { query, ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -55,10 +51,7 @@ export class Assets extends APIResource {
    * ```
    */
   upload(body: AssetUploadParams, options?: RequestOptions): APIPromise<AssetUploadResponse> {
-    return this._client.post(
-      '/v1/assets/upload',
-      multipartFormRequestOptions({ body, ...options }, this._client),
-    );
+    return this._client.post('/v1/assets/upload', multipartFormRequestOptions({ body, ...options }, this._client));
   }
 
   /**
@@ -73,10 +66,7 @@ export class Assets extends APIResource {
    * });
    * ```
    */
-  uploadBase64(
-    body: AssetUploadBase64Params,
-    options?: RequestOptions,
-  ): APIPromise<AssetUploadBase64Response> {
+  uploadBase64(body: AssetUploadBase64Params, options?: RequestOptions): APIPromise<AssetUploadBase64Response> {
     return this._client.post('/v1/assets/upload/base64', { body, ...options });
   }
 }
@@ -243,6 +233,6 @@ export declare namespace Assets {
     type AssetDownloadParams as AssetDownloadParams,
     type AssetServeParams as AssetServeParams,
     type AssetUploadParams as AssetUploadParams,
-    type AssetUploadBase64Params as AssetUploadBase64Params,
+    type AssetUploadBase64Params as AssetUploadBase64Params
   };
 }

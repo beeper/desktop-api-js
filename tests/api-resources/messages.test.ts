@@ -2,17 +2,11 @@
 
 import BeeperDesktop from '@beeper/desktop-api';
 
-const client = new BeeperDesktop({
-  accessToken: 'My Access Token',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new BeeperDesktop({ accessToken: 'My Access Token', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource messages', () => {
   test('update: only required params', async () => {
-    const responsePromise = client.messages.update('messageID', {
-      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-      text: 'x',
-    });
+    const responsePromise = client.messages.update('messageID', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', text: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,10 +17,7 @@ describe('resource messages', () => {
   });
 
   test('update: required and optional params', async () => {
-    const response = await client.messages.update('messageID', {
-      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-      text: 'x',
-    });
+    const response = await client.messages.update('messageID', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', text: 'x' });
   });
 
   test('list', async () => {
@@ -42,13 +33,9 @@ describe('resource messages', () => {
 
   test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.messages.list(
-        '!NCdzlIaMjZUmvmvyHU:beeper.com',
-        { cursor: '1725489123456|c29tZUltc2dQYWdl', direction: 'before' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(BeeperDesktop.NotFoundError);
+    await expect(client.messages.list('!NCdzlIaMjZUmvmvyHU:beeper.com', { cursor: '1725489123456|c29tZUltc2dQYWdl', direction: 'before' }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(BeeperDesktop.NotFoundError);
   });
 
   test('search', async () => {
@@ -64,29 +51,23 @@ describe('resource messages', () => {
 
   test('search: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.messages.search(
-        {
-          accountIDs: [
-            'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
-            'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',
-          ],
-          chatIDs: ['!NCdzlIaMjZUmvmvyHU:beeper.com', '1231073'],
-          chatType: 'group',
-          cursor: '1725489123456|c29tZUltc2dQYWdl',
-          dateAfter: '2025-08-01T00:00:00Z',
-          dateBefore: '2025-08-31T23:59:59Z',
-          direction: 'before',
-          excludeLowPriority: true,
-          includeMuted: true,
-          limit: 20,
-          mediaTypes: ['any'],
-          query: 'dinner',
-          sender: 'sender',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(BeeperDesktop.NotFoundError);
+    await expect(client.messages.search({
+    accountIDs: ['local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc', 'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU'],
+    chatIDs: ['!NCdzlIaMjZUmvmvyHU:beeper.com', '1231073'],
+    chatType: 'group',
+    cursor: '1725489123456|c29tZUltc2dQYWdl',
+    dateAfter: '2025-08-01T00:00:00Z',
+    dateBefore: '2025-08-31T23:59:59Z',
+    direction: 'before',
+    excludeLowPriority: true,
+    includeMuted: true,
+    limit: 20,
+    mediaTypes: ['any'],
+    query: 'dinner',
+    sender: 'sender',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(BeeperDesktop.NotFoundError);
   });
 
   test('send', async () => {
@@ -102,23 +83,19 @@ describe('resource messages', () => {
 
   test('send: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.messages.send(
-        '!NCdzlIaMjZUmvmvyHU:beeper.com',
-        {
-          attachment: {
-            uploadID: 'uploadID',
-            duration: 0,
-            fileName: 'fileName',
-            mimeType: 'mimeType',
-            size: { height: 0, width: 0 },
-            type: 'gif',
-          },
-          replyToMessageID: 'replyToMessageID',
-          text: 'text',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(BeeperDesktop.NotFoundError);
+    await expect(client.messages.send('!NCdzlIaMjZUmvmvyHU:beeper.com', {
+    attachment: {
+    uploadID: 'uploadID',
+    duration: 0,
+    fileName: 'fileName',
+    mimeType: 'mimeType',
+    size: { height: 0, width: 0 },
+    type: 'gif',
+  },
+    replyToMessageID: 'replyToMessageID',
+    text: 'text',
+  }, { path: '/_stainless_unknown_path' }))
+      .rejects
+      .toThrow(BeeperDesktop.NotFoundError);
   });
 });

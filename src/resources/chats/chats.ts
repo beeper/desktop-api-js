@@ -7,13 +7,7 @@ import { ReminderCreateParams, Reminders } from './reminders';
 import * as MessagesAPI from './messages/messages';
 import { Messages } from './messages/messages';
 import { APIPromise } from '../../core/api-promise';
-import {
-  CursorNoLimit,
-  type CursorNoLimitParams,
-  CursorSearch,
-  type CursorSearchParams,
-  PagePromise,
-} from '../../core/pagination';
+import { CursorNoLimit, type CursorNoLimitParams, CursorSearch, type CursorSearchParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -34,11 +28,8 @@ export class Chats extends APIResource {
    * const chat = await client.chats.create();
    * ```
    */
-  create(
-    params: ChatCreateParams | null | undefined = undefined,
-    options?: RequestOptions,
-  ): APIPromise<ChatCreateResponse> {
-    const { params } = params ?? {};
+  create(params: ChatCreateParams | null | undefined = undefined, options?: RequestOptions): APIPromise<ChatCreateResponse> {
+    const { params } = params ?? {}
     return this._client.post('/v1/chats', { body: params, ...options });
   }
 
@@ -52,11 +43,7 @@ export class Chats extends APIResource {
    * );
    * ```
    */
-  retrieve(
-    chatID: string,
-    query: ChatRetrieveParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Chat> {
+  retrieve(chatID: string, query: ChatRetrieveParams | null | undefined = {}, options?: RequestOptions): APIPromise<Chat> {
     return this._client.get(path`/v1/chats/${chatID}`, { query, ...options });
   }
 
@@ -72,10 +59,7 @@ export class Chats extends APIResource {
    * }
    * ```
    */
-  list(
-    query: ChatListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<ChatListResponsesCursorNoLimit, ChatListResponse> {
+  list(query: ChatListParams | null | undefined = {}, options?: RequestOptions): PagePromise<ChatListResponsesCursorNoLimit, ChatListResponse> {
     return this._client.getAPIList('/v1/chats', CursorNoLimit<ChatListResponse>, { query, ...options });
   }
 
@@ -90,16 +74,8 @@ export class Chats extends APIResource {
    * );
    * ```
    */
-  archive(
-    chatID: string,
-    body: ChatArchiveParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<void> {
-    return this._client.post(path`/v1/chats/${chatID}/archive`, {
-      body,
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
+  archive(chatID: string, body: ChatArchiveParams | null | undefined = {}, options?: RequestOptions): APIPromise<void> {
+    return this._client.post(path`/v1/chats/${chatID}/archive`, { body, ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
   }
 
   /**
@@ -114,17 +90,14 @@ export class Chats extends APIResource {
    * }
    * ```
    */
-  search(
-    query: ChatSearchParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<ChatsCursorSearch, Chat> {
+  search(query: ChatSearchParams | null | undefined = {}, options?: RequestOptions): PagePromise<ChatsCursorSearch, Chat> {
     return this._client.getAPIList('/v1/chats/search', CursorSearch<Chat>, { query, ...options });
   }
 }
 
-export type ChatListResponsesCursorNoLimit = CursorNoLimit<ChatListResponse>;
+export type ChatListResponsesCursorNoLimit = CursorNoLimit<ChatListResponse>
 
-export type ChatsCursorSearch = CursorSearch<Chat>;
+export type ChatsCursorSearch = CursorSearch<Chat>
 
 export interface Chat {
   /**
@@ -420,10 +393,15 @@ export declare namespace Chats {
     type ChatRetrieveParams as ChatRetrieveParams,
     type ChatListParams as ChatListParams,
     type ChatArchiveParams as ChatArchiveParams,
-    type ChatSearchParams as ChatSearchParams,
+    type ChatSearchParams as ChatSearchParams
   };
 
-  export { Reminders as Reminders, type ReminderCreateParams as ReminderCreateParams };
+  export {
+    Reminders as Reminders,
+    type ReminderCreateParams as ReminderCreateParams
+  };
 
-  export { Messages as Messages };
+  export {
+    Messages as Messages
+  };
 }
