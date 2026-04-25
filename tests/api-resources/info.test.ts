@@ -2,10 +2,7 @@
 
 import BeeperDesktop from '@beeper/desktop-api';
 
-const client = new BeeperDesktop({
-  accessToken: 'My Access Token',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new BeeperDesktop({ accessToken: 'My Access Token', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource info', () => {
   test('retrieve', async () => {

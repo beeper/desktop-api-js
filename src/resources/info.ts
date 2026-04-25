@@ -149,5 +149,7 @@ export namespace InfoRetrieveResponse {
 }
 
 export declare namespace Info {
-  export { type InfoRetrieveResponse as InfoRetrieveResponse };
+  export {
+    type InfoRetrieveResponse as InfoRetrieveResponse
+  };
 }

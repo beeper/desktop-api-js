@@ -78,17 +78,20 @@ export namespace Account {
  * Connected accounts the user can act through. Includes accountID and user
  * identity.
  */
-export type AccountListResponse = Array<Account>;
+export type AccountListResponse = Array<Account>
 
 Accounts.Contacts = Contacts;
 
 export declare namespace Accounts {
-  export { type Account as Account, type AccountListResponse as AccountListResponse };
+  export {
+    type Account as Account,
+    type AccountListResponse as AccountListResponse
+  };
 
   export {
     Contacts as Contacts,
     type ContactSearchResponse as ContactSearchResponse,
     type ContactListParams as ContactListParams,
-    type ContactSearchParams as ContactSearchParams,
+    type ContactSearchParams as ContactSearchParams
   };
 }

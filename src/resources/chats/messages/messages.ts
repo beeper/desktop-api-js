@@ -2,13 +2,7 @@
 
 import { APIResource } from '../../../core/resource';
 import * as ReactionsAPI from './reactions';
-import {
-  ReactionAddParams,
-  ReactionAddResponse,
-  ReactionDeleteParams,
-  ReactionDeleteResponse,
-  Reactions,
-} from './reactions';
+import { ReactionAddParams, ReactionAddResponse, ReactionDeleteParams, ReactionDeleteResponse, Reactions } from './reactions';
 
 /**
  * Manage chat messages
@@ -25,6 +19,6 @@ export declare namespace Messages {
     type ReactionDeleteResponse as ReactionDeleteResponse,
     type ReactionAddResponse as ReactionAddResponse,
     type ReactionDeleteParams as ReactionDeleteParams,
-    type ReactionAddParams as ReactionAddParams,
+    type ReactionAddParams as ReactionAddParams
   };
 }
