@@ -1,5 +1,30 @@
 # Changelog
 
+## 4.8.0 (2026-04-28)
+
+Full Changelog: [v4.7.1...v4.8.0](https://github.com/beeper/desktop-api-js/compare/v4.7.1...v4.8.0)
+
+### Features
+
+* **api:** add network, bridge fields to accounts ([507d953](https://github.com/beeper/desktop-api-js/commit/507d953e15f708e0f36ca97a79d5e6798637cd46))
+* support setting headers via env ([a96c11f](https://github.com/beeper/desktop-api-js/commit/a96c11fb55f79609589a4bd379dfc9c57bff21d2))
+
+
+### Chores
+
+* fix example snippet imports ([36526d0](https://github.com/beeper/desktop-api-js/commit/36526d0f6fe13881ad2e4fa5c9c0831572085b82))
+* **formatter:** run prettier and eslint separately ([fc858b4](https://github.com/beeper/desktop-api-js/commit/fc858b42ae0659e27b67ebb18abaebeeadc01054))
+* **internal:** codegen related update ([ebb38e3](https://github.com/beeper/desktop-api-js/commit/ebb38e3bebbba830772a5c3d452af10982fbc9a8))
+* **internal:** codegen related update ([99692bb](https://github.com/beeper/desktop-api-js/commit/99692bba99c8770456ed096a82858eec38fa8335))
+* **internal:** codegen related update ([921d01a](https://github.com/beeper/desktop-api-js/commit/921d01ab656e36350fc92a8317193dfa29fae869))
+* **internal:** more robust bootstrap script ([0045519](https://github.com/beeper/desktop-api-js/commit/0045519b594198a09f6c2140a5bfc15c02d26109))
+* **internal:** show error causes in MCP servers when running in local mode ([dfa8c13](https://github.com/beeper/desktop-api-js/commit/dfa8c13e0b706a5e22c38f55885d19297b9739c4))
+* **internal:** update docs ordering ([9ee1296](https://github.com/beeper/desktop-api-js/commit/9ee12965940572490d58bfa37779b9135f71c50f))
+* **mcp-server:** increase local docs search result count from 5 to 10 ([5efa76a](https://github.com/beeper/desktop-api-js/commit/5efa76aabeb9df310452af4f6ca19a04236fec9c))
+* restructure docs search code ([d148d8a](https://github.com/beeper/desktop-api-js/commit/d148d8a24c4a8ee5e154d86c00a7ceb8b477444f))
+* **tests:** bump steady to v0.22.1 ([cca9635](https://github.com/beeper/desktop-api-js/commit/cca96356d0a240903cdf02a608bbc61ecb02cdf3))
+* update CLI documentation ([9925dba](https://github.com/beeper/desktop-api-js/commit/9925dbadd7f5fc61bab398ab44b92b90df7dffe7))
+
 ## 4.7.1 (2026-04-07)
 
 Full Changelog: [v4.7.0...v4.7.1](https://github.com/beeper/desktop-api-js/compare/v4.7.0...v4.7.1)
