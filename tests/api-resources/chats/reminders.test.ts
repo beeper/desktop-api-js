@@ -2,11 +2,16 @@
 
 import BeeperDesktop from '@beeper/desktop-api';
 
-const client = new BeeperDesktop({ accessToken: 'My Access Token', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
+const client = new BeeperDesktop({
+  accessToken: 'My Access Token',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
 
 describe('resource reminders', () => {
   test('create: only required params', async () => {
-    const responsePromise = client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', { reminder: { remindAtMs: 0 } });
+    const responsePromise = client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', {
+      reminder: { remindAtMs: 0 },
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -17,7 +22,9 @@ describe('resource reminders', () => {
   });
 
   test('create: required and optional params', async () => {
-    const response = await client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', { reminder: { remindAtMs: 0, dismissOnIncomingMessage: true } });
+    const response = await client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', {
+      reminder: { remindAtMs: 0, dismissOnIncomingMessage: true },
+    });
   });
 
   test('delete', async () => {

@@ -25,8 +25,15 @@ export class Contacts extends APIResource {
    * }
    * ```
    */
-  list(accountID: string, query: ContactListParams | null | undefined = {}, options?: RequestOptions): PagePromise<UsersCursorSearch, Shared.User> {
-    return this._client.getAPIList(path`/v1/accounts/${accountID}/contacts/list`, CursorSearch<Shared.User>, { query, ...options });
+  list(
+    accountID: string,
+    query: ContactListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<UsersCursorSearch, Shared.User> {
+    return this._client.getAPIList(path`/v1/accounts/${accountID}/contacts/list`, CursorSearch<Shared.User>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -41,7 +48,11 @@ export class Contacts extends APIResource {
    * );
    * ```
    */
-  search(accountID: string, query: ContactSearchParams, options?: RequestOptions): APIPromise<ContactSearchResponse> {
+  search(
+    accountID: string,
+    query: ContactSearchParams,
+    options?: RequestOptions,
+  ): APIPromise<ContactSearchResponse> {
     return this._client.get(path`/v1/accounts/${accountID}/contacts`, { query, ...options });
   }
 }
@@ -68,8 +79,8 @@ export declare namespace Contacts {
   export {
     type ContactSearchResponse as ContactSearchResponse,
     type ContactListParams as ContactListParams,
-    type ContactSearchParams as ContactSearchParams
+    type ContactSearchParams as ContactSearchParams,
   };
 }
 
-export { type UsersCursorSearch }
+export { type UsersCursorSearch };
