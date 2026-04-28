@@ -22,7 +22,11 @@ export class Reminders extends APIResource {
    * ```
    */
   create(chatID: string, body: ReminderCreateParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.post(path`/v1/chats/${chatID}/reminders`, { body, ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
+    return this._client.post(path`/v1/chats/${chatID}/reminders`, {
+      body,
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 
   /**
@@ -36,7 +40,10 @@ export class Reminders extends APIResource {
    * ```
    */
   delete(chatID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/v1/chats/${chatID}/reminders`, { ...options, headers: buildHeaders([{Accept: '*/*'}, options?.headers]) });
+    return this._client.delete(path`/v1/chats/${chatID}/reminders`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 }
 
@@ -65,7 +72,5 @@ export namespace ReminderCreateParams {
 }
 
 export declare namespace Reminders {
-  export {
-    type ReminderCreateParams as ReminderCreateParams
-  };
+  export { type ReminderCreateParams as ReminderCreateParams };
 }

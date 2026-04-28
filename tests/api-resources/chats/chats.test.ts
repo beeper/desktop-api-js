@@ -2,7 +2,10 @@
 
 import BeeperDesktop from '@beeper/desktop-api';
 
-const client = new BeeperDesktop({ accessToken: 'My Access Token', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
+const client = new BeeperDesktop({
+  accessToken: 'My Access Token',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
 
 describe('resource chats', () => {
   test('create', async () => {
@@ -18,21 +21,26 @@ describe('resource chats', () => {
 
   test('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.chats.create({ params: {
-    accountID: 'accountID',
-    mode: 'start',
-    user: {
-    id: 'id',
-    email: 'email',
-    fullName: 'fullName',
-    phoneNumber: 'phoneNumber',
-    username: 'username',
-  },
-    allowInvite: true,
-    messageText: 'messageText',
-  } }, { path: '/_stainless_unknown_path' }))
-      .rejects
-      .toThrow(BeeperDesktop.NotFoundError);
+    await expect(
+      client.chats.create(
+        {
+          params: {
+            accountID: 'accountID',
+            mode: 'start',
+            user: {
+              id: 'id',
+              email: 'email',
+              fullName: 'fullName',
+              phoneNumber: 'phoneNumber',
+              username: 'username',
+            },
+            allowInvite: true,
+            messageText: 'messageText',
+          },
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
   test('retrieve', async () => {
@@ -48,9 +56,13 @@ describe('resource chats', () => {
 
   test('retrieve: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.chats.retrieve('!NCdzlIaMjZUmvmvyHU:beeper.com', { maxParticipantCount: 50 }, { path: '/_stainless_unknown_path' }))
-      .rejects
-      .toThrow(BeeperDesktop.NotFoundError);
+    await expect(
+      client.chats.retrieve(
+        '!NCdzlIaMjZUmvmvyHU:beeper.com',
+        { maxParticipantCount: 50 },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
   test('list', async () => {
@@ -66,13 +78,19 @@ describe('resource chats', () => {
 
   test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.chats.list({
-    accountIDs: ['local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc', 'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU'],
-    cursor: '1725489123456|c29tZUltc2dQYWdl',
-    direction: 'before',
-  }, { path: '/_stainless_unknown_path' }))
-      .rejects
-      .toThrow(BeeperDesktop.NotFoundError);
+    await expect(
+      client.chats.list(
+        {
+          accountIDs: [
+            'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
+            'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',
+          ],
+          cursor: '1725489123456|c29tZUltc2dQYWdl',
+          direction: 'before',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
   test('archive', async () => {
@@ -88,9 +106,13 @@ describe('resource chats', () => {
 
   test('archive: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.chats.archive('!NCdzlIaMjZUmvmvyHU:beeper.com', { archived: true }, { path: '/_stainless_unknown_path' }))
-      .rejects
-      .toThrow(BeeperDesktop.NotFoundError);
+    await expect(
+      client.chats.archive(
+        '!NCdzlIaMjZUmvmvyHU:beeper.com',
+        { archived: true },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
   test('search', async () => {
@@ -106,21 +128,27 @@ describe('resource chats', () => {
 
   test('search: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.chats.search({
-    accountIDs: ['local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc', 'local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI'],
-    cursor: '1725489123456|c29tZUltc2dQYWdl',
-    direction: 'before',
-    inbox: 'primary',
-    includeMuted: true,
-    lastActivityAfter: '2019-12-27T18:11:19.117Z',
-    lastActivityBefore: '2019-12-27T18:11:19.117Z',
-    limit: 1,
-    query: 'x',
-    scope: 'titles',
-    type: 'single',
-    unreadOnly: true,
-  }, { path: '/_stainless_unknown_path' }))
-      .rejects
-      .toThrow(BeeperDesktop.NotFoundError);
+    await expect(
+      client.chats.search(
+        {
+          accountIDs: [
+            'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
+            'local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI',
+          ],
+          cursor: '1725489123456|c29tZUltc2dQYWdl',
+          direction: 'before',
+          inbox: 'primary',
+          includeMuted: true,
+          lastActivityAfter: '2019-12-27T18:11:19.117Z',
+          lastActivityBefore: '2019-12-27T18:11:19.117Z',
+          limit: 1,
+          query: 'x',
+          scope: 'titles',
+          type: 'single',
+          unreadOnly: true,
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 });
