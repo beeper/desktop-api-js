@@ -99,6 +99,6 @@ export declare namespace TopLevel {
     type FocusResponse as FocusResponse,
     type SearchResponse as SearchResponse,
     type FocusParams as FocusParams,
-    type SearchParams as SearchParams
+    type SearchParams as SearchParams,
   };
 }

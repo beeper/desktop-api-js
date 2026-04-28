@@ -87,7 +87,8 @@ export class PagePromise<
     super(
       client,
       request,
-      async (client, props) => new Page(client, props.response, await defaultParseResponse(client, props), props.options)
+      async (client, props) =>
+        new Page(client, props.response, await defaultParseResponse(client, props), props.options),
     );
   }
 
@@ -133,7 +134,12 @@ export class CursorSearch<Item> extends AbstractPage<Item> implements CursorSear
 
   newestCursor: string | null;
 
-  constructor(client: BeeperDesktop, response: Response, body: CursorSearchResponse<Item>, options: FinalRequestOptions) {
+  constructor(
+    client: BeeperDesktop,
+    response: Response,
+    body: CursorSearchResponse<Item>,
+    options: FinalRequestOptions,
+  ) {
     super(client, response, body, options);
 
     this.items = body.items || [];
@@ -155,7 +161,7 @@ export class CursorSearch<Item> extends AbstractPage<Item> implements CursorSear
   }
 
   nextPageRequestOptions(): PageRequestOptions | null {
-    const cursor = this.oldestCursor
+    const cursor = this.oldestCursor;
     if (!cursor) {
       return null;
     }
@@ -195,7 +201,12 @@ export class CursorNoLimit<Item> extends AbstractPage<Item> implements CursorNoL
 
   newestCursor: string | null;
 
-  constructor(client: BeeperDesktop, response: Response, body: CursorNoLimitResponse<Item>, options: FinalRequestOptions) {
+  constructor(
+    client: BeeperDesktop,
+    response: Response,
+    body: CursorNoLimitResponse<Item>,
+    options: FinalRequestOptions,
+  ) {
     super(client, response, body, options);
 
     this.items = body.items || [];
@@ -217,7 +228,7 @@ export class CursorNoLimit<Item> extends AbstractPage<Item> implements CursorNoL
   }
 
   nextPageRequestOptions(): PageRequestOptions | null {
-    const cursor = this.oldestCursor
+    const cursor = this.oldestCursor;
     if (!cursor) {
       return null;
     }
@@ -244,12 +255,20 @@ export interface CursorSortKeyParams {
   direction?: string | null;
 }
 
-export class CursorSortKey<Item extends { sortKey: string }> extends AbstractPage<Item> implements CursorSortKeyResponse<Item> {
+export class CursorSortKey<Item extends { sortKey: string }>
+  extends AbstractPage<Item>
+  implements CursorSortKeyResponse<Item>
+{
   items: Array<Item>;
 
   hasMore: boolean;
 
-  constructor(client: BeeperDesktop, response: Response, body: CursorSortKeyResponse<Item>, options: FinalRequestOptions) {
+  constructor(
+    client: BeeperDesktop,
+    response: Response,
+    body: CursorSortKeyResponse<Item>,
+    options: FinalRequestOptions,
+  ) {
     super(client, response, body, options);
 
     this.items = body.items || [];
@@ -270,9 +289,9 @@ export class CursorSortKey<Item extends { sortKey: string }> extends AbstractPag
 
   nextPageRequestOptions(): PageRequestOptions | null {
     const items = this.getPaginatedItems();
-    const sortKey = items[items.length - 1]?.sortKey
+    const sortKey = items[items.length - 1]?.sortKey;
     if (!sortKey) {
-      return null
+      return null;
     }
 
     return {

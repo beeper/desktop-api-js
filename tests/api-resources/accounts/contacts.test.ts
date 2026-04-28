@@ -2,7 +2,10 @@
 
 import BeeperDesktop from '@beeper/desktop-api';
 
-const client = new BeeperDesktop({ accessToken: 'My Access Token', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
+const client = new BeeperDesktop({
+  accessToken: 'My Access Token',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
 
 describe('resource contacts', () => {
   test('list', async () => {
@@ -18,14 +21,18 @@ describe('resource contacts', () => {
 
   test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(client.accounts.contacts.list('accountID', {
-    cursor: '1725489123456|c29tZUltc2dQYWdl',
-    direction: 'before',
-    limit: 1,
-    query: 'x',
-  }, { path: '/_stainless_unknown_path' }))
-      .rejects
-      .toThrow(BeeperDesktop.NotFoundError);
+    await expect(
+      client.accounts.contacts.list(
+        'accountID',
+        {
+          cursor: '1725489123456|c29tZUltc2dQYWdl',
+          direction: 'before',
+          limit: 1,
+          query: 'x',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
   test('search: only required params', async () => {

@@ -197,7 +197,17 @@ export interface Message {
    * Message content type. Useful for distinguishing reactions, media messages, and
    * state events from regular text messages.
    */
-  type?: 'TEXT' | 'NOTICE' | 'IMAGE' | 'VIDEO' | 'VOICE' | 'AUDIO' | 'FILE' | 'STICKER' | 'LOCATION' | 'REACTION';
+  type?:
+    | 'TEXT'
+    | 'NOTICE'
+    | 'IMAGE'
+    | 'VIDEO'
+    | 'VOICE'
+    | 'AUDIO'
+    | 'FILE'
+    | 'STICKER'
+    | 'LOCATION'
+    | 'REACTION';
 }
 
 export interface Reaction {
@@ -278,8 +288,8 @@ export interface User {
   username?: string;
 }
 
-export type UsersCursorSearch = CursorSearch<User>
+export type UsersCursorSearch = CursorSearch<User>;
 
-export type MessagesCursorSortKey = CursorSortKey<Message>
+export type MessagesCursorSortKey = CursorSortKey<Message>;
 
-export type MessagesCursorSearch = CursorSearch<Message>
+export type MessagesCursorSearch = CursorSearch<Message>;
