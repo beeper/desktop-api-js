@@ -1049,23 +1049,24 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     stainlessPath: '(resource) assets > (method) serve',
     qualified: 'client.assets.serve',
     params: ['url: string;'],
+    response: 'string',
     markdown:
-      "## serve\n\n`client.assets.serve(url: string): void`\n\n**get** `/v1/assets/serve`\n\nStream a file given an mxc://, localmxc://, or file:// URL. Downloads first if not cached. Supports Range requests for seeking in large files.\n\n### Parameters\n\n- `url: string`\n  Asset URL to serve. Accepts mxc://, localmxc://, or file:// URLs.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.assets.serve({ url: 'x' })\n```",
+      "## serve\n\n`client.assets.serve(url: string): string`\n\n**get** `/v1/assets/serve`\n\nStream a file given an mxc://, localmxc://, or file:// URL. Downloads first if not cached. Supports Range requests for seeking in large files.\n\n### Parameters\n\n- `url: string`\n  Asset URL to serve. Accepts mxc://, localmxc://, or file:// URLs.\n\n### Returns\n\n- `string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.assets.serve({ url: 'x' });\n\nconsole.log(response);\n\nconst content = await response.blob()\nconsole.log(content)\n```",
     perLanguage: {
       typescript: {
         method: 'client.assets.serve',
         example:
-          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nawait client.assets.serve({ url: 'x' });",
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.assets.serve({ url: 'x' });\n\nconsole.log(response);\n\nconst content = await response.blob();\nconsole.log(content);",
       },
       python: {
         method: 'assets.serve',
         example:
-          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nclient.assets.serve(\n    url="x",\n)',
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.assets.serve(\n    url="x",\n)\nprint(response)\ncontent = response.read()\nprint(content)',
       },
       go: {
         method: 'client.Assets.Serve',
         example:
-          'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Assets.Serve(context.TODO(), beeperdesktopapi.AssetServeParams{\n\t\tURL: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Assets.Serve(context.TODO(), beeperdesktopapi.AssetServeParams{\n\t\tURL: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
       },
       cli: {
         method: 'assets serve',
@@ -1074,7 +1075,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       php: {
         method: 'assets->serve',
         example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$result = $client->assets->serve(url: 'x');\n\nvar_dump($result);",
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->assets->serve(url: 'x');\n\nvar_dump($response);",
       },
       http: {
         example:
