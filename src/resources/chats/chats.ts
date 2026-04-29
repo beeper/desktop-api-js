@@ -3,9 +3,9 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as RemindersAPI from './reminders';
-import { ReminderCreateParams, Reminders } from './reminders';
+import { BaseReminders, ReminderCreateParams, Reminders } from './reminders';
 import * as MessagesAPI from './messages/messages';
-import { Messages } from './messages/messages';
+import { BaseMessages, Messages } from './messages/messages';
 import { APIPromise } from '../../core/api-promise';
 import {
   CursorNoLimit,
@@ -21,9 +21,8 @@ import { path } from '../../internal/utils/path';
 /**
  * Manage chats
  */
-export class Chats extends APIResource {
-  reminders: RemindersAPI.Reminders = new RemindersAPI.Reminders(this._client);
-  messages: MessagesAPI.Messages = new MessagesAPI.Messages(this._client);
+export class BaseChats extends APIResource {
+  static override readonly _key: readonly ['chats'] = Object.freeze(['chats'] as const);
 
   /**
    * Create a direct or group chat with mode="create", or use mode="start" to resolve
@@ -117,6 +116,13 @@ export class Chats extends APIResource {
   ): PagePromise<ChatsCursorSearch, Chat> {
     return this._client.getAPIList('/v1/chats/search', CursorSearch<Chat>, { query, ...options });
   }
+}
+/**
+ * Manage chats
+ */
+export class Chats extends BaseChats {
+  reminders: RemindersAPI.Reminders = new RemindersAPI.Reminders(this._client);
+  messages: MessagesAPI.Messages = new MessagesAPI.Messages(this._client);
 }
 
 export type ChatListResponsesCursorNoLimit = CursorNoLimit<ChatListResponse>;
@@ -385,7 +391,9 @@ export interface ChatSearchParams extends CursorSearchParams {
 }
 
 Chats.Reminders = Reminders;
+Chats.BaseReminders = BaseReminders;
 Chats.Messages = Messages;
+Chats.BaseMessages = BaseMessages;
 
 export declare namespace Chats {
   export {
@@ -401,7 +409,11 @@ export declare namespace Chats {
     type ChatSearchParams as ChatSearchParams,
   };
 
-  export { Reminders as Reminders, type ReminderCreateParams as ReminderCreateParams };
+  export {
+    Reminders as Reminders,
+    BaseReminders as BaseReminders,
+    type ReminderCreateParams as ReminderCreateParams,
+  };
 
-  export { Messages as Messages };
+  export { Messages as Messages, BaseMessages as BaseMessages };
 }

@@ -7,15 +7,21 @@ import { RequestOptions } from '../internal/request-options';
 /**
  * Control the Beeper Desktop application
  */
-export class Info extends APIResource {
+export class BaseInfo extends APIResource {
+  static override readonly _key: readonly ['info'] = Object.freeze(['info'] as const);
+
   /**
    * Returns app, platform, server, and endpoint discovery metadata for this Beeper
    * Desktop instance.
    */
   retrieve(options?: RequestOptions): APIPromise<InfoRetrieveResponse> {
-    return this._client.get('/v1/info', options);
+    return this._client.get('/v1/info', { ...options, __security: {} });
   }
 }
+/**
+ * Control the Beeper Desktop application
+ */
+export class Info extends BaseInfo {}
 
 export interface InfoRetrieveResponse {
   app: InfoRetrieveResponse.App;

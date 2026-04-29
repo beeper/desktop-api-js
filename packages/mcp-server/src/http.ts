@@ -156,7 +156,7 @@ const oauthMetadata = (req: express.Request, res: express.Response) => {
   const resourceIdentifier = oauthResourceIdentifier(req);
   res.json({
     resource: resourceIdentifier,
-    authorization_servers: ['http://localhost:23373/oauth/authorize'],
+    authorization_servers: ['http://localhost:23373'],
     bearer_methods_supported: ['header'],
     scopes_supported: 'read write',
   });

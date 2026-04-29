@@ -154,7 +154,7 @@ const remoteStainlessHandler = async ({
       readEnv('BEEPER_ACCESS_TOKEN') ?? client.accessToken,
       'set BEEPER_ACCESS_TOKEN environment variable or provide accessToken client option',
     ),
-    BEEPER_DESKTOP_BASE_URL: readEnv('BEEPER_DESKTOP_BASE_URL') ?? client.baseURL ?? undefined,
+    BEEPER_BASE_URL: readEnv('BEEPER_BASE_URL') ?? client.baseURL ?? undefined,
   };
   // Merge any upstream client envs from the request header, with upstream values taking precedence.
   const mergedClientEnvs = { ...localClientEnvs, ...reqContext.upstreamClientEnvs };

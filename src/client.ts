@@ -62,7 +62,6 @@ import {
   ChatsCursorSearch,
 } from './resources/chats/chats';
 import { type Fetch } from './internal/builtin-types';
-import { isRunningInBrowser } from './internal/detect-platform';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import { readEnv } from './internal/utils/env';
@@ -84,7 +83,7 @@ export interface ClientOptions {
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['BEEPER_DESKTOP_BASE_URL'].
+   * Defaults to process.env['BEEPER_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -136,15 +135,9 @@ export interface ClientOptions {
   defaultQuery?: Record<string, string | undefined> | undefined;
 
   /**
-   * By default, client-side use of this library is not allowed, as it risks exposing your secret API credentials to attackers.
-   * Only set this option to `true` if you understand the risks and have appropriate mitigations in place.
-   */
-  dangerouslyAllowBrowser?: boolean | undefined;
-
-  /**
    * Set the log level.
    *
-   * Defaults to process.env['BEEPER_DESKTOP_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['BEEPER_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -157,9 +150,9 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Beeper Desktop API.
+ * Base class for Beeper Desktop API clients.
  */
-export class BeeperDesktop {
+export class BaseBeeperDesktop {
   accessToken: string;
 
   baseURL: string;
@@ -178,17 +171,16 @@ export class BeeperDesktop {
    * API Client for interfacing with the Beeper Desktop API.
    *
    * @param {string | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['BEEPER_DESKTOP_BASE_URL'] ?? http://localhost:23373] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['BEEPER_BASE_URL'] ?? http://localhost:23373] - Override the default base URL for the API.
    * @param {number} [opts.timeout=30 seconds] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
    * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
    * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
-   * @param {boolean} [opts.dangerouslyAllowBrowser=false] - By default, client-side use of this library is not allowed, as it risks exposing your secret API credentials to attackers.
    */
   constructor({
-    baseURL = readEnv('BEEPER_DESKTOP_BASE_URL'),
+    baseURL = readEnv('BEEPER_BASE_URL'),
     accessToken = readEnv('BEEPER_ACCESS_TOKEN'),
     ...opts
   }: ClientOptions = {}) {
@@ -204,28 +196,22 @@ export class BeeperDesktop {
       baseURL: baseURL || `http://localhost:23373`,
     };
 
-    if (!options.dangerouslyAllowBrowser && isRunningInBrowser()) {
-      throw new Errors.BeeperDesktopError(
-        'This is disabled by default, as it risks exposing your secret API credentials to attackers.\nIf you understand the risks and have appropriate mitigations in place,\nyou can set the `dangerouslyAllowBrowser` option to `true`, e.g.,\n\nnew BeeperDesktop({ dangerouslyAllowBrowser: true })',
-      );
-    }
-
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? BeeperDesktop.DEFAULT_TIMEOUT /* 30 seconds */;
+    this.timeout = options.timeout ?? BaseBeeperDesktop.DEFAULT_TIMEOUT /* 30 seconds */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('BEEPER_DESKTOP_LOG'), "process.env['BEEPER_DESKTOP_LOG']", this) ??
+      parseLogLevel(readEnv('BEEPER_LOG'), "process.env['BEEPER_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
 
-    const customHeadersEnv = readEnv('BEEPER_DESKTOP_CUSTOM_HEADERS');
+    const customHeadersEnv = readEnv('BEEPER_CUSTOM_HEADERS');
     if (customHeadersEnv) {
       const parsed: Record<string, string> = {};
       for (const line of customHeadersEnv.split('\n')) {
@@ -306,7 +292,14 @@ export class BeeperDesktop {
     return;
   }
 
-  protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+  protected async authHeaders(
+    opts: FinalRequestOptions,
+    schemes: { bearerAuth?: boolean },
+  ): Promise<NullableHeaders | undefined> {
+    return buildHeaders([schemes.bearerAuth ? await this.bearerAuth(opts) : null]);
+  }
+
+  protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
     return buildHeaders([{ Authorization: `Bearer ${this.accessToken}` }]);
   }
 
@@ -757,7 +750,7 @@ export class BeeperDesktop {
         ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
         ...getPlatformHeaders(),
       },
-      await this.authHeaders(options),
+      await this.authHeaders(options, options.__security ?? { bearerAuth: true }),
       this._options.defaultHeaders,
       bodyHeaders,
       options.headers,
@@ -819,8 +812,14 @@ export class BeeperDesktop {
     }
   }
 
-  static BeeperDesktop = this;
   static DEFAULT_TIMEOUT = 30000; // 30 seconds
+}
+
+/**
+ * API Client for interfacing with the Beeper Desktop API.
+ */
+export class BeeperDesktop extends BaseBeeperDesktop {
+  static BeeperDesktop = this;
 
   static BeeperDesktopError = Errors.BeeperDesktopError;
   static APIError = Errors.APIError;

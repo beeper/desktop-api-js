@@ -1,13 +1,29 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import { Messages } from '@beeper/desktop-api/resources/chats/messages/messages';
+import { BaseReactions } from '@beeper/desktop-api/resources/chats/messages/reactions';
+
 import BeeperDesktop from '@beeper/desktop-api';
+import { createClient, type PartialBeeperDesktop } from '@beeper/desktop-api/tree-shakable';
 
 const client = new BeeperDesktop({
   accessToken: 'My Access Token',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource reactions', () => {
+const partialClient = createClient({
+  accessToken: 'My Access Token',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+  resources: [BaseReactions],
+});
+
+const parentPartialClient = createClient({
+  accessToken: 'My Access Token',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+  resources: [Messages],
+});
+
+const runTests = (client: PartialBeeperDesktop<{ chats: { messages: { reactions: BaseReactions } } }>) => {
   test('delete: only required params', async () => {
     const responsePromise = client.chats.messages.reactions.delete('messageID', {
       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
@@ -50,4 +66,7 @@ describe('resource reactions', () => {
       transactionID: 'transactionID',
     });
   });
-});
+};
+describe('resource reactions', () => runTests(client));
+describe('resource reactions (tree shakable, base)', () => runTests(partialClient));
+describe('resource reactions (tree shakable, subresource)', () => runTests(parentPartialClient));

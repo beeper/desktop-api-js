@@ -3,15 +3,21 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as ContactsAPI from './contacts';
-import { ContactListParams, ContactSearchParams, ContactSearchResponse, Contacts } from './contacts';
+import {
+  BaseContacts,
+  ContactListParams,
+  ContactSearchParams,
+  ContactSearchResponse,
+  Contacts,
+} from './contacts';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
 /**
  * Manage connected chat accounts
  */
-export class Accounts extends APIResource {
-  contacts: ContactsAPI.Contacts = new ContactsAPI.Contacts(this._client);
+export class BaseAccounts extends APIResource {
+  static override readonly _key: readonly ['accounts'] = Object.freeze(['accounts'] as const);
 
   /**
    * Lists chat accounts across networks (WhatsApp, Telegram, Twitter/X, etc.)
@@ -25,6 +31,12 @@ export class Accounts extends APIResource {
   list(options?: RequestOptions): APIPromise<AccountListResponse> {
     return this._client.get('/v1/accounts', options);
   }
+}
+/**
+ * Manage connected chat accounts
+ */
+export class Accounts extends BaseAccounts {
+  contacts: ContactsAPI.Contacts = new ContactsAPI.Contacts(this._client);
 }
 
 /**
@@ -82,12 +94,14 @@ export namespace Account {
 export type AccountListResponse = Array<Account>;
 
 Accounts.Contacts = Contacts;
+Accounts.BaseContacts = BaseContacts;
 
 export declare namespace Accounts {
   export { type Account as Account, type AccountListResponse as AccountListResponse };
 
   export {
     Contacts as Contacts,
+    BaseContacts as BaseContacts,
     type ContactSearchResponse as ContactSearchResponse,
     type ContactListParams as ContactListParams,
     type ContactSearchParams as ContactSearchParams,

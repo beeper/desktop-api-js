@@ -1,13 +1,29 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import { Accounts } from '@beeper/desktop-api/resources/accounts/accounts';
+import { BaseContacts } from '@beeper/desktop-api/resources/accounts/contacts';
+
 import BeeperDesktop from '@beeper/desktop-api';
+import { createClient, type PartialBeeperDesktop } from '@beeper/desktop-api/tree-shakable';
 
 const client = new BeeperDesktop({
   accessToken: 'My Access Token',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource contacts', () => {
+const partialClient = createClient({
+  accessToken: 'My Access Token',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+  resources: [BaseContacts],
+});
+
+const parentPartialClient = createClient({
+  accessToken: 'My Access Token',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+  resources: [Accounts],
+});
+
+const runTests = (client: PartialBeeperDesktop<{ accounts: { contacts: BaseContacts } }>) => {
   test('list', async () => {
     const responsePromise = client.accounts.contacts.list('accountID');
     const rawResponse = await responsePromise.asResponse();
@@ -49,4 +65,7 @@ describe('resource contacts', () => {
   test('search: required and optional params', async () => {
     const response = await client.accounts.contacts.search('accountID', { query: 'x' });
   });
-});
+};
+describe('resource contacts', () => runTests(client));
+describe('resource contacts (tree shakable, base)', () => runTests(partialClient));
+describe('resource contacts (tree shakable, subresource)', () => runTests(parentPartialClient));

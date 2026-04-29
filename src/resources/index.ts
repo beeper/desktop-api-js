@@ -1,9 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
-export { Accounts, type Account, type AccountListResponse } from './accounts/accounts';
+export { Accounts, BaseAccounts, type Account, type AccountListResponse } from './accounts/accounts';
 export {
   Assets,
+  BaseAssets,
   type AssetDownloadResponse,
   type AssetUploadResponse,
   type AssetUploadBase64Response,
@@ -14,6 +15,7 @@ export {
 } from './assets';
 export {
   Chats,
+  BaseChats,
   type Chat,
   type ChatCreateResponse,
   type ChatListResponse,
@@ -25,9 +27,10 @@ export {
   type ChatListResponsesCursorNoLimit,
   type ChatsCursorSearch,
 } from './chats/chats';
-export { Info, type InfoRetrieveResponse } from './info';
+export { Info, BaseInfo, type InfoRetrieveResponse } from './info';
 export {
   Messages,
+  BaseMessages,
   type MessageUpdateResponse,
   type MessageSendResponse,
   type MessageUpdateParams,
