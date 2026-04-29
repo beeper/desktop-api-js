@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { CursorSearch, CursorSortKey } from '../core/pagination';
+import { CursorNoLimit, CursorSearch } from '../core/pagination';
 
 export interface Attachment {
   /**
@@ -290,6 +290,6 @@ export interface User {
 
 export type UsersCursorSearch = CursorSearch<User>;
 
-export type MessagesCursorSortKey = CursorSortKey<Message>;
+export type MessagesCursorNoLimit = CursorNoLimit<Message>;
 
 export type MessagesCursorSearch = CursorSearch<Message>;
