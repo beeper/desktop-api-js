@@ -3,7 +3,7 @@
 import { BeeperDesktopError } from './error';
 import { FinalRequestOptions } from '../internal/request-options';
 import { defaultParseResponse } from '../internal/parse';
-import { type BeeperDesktop } from '../client';
+import { type BaseBeeperDesktop } from '../client';
 import { APIPromise } from './api-promise';
 import { type APIResponseProps } from '../internal/parse';
 import { maybeObj } from '../internal/utils/values';
@@ -11,13 +11,13 @@ import { maybeObj } from '../internal/utils/values';
 export type PageRequestOptions = Pick<FinalRequestOptions, 'query' | 'headers' | 'body' | 'path' | 'method'>;
 
 export abstract class AbstractPage<Item> implements AsyncIterable<Item> {
-  #client: BeeperDesktop;
+  #client: BaseBeeperDesktop;
   protected options: FinalRequestOptions;
 
   protected response: Response;
   protected body: unknown;
 
-  constructor(client: BeeperDesktop, response: Response, body: unknown, options: FinalRequestOptions) {
+  constructor(client: BaseBeeperDesktop, response: Response, body: unknown, options: FinalRequestOptions) {
     this.#client = client;
     this.options = options;
     this.response = response;
@@ -80,7 +80,7 @@ export class PagePromise<
   implements AsyncIterable<Item>
 {
   constructor(
-    client: BeeperDesktop,
+    client: BaseBeeperDesktop,
     request: Promise<APIResponseProps>,
     Page: new (...args: ConstructorParameters<typeof AbstractPage>) => PageClass,
   ) {
@@ -135,7 +135,7 @@ export class CursorSearch<Item> extends AbstractPage<Item> implements CursorSear
   newestCursor: string | null;
 
   constructor(
-    client: BeeperDesktop,
+    client: BaseBeeperDesktop,
     response: Response,
     body: CursorSearchResponse<Item>,
     options: FinalRequestOptions,
@@ -202,7 +202,7 @@ export class CursorNoLimit<Item> extends AbstractPage<Item> implements CursorNoL
   newestCursor: string | null;
 
   constructor(
-    client: BeeperDesktop,
+    client: BaseBeeperDesktop,
     response: Response,
     body: CursorNoLimitResponse<Item>,
     options: FinalRequestOptions,

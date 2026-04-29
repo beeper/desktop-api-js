@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { type BeeperDesktop } from '../client';
+import { type BaseBeeperDesktop } from '../client';
 
 import { type PromiseOrValue } from '../internal/types';
 import { APIResponseProps, defaultParseResponse } from '../internal/parse';
@@ -11,13 +11,13 @@ import { APIResponseProps, defaultParseResponse } from '../internal/parse';
  */
 export class APIPromise<T> extends Promise<T> {
   private parsedPromise: Promise<T> | undefined;
-  #client: BeeperDesktop;
+  #client: BaseBeeperDesktop;
 
   constructor(
-    client: BeeperDesktop,
+    client: BaseBeeperDesktop,
     private responsePromise: Promise<APIResponseProps>,
     private parseResponse: (
-      client: BeeperDesktop,
+      client: BaseBeeperDesktop,
       props: APIResponseProps,
     ) => PromiseOrValue<T> = defaultParseResponse,
   ) {

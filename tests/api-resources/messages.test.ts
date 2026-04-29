@@ -1,13 +1,22 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import { BaseMessages } from '@beeper/desktop-api/resources/messages';
+
 import BeeperDesktop from '@beeper/desktop-api';
+import { createClient, type PartialBeeperDesktop } from '@beeper/desktop-api/tree-shakable';
 
 const client = new BeeperDesktop({
   accessToken: 'My Access Token',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource messages', () => {
+const partialClient = createClient({
+  accessToken: 'My Access Token',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+  resources: [BaseMessages],
+});
+
+const runTests = (client: PartialBeeperDesktop<{ messages: BaseMessages }>) => {
   test('update: only required params', async () => {
     const responsePromise = client.messages.update('messageID', {
       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
@@ -121,4 +130,6 @@ describe('resource messages', () => {
       ),
     ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
-});
+};
+describe('resource messages', () => runTests(client));
+describe('resource messages (tree shakable, base)', () => runTests(partialClient));

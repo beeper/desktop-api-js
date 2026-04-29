@@ -17,7 +17,9 @@ import { path } from '../internal/utils/path';
 /**
  * Manage messages in chats
  */
-export class Messages extends APIResource {
+export class BaseMessages extends APIResource {
+  static override readonly _key: readonly ['messages'] = Object.freeze(['messages'] as const);
+
   /**
    * Edit the text content of an existing message. Messages with attachments cannot
    * be edited.
@@ -103,6 +105,10 @@ export class Messages extends APIResource {
     return this._client.post(path`/v1/chats/${chatID}/messages`, { body, ...options });
   }
 }
+/**
+ * Manage messages in chats
+ */
+export class Messages extends BaseMessages {}
 
 export interface MessageUpdateResponse {
   /**

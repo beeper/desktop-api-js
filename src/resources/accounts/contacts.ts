@@ -11,7 +11,12 @@ import { path } from '../../internal/utils/path';
 /**
  * Manage contacts on a specific account
  */
-export class Contacts extends APIResource {
+export class BaseContacts extends APIResource {
+  static override readonly _key: readonly ['accounts', 'contacts'] = Object.freeze([
+    'accounts',
+    'contacts',
+  ] as const);
+
   /**
    * List merged contacts for a specific account with cursor-based pagination.
    *
@@ -56,6 +61,10 @@ export class Contacts extends APIResource {
     return this._client.get(path`/v1/accounts/${accountID}/contacts`, { query, ...options });
   }
 }
+/**
+ * Manage contacts on a specific account
+ */
+export class Contacts extends BaseContacts {}
 
 export interface ContactSearchResponse {
   items: Array<Shared.User>;
