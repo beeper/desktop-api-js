@@ -2,13 +2,13 @@
 
 import { APIResource } from '../core/resource';
 import * as Shared from './shared';
-import { MessagesCursorSearch, MessagesCursorSortKey } from './shared';
+import { MessagesCursorNoLimit, MessagesCursorSearch } from './shared';
 import { APIPromise } from '../core/api-promise';
 import {
+  CursorNoLimit,
+  type CursorNoLimitParams,
   CursorSearch,
   type CursorSearchParams,
-  CursorSortKey,
-  type CursorSortKeyParams,
   PagePromise,
 } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -56,15 +56,15 @@ export class Messages extends APIResource {
     chatID: string,
     query: MessageListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<MessagesCursorSortKey, Shared.Message> {
-    return this._client.getAPIList(path`/v1/chats/${chatID}/messages`, CursorSortKey<Shared.Message>, {
+  ): PagePromise<MessagesCursorNoLimit, Shared.Message> {
+    return this._client.getAPIList(path`/v1/chats/${chatID}/messages`, CursorNoLimit<Shared.Message>, {
       query,
       ...options,
     });
   }
 
   /**
-   * Search messages across chats using Beeper's message index
+   * Search messages across chats.
    *
    * @example
    * ```ts
@@ -145,7 +145,7 @@ export interface MessageUpdateParams {
   text: string;
 }
 
-export interface MessageListParams extends CursorSortKeyParams {}
+export interface MessageListParams extends CursorNoLimitParams {}
 
 export interface MessageSearchParams extends CursorSearchParams {
   /**
@@ -285,4 +285,4 @@ export declare namespace Messages {
   };
 }
 
-export { type MessagesCursorSortKey, type MessagesCursorSearch };
+export { type MessagesCursorNoLimit, type MessagesCursorSearch };
