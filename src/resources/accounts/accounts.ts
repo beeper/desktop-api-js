@@ -28,7 +28,7 @@ export class Accounts extends APIResource {
 }
 
 /**
- * A chat account added to Beeper
+ * A chat account added to Beeper.
  */
 export interface Account {
   /**
@@ -37,46 +37,47 @@ export interface Account {
   accountID: string;
 
   /**
-   * Bridge metadata for the account. Available from Beeper Desktop v.4.2.719+.
+   * Bridge metadata for the account. Available in Beeper Desktop v4.2.789+.
    */
   bridge: Account.Bridge;
-
-  /**
-   * Human-friendly network name for the account.
-   */
-  network: string;
 
   /**
    * User the account belongs to.
    */
   user: Shared.User;
+
+  /**
+   * Human-friendly network name for the account. Omitted when the network is
+   * unknown.
+   */
+  network?: string;
 }
 
 export namespace Account {
   /**
-   * Bridge metadata for the account. Available from Beeper Desktop v.4.2.719+.
+   * Bridge metadata for the account. Available in Beeper Desktop v4.2.789+.
    */
   export interface Bridge {
     /**
-     * Bridge instance identifier.
+     * Bridge instance identifier. Available in Beeper Desktop v4.2.789+.
      */
     id: string;
 
     /**
-     * Bridge provider for the account.
+     * Bridge provider for the account. Available in Beeper Desktop v4.2.789+.
      */
     provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk';
 
     /**
-     * Bridge type.
+     * Bridge type. Available in Beeper Desktop v4.2.789+.
      */
     type: string;
   }
 }
 
 /**
- * Connected accounts the user can act through. Includes accountID and user
- * identity.
+ * Accounts configured on this device. Includes accountID, bridge metadata,
+ * optional network name, and user identity.
  */
 export type AccountListResponse = Array<Account>;
 

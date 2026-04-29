@@ -10,7 +10,7 @@ import { path } from '../../../internal/utils/path';
  */
 export class Reactions extends APIResource {
   /**
-   * Remove the authenticated user's reaction from an existing message.
+   * Remove the reaction added by the authenticated user from an existing message.
    *
    * @example
    * ```ts

@@ -26,20 +26,18 @@ export class Chats extends APIResource {
   messages: MessagesAPI.Messages = new MessagesAPI.Messages(this._client);
 
   /**
-   * Create a single/group chat (mode='create') or start a direct chat from merged
-   * user data (mode='start').
+   * Create a direct or group chat with mode="create", or use mode="start" to resolve
+   * a contact and open a direct chat.
    *
    * @example
    * ```ts
-   * const chat = await client.chats.create();
+   * const chat = await client.chats.create({
+   *   accountID: 'accountID',
+   * });
    * ```
    */
-  create(
-    params: ChatCreateParams | null | undefined = undefined,
-    options?: RequestOptions,
-  ): APIPromise<ChatCreateResponse> {
-    const { params } = params ?? {};
-    return this._client.post('/v1/chats', { body: params, ...options });
+  create(body: ChatCreateParams, options?: RequestOptions): APIPromise<ChatCreateResponse> {
+    return this._client.post('/v1/chats', { body, ...options });
   }
 
   /**
@@ -103,8 +101,7 @@ export class Chats extends APIResource {
   }
 
   /**
-   * Search chats by title/network or participants using Beeper Desktop's renderer
-   * algorithm.
+   * Search chats by title, network, or participant names.
    *
    * @example
    * ```ts
@@ -231,101 +228,82 @@ export interface ChatListResponse extends Chat {
 }
 
 export interface ChatCreateParams {
-  params?: ChatCreateParams.UnionMember0 | ChatCreateParams.UnionMember1;
+  /**
+   * Account to create or start the chat on.
+   */
+  accountID: string;
+
+  /**
+   * Only used for mode='start'. Whether invite-based DM creation is allowed when
+   * required by the platform.
+   */
+  allowInvite?: boolean;
+
+  /**
+   * Optional first message content if the platform requires it to create the chat.
+   */
+  messageText?: string;
+
+  /**
+   * Operation mode. Use 'start' to resolve a user/contact and start a direct chat.
+   * Omit or set 'create' to create a chat directly.
+   */
+  mode?: 'start' | 'create';
+
+  /**
+   * Required for create mode. Provide exactly one user ID for 'single' chats and one
+   * or more for 'group' chats.
+   */
+  participantIDs?: Array<string>;
+
+  /**
+   * Optional title for group chats; ignored for single chats on most networks.
+   */
+  title?: string;
+
+  /**
+   * Required for create mode. 'single' creates a direct message chat; 'group'
+   * creates a group chat.
+   */
+  type?: 'single' | 'group';
+
+  /**
+   * Required for mode='start'. Merged user-like contact payload used to resolve the
+   * best identifier.
+   */
+  user?: ChatCreateParams.User;
 }
 
 export namespace ChatCreateParams {
-  export interface UnionMember0 {
+  /**
+   * Required for mode='start'. Merged user-like contact payload used to resolve the
+   * best identifier.
+   */
+  export interface User {
     /**
-     * Account to create or start the chat on.
+     * Known user ID when available.
      */
-    accountID: string;
-
-    /**
-     * Operation mode. Use 'start' to resolve a user/contact and start a direct chat.
-     */
-    mode: 'start';
-
-    /**
-     * Merged user-like contact payload used to resolve the best identifier.
-     */
-    user: UnionMember0.User;
+    id?: string;
 
     /**
-     * Whether invite-based DM creation is allowed when required by the platform. Used
-     * for mode='start'.
+     * Email candidate.
      */
-    allowInvite?: boolean;
+    email?: string;
 
     /**
-     * Optional first message content if the platform requires it to create the chat.
+     * Display name hint used for ranking only.
      */
-    messageText?: string;
-  }
-
-  export namespace UnionMember0 {
-    /**
-     * Merged user-like contact payload used to resolve the best identifier.
-     */
-    export interface User {
-      /**
-       * Known user ID when available.
-       */
-      id?: string;
-
-      /**
-       * Email candidate.
-       */
-      email?: string;
-
-      /**
-       * Display name hint used for ranking only.
-       */
-      fullName?: string;
-
-      /**
-       * Phone number candidate (E.164 preferred).
-       */
-      phoneNumber?: string;
-
-      /**
-       * Username/handle candidate.
-       */
-      username?: string;
-    }
-  }
-
-  export interface UnionMember1 {
-    /**
-     * Account to create or start the chat on.
-     */
-    accountID: string;
+    fullName?: string;
 
     /**
-     * User IDs to include in the new chat.
+     * Phone number candidate (E.164 preferred).
      */
-    participantIDs: Array<string>;
+    phoneNumber?: string;
 
     /**
-     * 'single' requires exactly one participantID; 'group' supports multiple
-     * participants and optional title.
+     * Username/handle candidate.
      */
-    type: 'single' | 'group';
-
-    /**
-     * Optional first message content if the platform requires it to create the chat.
-     */
-    messageText?: string;
-
-    /**
-     * Operation mode. Defaults to 'create' when omitted.
-     */
-    mode?: 'create';
-
-    /**
-     * Optional title for group chats; ignored for single chats on most platforms.
-     */
-    title?: string;
+    username?: string;
   }
 }
 

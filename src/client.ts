@@ -21,8 +21,6 @@ import {
   CursorNoLimitResponse,
   type CursorSearchParams,
   CursorSearchResponse,
-  type CursorSortKeyParams,
-  CursorSortKeyResponse,
 } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
@@ -878,12 +876,6 @@ export declare namespace BeeperDesktop {
   export {
     type CursorNoLimitParams as CursorNoLimitParams,
     type CursorNoLimitResponse as CursorNoLimitResponse,
-  };
-
-  export import CursorSortKey = Pagination.CursorSortKey;
-  export {
-    type CursorSortKeyParams as CursorSortKeyParams,
-    type CursorSortKeyResponse as CursorSortKeyResponse,
   };
 
   export {
