@@ -32,6 +32,17 @@ const runTests = (client: PartialBeeperDesktop<{ assets: BaseAssets }>) => {
     const response = await client.assets.download({ url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ' });
   });
 
+  test('serve: only required params', async () => {
+    const responsePromise = client.assets.serve({ url: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
   test('serve: required and optional params', async () => {
     const response = await client.assets.serve({ url: 'x' });
   });

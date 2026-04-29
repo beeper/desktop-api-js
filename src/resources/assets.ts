@@ -34,18 +34,14 @@ export class BaseAssets extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.assets.serve({ url: 'x' });
-   *
-   * const content = await response.blob();
-   * console.log(content);
+   * await client.assets.serve({ url: 'x' });
    * ```
    */
-  serve(query: AssetServeParams, options?: RequestOptions): APIPromise<Response> {
+  serve(query: AssetServeParams, options?: RequestOptions): APIPromise<void> {
     return this._client.get('/v1/assets/serve', {
       query,
       ...options,
-      headers: buildHeaders([{ Accept: 'application/octet-stream' }, options?.headers]),
-      __binaryResponse: true,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 
