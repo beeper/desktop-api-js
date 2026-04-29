@@ -10,7 +10,9 @@ import { multipartFormRequestOptions } from '../internal/uploads';
 /**
  * Manage assets in Beeper Desktop, like message attachments
  */
-export class Assets extends APIResource {
+export class BaseAssets extends APIResource {
+  static override readonly _key: readonly ['assets'] = Object.freeze(['assets'] as const);
+
   /**
    * Download a Matrix asset using its mxc:// or localmxc:// URL to the device
    * running Beeper Desktop and return the local file URL.
@@ -84,6 +86,10 @@ export class Assets extends APIResource {
     return this._client.post('/v1/assets/upload/base64', { body, ...options });
   }
 }
+/**
+ * Manage assets in Beeper Desktop, like message attachments
+ */
+export class Assets extends BaseAssets {}
 
 export interface AssetDownloadResponse {
   /**

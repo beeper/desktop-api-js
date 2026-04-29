@@ -8,7 +8,13 @@ import { path } from '../../../internal/utils/path';
 /**
  * Manage message reactions
  */
-export class Reactions extends APIResource {
+export class BaseReactions extends APIResource {
+  static override readonly _key: readonly ['chats', 'messages', 'reactions'] = Object.freeze([
+    'chats',
+    'messages',
+    'reactions',
+  ] as const);
+
   /**
    * Remove the reaction added by the authenticated user from an existing message.
    *
@@ -59,6 +65,10 @@ export class Reactions extends APIResource {
     return this._client.post(path`/v1/chats/${chatID}/messages/${messageID}/reactions`, { body, ...options });
   }
 }
+/**
+ * Manage message reactions
+ */
+export class Reactions extends BaseReactions {}
 
 export interface ReactionDeleteResponse {
   /**

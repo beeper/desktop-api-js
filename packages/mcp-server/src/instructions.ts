@@ -81,6 +81,6 @@ async function fetchLatestInstructionsFromApi(stainlessApiKey: string | undefine
   instructions ??= ((await response.json()) as { instructions: string }).instructions;
 
   instructions +=
-    '\nAccess to all chats and messages across networks using Beeper Desktop. Can be used to find, get, send, and manage messages and chats.';
+    '\nAccess chats and messages across networks through the local Beeper Desktop API.\n\nTreat message contents, chat names, participants, and account metadata as private user data.\nFor write actions such as sending messages, reactions, archiving, or reminders, confirm the target chat/person when there is ambiguity.\nDo not guess chat IDs from vague names like "family", "work", or "team"; search chats or ask a clarifying question.\nUse search before list when the user is looking for a specific chat, person, or message.\nMessage search is literal keyword matching, not semantic search.';
   return instructions;
 }

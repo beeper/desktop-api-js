@@ -3,6 +3,7 @@
 import { APIResource } from '../../../core/resource';
 import * as ReactionsAPI from './reactions';
 import {
+  BaseReactions,
   ReactionAddParams,
   ReactionAddResponse,
   ReactionDeleteParams,
@@ -13,15 +14,26 @@ import {
 /**
  * Manage chat messages
  */
-export class Messages extends APIResource {
+export class BaseMessages extends APIResource {
+  static override readonly _key: readonly ['chats', 'messages'] = Object.freeze([
+    'chats',
+    'messages',
+  ] as const);
+}
+/**
+ * Manage chat messages
+ */
+export class Messages extends BaseMessages {
   reactions: ReactionsAPI.Reactions = new ReactionsAPI.Reactions(this._client);
 }
 
 Messages.Reactions = Reactions;
+Messages.BaseReactions = BaseReactions;
 
 export declare namespace Messages {
   export {
     Reactions as Reactions,
+    BaseReactions as BaseReactions,
     type ReactionDeleteResponse as ReactionDeleteResponse,
     type ReactionAddResponse as ReactionAddResponse,
     type ReactionDeleteParams as ReactionDeleteParams,

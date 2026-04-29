@@ -204,6 +204,57 @@ while (page.hasNextPage()) {
 
 ## Advanced Usage
 
+### Tree shaking
+
+This library supports tree shaking to reduce bundle size. Instead of importing the full client, you can create a client only including the API resources you need:
+
+```ts
+import { createClient } from '@beeper/desktop-api/tree-shakable';
+import { Accounts } from '@beeper/desktop-api/resources/accounts/accounts';
+import { BaseChats } from '@beeper/desktop-api/resources/chats/chats';
+
+const client = createClient({
+  // Specify the resources you'd like to use ...
+  resources: [Accounts, BaseChats],
+});
+
+// ... then make API calls as usual.
+const accounts = await client.accounts.list();
+const chat = await client.chats.create({ accountID: 'accountID' });
+```
+
+Each API resource has two versions, the full resource (e.g., `Accounts`) which includes all subresources, and the base resource (e.g., `BaseAccounts`) which does not.
+
+The tree-shaken client is fully typed, so TypeScript will provide accurate autocomplete and prevent access to resources not included in your configuration.
+The `createClient` function automatically infers the correct type, but you can also use the `PartialBeeperDesktop` type explicitly:
+
+```ts
+import BeeperDesktop from '@beeper/desktop-api';
+import { createClient, type PartialBeeperDesktop } from '@beeper/desktop-api/tree-shakable';
+import { BaseAccounts } from '@beeper/desktop-api/resources/accounts/accounts';
+
+// Explicit variable type
+const client: PartialBeeperDesktop<{ accounts: BaseAccounts }> = createClient({
+  resources: [BaseAccounts],
+  /* ... */
+});
+
+// Function parameter type
+async function main(client: PartialBeeperDesktop<{ accounts: BaseAccounts }>) {
+  const accounts = await client.accounts.list();
+}
+
+// Works with any client that has the accounts resource
+const treeShakableClient = createClient({
+  resources: [BaseAccounts],
+  /* ... */
+});
+const fullClient = new BeeperDesktop(/* ... */);
+
+main(treeShakableClient); // Works
+main(fullClient); // Also works
+```
+
 ### Accessing raw Response data (e.g., headers)
 
 The "raw" `Response` returned by `fetch()` can be accessed through the `.asResponse()` method on the `APIPromise` type that all methods return.
@@ -235,7 +286,7 @@ console.log(accounts);
 
 The log level can be configured in two ways:
 
-1. Via the `BEEPER_DESKTOP_LOG` environment variable
+1. Via the `BEEPER_LOG` environment variable
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
@@ -420,6 +471,7 @@ TypeScript >= 4.9 is supported.
 
 The following runtimes are supported:
 
+- Web browsers (Up-to-date Chrome, Firefox, Safari, Edge, and more)
 - Node.js 20 LTS or later ([non-EOL](https://endoflife.date/nodejs)) versions.
 - Deno v1.28.0 or higher.
 - Bun 1.0 or later.
@@ -427,24 +479,6 @@ The following runtimes are supported:
 - Vercel Edge Runtime.
 - Jest 28 or greater with the `"node"` environment (`"jsdom"` is not supported at this time).
 - Nitro v2.6 or greater.
-- Web browsers: disabled by default to avoid exposing your secret API credentials. Enable browser support by explicitly setting `dangerouslyAllowBrowser` to true'.
-  <details>
-    <summary>More explanation</summary>
-
-  ### Why is this dangerous?
-
-  Enabling the `dangerouslyAllowBrowser` option can be dangerous because it exposes your secret API credentials in the client-side code. Web browsers are inherently less secure than server environments,
-  any user with access to the browser can potentially inspect, extract, and misuse these credentials. This could lead to unauthorized access using your credentials and potentially compromise sensitive data or functionality.
-
-  ### When might this not be dangerous?
-
-  In certain scenarios where enabling browser support might not pose significant risks:
-
-  - Internal Tools: If the application is used solely within a controlled internal environment where the users are trusted, the risk of credential exposure can be mitigated.
-  - Public APIs with Limited Scope: If your API has very limited scope and the exposed credentials do not grant access to sensitive data or critical operations, the potential impact of exposure is reduced.
-  - Development or debugging purpose: Enabling this feature temporarily might be acceptable, provided the credentials are short-lived, aren't also used in production environments, or are frequently rotated.
-
-</details>
 
 Note that React Native is not supported at this time.
 

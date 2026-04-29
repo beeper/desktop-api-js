@@ -9,7 +9,12 @@ import { path } from '../../internal/utils/path';
 /**
  * Manage reminders for chats
  */
-export class Reminders extends APIResource {
+export class BaseReminders extends APIResource {
+  static override readonly _key: readonly ['chats', 'reminders'] = Object.freeze([
+    'chats',
+    'reminders',
+  ] as const);
+
   /**
    * Set a reminder for a chat at a specific time
    *
@@ -46,6 +51,10 @@ export class Reminders extends APIResource {
     });
   }
 }
+/**
+ * Manage reminders for chats
+ */
+export class Reminders extends BaseReminders {}
 
 export interface ReminderCreateParams {
   /**

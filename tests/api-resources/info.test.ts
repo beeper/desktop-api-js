@@ -1,13 +1,22 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import { BaseInfo } from '@beeper/desktop-api/resources/info';
+
 import BeeperDesktop from '@beeper/desktop-api';
+import { createClient, type PartialBeeperDesktop } from '@beeper/desktop-api/tree-shakable';
 
 const client = new BeeperDesktop({
   accessToken: 'My Access Token',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource info', () => {
+const partialClient = createClient({
+  accessToken: 'My Access Token',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+  resources: [BaseInfo],
+});
+
+const runTests = (client: PartialBeeperDesktop<{ info: BaseInfo }>) => {
   test('retrieve', async () => {
     const responsePromise = client.info.retrieve();
     const rawResponse = await responsePromise.asResponse();
@@ -18,4 +27,6 @@ describe('resource info', () => {
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
   });
-});
+};
+describe('resource info', () => runTests(client));
+describe('resource info (tree shakable, base)', () => runTests(partialClient));
