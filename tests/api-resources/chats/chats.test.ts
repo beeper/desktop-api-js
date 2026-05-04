@@ -18,7 +18,11 @@ const partialClient = createClient({
 
 const runTests = (client: PartialBeeperDesktop<{ chats: BaseChats }>) => {
   test('create: only required params', async () => {
-    const responsePromise = client.chats.create({ accountID: 'accountID' });
+    const responsePromise = client.chats.create({
+      accountID: 'accountID',
+      participantIDs: ['string'],
+      type: 'single',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -31,19 +35,10 @@ const runTests = (client: PartialBeeperDesktop<{ chats: BaseChats }>) => {
   test('create: required and optional params', async () => {
     const response = await client.chats.create({
       accountID: 'accountID',
-      allowInvite: true,
-      messageText: 'messageText',
-      mode: 'start',
       participantIDs: ['string'],
-      title: 'title',
       type: 'single',
-      user: {
-        id: 'id',
-        email: 'email',
-        fullName: 'fullName',
-        phoneNumber: 'phoneNumber',
-        username: 'username',
-      },
+      messageText: 'messageText',
+      title: 'title',
     });
   });
 
@@ -154,6 +149,37 @@ const runTests = (client: PartialBeeperDesktop<{ chats: BaseChats }>) => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(BeeperDesktop.NotFoundError);
+  });
+
+  // Stainless mock tests currently load the project-published OpenAPI spec URL, which may not include newly-added local-only endpoints during build checks.
+  test.skip('start: only required params', async () => {
+    const responsePromise = client.chats.start({
+      accountID: 'accountID',
+      user: {},
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Stainless mock tests currently load the project-published OpenAPI spec URL, which may not include newly-added local-only endpoints during build checks.
+  test.skip('start: required and optional params', async () => {
+    const response = await client.chats.start({
+      accountID: 'accountID',
+      user: {
+        id: 'id',
+        email: 'email',
+        fullName: 'fullName',
+        phoneNumber: 'phoneNumber',
+        username: 'username',
+      },
+      allowInvite: true,
+      messageText: 'messageText',
+    });
   });
 };
 describe('resource chats', () => runTests(client));

@@ -25,13 +25,14 @@ export class BaseChats extends APIResource {
   static override readonly _key: readonly ['chats'] = Object.freeze(['chats'] as const);
 
   /**
-   * Create a direct or group chat with mode="create", or use mode="start" to resolve
-   * a contact and open a direct chat.
+   * Create a direct or group chat from participant IDs.
    *
    * @example
    * ```ts
    * const chat = await client.chats.create({
    *   accountID: 'accountID',
+   *   participantIDs: ['string'],
+   *   type: 'single',
    * });
    * ```
    */
@@ -115,6 +116,22 @@ export class BaseChats extends APIResource {
     options?: RequestOptions,
   ): PagePromise<ChatsCursorSearch, Chat> {
     return this._client.getAPIList('/v1/chats/search', CursorSearch<Chat>, { query, ...options });
+  }
+
+  /**
+   * Resolve a user/contact and open a direct chat. Reuses an existing direct chat
+   * when one is found. Available in Beeper Desktop v4.2.799+.
+   *
+   * @example
+   * ```ts
+   * const response = await client.chats.start({
+   *   accountID: 'accountID',
+   *   user: {},
+   * });
+   * ```
+   */
+  start(body: ChatStartParams, options?: RequestOptions): APIPromise<ChatStartResponse> {
+    return this._client.post('/v1/chats.start', { body, ...options });
   }
 }
 /**
@@ -233,6 +250,19 @@ export interface ChatListResponse extends Chat {
   preview?: Shared.Message;
 }
 
+export interface ChatStartResponse {
+  /**
+   * Newly created chat ID.
+   */
+  chatID: string;
+
+  /**
+   * Only returned in start mode. 'existing' means an existing chat was reused;
+   * 'created' means a new chat was created.
+   */
+  status?: 'existing' | 'created';
+}
+
 export interface ChatCreateParams {
   /**
    * Account to create or start the chat on.
@@ -240,10 +270,15 @@ export interface ChatCreateParams {
   accountID: string;
 
   /**
-   * Only used for mode='start'. Whether invite-based DM creation is allowed when
-   * required by the platform.
+   * User IDs to include in the new chat.
    */
-  allowInvite?: boolean;
+  participantIDs: Array<string>;
+
+  /**
+   * 'single' requires exactly one participantID; 'group' supports multiple
+   * participants and optional title.
+   */
+  type: 'single' | 'group';
 
   /**
    * Optional first message content if the platform requires it to create the chat.
@@ -251,66 +286,9 @@ export interface ChatCreateParams {
   messageText?: string;
 
   /**
-   * Operation mode. Use 'start' to resolve a user/contact and start a direct chat.
-   * Omit or set 'create' to create a chat directly.
-   */
-  mode?: 'start' | 'create';
-
-  /**
-   * Required for create mode. Provide exactly one user ID for 'single' chats and one
-   * or more for 'group' chats.
-   */
-  participantIDs?: Array<string>;
-
-  /**
    * Optional title for group chats; ignored for single chats on most networks.
    */
   title?: string;
-
-  /**
-   * Required for create mode. 'single' creates a direct message chat; 'group'
-   * creates a group chat.
-   */
-  type?: 'single' | 'group';
-
-  /**
-   * Required for mode='start'. Merged user-like contact payload used to resolve the
-   * best identifier.
-   */
-  user?: ChatCreateParams.User;
-}
-
-export namespace ChatCreateParams {
-  /**
-   * Required for mode='start'. Merged user-like contact payload used to resolve the
-   * best identifier.
-   */
-  export interface User {
-    /**
-     * Known user ID when available.
-     */
-    id?: string;
-
-    /**
-     * Email candidate.
-     */
-    email?: string;
-
-    /**
-     * Display name hint used for ranking only.
-     */
-    fullName?: string;
-
-    /**
-     * Phone number candidate (E.164 preferred).
-     */
-    phoneNumber?: string;
-
-    /**
-     * Username/handle candidate.
-     */
-    username?: string;
-  }
 }
 
 export interface ChatRetrieveParams {
@@ -390,6 +368,60 @@ export interface ChatSearchParams extends CursorSearchParams {
   unreadOnly?: boolean | null;
 }
 
+export interface ChatStartParams {
+  /**
+   * Account to create or start the chat on.
+   */
+  accountID: string;
+
+  /**
+   * Merged user-like contact payload used to resolve the best identifier.
+   */
+  user: ChatStartParams.User;
+
+  /**
+   * Whether invite-based DM creation is allowed when required by the platform.
+   */
+  allowInvite?: boolean;
+
+  /**
+   * Optional first message content if the platform requires it to create the chat.
+   */
+  messageText?: string;
+}
+
+export namespace ChatStartParams {
+  /**
+   * Merged user-like contact payload used to resolve the best identifier.
+   */
+  export interface User {
+    /**
+     * Known user ID when available.
+     */
+    id?: string;
+
+    /**
+     * Email candidate.
+     */
+    email?: string;
+
+    /**
+     * Display name hint used for ranking only.
+     */
+    fullName?: string;
+
+    /**
+     * Phone number candidate (E.164 preferred).
+     */
+    phoneNumber?: string;
+
+    /**
+     * Username/handle candidate.
+     */
+    username?: string;
+  }
+}
+
 Chats.Reminders = Reminders;
 Chats.BaseReminders = BaseReminders;
 Chats.Messages = Messages;
@@ -400,6 +432,7 @@ export declare namespace Chats {
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
+    type ChatStartResponse as ChatStartResponse,
     type ChatListResponsesCursorNoLimit as ChatListResponsesCursorNoLimit,
     type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
@@ -407,6 +440,7 @@ export declare namespace Chats {
     type ChatListParams as ChatListParams,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatSearchParams as ChatSearchParams,
+    type ChatStartParams as ChatStartParams,
   };
 
   export {

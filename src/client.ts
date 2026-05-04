@@ -58,6 +58,8 @@ import {
   ChatListResponsesCursorNoLimit,
   ChatRetrieveParams,
   ChatSearchParams,
+  ChatStartParams,
+  ChatStartResponse,
   Chats,
   ChatsCursorSearch,
 } from './resources/chats/chats';
@@ -891,6 +893,7 @@ export declare namespace BeeperDesktop {
     type Chat as Chat,
     type ChatCreateResponse as ChatCreateResponse,
     type ChatListResponse as ChatListResponse,
+    type ChatStartResponse as ChatStartResponse,
     type ChatListResponsesCursorNoLimit as ChatListResponsesCursorNoLimit,
     type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
@@ -898,6 +901,7 @@ export declare namespace BeeperDesktop {
     type ChatListParams as ChatListParams,
     type ChatArchiveParams as ChatArchiveParams,
     type ChatSearchParams as ChatSearchParams,
+    type ChatStartParams as ChatStartParams,
   };
 
   export {

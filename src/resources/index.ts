@@ -19,11 +19,13 @@ export {
   type Chat,
   type ChatCreateResponse,
   type ChatListResponse,
+  type ChatStartResponse,
   type ChatCreateParams,
   type ChatRetrieveParams,
   type ChatListParams,
   type ChatArchiveParams,
   type ChatSearchParams,
+  type ChatStartParams,
   type ChatListResponsesCursorNoLimit,
   type ChatsCursorSearch,
 } from './chats/chats';

@@ -49,7 +49,7 @@ export interface Account {
   accountID: string;
 
   /**
-   * Bridge metadata for the account. Available in Beeper Desktop v4.2.789+.
+   * Bridge metadata for the account. Available in Beeper Desktop v4.2.799+.
    */
   bridge: Account.Bridge;
 
@@ -67,21 +67,21 @@ export interface Account {
 
 export namespace Account {
   /**
-   * Bridge metadata for the account. Available in Beeper Desktop v4.2.789+.
+   * Bridge metadata for the account. Available in Beeper Desktop v4.2.799+.
    */
   export interface Bridge {
     /**
-     * Bridge instance identifier. Available in Beeper Desktop v4.2.789+.
+     * Bridge instance identifier. Available in Beeper Desktop v4.2.799+.
      */
     id: string;
 
     /**
-     * Bridge provider for the account. Available in Beeper Desktop v4.2.789+.
+     * Bridge provider for the account. Available in Beeper Desktop v4.2.799+.
      */
     provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk';
 
     /**
-     * Bridge type. Available in Beeper Desktop v4.2.789+.
+     * Bridge type. Available in Beeper Desktop v4.2.799+.
      */
     type: string;
   }
