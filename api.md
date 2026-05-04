@@ -49,6 +49,7 @@ Types:
 - <code><a href="./src/resources/chats/chats.ts">Chat</a></code>
 - <code><a href="./src/resources/chats/chats.ts">ChatCreateResponse</a></code>
 - <code><a href="./src/resources/chats/chats.ts">ChatListResponse</a></code>
+- <code><a href="./src/resources/chats/chats.ts">ChatStartResponse</a></code>
 
 Methods:
 
@@ -57,6 +58,7 @@ Methods:
 - <code title="get /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">list</a>({ ...params }) -> ChatListResponsesCursorNoLimit</code>
 - <code title="post /v1/chats/{chatID}/archive">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>(chatID, { ...params }) -> void</code>
 - <code title="get /v1/chats/search">client.chats.<a href="./src/resources/chats/chats.ts">search</a>({ ...params }) -> ChatsCursorSearch</code>
+- <code title="post /v1/chats.start">client.chats.<a href="./src/resources/chats/chats.ts">start</a>({ ...params }) -> ChatStartResponse</code>
 
 ## Reminders
 

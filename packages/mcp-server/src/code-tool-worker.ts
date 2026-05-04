@@ -118,6 +118,7 @@ const fuse = new Fuse(
     'client.chats.list',
     'client.chats.retrieve',
     'client.chats.search',
+    'client.chats.start',
     'client.chats.reminders.create',
     'client.chats.reminders.delete',
     'client.chats.messages.reactions.add',

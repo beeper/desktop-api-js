@@ -71,6 +71,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/chats/search',
   },
   {
+    clientCallName: 'client.chats.start',
+    fullyQualifiedName: 'chats.start',
+    httpMethod: 'post',
+    httpPath: '/v1/chats.start',
+  },
+  {
     clientCallName: 'client.chats.reminders.create',
     fullyQualifiedName: 'chats.reminders.create',
     httpMethod: 'post',
