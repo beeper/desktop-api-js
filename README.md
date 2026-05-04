@@ -220,7 +220,11 @@ const client = createClient({
 
 // ... then make API calls as usual.
 const accounts = await client.accounts.list();
-const chat = await client.chats.create({ accountID: 'accountID' });
+const chat = await client.chats.create({
+  accountID: 'accountID',
+  participantIDs: ['string'],
+  type: 'single',
+});
 ```
 
 Each API resource has two versions, the full resource (e.g., `Accounts`) which includes all subresources, and the base resource (e.g., `BaseAccounts`) which does not.
