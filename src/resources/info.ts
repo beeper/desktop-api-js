@@ -5,21 +5,21 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
 /**
- * Control the Beeper Desktop application
+ * Server discovery and capability metadata. Use /v1/info before authentication setup.
  */
 export class BaseInfo extends APIResource {
   static override readonly _key: readonly ['info'] = Object.freeze(['info'] as const);
 
   /**
-   * Returns app, platform, server, and endpoint discovery metadata for this Beeper
-   * Desktop instance.
+   * Returns app, platform, server, endpoint discovery, OAuth, and WebSocket metadata
+   * for this Beeper Desktop instance.
    */
   retrieve(options?: RequestOptions): APIPromise<InfoRetrieveResponse> {
     return this._client.get('/v1/info', { ...options, __security: {} });
   }
 }
 /**
- * Control the Beeper Desktop application
+ * Server discovery and capability metadata. Use /v1/info before authentication setup.
  */
 export class Info extends BaseInfo {}
 
@@ -123,7 +123,7 @@ export namespace InfoRetrieveResponse {
 
   export interface Server {
     /**
-     * Base URL of the Connect server
+     * Base URL of the Beeper Desktop API server
      */
     base_url: string;
 

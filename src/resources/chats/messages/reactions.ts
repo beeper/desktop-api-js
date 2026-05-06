@@ -21,25 +21,22 @@ export class BaseReactions extends APIResource {
    * @example
    * ```ts
    * const reaction =
-   *   await client.chats.messages.reactions.delete(
-   *     'messageID',
-   *     {
-   *       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-   *       reactionKey: 'x',
-   *     },
-   *   );
+   *   await client.chats.messages.reactions.delete('x', {
+   *     chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+   *     messageID: '1343993',
+   *   });
    * ```
    */
   delete(
-    messageID: string,
+    reactionKey: string,
     params: ReactionDeleteParams,
     options?: RequestOptions,
   ): APIPromise<ReactionDeleteResponse> {
-    const { chatID, reactionKey } = params;
-    return this._client.delete(path`/v1/chats/${chatID}/messages/${messageID}/reactions`, {
-      query: { reactionKey },
-      ...options,
-    });
+    const { chatID, messageID } = params;
+    return this._client.delete(
+      path`/v1/chats/${chatID}/messages/${messageID}/reactions/${reactionKey}`,
+      options,
+    );
   }
 
   /**
@@ -48,7 +45,7 @@ export class BaseReactions extends APIResource {
    * @example
    * ```ts
    * const response = await client.chats.messages.reactions.add(
-   *   'messageID',
+   *   '1343993',
    *   {
    *     chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
    *     reactionKey: 'x',
@@ -72,7 +69,8 @@ export class Reactions extends BaseReactions {}
 
 export interface ReactionDeleteResponse {
   /**
-   * Unique identifier of the chat.
+   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
+   * installation when available.
    */
   chatID: string;
 
@@ -82,19 +80,21 @@ export interface ReactionDeleteResponse {
   messageID: string;
 
   /**
-   * Reaction key that was removed
+   * Reaction key that was removed.
    */
   reactionKey: string;
 
   /**
-   * Whether the reaction was successfully removed
+   * Always true. Indicates the reaction removal was queued; failures return an error
+   * response.
    */
   success: true;
 }
 
 export interface ReactionAddResponse {
   /**
-   * Unique identifier of the chat.
+   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
+   * installation when available.
    */
   chatID: string;
 
@@ -104,36 +104,39 @@ export interface ReactionAddResponse {
   messageID: string;
 
   /**
-   * Reaction key that was added
+   * Reaction key that was added.
    */
   reactionKey: string;
 
   /**
-   * Whether the reaction was successfully added
+   * Always true. Indicates the reaction was queued; failures return an error
+   * response.
    */
   success: true;
 
   /**
-   * Transaction ID used for the reaction event
+   * Transaction ID used for send tracking.
    */
   transactionID: string;
 }
 
 export interface ReactionDeleteParams {
   /**
-   * Path param: Unique identifier of the chat.
+   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
+   * installation when available.
    */
   chatID: string;
 
   /**
-   * Query param: Reaction key to remove
+   * Message ID.
    */
-  reactionKey: string;
+  messageID: string;
 }
 
 export interface ReactionAddParams {
   /**
-   * Path param: Unique identifier of the chat.
+   * Path param: Chat ID. Input routes also accept the local chat ID from this Beeper
+   * Desktop installation when available.
    */
   chatID: string;
 
@@ -143,7 +146,7 @@ export interface ReactionAddParams {
   reactionKey: string;
 
   /**
-   * Body param: Optional transaction ID for deduplication and local echo tracking
+   * Body param: Optional transaction ID for deduplication and send tracking
    */
   transactionID?: string;
 }

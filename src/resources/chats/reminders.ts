@@ -22,7 +22,7 @@ export class BaseReminders extends APIResource {
    * ```ts
    * await client.chats.reminders.create(
    *   '!NCdzlIaMjZUmvmvyHU:beeper.com',
-   *   { reminder: { remindAtMs: 0 } },
+   *   { reminder: { remindAt: '2025-08-31T23:30:12.520Z' } },
    * );
    * ```
    */
@@ -69,9 +69,9 @@ export namespace ReminderCreateParams {
    */
   export interface Reminder {
     /**
-     * Unix timestamp in milliseconds when reminder should trigger
+     * Timestamp when the reminder should trigger.
      */
-    remindAtMs: number;
+    remindAt: string;
 
     /**
      * Cancel reminder if someone messages in the chat

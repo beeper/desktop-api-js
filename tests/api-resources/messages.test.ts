@@ -17,8 +17,23 @@ const partialClient = createClient({
 });
 
 const runTests = (client: PartialBeeperDesktop<{ messages: BaseMessages }>) => {
+  test('retrieve: only required params', async () => {
+    const responsePromise = client.messages.retrieve('1343993', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieve: required and optional params', async () => {
+    const response = await client.messages.retrieve('1343993', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
+  });
+
   test('update: only required params', async () => {
-    const responsePromise = client.messages.update('messageID', {
+    const responsePromise = client.messages.update('1343993', {
       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       text: 'x',
     });
@@ -32,7 +47,7 @@ const runTests = (client: PartialBeeperDesktop<{ messages: BaseMessages }>) => {
   });
 
   test('update: required and optional params', async () => {
-    const response = await client.messages.update('messageID', {
+    const response = await client.messages.update('1343993', {
       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       text: 'x',
     });
@@ -60,6 +75,24 @@ const runTests = (client: PartialBeeperDesktop<{ messages: BaseMessages }>) => {
     ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
+  test('delete: only required params', async () => {
+    const responsePromise = client.messages.delete('1343993', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('delete: required and optional params', async () => {
+    const response = await client.messages.delete('1343993', {
+      chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+      forEveryone: true,
+    });
+  });
+
   test('search', async () => {
     const responsePromise = client.messages.search();
     const rawResponse = await responsePromise.asResponse();
@@ -76,10 +109,7 @@ const runTests = (client: PartialBeeperDesktop<{ messages: BaseMessages }>) => {
     await expect(
       client.messages.search(
         {
-          accountIDs: [
-            'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
-            'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',
-          ],
+          accountIDs: ['matrix', 'discordgo', 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc'],
           chatIDs: ['!NCdzlIaMjZUmvmvyHU:beeper.com', '1231073'],
           chatType: 'group',
           cursor: '1725489123456|c29tZUltc2dQYWdl',
@@ -121,7 +151,7 @@ const runTests = (client: PartialBeeperDesktop<{ messages: BaseMessages }>) => {
             fileName: 'fileName',
             mimeType: 'mimeType',
             size: { height: 0, width: 0 },
-            type: 'gif',
+            type: 'image',
           },
           replyToMessageID: 'replyToMessageID',
           text: 'text',
