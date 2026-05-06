@@ -14,8 +14,8 @@ export class BaseAssets extends APIResource {
   static override readonly _key: readonly ['assets'] = Object.freeze(['assets'] as const);
 
   /**
-   * Download a Matrix asset using its mxc:// or localmxc:// URL to the device
-   * running Beeper Desktop and return the local file URL.
+   * Download a Matrix file using its mxc:// or localmxc:// URL to the device running
+   * Beeper Desktop and return the local file URL.
    *
    * @example
    * ```ts
@@ -51,7 +51,8 @@ export class BaseAssets extends APIResource {
 
   /**
    * Upload a file to a temporary location using multipart/form-data. Returns an
-   * uploadID that can be referenced when sending messages with attachments.
+   * uploadID that can be referenced when sending a message or materializing a draft
+   * attachment.
    *
    * @example
    * ```ts
@@ -69,8 +70,8 @@ export class BaseAssets extends APIResource {
 
   /**
    * Upload a file using a JSON body with base64-encoded content. Returns an uploadID
-   * that can be referenced when sending messages with attachments. Alternative to
-   * the multipart upload endpoint.
+   * that can be referenced when sending a message or materializing a draft
+   * attachment. Alternative to the multipart upload endpoint.
    *
    * @example
    * ```ts
@@ -98,7 +99,7 @@ export interface AssetDownloadResponse {
   error?: string;
 
   /**
-   * Local file URL to the downloaded asset.
+   * Local file URL to the downloaded file.
    */
   srcURL?: string;
 }
@@ -135,12 +136,12 @@ export interface AssetUploadResponse {
   mimeType?: string;
 
   /**
-   * Local file URL (file://) for the uploaded asset
+   * Local file URL (file://) for the uploaded file
    */
   srcURL?: string;
 
   /**
-   * Unique upload ID for this asset
+   * Unique upload ID for this temporary file
    */
   uploadID?: string;
 
@@ -182,12 +183,12 @@ export interface AssetUploadBase64Response {
   mimeType?: string;
 
   /**
-   * Local file URL (file://) for the uploaded asset
+   * Local file URL (file://) for the uploaded file
    */
   srcURL?: string;
 
   /**
-   * Unique upload ID for this asset
+   * Unique upload ID for this temporary file
    */
   uploadID?: string;
 
@@ -199,14 +200,14 @@ export interface AssetUploadBase64Response {
 
 export interface AssetDownloadParams {
   /**
-   * Matrix content URL (mxc:// or localmxc://) for the asset to download.
+   * Matrix content URL (mxc:// or localmxc://) for the file to download.
    */
   url: string;
 }
 
 export interface AssetServeParams {
   /**
-   * Asset URL to serve. Accepts mxc://, localmxc://, or file:// URLs.
+   * File URL to serve. Accepts mxc://, localmxc://, or file:// URLs.
    */
   url: string;
 }

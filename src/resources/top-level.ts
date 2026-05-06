@@ -72,12 +72,12 @@ export interface FocusParams {
   chatID?: string;
 
   /**
-   * Optional draft attachment path to populate in the message input field.
+   * Optional image path to populate in the message input field.
    */
   draftAttachmentPath?: string;
 
   /**
-   * Optional draft text to populate in the message input field.
+   * Optional plain text to populate in the message input field.
    */
   draftText?: string;
 

@@ -55,10 +55,14 @@ Methods:
 
 - <code title="post /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">create</a>({ ...params }) -> ChatCreateResponse</code>
 - <code title="get /v1/chats/{chatID}">client.chats.<a href="./src/resources/chats/chats.ts">retrieve</a>(chatID, { ...params }) -> Chat</code>
+- <code title="patch /v1/chats/{chatID}">client.chats.<a href="./src/resources/chats/chats.ts">update</a>(chatID, { ...params }) -> Chat</code>
 - <code title="get /v1/chats">client.chats.<a href="./src/resources/chats/chats.ts">list</a>({ ...params }) -> ChatListResponsesCursorNoLimit</code>
 - <code title="post /v1/chats/{chatID}/archive">client.chats.<a href="./src/resources/chats/chats.ts">archive</a>(chatID, { ...params }) -> void</code>
+- <code title="post /v1/chats/{chatID}/read">client.chats.<a href="./src/resources/chats/chats.ts">markRead</a>(chatID, { ...params }) -> Chat</code>
+- <code title="post /v1/chats/{chatID}/unread">client.chats.<a href="./src/resources/chats/chats.ts">markUnread</a>(chatID, { ...params }) -> Chat</code>
+- <code title="post /v1/chats/{chatID}/notify-anyway">client.chats.<a href="./src/resources/chats/chats.ts">notifyAnyway</a>(chatID) -> Chat</code>
 - <code title="get /v1/chats/search">client.chats.<a href="./src/resources/chats/chats.ts">search</a>({ ...params }) -> ChatsCursorSearch</code>
-- <code title="post /v1/chats.start">client.chats.<a href="./src/resources/chats/chats.ts">start</a>({ ...params }) -> ChatStartResponse</code>
+- <code title="post /v1/chats/start">client.chats.<a href="./src/resources/chats/chats.ts">start</a>({ ...params }) -> ChatStartResponse</code>
 
 ## Reminders
 
@@ -78,7 +82,7 @@ Types:
 
 Methods:
 
-- <code title="delete /v1/chats/{chatID}/messages/{messageID}/reactions">client.chats.messages.reactions.<a href="./src/resources/chats/messages/reactions.ts">delete</a>(messageID, { ...params }) -> ReactionDeleteResponse</code>
+- <code title="delete /v1/chats/{chatID}/messages/{messageID}/reactions/{reactionKey}">client.chats.messages.reactions.<a href="./src/resources/chats/messages/reactions.ts">delete</a>(reactionKey, { ...params }) -> ReactionDeleteResponse</code>
 - <code title="post /v1/chats/{chatID}/messages/{messageID}/reactions">client.chats.messages.reactions.<a href="./src/resources/chats/messages/reactions.ts">add</a>(messageID, { ...params }) -> ReactionAddResponse</code>
 
 # Messages
@@ -90,8 +94,10 @@ Types:
 
 Methods:
 
+- <code title="get /v1/chats/{chatID}/messages/{messageID}">client.messages.<a href="./src/resources/messages.ts">retrieve</a>(messageID, { ...params }) -> Message</code>
 - <code title="put /v1/chats/{chatID}/messages/{messageID}">client.messages.<a href="./src/resources/messages.ts">update</a>(messageID, { ...params }) -> MessageUpdateResponse</code>
 - <code title="get /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">list</a>(chatID, { ...params }) -> MessagesCursorNoLimit</code>
+- <code title="delete /v1/chats/{chatID}/messages/{messageID}">client.messages.<a href="./src/resources/messages.ts">delete</a>(messageID, { ...params }) -> void</code>
 - <code title="get /v1/messages/search">client.messages.<a href="./src/resources/messages.ts">search</a>({ ...params }) -> MessagesCursorSearch</code>
 - <code title="post /v1/chats/{chatID}/messages">client.messages.<a href="./src/resources/messages.ts">send</a>(chatID, { ...params }) -> MessageSendResponse</code>
 

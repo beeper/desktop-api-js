@@ -9,8 +9,8 @@ export interface Attachment {
   type: 'unknown' | 'img' | 'video' | 'audio';
 
   /**
-   * Attachment identifier (typically an mxc:// URL). Use with /v1/assets/download to
-   * get a local file path.
+   * Attachment identifier (typically an mxc:// URL). Use the download file endpoint
+   * to get a local file path.
    */
   id?: string;
 
@@ -61,10 +61,15 @@ export interface Attachment {
   size?: Attachment.Size;
 
   /**
-   * Public URL or local file path to fetch the asset. May be temporary or local-only
+   * Public URL or local file path to fetch the file. May be temporary or local-only
    * to this device; download promptly if durable access is needed.
    */
   srcURL?: string;
+
+  /**
+   * Attachment transcription if available.
+   */
+  transcription?: Attachment.Transcription;
 }
 
 export namespace Attachment {
@@ -75,6 +80,26 @@ export namespace Attachment {
     height?: number;
 
     width?: number;
+  }
+
+  /**
+   * Attachment transcription if available.
+   */
+  export interface Transcription {
+    /**
+     * Transcription engine.
+     */
+    engine: string;
+
+    /**
+     * Transcribed text.
+     */
+    transcription: string;
+
+    /**
+     * Detected or selected language.
+     */
+    language?: string;
   }
 }
 
@@ -138,12 +163,14 @@ export interface Message {
   accountID: string;
 
   /**
-   * Unique identifier of the chat.
+   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
+   * installation when available.
    */
   chatID: string;
 
   /**
-   * Sender user ID.
+   * Matrix-style fully-qualified sender user ID, usually including a bridge prefix
+   * and homeserver.
    */
   senderID: string;
 
@@ -163,6 +190,21 @@ export interface Message {
   attachments?: Array<Attachment>;
 
   /**
+   * Timestamp when the message was edited, if known.
+   */
+  editedTimestamp?: string;
+
+  /**
+   * True if the message has been deleted.
+   */
+  isDeleted?: boolean;
+
+  /**
+   * True if the message is hidden from normal display.
+   */
+  isHidden?: boolean;
+
+  /**
    * True if the authenticated user sent the message.
    */
   isSender?: boolean;
@@ -178,9 +220,25 @@ export interface Message {
   linkedMessageID?: string;
 
   /**
+   * Link previews included with this message, if any.
+   */
+  links?: Array<Message.Link>;
+
+  /**
+   * Mentioned user IDs, @room, or null for legacy messages that require text
+   * scanning.
+   */
+  mentions?: Array<string> | null;
+
+  /**
    * Reactions to the message, if any.
    */
   reactions?: Array<Reaction>;
+
+  /**
+   * Read receipt state for this message, when available.
+   */
+  seen?: boolean | string | { [key: string]: boolean | string };
 
   /**
    * Resolved sender display name (impersonator/full name/username/participant name).
@@ -188,8 +246,12 @@ export interface Message {
   senderName?: string;
 
   /**
-   * Plain-text body if present. May include a JSON fallback with text entities for
-   * rich messages.
+   * Message send status for this message, when reported by the bridge.
+   */
+  sendStatus?: Message.SendStatus;
+
+  /**
+   * Matrix HTML body if present.
    */
   text?: string;
 
@@ -210,10 +272,101 @@ export interface Message {
     | 'REACTION';
 }
 
+export namespace Message {
+  /**
+   * Link preview included with a message.
+   */
+  export interface Link {
+    /**
+     * Link preview title.
+     */
+    title: string;
+
+    /**
+     * Resolved link URL.
+     */
+    url: string;
+
+    /**
+     * Favicon URL if available. May be temporary or local-only to this device;
+     * download promptly if durable access is needed.
+     */
+    favicon?: string;
+
+    /**
+     * Preview image URL if available. May be temporary or local-only to this device;
+     * download promptly if durable access is needed.
+     */
+    img?: string;
+
+    /**
+     * Preview image dimensions.
+     */
+    imgSize?: Link.ImgSize;
+
+    /**
+     * Original URL when the displayed URL is shortened or redirected.
+     */
+    originalURL?: string;
+
+    /**
+     * Link preview summary.
+     */
+    summary?: string;
+  }
+
+  export namespace Link {
+    /**
+     * Preview image dimensions.
+     */
+    export interface ImgSize {
+      height?: number;
+
+      width?: number;
+    }
+  }
+
+  /**
+   * Message send status for this message, when reported by the bridge.
+   */
+  export interface SendStatus {
+    /**
+     * Current status of the message send attempt.
+     */
+    status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT';
+
+    /**
+     * Timestamp for the send status event.
+     */
+    timestamp: string;
+
+    /**
+     * User IDs the message was delivered to, when reported by the network.
+     */
+    deliveredToUsers?: Array<string>;
+
+    /**
+     * Internal bridge error detail. Intended for diagnostics, not end-user display.
+     */
+    internalError?: string;
+
+    /**
+     * Human-readable send status or failure message.
+     */
+    message?: string;
+
+    /**
+     * Machine-readable failure reason. Present when the send status is a failure.
+     */
+    reason?: string;
+  }
+}
+
 export interface Reaction {
   /**
-   * Reaction ID, typically ${participantID}${reactionKey} if multiple reactions
-   * allowed, or just participantID otherwise.
+   * Reaction ID. When a participant can react more than once, the ID is the
+   * participant ID concatenated with the reaction key; otherwise it equals the
+   * participant ID.
    */
   id: string;
 
@@ -266,8 +419,9 @@ export interface User {
   fullName?: string;
 
   /**
-   * Avatar image URL if available. May be temporary or local-only to this device;
-   * download promptly if durable access is needed.
+   * Avatar image URL if available. This may be a remote URL, Matrix media URL, data
+   * URL, or local filesystem URL depending on source and endpoint. May be temporary
+   * or local-only to this device; download promptly if durable access is needed.
    */
   imgURL?: string;
 

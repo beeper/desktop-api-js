@@ -39,7 +39,9 @@ import {
 } from './resources/assets';
 import { Info, InfoRetrieveResponse } from './resources/info';
 import {
+  MessageDeleteParams,
   MessageListParams,
+  MessageRetrieveParams,
   MessageSearchParams,
   MessageSendParams,
   MessageSendResponse,
@@ -56,10 +58,14 @@ import {
   ChatListParams,
   ChatListResponse,
   ChatListResponsesCursorNoLimit,
+  ChatMarkReadParams,
+  ChatMarkUnreadParams,
+  ChatNotifyAnywayParams,
   ChatRetrieveParams,
   ChatSearchParams,
   ChatStartParams,
   ChatStartResponse,
+  ChatUpdateParams,
   Chats,
   ChatsCursorSearch,
 } from './resources/chats/chats';
@@ -258,7 +264,7 @@ export class BaseBeeperDesktop {
 
   /**
    * Focus Beeper Desktop and optionally navigate to a specific chat, message, or
-   * pre-fill draft text and attachment.
+   * pre-fill plain text and an image path.
    *
    * @example
    * ```ts
@@ -856,7 +862,7 @@ export class BeeperDesktop extends BaseBeeperDesktop {
    */
   assets: API.Assets = new API.Assets(this);
   /**
-   * Control the Beeper Desktop application
+   * Server discovery and capability metadata. Use /v1/info before authentication setup.
    */
   info: API.Info = new API.Info(this);
 }
@@ -898,8 +904,12 @@ export declare namespace BeeperDesktop {
     type ChatsCursorSearch as ChatsCursorSearch,
     type ChatCreateParams as ChatCreateParams,
     type ChatRetrieveParams as ChatRetrieveParams,
+    type ChatUpdateParams as ChatUpdateParams,
     type ChatListParams as ChatListParams,
     type ChatArchiveParams as ChatArchiveParams,
+    type ChatMarkReadParams as ChatMarkReadParams,
+    type ChatMarkUnreadParams as ChatMarkUnreadParams,
+    type ChatNotifyAnywayParams as ChatNotifyAnywayParams,
     type ChatSearchParams as ChatSearchParams,
     type ChatStartParams as ChatStartParams,
   };
@@ -908,8 +918,10 @@ export declare namespace BeeperDesktop {
     Messages as Messages,
     type MessageUpdateResponse as MessageUpdateResponse,
     type MessageSendResponse as MessageSendResponse,
+    type MessageRetrieveParams as MessageRetrieveParams,
     type MessageUpdateParams as MessageUpdateParams,
     type MessageListParams as MessageListParams,
+    type MessageDeleteParams as MessageDeleteParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };

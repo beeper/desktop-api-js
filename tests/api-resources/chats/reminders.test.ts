@@ -26,7 +26,7 @@ const parentPartialClient = createClient({
 const runTests = (client: PartialBeeperDesktop<{ chats: { reminders: BaseReminders } }>) => {
   test('create: only required params', async () => {
     const responsePromise = client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', {
-      reminder: { remindAtMs: 0 },
+      reminder: { remindAt: '2025-08-31T23:30:12.520Z' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -39,7 +39,7 @@ const runTests = (client: PartialBeeperDesktop<{ chats: { reminders: BaseReminde
 
   test('create: required and optional params', async () => {
     const response = await client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', {
-      reminder: { remindAtMs: 0, dismissOnIncomingMessage: true },
+      reminder: { remindAt: '2025-08-31T23:30:12.520Z', dismissOnIncomingMessage: true },
     });
   });
 

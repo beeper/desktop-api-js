@@ -11,6 +11,7 @@ import {
   type CursorSearchParams,
   PagePromise,
 } from '../core/pagination';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -21,12 +22,32 @@ export class BaseMessages extends APIResource {
   static override readonly _key: readonly ['messages'] = Object.freeze(['messages'] as const);
 
   /**
+   * Retrieve a message by final message ID, pendingMessageID, or Matrix event ID.
+   * Chat ID may be a Beeper chat ID or local chat ID.
+   *
+   * @example
+   * ```ts
+   * const message = await client.messages.retrieve('1343993', {
+   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+   * });
+   * ```
+   */
+  retrieve(
+    messageID: string,
+    params: MessageRetrieveParams,
+    options?: RequestOptions,
+  ): APIPromise<Shared.Message> {
+    const { chatID } = params;
+    return this._client.get(path`/v1/chats/${chatID}/messages/${messageID}`, options);
+  }
+
+  /**
    * Edit the text content of an existing message. Messages with attachments cannot
    * be edited.
    *
    * @example
    * ```ts
-   * const message = await client.messages.update('messageID', {
+   * const message = await client.messages.update('1343993', {
    *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
    *   text: 'x',
    * });
@@ -62,6 +83,26 @@ export class BaseMessages extends APIResource {
     return this._client.getAPIList(path`/v1/chats/${chatID}/messages`, CursorNoLimit<Shared.Message>, {
       query,
       ...options,
+    });
+  }
+
+  /**
+   * Delete a message by final message ID. Pending message IDs are not accepted
+   * because messages cannot be deleted while sending.
+   *
+   * @example
+   * ```ts
+   * await client.messages.delete('1343993', {
+   *   chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
+   * });
+   * ```
+   */
+  delete(messageID: string, params: MessageDeleteParams, options?: RequestOptions): APIPromise<void> {
+    const { chatID, forEveryone } = params;
+    return this._client.delete(path`/v1/chats/${chatID}/messages/${messageID}`, {
+      query: { forEveryone },
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 
@@ -110,38 +151,46 @@ export class BaseMessages extends APIResource {
  */
 export class Messages extends BaseMessages {}
 
-export interface MessageUpdateResponse {
+export interface MessageUpdateResponse extends Shared.Message {
   /**
-   * Unique identifier of the chat.
-   */
-  chatID: string;
-
-  /**
-   * Message ID.
+   * @deprecated DEPRECATED - use id instead. Compatibility alias for older clients.
    */
   messageID: string;
 
   /**
-   * Whether the message was successfully edited
+   * @deprecated DEPRECATED - compatibility field. Successful responses are already
+   * represented by the 200 status code.
    */
-  success: boolean;
+  success: true;
 }
 
 export interface MessageSendResponse {
   /**
-   * Unique identifier of the chat.
+   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
+   * installation when available.
    */
   chatID: string;
 
   /**
-   * Pending message ID
+   * Pending ID assigned to the message before the network confirms the send. Pass it
+   * to GET /v1/chats/{chatID}/messages/{messageID} to resolve, or wait for the
+   * matching message.upserted over the WebSocket.
    */
   pendingMessageID: string;
 }
 
+export interface MessageRetrieveParams {
+  /**
+   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
+   * installation when available.
+   */
+  chatID: string;
+}
+
 export interface MessageUpdateParams {
   /**
-   * Path param: Unique identifier of the chat.
+   * Path param: Chat ID. Input routes also accept the local chat ID from this Beeper
+   * Desktop installation when available.
    */
   chatID: string;
 
@@ -152,6 +201,20 @@ export interface MessageUpdateParams {
 }
 
 export interface MessageListParams extends CursorNoLimitParams {}
+
+export interface MessageDeleteParams {
+  /**
+   * Path param: Chat ID. Input routes also accept the local chat ID from this Beeper
+   * Desktop installation when available.
+   */
+  chatID: string;
+
+  /**
+   * Query param: True to request deletion for everyone when the network supports it;
+   * false to delete only for the authenticated user when supported.
+   */
+  forEveryone?: boolean | null;
+}
 
 export interface MessageSearchParams extends CursorSearchParams {
   /**
@@ -226,7 +289,8 @@ export interface MessageSendParams {
   replyToMessageID?: string;
 
   /**
-   * Text content of the message you want to send. You may use markdown.
+   * Draft text. Plain text and Markdown are converted to Matrix HTML with the same
+   * rules used by send and edit.
    */
   text?: string;
 }
@@ -262,10 +326,10 @@ export namespace MessageSendParams {
     size?: Attachment.Size;
 
     /**
-     * Special attachment type (gif, voiceNote, sticker). If omitted, auto-detected
-     * from mimeType
+     * Attachment type hint (image, video, audio, file, gif, voice-note, sticker). If
+     * omitted, auto-detected from mimeType
      */
-    type?: 'gif' | 'voiceNote' | 'sticker';
+    type?: 'image' | 'video' | 'audio' | 'file' | 'gif' | 'voice-note' | 'sticker';
   }
 
   export namespace Attachment {
@@ -284,8 +348,10 @@ export declare namespace Messages {
   export {
     type MessageUpdateResponse as MessageUpdateResponse,
     type MessageSendResponse as MessageSendResponse,
+    type MessageRetrieveParams as MessageRetrieveParams,
     type MessageUpdateParams as MessageUpdateParams,
     type MessageListParams as MessageListParams,
+    type MessageDeleteParams as MessageDeleteParams,
     type MessageSearchParams as MessageSearchParams,
     type MessageSendParams as MessageSendParams,
   };

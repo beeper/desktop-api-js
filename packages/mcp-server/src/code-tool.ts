@@ -26,6 +26,7 @@ For example:
 \`\`\`
 async function run(client) {
   const page = await client.chats.search({
+    accountIDs: ['matrix', 'discordgo', 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc'],
     includeMuted: true,
     limit: 3,
     type: 'single',
