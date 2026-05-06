@@ -34,6 +34,7 @@ const client = new BeeperDesktop({
 });
 
 const page = await client.chats.search({
+  accountIDs: ['matrix', 'discordgo', 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc'],
   includeMuted: true,
   limit: 3,
   type: 'single',
@@ -173,9 +174,9 @@ async function fetchAllMessages(params) {
   const allMessages = [];
   // Automatically fetches more pages as needed.
   for await (const message of client.messages.search({
-    accountIDs: ['local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI'],
+    accountIDs: ['discordgo', 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc'],
     limit: 10,
-    query: 'deployment',
+    query: 'oauth',
   })) {
     allMessages.push(message);
   }
@@ -187,9 +188,9 @@ Alternatively, you can request a single page at a time:
 
 ```ts
 let page = await client.messages.search({
-  accountIDs: ['local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI'],
+  accountIDs: ['discordgo', 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc'],
   limit: 10,
-  query: 'deployment',
+  query: 'oauth',
 });
 for (const message of page.items) {
   console.log(message);

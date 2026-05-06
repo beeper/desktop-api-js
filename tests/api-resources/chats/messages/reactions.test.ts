@@ -25,9 +25,9 @@ const parentPartialClient = createClient({
 
 const runTests = (client: PartialBeeperDesktop<{ chats: { messages: { reactions: BaseReactions } } }>) => {
   test('delete: only required params', async () => {
-    const responsePromise = client.chats.messages.reactions.delete('messageID', {
+    const responsePromise = client.chats.messages.reactions.delete('x', {
       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-      reactionKey: 'x',
+      messageID: '1343993',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -39,14 +39,14 @@ const runTests = (client: PartialBeeperDesktop<{ chats: { messages: { reactions:
   });
 
   test('delete: required and optional params', async () => {
-    const response = await client.chats.messages.reactions.delete('messageID', {
+    const response = await client.chats.messages.reactions.delete('x', {
       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
-      reactionKey: 'x',
+      messageID: '1343993',
     });
   });
 
   test('add: only required params', async () => {
-    const responsePromise = client.chats.messages.reactions.add('messageID', {
+    const responsePromise = client.chats.messages.reactions.add('1343993', {
       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       reactionKey: 'x',
     });
@@ -60,7 +60,7 @@ const runTests = (client: PartialBeeperDesktop<{ chats: { messages: { reactions:
   });
 
   test('add: required and optional params', async () => {
-    const response = await client.chats.messages.reactions.add('messageID', {
+    const response = await client.chats.messages.reactions.add('1343993', {
       chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com',
       reactionKey: 'x',
       transactionID: 'transactionID',

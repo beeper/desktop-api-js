@@ -58,7 +58,52 @@ const runTests = (client: PartialBeeperDesktop<{ chats: BaseChats }>) => {
     await expect(
       client.chats.retrieve(
         '!NCdzlIaMjZUmvmvyHU:beeper.com',
-        { maxParticipantCount: 50 },
+        { maxParticipantCount: 100 },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
+  });
+
+  test('update', async () => {
+    const responsePromise = client.chats.update('!NCdzlIaMjZUmvmvyHU:beeper.com');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('update: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.chats.update(
+        '!NCdzlIaMjZUmvmvyHU:beeper.com',
+        {
+          description: 'description',
+          draft: {
+            text: 'text',
+            attachments: {
+              foo: {
+                uploadID: 'uploadID',
+                id: 'id',
+                duration: 0,
+                fileName: 'fileName',
+                mimeType: 'mimeType',
+                size: { height: 0, width: 0 },
+                type: 'image',
+              },
+            },
+          },
+          imgURL: 'imgURL',
+          isArchived: true,
+          isLowPriority: true,
+          isMuted: true,
+          isPinned: true,
+          messageExpirySeconds: 0,
+          title: 'title',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(BeeperDesktop.NotFoundError);
@@ -80,10 +125,7 @@ const runTests = (client: PartialBeeperDesktop<{ chats: BaseChats }>) => {
     await expect(
       client.chats.list(
         {
-          accountIDs: [
-            'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
-            'local-instagram_ba_eRfQMmnSNy_p7Ih7HL7RduRpKFU',
-          ],
+          accountIDs: ['matrix', 'discordgo', 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc'],
           cursor: '1725489123456|c29tZUltc2dQYWdl',
           direction: 'before',
         },
@@ -114,6 +156,68 @@ const runTests = (client: PartialBeeperDesktop<{ chats: BaseChats }>) => {
     ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
+  test('markRead', async () => {
+    const responsePromise = client.chats.markRead('!NCdzlIaMjZUmvmvyHU:beeper.com');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('markRead: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.chats.markRead(
+        '!NCdzlIaMjZUmvmvyHU:beeper.com',
+        { messageID: '1343993' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
+  });
+
+  test('markUnread', async () => {
+    const responsePromise = client.chats.markUnread('!NCdzlIaMjZUmvmvyHU:beeper.com');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('markUnread: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.chats.markUnread(
+        '!NCdzlIaMjZUmvmvyHU:beeper.com',
+        { messageID: '1343993' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
+  });
+
+  test('notifyAnyway', async () => {
+    const responsePromise = client.chats.notifyAnyway('!NCdzlIaMjZUmvmvyHU:beeper.com');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('notifyAnyway: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.chats.notifyAnyway('!NCdzlIaMjZUmvmvyHU:beeper.com', {}, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(BeeperDesktop.NotFoundError);
+  });
+
   test('search', async () => {
     const responsePromise = client.chats.search();
     const rawResponse = await responsePromise.asResponse();
@@ -130,10 +234,7 @@ const runTests = (client: PartialBeeperDesktop<{ chats: BaseChats }>) => {
     await expect(
       client.chats.search(
         {
-          accountIDs: [
-            'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc',
-            'local-telegram_ba_QFrb5lrLPhO3OT5MFBeTWv0x4BI',
-          ],
+          accountIDs: ['matrix', 'discordgo', 'local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc'],
           cursor: '1725489123456|c29tZUltc2dQYWdl',
           direction: 'before',
           inbox: 'primary',
@@ -151,8 +252,7 @@ const runTests = (client: PartialBeeperDesktop<{ chats: BaseChats }>) => {
     ).rejects.toThrow(BeeperDesktop.NotFoundError);
   });
 
-  // Stainless mock tests currently load the project-published OpenAPI spec URL, which may not include newly-added local-only endpoints during build checks.
-  test.skip('start: only required params', async () => {
+  test('start: only required params', async () => {
     const responsePromise = client.chats.start({
       accountID: 'accountID',
       user: {},
@@ -166,8 +266,7 @@ const runTests = (client: PartialBeeperDesktop<{ chats: BaseChats }>) => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Stainless mock tests currently load the project-published OpenAPI spec URL, which may not include newly-added local-only endpoints during build checks.
-  test.skip('start: required and optional params', async () => {
+  test('start: required and optional params', async () => {
     const response = await client.chats.start({
       accountID: 'accountID',
       user: {

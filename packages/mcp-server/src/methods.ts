@@ -53,6 +53,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/chats/{chatID}',
   },
   {
+    clientCallName: 'client.chats.update',
+    fullyQualifiedName: 'chats.update',
+    httpMethod: 'patch',
+    httpPath: '/v1/chats/{chatID}',
+  },
+  {
     clientCallName: 'client.chats.list',
     fullyQualifiedName: 'chats.list',
     httpMethod: 'get',
@@ -65,6 +71,24 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/chats/{chatID}/archive',
   },
   {
+    clientCallName: 'client.chats.markRead',
+    fullyQualifiedName: 'chats.markRead',
+    httpMethod: 'post',
+    httpPath: '/v1/chats/{chatID}/read',
+  },
+  {
+    clientCallName: 'client.chats.markUnread',
+    fullyQualifiedName: 'chats.markUnread',
+    httpMethod: 'post',
+    httpPath: '/v1/chats/{chatID}/unread',
+  },
+  {
+    clientCallName: 'client.chats.notifyAnyway',
+    fullyQualifiedName: 'chats.notifyAnyway',
+    httpMethod: 'post',
+    httpPath: '/v1/chats/{chatID}/notify-anyway',
+  },
+  {
     clientCallName: 'client.chats.search',
     fullyQualifiedName: 'chats.search',
     httpMethod: 'get',
@@ -74,7 +98,7 @@ export const sdkMethods: SdkMethod[] = [
     clientCallName: 'client.chats.start',
     fullyQualifiedName: 'chats.start',
     httpMethod: 'post',
-    httpPath: '/v1/chats.start',
+    httpPath: '/v1/chats/start',
   },
   {
     clientCallName: 'client.chats.reminders.create',
@@ -92,13 +116,19 @@ export const sdkMethods: SdkMethod[] = [
     clientCallName: 'client.chats.messages.reactions.delete',
     fullyQualifiedName: 'chats.messages.reactions.delete',
     httpMethod: 'delete',
-    httpPath: '/v1/chats/{chatID}/messages/{messageID}/reactions',
+    httpPath: '/v1/chats/{chatID}/messages/{messageID}/reactions/{reactionKey}',
   },
   {
     clientCallName: 'client.chats.messages.reactions.add',
     fullyQualifiedName: 'chats.messages.reactions.add',
     httpMethod: 'post',
     httpPath: '/v1/chats/{chatID}/messages/{messageID}/reactions',
+  },
+  {
+    clientCallName: 'client.messages.retrieve',
+    fullyQualifiedName: 'messages.retrieve',
+    httpMethod: 'get',
+    httpPath: '/v1/chats/{chatID}/messages/{messageID}',
   },
   {
     clientCallName: 'client.messages.update',
@@ -111,6 +141,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'messages.list',
     httpMethod: 'get',
     httpPath: '/v1/chats/{chatID}/messages',
+  },
+  {
+    clientCallName: 'client.messages.delete',
+    fullyQualifiedName: 'messages.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/chats/{chatID}/messages/{messageID}',
   },
   {
     clientCallName: 'client.messages.search',

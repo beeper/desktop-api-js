@@ -20,8 +20,8 @@ export class BaseAccounts extends APIResource {
   static override readonly _key: readonly ['accounts'] = Object.freeze(['accounts'] as const);
 
   /**
-   * Lists chat accounts across networks (WhatsApp, Telegram, Twitter/X, etc.)
-   * actively connected to this Beeper Desktop instance
+   * List Chat Accounts connected to this Beeper Desktop instance, including bridge
+   * metadata and network identity.
    *
    * @example
    * ```ts
@@ -44,12 +44,15 @@ export class Accounts extends BaseAccounts {
  */
 export interface Account {
   /**
-   * Chat account added to Beeper. Use this to route account-scoped actions.
+   * Chat account added to Beeper. Use this to route account-scoped actions. Examples
+   * include matrix for Beeper/Matrix, discordgo for a cloud bridge,
+   * slackgo.TEAM-USER for workspace-scoped cloud bridges, and local-whatsapp*ba*...
+   * for local bridges.
    */
   accountID: string;
 
   /**
-   * Bridge metadata for the account. Available in Beeper Desktop v4.2.799+.
+   * Bridge metadata for the account. Available in Beeper Desktop v4.2.785+.
    */
   bridge: Account.Bridge;
 
@@ -67,21 +70,24 @@ export interface Account {
 
 export namespace Account {
   /**
-   * Bridge metadata for the account. Available in Beeper Desktop v4.2.799+.
+   * Bridge metadata for the account. Available in Beeper Desktop v4.2.785+.
    */
   export interface Bridge {
     /**
-     * Bridge instance identifier. Available in Beeper Desktop v4.2.799+.
+     * Bridge instance identifier. Matrix and cloud bridges often use the bridge type
+     * (for example matrix or discordgo); local bridges use a local bridge ID (for
+     * example local-whatsapp). Available in Beeper Desktop v4.2.785+.
      */
     id: string;
 
     /**
-     * Bridge provider for the account. Available in Beeper Desktop v4.2.799+.
+     * Bridge provider for the account. Available in Beeper Desktop v4.2.785+.
      */
     provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk';
 
     /**
-     * Bridge type. Available in Beeper Desktop v4.2.799+.
+     * Bridge type, such as matrix, discordgo, slackgo, whatsapp, telegram, or twitter.
+     * Available in Beeper Desktop v4.2.785+.
      */
     type: string;
   }
