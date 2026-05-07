@@ -38,7 +38,7 @@ const newServer = async ({
   // endpoint so clients know how to authenticate (RFC 9728).
   let authOptions: Partial<ClientOptions>;
   try {
-    authOptions = parseClientAuthHeaders(req, false);
+    authOptions = parseClientAuthHeaders(req, true);
   } catch (error) {
     const resourceIdentifier = oauthResourceIdentifier(req);
     res.set(

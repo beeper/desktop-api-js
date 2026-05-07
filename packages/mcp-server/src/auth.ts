@@ -7,7 +7,6 @@ import { McpOptions } from './options';
 export const parseClientAuthHeaders = (req: IncomingMessage, required?: boolean): Partial<ClientOptions> => {
   if (req.headers.authorization) {
     const scheme = req.headers.authorization.split(' ')[0]!;
-    const value = req.headers.authorization.slice(scheme.length + 1);
     switch (scheme) {
       case 'Bearer':
         return { accessToken: req.headers.authorization.slice('Bearer '.length) };
@@ -16,14 +15,15 @@ export const parseClientAuthHeaders = (req: IncomingMessage, required?: boolean)
           'Unsupported authorization scheme. Expected the "Authorization" header to be a supported scheme (Bearer).',
         );
     }
-  } else if (required) {
-    throw new Error('Missing required Authorization header; see WWW-Authenticate header for details.');
   }
 
   const accessToken =
     Array.isArray(req.headers['x-beeper-access-token']) ?
       req.headers['x-beeper-access-token'][0]
     : req.headers['x-beeper-access-token'];
+  if (!accessToken && required) {
+    throw new Error('Missing required Authorization header; see WWW-Authenticate header for details.');
+  }
   return { accessToken };
 };
 
