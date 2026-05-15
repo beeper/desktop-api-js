@@ -84,10 +84,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Focus(context.TODO(), beeperdesktopapi.FocusParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Success)\n}\n',
       },
-      cli: {
-        method: '$client focus',
-        example: "beeper-desktop-cli focus \\\n  --access-token 'My Access Token'",
-      },
       php: {
         method: 'focus',
         example:
@@ -129,10 +125,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Search(context.TODO(), beeperdesktopapi.SearchParams{\n\t\tQuery: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Results)\n}\n',
       },
-      cli: {
-        method: '$client search',
-        example: "beeper-desktop-cli search \\\n  --access-token 'My Access Token' \\\n  --query x",
-      },
       php: {
         method: 'search',
         example:
@@ -172,10 +164,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Accounts.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\taccounts, err := client.Accounts.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accounts)\n}\n',
-      },
-      cli: {
-        method: 'accounts list',
-        example: "beeper-desktop-cli accounts list \\\n  --access-token 'My Access Token'",
       },
       php: {
         method: 'accounts->list',
@@ -217,11 +205,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Accounts.Contacts.Search',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Accounts.Contacts.Search(\n\t\tcontext.TODO(),\n\t\t"accountID",\n\t\tbeeperdesktopapi.AccountContactSearchParams{\n\t\t\tQuery: "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Items)\n}\n',
-      },
-      cli: {
-        method: 'contacts search',
-        example:
-          "beeper-desktop-cli accounts:contacts search \\\n  --access-token 'My Access Token' \\\n  --account-id accountID \\\n  --query x",
       },
       php: {
         method: 'accounts->contacts->search',
@@ -269,11 +252,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Accounts.Contacts.List(\n\t\tcontext.TODO(),\n\t\t"accountID",\n\t\tbeeperdesktopapi.AccountContactListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
-      cli: {
-        method: 'contacts list',
-        example:
-          "beeper-desktop-cli accounts:contacts list \\\n  --access-token 'My Access Token' \\\n  --account-id accountID",
-      },
       php: {
         method: 'accounts->contacts->list',
         example:
@@ -313,11 +291,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Chats.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tchat, err := client.Chats.Get(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", chat.ID)\n}\n',
-      },
-      cli: {
-        method: 'chats retrieve',
-        example:
-          "beeper-desktop-cli chats retrieve \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'chats->retrieve',
@@ -365,11 +338,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tchat, err := client.Chats.New(context.TODO(), beeperdesktopapi.ChatNewParams{\n\t\tAccountID:      "accountID",\n\t\tParticipantIDs: []string{"string"},\n\t\tType:           beeperdesktopapi.ChatNewParamsTypeSingle,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", chat)\n}\n',
       },
-      cli: {
-        method: 'chats create',
-        example:
-          "beeper-desktop-cli chats create \\\n  --access-token 'My Access Token' \\\n  --account-id accountID \\\n  --participant-id string \\\n  --type single",
-      },
       php: {
         method: 'chats->create',
         example:
@@ -416,11 +384,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Chats.Start(context.TODO(), beeperdesktopapi.ChatStartParams{\n\t\tAccountID: "accountID",\n\t\tUser:      beeperdesktopapi.ChatStartParamsUser{},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
       },
-      cli: {
-        method: 'chats start',
-        example:
-          "beeper-desktop-cli chats start \\\n  --access-token 'My Access Token' \\\n  --account-id accountID \\\n  --user '{}'",
-      },
       php: {
         method: 'chats->start',
         example:
@@ -461,10 +424,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Chats.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Chats.List(context.TODO(), beeperdesktopapi.ChatListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
-      },
-      cli: {
-        method: 'chats list',
-        example: "beeper-desktop-cli chats list \\\n  --access-token 'My Access Token'",
       },
       php: {
         method: 'chats->list',
@@ -519,10 +478,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Chats.Search(context.TODO(), beeperdesktopapi.ChatSearchParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
-      cli: {
-        method: 'chats search',
-        example: "beeper-desktop-cli chats search \\\n  --access-token 'My Access Token'",
-      },
       php: {
         method: 'chats->search',
         example:
@@ -561,11 +516,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Chats.Archive',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Chats.Archive(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatArchiveParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
-      },
-      cli: {
-        method: 'chats archive',
-        example:
-          "beeper-desktop-cli chats archive \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'chats->archive',
@@ -619,11 +569,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tchat, err := client.Chats.Update(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", chat.ID)\n}\n',
       },
-      cli: {
-        method: 'chats update',
-        example:
-          "beeper-desktop-cli chats update \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
-      },
       php: {
         method: 'chats->update',
         example:
@@ -664,11 +609,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tchat, err := client.Chats.MarkRead(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatMarkReadParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", chat.ID)\n}\n',
       },
-      cli: {
-        method: 'chats mark_read',
-        example:
-          "beeper-desktop-cli chats mark-read \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
-      },
       php: {
         method: 'chats->markRead',
         example:
@@ -708,11 +648,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Chats.MarkUnread',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tchat, err := client.Chats.MarkUnread(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatMarkUnreadParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", chat.ID)\n}\n',
-      },
-      cli: {
-        method: 'chats mark_unread',
-        example:
-          "beeper-desktop-cli chats mark-unread \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'chats->markUnread',
@@ -755,11 +690,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tchat, err := client.Chats.NotifyAnyway(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatNotifyAnywayParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", chat.ID)\n}\n',
       },
-      cli: {
-        method: 'chats notify_anyway',
-        example:
-          "beeper-desktop-cli chats notify-anyway \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
-      },
       php: {
         method: 'chats->notifyAnyway',
         example:
@@ -798,11 +728,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"time"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Chats.Reminders.New(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.ChatReminderNewParams{\n\t\t\tReminder: beeperdesktopapi.ChatReminderNewParamsReminder{\n\t\t\t\tRemindAt: time.Now(),\n\t\t\t},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
-      cli: {
-        method: 'reminders create',
-        example:
-          "beeper-desktop-cli chats:reminders create \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --reminder \"{remindAt: '2025-08-31T23:30:12.520Z'}\"",
-      },
       php: {
         method: 'chats->reminders->create',
         example:
@@ -840,11 +765,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Chats.Reminders.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Chats.Reminders.Delete(context.TODO(), "!NCdzlIaMjZUmvmvyHU:beeper.com")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
-      },
-      cli: {
-        method: 'reminders delete',
-        example:
-          "beeper-desktop-cli chats:reminders delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'chats->reminders->delete',
@@ -886,11 +806,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Chats.Messages.Reactions.Add(\n\t\tcontext.TODO(),\n\t\t"1343993",\n\t\tbeeperdesktopapi.ChatMessageReactionAddParams{\n\t\t\tChatID:      "!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\t\tReactionKey: "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ChatID)\n}\n',
       },
-      cli: {
-        method: 'reactions add',
-        example:
-          "beeper-desktop-cli chats:messages:reactions add \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993 \\\n  --reaction-key x",
-      },
       php: {
         method: 'chats->messages->reactions->add',
         example:
@@ -929,11 +844,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Chats.Messages.Reactions.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\treaction, err := client.Chats.Messages.Reactions.Delete(\n\t\tcontext.TODO(),\n\t\t"x",\n\t\tbeeperdesktopapi.ChatMessageReactionDeleteParams{\n\t\t\tChatID:    "!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\t\tMessageID: "1343993",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", reaction.ChatID)\n}\n',
-      },
-      cli: {
-        method: 'reactions delete',
-        example:
-          "beeper-desktop-cli chats:messages:reactions delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993 \\\n  --reaction-key x",
       },
       php: {
         method: 'chats->messages->reactions->delete',
@@ -989,10 +899,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Messages.Search(context.TODO(), beeperdesktopapi.MessageSearchParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
-      cli: {
-        method: 'messages search',
-        example: "beeper-desktop-cli messages search \\\n  --access-token 'My Access Token'",
-      },
       php: {
         method: 'messages->search',
         example:
@@ -1032,11 +938,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Messages.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tpage, err := client.Messages.List(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.MessageListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
-      },
-      cli: {
-        method: 'messages list',
-        example:
-          "beeper-desktop-cli messages list \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'messages->list',
@@ -1083,11 +984,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Messages.Send(\n\t\tcontext.TODO(),\n\t\t"!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\tbeeperdesktopapi.MessageSendParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.PendingMessageID)\n}\n',
       },
-      cli: {
-        method: 'messages send',
-        example:
-          "beeper-desktop-cli messages send \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
-      },
       php: {
         method: 'messages->send',
         example:
@@ -1129,11 +1025,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tmessage, err := client.Messages.Get(\n\t\tcontext.TODO(),\n\t\t"1343993",\n\t\tbeeperdesktopapi.MessageGetParams{\n\t\t\tChatID: "!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message.ID)\n}\n',
       },
-      cli: {
-        method: 'messages retrieve',
-        example:
-          "beeper-desktop-cli messages retrieve \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993",
-      },
       php: {
         method: 'messages->retrieve',
         example:
@@ -1174,11 +1065,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tmessage, err := client.Messages.Update(\n\t\tcontext.TODO(),\n\t\t"1343993",\n\t\tbeeperdesktopapi.MessageUpdateParams{\n\t\t\tChatID: "!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\t\tText:   "x",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", message)\n}\n',
       },
-      cli: {
-        method: 'messages update',
-        example:
-          "beeper-desktop-cli messages update \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993 \\\n  --text x",
-      },
       php: {
         method: 'messages->update',
         example:
@@ -1217,11 +1103,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Messages.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.Messages.Delete(\n\t\tcontext.TODO(),\n\t\t"1343993",\n\t\tbeeperdesktopapi.MessageDeleteParams{\n\t\t\tChatID: "!NCdzlIaMjZUmvmvyHU:beeper.com",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
-      },
-      cli: {
-        method: 'messages delete',
-        example:
-          "beeper-desktop-cli messages delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993",
       },
       php: {
         method: 'messages->delete',
@@ -1262,11 +1143,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Assets.Download',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Assets.Download(context.TODO(), beeperdesktopapi.AssetDownloadParams{\n\t\tURL: "mxc://example.org/Q4x9CqGz1pB3Oa6XgJ",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Error)\n}\n',
-      },
-      cli: {
-        method: 'assets download',
-        example:
-          "beeper-desktop-cli assets download \\\n  --access-token 'My Access Token' \\\n  --url mxc://example.org/Q4x9CqGz1pB3Oa6XgJ",
       },
       php: {
         method: 'assets->download',
@@ -1309,11 +1185,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"bytes"\n\t"context"\n\t"fmt"\n\t"io"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Assets.Upload(context.TODO(), beeperdesktopapi.AssetUploadParams{\n\t\tFile: io.Reader(bytes.NewBuffer([]byte("Example data"))),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Width)\n}\n',
       },
-      cli: {
-        method: 'assets upload',
-        example:
-          "beeper-desktop-cli assets upload \\\n  --access-token 'My Access Token' \\\n  --file 'Example data'",
-      },
       php: {
         method: 'assets->upload',
         example:
@@ -1355,11 +1226,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Assets.UploadBase64(context.TODO(), beeperdesktopapi.AssetUploadBase64Params{\n\t\tContent: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Width)\n}\n',
       },
-      cli: {
-        method: 'assets upload_base64',
-        example:
-          "beeper-desktop-cli assets upload-base64 \\\n  --access-token 'My Access Token' \\\n  --content x",
-      },
       php: {
         method: 'assets->uploadBase64',
         example:
@@ -1399,10 +1265,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Assets.Serve',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Assets.Serve(context.TODO(), beeperdesktopapi.AssetServeParams{\n\t\tURL: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
-      },
-      cli: {
-        method: 'assets serve',
-        example: "beeper-desktop-cli assets serve \\\n  --access-token 'My Access Token' \\\n  --url x",
       },
       php: {
         method: 'assets->serve',
@@ -1444,10 +1306,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tinfo, err := client.Info.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", info.App)\n}\n',
       },
-      cli: {
-        method: 'info retrieve',
-        example: "beeper-desktop-cli info retrieve \\\n  --access-token 'My Access Token'",
-      },
       php: {
         method: 'info->retrieve',
         example:
@@ -1462,11 +1320,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
-  {
-    language: 'cli',
-    content:
-      "# Beeper Desktop CLI\n\nThe official CLI for the [Beeper Desktop REST API](https://developers.beeper.com/desktop-api/).\n\n<!-- x-release-please-start-version -->\n\n## Installation\n\n### Installing with Homebrew\n\n~~~sh\nbrew install beeper/tap/beeper-desktop-cli\n~~~\n\n### Installing with Go\n\nTo test or install the CLI locally, you need [Go](https://go.dev/doc/install) version 1.22 or later installed.\n\n~~~sh\ngo install 'github.com/beeper/desktop-api-cli/cmd/beeper-desktop-cli@latest'\n~~~\n\nOnce you have run `go install`, the binary is placed in your Go bin directory:\n\n- **Default location**: `$HOME/go/bin` (or `$GOPATH/bin` if GOPATH is set)\n- **Check your path**: Run `go env GOPATH` to see the base directory\n\nIf commands aren't found after installation, add the Go bin directory to your PATH:\n\n~~~sh\n# Add to your shell profile (.zshrc, .bashrc, etc.)\nexport PATH=\"$PATH:$(go env GOPATH)/bin\"\n~~~\n\n<!-- x-release-please-end -->\n\n### Running Locally\n\nAfter cloning the git repository for this project, you can use the\n`scripts/run` script to run the tool locally:\n\n~~~sh\n./scripts/run args...\n~~~\n\n## Usage\n\nThe CLI follows a resource-based command structure:\n\n~~~sh\nbeeper-desktop-cli [resource] <command> [flags...]\n~~~\n\n~~~sh\nbeeper-desktop-cli chats search \\\n  --access-token 'My Access Token' \\\n  --account-id matrix \\\n  --account-id discordgo \\\n  --account-id local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc \\\n  --include-muted \\\n  --limit 3 \\\n  --type single\n~~~\n\nFor details about specific commands, use the `--help` flag.\n\n### Environment variables\n\n| Environment variable  | Description                                                                                           | Required |\n| --------------------- | ----------------------------------------------------------------------------------------------------- | -------- |\n| `BEEPER_ACCESS_TOKEN` | Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for all API operations. | yes      |\n\n### Global flags\n\n- `--access-token` - Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for all API operations. (can also be set with `BEEPER_ACCESS_TOKEN` env var)\n- `--help` - Show command line usage\n- `--debug` - Enable debug logging (includes HTTP request/response details)\n- `--version`, `-v` - Show the CLI version\n- `--base-url` - Use a custom API backend URL\n- `--format` - Change the output format (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--format-error` - Change the output format for errors (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--transform` - Transform the data output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n- `--transform-error` - Transform the error output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n\n### Passing files as arguments\n\nTo pass files to your API, you can use the `@myfile.ext` syntax:\n\n~~~bash\nbeeper-desktop-cli <command> --arg @abe.jpg\n~~~\n\nFiles can also be passed inside JSON or YAML blobs:\n\n~~~bash\nbeeper-desktop-cli <command> --arg '{image: \"@abe.jpg\"}'\n# Equivalent:\nbeeper-desktop-cli <command> <<YAML\narg:\n  image: \"@abe.jpg\"\nYAML\n~~~\n\nIf you need to pass a string literal that begins with an `@` sign, you can\nescape the `@` sign to avoid accidentally passing a file.\n\n~~~bash\nbeeper-desktop-cli <command> --username '\\@abe'\n~~~\n\n#### Explicit encoding\n\nFor JSON endpoints, the CLI tool does filetype sniffing to determine whether the\nfile contents should be sent as a string literal (for plain text files) or as a\nbase64-encoded string literal (for binary files). If you need to explicitly send\nthe file as either plain text or base64-encoded data, you can use\n`@file://myfile.txt` (for string encoding) or `@data://myfile.dat` (for\nbase64-encoding). Note that absolute paths will begin with `@file://` or\n`@data://`, followed by a third `/` (for example, `@file:///tmp/file.txt`).\n\n~~~bash\nbeeper-desktop-cli <command> --arg @data://file.txt\n~~~\n\n## Linking different Go SDK versions\n\nYou can link the CLI against a different version of the Beeper Desktop Go SDK\nfor development purposes using the `./scripts/link` script.\n\nTo link to a specific version from a repository (version can be a branch,\ngit tag, or commit hash):\n\n~~~bash\n./scripts/link github.com/org/repo@version\n~~~\n\nTo link to a local copy of the SDK:\n\n~~~bash\n./scripts/link ../path/to/beeperdesktopapi-go\n~~~\n\nIf you run the link script without any arguments, it will default to `../beeperdesktopapi-go`.\n",
-  },
   {
     language: 'go',
     content:
