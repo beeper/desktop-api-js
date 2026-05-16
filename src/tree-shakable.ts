@@ -18,11 +18,11 @@ type InferClientStructure<T extends readonly (typeof APIResource)[]> =
  *
  * @example
  * ```ts
- * import { App } from `@beeper/desktop-api/resources/app`;
+ * import { Accounts } from `@beeper/desktop-api/resources/accounts`;
  * import { createClient } from `@beeper/desktop-api/tree-shakable`;
  *
  * const client = createClient({
- *   resources: [App],
+ *   resources: [Accounts],
  * });
  * ```
  */

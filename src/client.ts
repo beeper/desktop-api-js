@@ -98,7 +98,7 @@ export interface ClientOptions {
   /**
    * Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for authenticated API operations.
    */
-  accessToken?: string | null | undefined;
+  accessToken?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -173,7 +173,7 @@ export interface ClientOptions {
  * Base class for Beeper Desktop API clients.
  */
 export class BaseBeeperDesktop {
-  accessToken: string | null;
+  accessToken: string;
 
   baseURL: string;
   maxRetries: number;
@@ -190,7 +190,7 @@ export class BaseBeeperDesktop {
   /**
    * API Client for interfacing with the Beeper Desktop API.
    *
-   * @param {string | null | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? null]
+   * @param {string | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? undefined]
    * @param {string} [opts.baseURL=process.env['BEEPER_BASE_URL'] ?? http://localhost:23373] - Override the default base URL for the API.
    * @param {number} [opts.timeout=30 seconds] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -201,9 +201,15 @@ export class BaseBeeperDesktop {
    */
   constructor({
     baseURL = readEnv('BEEPER_BASE_URL'),
-    accessToken = readEnv('BEEPER_ACCESS_TOKEN') ?? null,
+    accessToken = readEnv('BEEPER_ACCESS_TOKEN'),
     ...opts
   }: ClientOptions = {}) {
+    if (accessToken === undefined) {
+      throw new Errors.BeeperDesktopError(
+        "The BEEPER_ACCESS_TOKEN environment variable is missing or empty; either provide it, or instantiate the BeeperDesktop client with an accessToken option, like new BeeperDesktop({ accessToken: 'My Access Token' }).",
+      );
+    }
+
     const options: ClientOptions = {
       accessToken,
       ...opts,
@@ -303,16 +309,7 @@ export class BaseBeeperDesktop {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    if (this.accessToken && values.get('authorization')) {
-      return;
-    }
-    if (nulls.has('authorization')) {
-      return;
-    }
-
-    throw new Error(
-      'Could not resolve authentication method. Expected the accessToken to be set. Or for the "Authorization" headers to be explicitly omitted',
-    );
+    return;
   }
 
   protected async authHeaders(
@@ -323,9 +320,6 @@ export class BaseBeeperDesktop {
   }
 
   protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    if (this.accessToken == null) {
-      return undefined;
-    }
     return buildHeaders([{ Authorization: `Bearer ${this.accessToken}` }]);
   }
 
@@ -864,10 +858,6 @@ export class BeeperDesktop extends BaseBeeperDesktop {
   static toFile = Uploads.toFile;
 
   /**
-   * Manage Beeper app login and encrypted messaging setup
-   */
-  app: API.App = new API.App(this);
-  /**
    * Manage connected chat accounts
    */
   accounts: API.Accounts = new API.Accounts(this);
@@ -875,10 +865,6 @@ export class BeeperDesktop extends BaseBeeperDesktop {
    * Manage bridge-backed account types and account availability
    */
   bridges: API.Bridges = new API.Bridges(this);
-  /**
-   * Matrix-compatible APIs for accounts, rooms, and connected network bridges.
-   */
-  matrix: API.Matrix = new API.Matrix(this);
   /**
    * Manage chats
    */
@@ -895,16 +881,24 @@ export class BeeperDesktop extends BaseBeeperDesktop {
    * Server discovery and capability metadata. Use /v1/info before authentication setup.
    */
   info: API.Info = new API.Info(this);
+  /**
+   * Manage Beeper app login and encrypted messaging setup
+   */
+  app: API.App = new API.App(this);
+  /**
+   * Matrix-compatible APIs for accounts, rooms, and connected network bridges.
+   */
+  matrix: API.Matrix = new API.Matrix(this);
 }
 
-BeeperDesktop.App = App;
 BeeperDesktop.Accounts = Accounts;
 BeeperDesktop.Bridges = Bridges;
-BeeperDesktop.Matrix = Matrix;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
 BeeperDesktop.Assets = Assets;
 BeeperDesktop.Info = Info;
+BeeperDesktop.App = App;
+BeeperDesktop.Matrix = Matrix;
 
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
@@ -925,17 +919,6 @@ export declare namespace BeeperDesktop {
     type SearchParams as SearchParams,
   };
 
-  export {
-    App as App,
-    type LoginRegistrationRequiredResponse as LoginRegistrationRequiredResponse,
-    type LoginResponse as LoginResponse,
-    type LoginResponseOutput as LoginResponseOutput,
-    type RecoveryCodeResetResponse as RecoveryCodeResetResponse,
-    type StartVerificationResponse as StartVerificationResponse,
-    type StateMutationResponse as StateMutationResponse,
-    type AppStatusResponse as AppStatusResponse,
-  };
-
   export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
 
   export {
@@ -943,8 +926,6 @@ export declare namespace BeeperDesktop {
     type BridgeAvailability as BridgeAvailability,
     type BridgeListResponse as BridgeListResponse,
   };
-
-  export { Matrix as Matrix };
 
   export {
     Chats as Chats,
@@ -990,6 +971,19 @@ export declare namespace BeeperDesktop {
   };
 
   export { Info as Info, type InfoRetrieveResponse as InfoRetrieveResponse };
+
+  export {
+    App as App,
+    type LoginRegistrationRequiredResponse as LoginRegistrationRequiredResponse,
+    type LoginResponse as LoginResponse,
+    type LoginResponseOutput as LoginResponseOutput,
+    type RecoveryCodeResetResponse as RecoveryCodeResetResponse,
+    type StartVerificationResponse as StartVerificationResponse,
+    type StateMutationResponse as StateMutationResponse,
+    type AppStatusResponse as AppStatusResponse,
+  };
+
+  export { Matrix as Matrix };
 
   export type AppStateSnapshot = API.AppStateSnapshot;
   export type Attachment = API.Attachment;

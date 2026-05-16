@@ -10,7 +10,7 @@ import {
   asTextContentResult,
 } from './types';
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { readEnv } from './util';
+import { readEnv, requireValue } from './util';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
 import { getLogger } from './logger';
 import { SdkMethod } from './methods';
@@ -151,7 +151,10 @@ const remoteStainlessHandler = async ({
   const codeModeEndpoint = readEnv('CODE_MODE_ENDPOINT_URL') ?? 'https://api.stainless.com/api/ai/code-tool';
 
   const localClientEnvs = {
-    BEEPER_ACCESS_TOKEN: readEnv('BEEPER_ACCESS_TOKEN') ?? client.accessToken ?? undefined,
+    BEEPER_ACCESS_TOKEN: requireValue(
+      readEnv('BEEPER_ACCESS_TOKEN') ?? client.accessToken,
+      'set BEEPER_ACCESS_TOKEN environment variable or provide accessToken client option',
+    ),
     BEEPER_BASE_URL: readEnv('BEEPER_BASE_URL') ?? client.baseURL ?? undefined,
   };
   // Merge any upstream client envs from the request header, with upstream values taking precedence.
