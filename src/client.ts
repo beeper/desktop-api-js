@@ -37,6 +37,7 @@ import {
   AssetUploadResponse,
   Assets,
 } from './resources/assets';
+import { BridgeAvailability, BridgeListResponse, Bridges } from './resources/bridges';
 import { Info, InfoRetrieveResponse } from './resources/info';
 import {
   MessageDeleteParams,
@@ -50,6 +51,16 @@ import {
   Messages,
 } from './resources/messages';
 import { Account, AccountListResponse, Accounts } from './resources/accounts/accounts';
+import {
+  App,
+  AppStatusResponse,
+  LoginRegistrationRequiredResponse,
+  LoginResponse,
+  LoginResponseOutput,
+  RecoveryCodeResetResponse,
+  StartVerificationResponse,
+  StateMutationResponse,
+} from './resources/app/app';
 import {
   Chat,
   ChatArchiveParams,
@@ -69,6 +80,7 @@ import {
   Chats,
   ChatsCursorSearch,
 } from './resources/chats/chats';
+import { Matrix } from './resources/matrix/matrix';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -846,9 +858,21 @@ export class BeeperDesktop extends BaseBeeperDesktop {
   static toFile = Uploads.toFile;
 
   /**
+   * Manage Beeper app login and encrypted messaging setup
+   */
+  app: API.App = new API.App(this);
+  /**
    * Manage connected chat accounts
    */
   accounts: API.Accounts = new API.Accounts(this);
+  /**
+   * Manage bridge-backed account types and account availability
+   */
+  bridges: API.Bridges = new API.Bridges(this);
+  /**
+   * Matrix-compatible APIs for accounts, rooms, and connected network bridges.
+   */
+  matrix: API.Matrix = new API.Matrix(this);
   /**
    * Manage chats
    */
@@ -867,7 +891,10 @@ export class BeeperDesktop extends BaseBeeperDesktop {
   info: API.Info = new API.Info(this);
 }
 
+BeeperDesktop.App = App;
 BeeperDesktop.Accounts = Accounts;
+BeeperDesktop.Bridges = Bridges;
+BeeperDesktop.Matrix = Matrix;
 BeeperDesktop.Chats = Chats;
 BeeperDesktop.Messages = Messages;
 BeeperDesktop.Assets = Assets;
@@ -892,7 +919,26 @@ export declare namespace BeeperDesktop {
     type SearchParams as SearchParams,
   };
 
+  export {
+    App as App,
+    type LoginRegistrationRequiredResponse as LoginRegistrationRequiredResponse,
+    type LoginResponse as LoginResponse,
+    type LoginResponseOutput as LoginResponseOutput,
+    type RecoveryCodeResetResponse as RecoveryCodeResetResponse,
+    type StartVerificationResponse as StartVerificationResponse,
+    type StateMutationResponse as StateMutationResponse,
+    type AppStatusResponse as AppStatusResponse,
+  };
+
   export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
+
+  export {
+    Bridges as Bridges,
+    type BridgeAvailability as BridgeAvailability,
+    type BridgeListResponse as BridgeListResponse,
+  };
+
+  export { Matrix as Matrix };
 
   export {
     Chats as Chats,
@@ -939,6 +985,7 @@ export declare namespace BeeperDesktop {
 
   export { Info as Info, type InfoRetrieveResponse as InfoRetrieveResponse };
 
+  export type AppStateSnapshot = API.AppStateSnapshot;
   export type Attachment = API.Attachment;
   export type Error = API.Error;
   export type Message = API.Message;

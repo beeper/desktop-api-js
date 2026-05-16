@@ -3,6 +3,17 @@
 export * from './shared';
 export { Accounts, BaseAccounts, type Account, type AccountListResponse } from './accounts/accounts';
 export {
+  App,
+  BaseApp,
+  type LoginRegistrationRequiredResponse,
+  type LoginResponse,
+  type LoginResponseOutput,
+  type RecoveryCodeResetResponse,
+  type StartVerificationResponse,
+  type StateMutationResponse,
+  type AppStatusResponse,
+} from './app/app';
+export {
   Assets,
   BaseAssets,
   type AssetDownloadResponse,
@@ -13,6 +24,7 @@ export {
   type AssetUploadParams,
   type AssetUploadBase64Params,
 } from './assets';
+export { Bridges, BaseBridges, type BridgeAvailability, type BridgeListResponse } from './bridges';
 export {
   Chats,
   BaseChats,
@@ -34,6 +46,7 @@ export {
   type ChatsCursorSearch,
 } from './chats/chats';
 export { Info, BaseInfo, type InfoRetrieveResponse } from './info';
+export { Matrix, BaseMatrix } from './matrix/matrix';
 export {
   Messages,
   BaseMessages,
