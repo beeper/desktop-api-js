@@ -96,9 +96,9 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for all API operations.
+   * Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for authenticated API operations.
    */
-  accessToken?: string | undefined;
+  accessToken?: string | null | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -173,7 +173,7 @@ export interface ClientOptions {
  * Base class for Beeper Desktop API clients.
  */
 export class BaseBeeperDesktop {
-  accessToken: string;
+  accessToken: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -190,7 +190,7 @@ export class BaseBeeperDesktop {
   /**
    * API Client for interfacing with the Beeper Desktop API.
    *
-   * @param {string | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? undefined]
+   * @param {string | null | undefined} [opts.accessToken=process.env['BEEPER_ACCESS_TOKEN'] ?? null]
    * @param {string} [opts.baseURL=process.env['BEEPER_BASE_URL'] ?? http://localhost:23373] - Override the default base URL for the API.
    * @param {number} [opts.timeout=30 seconds] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -201,15 +201,9 @@ export class BaseBeeperDesktop {
    */
   constructor({
     baseURL = readEnv('BEEPER_BASE_URL'),
-    accessToken = readEnv('BEEPER_ACCESS_TOKEN'),
+    accessToken = readEnv('BEEPER_ACCESS_TOKEN') ?? null,
     ...opts
   }: ClientOptions = {}) {
-    if (accessToken === undefined) {
-      throw new Errors.BeeperDesktopError(
-        "The BEEPER_ACCESS_TOKEN environment variable is missing or empty; either provide it, or instantiate the BeeperDesktop client with an accessToken option, like new BeeperDesktop({ accessToken: 'My Access Token' }).",
-      );
-    }
-
     const options: ClientOptions = {
       accessToken,
       ...opts,
@@ -309,7 +303,16 @@ export class BaseBeeperDesktop {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    return;
+    if (this.accessToken && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    throw new Error(
+      'Could not resolve authentication method. Expected the accessToken to be set. Or for the "Authorization" headers to be explicitly omitted',
+    );
   }
 
   protected async authHeaders(
@@ -320,6 +323,9 @@ export class BaseBeeperDesktop {
   }
 
   protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.accessToken == null) {
+      return undefined;
+    }
     return buildHeaders([{ Authorization: `Bearer ${this.accessToken}` }]);
   }
 
