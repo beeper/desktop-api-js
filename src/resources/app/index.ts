@@ -6,12 +6,12 @@ export {
   type LoginRegistrationRequiredResponse,
   type LoginResponse,
   type LoginResponseOutput,
-  type RecoveryCodeResetResponse,
-  type StartVerificationResponse,
-  type StateMutationResponse,
-  type AppStatusResponse,
+  type RecoveryKeyResetResponse,
+  type SessionMutationResponse,
+  type Verification,
+  type VerificationResponse,
+  type AppSessionResponse,
 } from './app';
-export { E2ee, BaseE2ee } from './e2ee/index';
 export {
   Login,
   BaseLogin,
@@ -22,4 +22,15 @@ export {
   type LoginEmailParams,
   type LoginRegisterParams,
   type LoginResponseParams,
-} from './login';
+} from './login/index';
+export {
+  Verifications,
+  BaseVerifications,
+  type VerificationCreateResponse,
+  type VerificationRetrieveResponse,
+  type VerificationListResponse,
+  type VerificationAcceptResponse,
+  type VerificationCancelResponse,
+  type VerificationCreateParams,
+  type VerificationCancelParams,
+} from './verifications/index';

@@ -2,11 +2,19 @@
 
 import { CursorNoLimit, CursorSearch } from '../core/pagination';
 
+export interface APIError {
+  code: string;
+
+  message: string;
+
+  details?: { [key: string]: unknown };
+}
+
 export interface AppStateSnapshot {
   /**
    * Encrypted messaging setup status.
    */
-  e2ee: AppStateSnapshot.E2ee;
+  e2ee: AppStateSnapshot.E2EE;
 
   /**
    * Current onboarding state for Beeper Desktop.
@@ -35,7 +43,7 @@ export namespace AppStateSnapshot {
   /**
    * Encrypted messaging setup status.
    */
-  export interface E2ee {
+  export interface E2EE {
     /**
      * Whether this account can verify trusted devices.
      */
@@ -49,7 +57,7 @@ export namespace AppStateSnapshot {
     /**
      * Whether the user confirmed that they saved their recovery key.
      */
-    hasBackedUpCode: boolean;
+    hasBackedUpRecoveryKey: boolean;
 
     /**
      * Whether encrypted messaging setup has started.
@@ -64,7 +72,7 @@ export namespace AppStateSnapshot {
     /**
      * Encrypted messaging keys available on this device.
      */
-    secrets: E2ee.Secrets;
+    secrets: E2EE.Secrets;
 
     /**
      * Whether secure key storage is available.
@@ -79,10 +87,10 @@ export namespace AppStateSnapshot {
     /**
      * Unix timestamp for when the recovery key was created.
      */
-    recoveryCodeGeneratedAt?: number;
+    recoveryKeyGeneratedAt?: number;
   }
 
-  export namespace E2ee {
+  export namespace E2EE {
     /**
      * Encrypted messaging keys available on this device.
      */
@@ -100,7 +108,7 @@ export namespace AppStateSnapshot {
       /**
        * Whether a recovery key is available.
        */
-      recoveryCode: boolean;
+      recoveryKey: boolean;
 
       /**
        * Whether the device trust key is available.
@@ -139,16 +147,34 @@ export namespace AppStateSnapshot {
    */
   export interface Verification {
     /**
+     * Verification ID to pass in verification action paths.
+     */
+    id: string;
+
+    /**
      * Verification actions that are valid for the current state.
      */
-    availableActions: Array<
-      'create' | 'qr.scan' | 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'
-    >;
+    availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+    /**
+     * Whether this device started or received the verification.
+     */
+    direction: 'incoming' | 'outgoing';
+
+    /**
+     * Verification methods supported for this transaction.
+     */
+    methods: Array<'qr' | 'sas'>;
+
+    /**
+     * Why this verification exists.
+     */
+    purpose: 'login' | 'device';
 
     /**
      * Current trusted-device verification state.
      */
-    state: 'idle' | 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+    state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
 
     /**
      * Verification error details, if verification stopped.
@@ -156,44 +182,24 @@ export namespace AppStateSnapshot {
     error?: Verification.Error;
 
     /**
-     * User ID that started verification.
-     */
-    from?: string;
-
-    /**
-     * Device that started verification.
-     */
-    fromDevice?: string;
-
-    /**
      * Other device participating in verification.
      */
-    otherDevice?: string;
+    otherDevice?: Verification.OtherDevice;
 
     /**
-     * QR code payload to display for verification.
+     * Other user participating in verification.
      */
-    qrData?: string;
+    otherUserID?: string;
+
+    /**
+     * QR verification data.
+     */
+    qr?: Verification.Qr;
 
     /**
      * Emoji or number comparison data for verification.
      */
-    sas?: Verification.Sas;
-
-    /**
-     * Whether emoji comparison is available.
-     */
-    supportsSAS?: boolean;
-
-    /**
-     * Whether QR code verification is available.
-     */
-    supportsScanQRCode?: boolean;
-
-    /**
-     * Verification ID to pass in verification action paths.
-     */
-    verificationID?: string;
+    sas?: Verification.SAS;
   }
 
   export namespace Verification {
@@ -213,18 +219,43 @@ export namespace AppStateSnapshot {
     }
 
     /**
+     * Other device participating in verification.
+     */
+    export interface OtherDevice {
+      /**
+       * Other device ID.
+       */
+      id: string;
+
+      /**
+       * Other device display name, if known.
+       */
+      name?: string;
+    }
+
+    /**
+     * QR verification data.
+     */
+    export interface Qr {
+      /**
+       * QR code payload to display for verification.
+       */
+      data: string;
+    }
+
+    /**
      * Emoji or number comparison data for verification.
      */
-    export interface Sas {
-      /**
-       * Number sequence to compare on both devices.
-       */
-      decimals: string;
-
+    export interface SAS {
       /**
        * Emoji sequence to compare on both devices.
        */
       emojis: string;
+
+      /**
+       * Number sequence to compare on both devices.
+       */
+      decimals?: string;
     }
   }
 }
