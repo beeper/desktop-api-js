@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as LoginAPI from './login';
+import * as LoginAPI from './login/login';
 import {
   BaseLogin,
   Login,
@@ -12,9 +12,19 @@ import {
   LoginResponseParams,
   LoginResponseResponse,
   LoginStartResponse,
-} from './login';
-import * as E2eeAPI from './e2ee/e2ee';
-import { BaseE2ee, E2ee as E2eeAPIE2ee } from './e2ee/e2ee';
+} from './login/login';
+import * as VerificationsAPI from './verifications/verifications';
+import {
+  BaseVerifications,
+  VerificationAcceptResponse,
+  VerificationCancelParams,
+  VerificationCancelResponse,
+  VerificationCreateParams,
+  VerificationCreateResponse,
+  VerificationListResponse,
+  VerificationRetrieveResponse,
+  Verifications,
+} from './verifications/verifications';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -29,8 +39,8 @@ export class BaseApp extends APIResource {
    * This endpoint is public before sign-in so apps can discover that login is
    * needed; after sign-in, pass a read token.
    */
-  status(options?: RequestOptions): APIPromise<AppStatusResponse> {
-    return this._client.get('/v1/app/status', options);
+  session(options?: RequestOptions): APIPromise<AppSessionResponse> {
+    return this._client.get('/v1/app/session', options);
   }
 }
 /**
@@ -38,7 +48,7 @@ export class BaseApp extends APIResource {
  */
 export class App extends BaseApp {
   login: LoginAPI.Login = new LoginAPI.Login(this._client);
-  e2ee: E2eeAPI.E2ee = new E2eeAPI.E2ee(this._client);
+  verifications: VerificationsAPI.Verifications = new VerificationsAPI.Verifications(this._client);
 }
 
 export interface LoginRegistrationRequiredResponse {
@@ -97,11 +107,6 @@ export namespace LoginRegistrationRequiredResponse {
 
 export interface LoginResponse {
   /**
-   * Current onboarding state after sign-in.
-   */
-  appState: LoginResponse.AppState;
-
-  /**
    * Desktop API credentials for the signed-in app session.
    */
   desktopAPI: LoginResponse.DesktopAPI;
@@ -110,239 +115,14 @@ export interface LoginResponse {
    * Account credentials for first-party app setup.
    */
   matrix: LoginResponse.Matrix;
+
+  /**
+   * Current app session state after sign-in.
+   */
+  session: LoginResponse.Session;
 }
 
 export namespace LoginResponse {
-  /**
-   * Current onboarding state after sign-in.
-   */
-  export interface AppState {
-    /**
-     * Encrypted messaging setup status.
-     */
-    e2ee: AppState.E2ee;
-
-    /**
-     * Current onboarding state for Beeper Desktop.
-     */
-    state:
-      | 'needs-login'
-      | 'initializing'
-      | 'needs-cross-signing-setup'
-      | 'needs-verification'
-      | 'needs-secrets'
-      | 'needs-first-sync'
-      | 'ready';
-
-    /**
-     * Signed-in account details. Omitted until sign-in is complete.
-     */
-    matrix?: AppState.Matrix;
-
-    /**
-     * Trusted-device verification progress.
-     */
-    verification?: AppState.Verification;
-  }
-
-  export namespace AppState {
-    /**
-     * Encrypted messaging setup status.
-     */
-    export interface E2ee {
-      /**
-       * Whether this account can verify trusted devices.
-       */
-      crossSigning: boolean;
-
-      /**
-       * Whether the first encrypted message sync is complete.
-       */
-      firstSyncDone: boolean;
-
-      /**
-       * Whether the user confirmed that they saved their recovery key.
-       */
-      hasBackedUpCode: boolean;
-
-      /**
-       * Whether encrypted messaging setup has started.
-       */
-      initialized: boolean;
-
-      /**
-       * Whether encrypted message backup is available.
-       */
-      keyBackup: boolean;
-
-      /**
-       * Encrypted messaging keys available on this device.
-       */
-      secrets: E2ee.Secrets;
-
-      /**
-       * Whether secure key storage is available.
-       */
-      secretStorage: boolean;
-
-      /**
-       * Whether this device is trusted for encrypted messages.
-       */
-      verified: boolean;
-
-      /**
-       * Unix timestamp for when the recovery key was created.
-       */
-      recoveryCodeGeneratedAt?: number;
-    }
-
-    export namespace E2ee {
-      /**
-       * Encrypted messaging keys available on this device.
-       */
-      export interface Secrets {
-        /**
-         * Whether the account identity key is available.
-         */
-        masterKey: boolean;
-
-        /**
-         * Whether the encrypted message backup key is available.
-         */
-        megolmBackupKey: boolean;
-
-        /**
-         * Whether a recovery key is available.
-         */
-        recoveryCode: boolean;
-
-        /**
-         * Whether the device trust key is available.
-         */
-        selfSigningKey: boolean;
-
-        /**
-         * Whether the user trust key is available.
-         */
-        userSigningKey: boolean;
-      }
-    }
-
-    /**
-     * Signed-in account details. Omitted until sign-in is complete.
-     */
-    export interface Matrix {
-      /**
-       * Current device ID.
-       */
-      deviceID: string;
-
-      /**
-       * Beeper server URL for this account.
-       */
-      homeserver: string;
-
-      /**
-       * Signed-in Beeper user ID.
-       */
-      userID: string;
-    }
-
-    /**
-     * Trusted-device verification progress.
-     */
-    export interface Verification {
-      /**
-       * Verification actions that are valid for the current state.
-       */
-      availableActions: Array<
-        'create' | 'qr.scan' | 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'
-      >;
-
-      /**
-       * Current trusted-device verification state.
-       */
-      state: 'idle' | 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
-
-      /**
-       * Verification error details, if verification stopped.
-       */
-      error?: Verification.Error;
-
-      /**
-       * User ID that started verification.
-       */
-      from?: string;
-
-      /**
-       * Device that started verification.
-       */
-      fromDevice?: string;
-
-      /**
-       * Other device participating in verification.
-       */
-      otherDevice?: string;
-
-      /**
-       * QR code payload to display for verification.
-       */
-      qrData?: string;
-
-      /**
-       * Emoji or number comparison data for verification.
-       */
-      sas?: Verification.Sas;
-
-      /**
-       * Whether emoji comparison is available.
-       */
-      supportsSAS?: boolean;
-
-      /**
-       * Whether QR code verification is available.
-       */
-      supportsScanQRCode?: boolean;
-
-      /**
-       * Verification ID to pass in verification action paths.
-       */
-      verificationID?: string;
-    }
-
-    export namespace Verification {
-      /**
-       * Verification error details, if verification stopped.
-       */
-      export interface Error {
-        /**
-         * Verification error code.
-         */
-        code: string;
-
-        /**
-         * User-facing verification error message.
-         */
-        reason: string;
-      }
-
-      /**
-       * Emoji or number comparison data for verification.
-       */
-      export interface Sas {
-        /**
-         * Number sequence to compare on both devices.
-         */
-        decimals: string;
-
-        /**
-         * Emoji sequence to compare on both devices.
-         */
-        emojis: string;
-      }
-    }
-  }
-
   /**
    * Desktop API credentials for the signed-in app session.
    */
@@ -387,17 +167,265 @@ export namespace LoginResponse {
      */
     userID: string;
   }
+
+  /**
+   * Current app session state after sign-in.
+   */
+  export interface Session {
+    /**
+     * Encrypted messaging setup status.
+     */
+    e2ee: Session.E2EE;
+
+    /**
+     * Current onboarding state for Beeper Desktop.
+     */
+    state:
+      | 'needs-login'
+      | 'initializing'
+      | 'needs-cross-signing-setup'
+      | 'needs-verification'
+      | 'needs-secrets'
+      | 'needs-first-sync'
+      | 'ready';
+
+    /**
+     * Signed-in account details. Omitted until sign-in is complete.
+     */
+    matrix?: Session.Matrix;
+
+    /**
+     * Trusted-device verification progress.
+     */
+    verification?: Session.Verification;
+  }
+
+  export namespace Session {
+    /**
+     * Encrypted messaging setup status.
+     */
+    export interface E2EE {
+      /**
+       * Whether this account can verify trusted devices.
+       */
+      crossSigning: boolean;
+
+      /**
+       * Whether the first encrypted message sync is complete.
+       */
+      firstSyncDone: boolean;
+
+      /**
+       * Whether the user confirmed that they saved their recovery key.
+       */
+      hasBackedUpRecoveryKey: boolean;
+
+      /**
+       * Whether encrypted messaging setup has started.
+       */
+      initialized: boolean;
+
+      /**
+       * Whether encrypted message backup is available.
+       */
+      keyBackup: boolean;
+
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      secrets: E2EE.Secrets;
+
+      /**
+       * Whether secure key storage is available.
+       */
+      secretStorage: boolean;
+
+      /**
+       * Whether this device is trusted for encrypted messages.
+       */
+      verified: boolean;
+
+      /**
+       * Unix timestamp for when the recovery key was created.
+       */
+      recoveryKeyGeneratedAt?: number;
+    }
+
+    export namespace E2EE {
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      export interface Secrets {
+        /**
+         * Whether the account identity key is available.
+         */
+        masterKey: boolean;
+
+        /**
+         * Whether the encrypted message backup key is available.
+         */
+        megolmBackupKey: boolean;
+
+        /**
+         * Whether a recovery key is available.
+         */
+        recoveryKey: boolean;
+
+        /**
+         * Whether the device trust key is available.
+         */
+        selfSigningKey: boolean;
+
+        /**
+         * Whether the user trust key is available.
+         */
+        userSigningKey: boolean;
+      }
+    }
+
+    /**
+     * Signed-in account details. Omitted until sign-in is complete.
+     */
+    export interface Matrix {
+      /**
+       * Current device ID.
+       */
+      deviceID: string;
+
+      /**
+       * Beeper server URL for this account.
+       */
+      homeserver: string;
+
+      /**
+       * Signed-in Beeper user ID.
+       */
+      userID: string;
+    }
+
+    /**
+     * Trusted-device verification progress.
+     */
+    export interface Verification {
+      /**
+       * Verification ID to pass in verification action paths.
+       */
+      id: string;
+
+      /**
+       * Verification actions that are valid for the current state.
+       */
+      availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+      /**
+       * Whether this device started or received the verification.
+       */
+      direction: 'incoming' | 'outgoing';
+
+      /**
+       * Verification methods supported for this transaction.
+       */
+      methods: Array<'qr' | 'sas'>;
+
+      /**
+       * Why this verification exists.
+       */
+      purpose: 'login' | 'device';
+
+      /**
+       * Current trusted-device verification state.
+       */
+      state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+
+      /**
+       * Verification error details, if verification stopped.
+       */
+      error?: Verification.Error;
+
+      /**
+       * Other device participating in verification.
+       */
+      otherDevice?: Verification.OtherDevice;
+
+      /**
+       * Other user participating in verification.
+       */
+      otherUserID?: string;
+
+      /**
+       * QR verification data.
+       */
+      qr?: Verification.Qr;
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      sas?: Verification.SAS;
+    }
+
+    export namespace Verification {
+      /**
+       * Verification error details, if verification stopped.
+       */
+      export interface Error {
+        /**
+         * Verification error code.
+         */
+        code: string;
+
+        /**
+         * User-facing verification error message.
+         */
+        reason: string;
+      }
+
+      /**
+       * Other device participating in verification.
+       */
+      export interface OtherDevice {
+        /**
+         * Other device ID.
+         */
+        id: string;
+
+        /**
+         * Other device display name, if known.
+         */
+        name?: string;
+      }
+
+      /**
+       * QR verification data.
+       */
+      export interface Qr {
+        /**
+         * QR code payload to display for verification.
+         */
+        data: string;
+      }
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      export interface SAS {
+        /**
+         * Emoji sequence to compare on both devices.
+         */
+        emojis: string;
+
+        /**
+         * Number sequence to compare on both devices.
+         */
+        decimals?: string;
+      }
+    }
+  }
 }
 
 export type LoginResponseOutput = LoginResponseOutput.UnionMember0 | LoginResponseOutput.UnionMember1;
 
 export namespace LoginResponseOutput {
   export interface UnionMember0 {
-    /**
-     * Current onboarding state after sign-in.
-     */
-    appState: UnionMember0.AppState;
-
     /**
      * Desktop API credentials for the signed-in app session.
      */
@@ -407,239 +435,14 @@ export namespace LoginResponseOutput {
      * Account credentials for first-party app setup.
      */
     matrix: UnionMember0.Matrix;
+
+    /**
+     * Current app session state after sign-in.
+     */
+    session: UnionMember0.Session;
   }
 
   export namespace UnionMember0 {
-    /**
-     * Current onboarding state after sign-in.
-     */
-    export interface AppState {
-      /**
-       * Encrypted messaging setup status.
-       */
-      e2ee: AppState.E2ee;
-
-      /**
-       * Current onboarding state for Beeper Desktop.
-       */
-      state:
-        | 'needs-login'
-        | 'initializing'
-        | 'needs-cross-signing-setup'
-        | 'needs-verification'
-        | 'needs-secrets'
-        | 'needs-first-sync'
-        | 'ready';
-
-      /**
-       * Signed-in account details. Omitted until sign-in is complete.
-       */
-      matrix?: AppState.Matrix;
-
-      /**
-       * Trusted-device verification progress.
-       */
-      verification?: AppState.Verification;
-    }
-
-    export namespace AppState {
-      /**
-       * Encrypted messaging setup status.
-       */
-      export interface E2ee {
-        /**
-         * Whether this account can verify trusted devices.
-         */
-        crossSigning: boolean;
-
-        /**
-         * Whether the first encrypted message sync is complete.
-         */
-        firstSyncDone: boolean;
-
-        /**
-         * Whether the user confirmed that they saved their recovery key.
-         */
-        hasBackedUpCode: boolean;
-
-        /**
-         * Whether encrypted messaging setup has started.
-         */
-        initialized: boolean;
-
-        /**
-         * Whether encrypted message backup is available.
-         */
-        keyBackup: boolean;
-
-        /**
-         * Encrypted messaging keys available on this device.
-         */
-        secrets: E2ee.Secrets;
-
-        /**
-         * Whether secure key storage is available.
-         */
-        secretStorage: boolean;
-
-        /**
-         * Whether this device is trusted for encrypted messages.
-         */
-        verified: boolean;
-
-        /**
-         * Unix timestamp for when the recovery key was created.
-         */
-        recoveryCodeGeneratedAt?: number;
-      }
-
-      export namespace E2ee {
-        /**
-         * Encrypted messaging keys available on this device.
-         */
-        export interface Secrets {
-          /**
-           * Whether the account identity key is available.
-           */
-          masterKey: boolean;
-
-          /**
-           * Whether the encrypted message backup key is available.
-           */
-          megolmBackupKey: boolean;
-
-          /**
-           * Whether a recovery key is available.
-           */
-          recoveryCode: boolean;
-
-          /**
-           * Whether the device trust key is available.
-           */
-          selfSigningKey: boolean;
-
-          /**
-           * Whether the user trust key is available.
-           */
-          userSigningKey: boolean;
-        }
-      }
-
-      /**
-       * Signed-in account details. Omitted until sign-in is complete.
-       */
-      export interface Matrix {
-        /**
-         * Current device ID.
-         */
-        deviceID: string;
-
-        /**
-         * Beeper server URL for this account.
-         */
-        homeserver: string;
-
-        /**
-         * Signed-in Beeper user ID.
-         */
-        userID: string;
-      }
-
-      /**
-       * Trusted-device verification progress.
-       */
-      export interface Verification {
-        /**
-         * Verification actions that are valid for the current state.
-         */
-        availableActions: Array<
-          'create' | 'qr.scan' | 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'
-        >;
-
-        /**
-         * Current trusted-device verification state.
-         */
-        state: 'idle' | 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
-
-        /**
-         * Verification error details, if verification stopped.
-         */
-        error?: Verification.Error;
-
-        /**
-         * User ID that started verification.
-         */
-        from?: string;
-
-        /**
-         * Device that started verification.
-         */
-        fromDevice?: string;
-
-        /**
-         * Other device participating in verification.
-         */
-        otherDevice?: string;
-
-        /**
-         * QR code payload to display for verification.
-         */
-        qrData?: string;
-
-        /**
-         * Emoji or number comparison data for verification.
-         */
-        sas?: Verification.Sas;
-
-        /**
-         * Whether emoji comparison is available.
-         */
-        supportsSAS?: boolean;
-
-        /**
-         * Whether QR code verification is available.
-         */
-        supportsScanQRCode?: boolean;
-
-        /**
-         * Verification ID to pass in verification action paths.
-         */
-        verificationID?: string;
-      }
-
-      export namespace Verification {
-        /**
-         * Verification error details, if verification stopped.
-         */
-        export interface Error {
-          /**
-           * Verification error code.
-           */
-          code: string;
-
-          /**
-           * User-facing verification error message.
-           */
-          reason: string;
-        }
-
-        /**
-         * Emoji or number comparison data for verification.
-         */
-        export interface Sas {
-          /**
-           * Number sequence to compare on both devices.
-           */
-          decimals: string;
-
-          /**
-           * Emoji sequence to compare on both devices.
-           */
-          emojis: string;
-        }
-      }
-    }
-
     /**
      * Desktop API credentials for the signed-in app session.
      */
@@ -683,6 +486,259 @@ export namespace LoginResponseOutput {
        * Signed-in Beeper user ID.
        */
       userID: string;
+    }
+
+    /**
+     * Current app session state after sign-in.
+     */
+    export interface Session {
+      /**
+       * Encrypted messaging setup status.
+       */
+      e2ee: Session.E2EE;
+
+      /**
+       * Current onboarding state for Beeper Desktop.
+       */
+      state:
+        | 'needs-login'
+        | 'initializing'
+        | 'needs-cross-signing-setup'
+        | 'needs-verification'
+        | 'needs-secrets'
+        | 'needs-first-sync'
+        | 'ready';
+
+      /**
+       * Signed-in account details. Omitted until sign-in is complete.
+       */
+      matrix?: Session.Matrix;
+
+      /**
+       * Trusted-device verification progress.
+       */
+      verification?: Session.Verification;
+    }
+
+    export namespace Session {
+      /**
+       * Encrypted messaging setup status.
+       */
+      export interface E2EE {
+        /**
+         * Whether this account can verify trusted devices.
+         */
+        crossSigning: boolean;
+
+        /**
+         * Whether the first encrypted message sync is complete.
+         */
+        firstSyncDone: boolean;
+
+        /**
+         * Whether the user confirmed that they saved their recovery key.
+         */
+        hasBackedUpRecoveryKey: boolean;
+
+        /**
+         * Whether encrypted messaging setup has started.
+         */
+        initialized: boolean;
+
+        /**
+         * Whether encrypted message backup is available.
+         */
+        keyBackup: boolean;
+
+        /**
+         * Encrypted messaging keys available on this device.
+         */
+        secrets: E2EE.Secrets;
+
+        /**
+         * Whether secure key storage is available.
+         */
+        secretStorage: boolean;
+
+        /**
+         * Whether this device is trusted for encrypted messages.
+         */
+        verified: boolean;
+
+        /**
+         * Unix timestamp for when the recovery key was created.
+         */
+        recoveryKeyGeneratedAt?: number;
+      }
+
+      export namespace E2EE {
+        /**
+         * Encrypted messaging keys available on this device.
+         */
+        export interface Secrets {
+          /**
+           * Whether the account identity key is available.
+           */
+          masterKey: boolean;
+
+          /**
+           * Whether the encrypted message backup key is available.
+           */
+          megolmBackupKey: boolean;
+
+          /**
+           * Whether a recovery key is available.
+           */
+          recoveryKey: boolean;
+
+          /**
+           * Whether the device trust key is available.
+           */
+          selfSigningKey: boolean;
+
+          /**
+           * Whether the user trust key is available.
+           */
+          userSigningKey: boolean;
+        }
+      }
+
+      /**
+       * Signed-in account details. Omitted until sign-in is complete.
+       */
+      export interface Matrix {
+        /**
+         * Current device ID.
+         */
+        deviceID: string;
+
+        /**
+         * Beeper server URL for this account.
+         */
+        homeserver: string;
+
+        /**
+         * Signed-in Beeper user ID.
+         */
+        userID: string;
+      }
+
+      /**
+       * Trusted-device verification progress.
+       */
+      export interface Verification {
+        /**
+         * Verification ID to pass in verification action paths.
+         */
+        id: string;
+
+        /**
+         * Verification actions that are valid for the current state.
+         */
+        availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+        /**
+         * Whether this device started or received the verification.
+         */
+        direction: 'incoming' | 'outgoing';
+
+        /**
+         * Verification methods supported for this transaction.
+         */
+        methods: Array<'qr' | 'sas'>;
+
+        /**
+         * Why this verification exists.
+         */
+        purpose: 'login' | 'device';
+
+        /**
+         * Current trusted-device verification state.
+         */
+        state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+
+        /**
+         * Verification error details, if verification stopped.
+         */
+        error?: Verification.Error;
+
+        /**
+         * Other device participating in verification.
+         */
+        otherDevice?: Verification.OtherDevice;
+
+        /**
+         * Other user participating in verification.
+         */
+        otherUserID?: string;
+
+        /**
+         * QR verification data.
+         */
+        qr?: Verification.Qr;
+
+        /**
+         * Emoji or number comparison data for verification.
+         */
+        sas?: Verification.SAS;
+      }
+
+      export namespace Verification {
+        /**
+         * Verification error details, if verification stopped.
+         */
+        export interface Error {
+          /**
+           * Verification error code.
+           */
+          code: string;
+
+          /**
+           * User-facing verification error message.
+           */
+          reason: string;
+        }
+
+        /**
+         * Other device participating in verification.
+         */
+        export interface OtherDevice {
+          /**
+           * Other device ID.
+           */
+          id: string;
+
+          /**
+           * Other device display name, if known.
+           */
+          name?: string;
+        }
+
+        /**
+         * QR verification data.
+         */
+        export interface Qr {
+          /**
+           * QR code payload to display for verification.
+           */
+          data: string;
+        }
+
+        /**
+         * Emoji or number comparison data for verification.
+         */
+        export interface SAS {
+          /**
+           * Emoji sequence to compare on both devices.
+           */
+          emojis: string;
+
+          /**
+           * Number sequence to compare on both devices.
+           */
+          decimals?: string;
+        }
+      }
     }
   }
 
@@ -741,27 +797,27 @@ export namespace LoginResponseOutput {
   }
 }
 
-export interface RecoveryCodeResetResponse {
-  /**
-   * Current onboarding state after creating the new recovery key.
-   */
-  appState: RecoveryCodeResetResponse.AppState;
-
+export interface RecoveryKeyResetResponse {
   /**
    * New recovery key. Show it once and ask the user to save it.
    */
-  recoveryCode: string;
+  recoveryKey: string;
+
+  /**
+   * Current session state after creating the new recovery key.
+   */
+  session: RecoveryKeyResetResponse.Session;
 }
 
-export namespace RecoveryCodeResetResponse {
+export namespace RecoveryKeyResetResponse {
   /**
-   * Current onboarding state after creating the new recovery key.
+   * Current session state after creating the new recovery key.
    */
-  export interface AppState {
+  export interface Session {
     /**
      * Encrypted messaging setup status.
      */
-    e2ee: AppState.E2ee;
+    e2ee: Session.E2EE;
 
     /**
      * Current onboarding state for Beeper Desktop.
@@ -778,19 +834,19 @@ export namespace RecoveryCodeResetResponse {
     /**
      * Signed-in account details. Omitted until sign-in is complete.
      */
-    matrix?: AppState.Matrix;
+    matrix?: Session.Matrix;
 
     /**
      * Trusted-device verification progress.
      */
-    verification?: AppState.Verification;
+    verification?: Session.Verification;
   }
 
-  export namespace AppState {
+  export namespace Session {
     /**
      * Encrypted messaging setup status.
      */
-    export interface E2ee {
+    export interface E2EE {
       /**
        * Whether this account can verify trusted devices.
        */
@@ -804,7 +860,7 @@ export namespace RecoveryCodeResetResponse {
       /**
        * Whether the user confirmed that they saved their recovery key.
        */
-      hasBackedUpCode: boolean;
+      hasBackedUpRecoveryKey: boolean;
 
       /**
        * Whether encrypted messaging setup has started.
@@ -819,7 +875,7 @@ export namespace RecoveryCodeResetResponse {
       /**
        * Encrypted messaging keys available on this device.
        */
-      secrets: E2ee.Secrets;
+      secrets: E2EE.Secrets;
 
       /**
        * Whether secure key storage is available.
@@ -834,10 +890,10 @@ export namespace RecoveryCodeResetResponse {
       /**
        * Unix timestamp for when the recovery key was created.
        */
-      recoveryCodeGeneratedAt?: number;
+      recoveryKeyGeneratedAt?: number;
     }
 
-    export namespace E2ee {
+    export namespace E2EE {
       /**
        * Encrypted messaging keys available on this device.
        */
@@ -855,7 +911,7 @@ export namespace RecoveryCodeResetResponse {
         /**
          * Whether a recovery key is available.
          */
-        recoveryCode: boolean;
+        recoveryKey: boolean;
 
         /**
          * Whether the device trust key is available.
@@ -894,16 +950,34 @@ export namespace RecoveryCodeResetResponse {
      */
     export interface Verification {
       /**
+       * Verification ID to pass in verification action paths.
+       */
+      id: string;
+
+      /**
        * Verification actions that are valid for the current state.
        */
-      availableActions: Array<
-        'create' | 'qr.scan' | 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'
-      >;
+      availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+      /**
+       * Whether this device started or received the verification.
+       */
+      direction: 'incoming' | 'outgoing';
+
+      /**
+       * Verification methods supported for this transaction.
+       */
+      methods: Array<'qr' | 'sas'>;
+
+      /**
+       * Why this verification exists.
+       */
+      purpose: 'login' | 'device';
 
       /**
        * Current trusted-device verification state.
        */
-      state: 'idle' | 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+      state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
 
       /**
        * Verification error details, if verification stopped.
@@ -911,44 +985,24 @@ export namespace RecoveryCodeResetResponse {
       error?: Verification.Error;
 
       /**
-       * User ID that started verification.
-       */
-      from?: string;
-
-      /**
-       * Device that started verification.
-       */
-      fromDevice?: string;
-
-      /**
        * Other device participating in verification.
        */
-      otherDevice?: string;
+      otherDevice?: Verification.OtherDevice;
 
       /**
-       * QR code payload to display for verification.
+       * Other user participating in verification.
        */
-      qrData?: string;
+      otherUserID?: string;
+
+      /**
+       * QR verification data.
+       */
+      qr?: Verification.Qr;
 
       /**
        * Emoji or number comparison data for verification.
        */
-      sas?: Verification.Sas;
-
-      /**
-       * Whether emoji comparison is available.
-       */
-      supportsSAS?: boolean;
-
-      /**
-       * Whether QR code verification is available.
-       */
-      supportsScanQRCode?: boolean;
-
-      /**
-       * Verification ID to pass in verification action paths.
-       */
-      verificationID?: string;
+      sas?: Verification.SAS;
     }
 
     export namespace Verification {
@@ -968,44 +1022,448 @@ export namespace RecoveryCodeResetResponse {
       }
 
       /**
+       * Other device participating in verification.
+       */
+      export interface OtherDevice {
+        /**
+         * Other device ID.
+         */
+        id: string;
+
+        /**
+         * Other device display name, if known.
+         */
+        name?: string;
+      }
+
+      /**
+       * QR verification data.
+       */
+      export interface Qr {
+        /**
+         * QR code payload to display for verification.
+         */
+        data: string;
+      }
+
+      /**
        * Emoji or number comparison data for verification.
        */
-      export interface Sas {
-        /**
-         * Number sequence to compare on both devices.
-         */
-        decimals: string;
-
+      export interface SAS {
         /**
          * Emoji sequence to compare on both devices.
          */
         emojis: string;
+
+        /**
+         * Number sequence to compare on both devices.
+         */
+        decimals?: string;
       }
     }
   }
 }
 
-export interface StartVerificationResponse {
+export interface SessionMutationResponse {
   /**
-   * Current onboarding state after starting verification.
+   * Current app session state.
    */
-  appState: StartVerificationResponse.AppState;
+  session: SessionMutationResponse.Session;
+}
 
+export namespace SessionMutationResponse {
+  /**
+   * Current app session state.
+   */
+  export interface Session {
+    /**
+     * Encrypted messaging setup status.
+     */
+    e2ee: Session.E2EE;
+
+    /**
+     * Current onboarding state for Beeper Desktop.
+     */
+    state:
+      | 'needs-login'
+      | 'initializing'
+      | 'needs-cross-signing-setup'
+      | 'needs-verification'
+      | 'needs-secrets'
+      | 'needs-first-sync'
+      | 'ready';
+
+    /**
+     * Signed-in account details. Omitted until sign-in is complete.
+     */
+    matrix?: Session.Matrix;
+
+    /**
+     * Trusted-device verification progress.
+     */
+    verification?: Session.Verification;
+  }
+
+  export namespace Session {
+    /**
+     * Encrypted messaging setup status.
+     */
+    export interface E2EE {
+      /**
+       * Whether this account can verify trusted devices.
+       */
+      crossSigning: boolean;
+
+      /**
+       * Whether the first encrypted message sync is complete.
+       */
+      firstSyncDone: boolean;
+
+      /**
+       * Whether the user confirmed that they saved their recovery key.
+       */
+      hasBackedUpRecoveryKey: boolean;
+
+      /**
+       * Whether encrypted messaging setup has started.
+       */
+      initialized: boolean;
+
+      /**
+       * Whether encrypted message backup is available.
+       */
+      keyBackup: boolean;
+
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      secrets: E2EE.Secrets;
+
+      /**
+       * Whether secure key storage is available.
+       */
+      secretStorage: boolean;
+
+      /**
+       * Whether this device is trusted for encrypted messages.
+       */
+      verified: boolean;
+
+      /**
+       * Unix timestamp for when the recovery key was created.
+       */
+      recoveryKeyGeneratedAt?: number;
+    }
+
+    export namespace E2EE {
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      export interface Secrets {
+        /**
+         * Whether the account identity key is available.
+         */
+        masterKey: boolean;
+
+        /**
+         * Whether the encrypted message backup key is available.
+         */
+        megolmBackupKey: boolean;
+
+        /**
+         * Whether a recovery key is available.
+         */
+        recoveryKey: boolean;
+
+        /**
+         * Whether the device trust key is available.
+         */
+        selfSigningKey: boolean;
+
+        /**
+         * Whether the user trust key is available.
+         */
+        userSigningKey: boolean;
+      }
+    }
+
+    /**
+     * Signed-in account details. Omitted until sign-in is complete.
+     */
+    export interface Matrix {
+      /**
+       * Current device ID.
+       */
+      deviceID: string;
+
+      /**
+       * Beeper server URL for this account.
+       */
+      homeserver: string;
+
+      /**
+       * Signed-in Beeper user ID.
+       */
+      userID: string;
+    }
+
+    /**
+     * Trusted-device verification progress.
+     */
+    export interface Verification {
+      /**
+       * Verification ID to pass in verification action paths.
+       */
+      id: string;
+
+      /**
+       * Verification actions that are valid for the current state.
+       */
+      availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+      /**
+       * Whether this device started or received the verification.
+       */
+      direction: 'incoming' | 'outgoing';
+
+      /**
+       * Verification methods supported for this transaction.
+       */
+      methods: Array<'qr' | 'sas'>;
+
+      /**
+       * Why this verification exists.
+       */
+      purpose: 'login' | 'device';
+
+      /**
+       * Current trusted-device verification state.
+       */
+      state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+
+      /**
+       * Verification error details, if verification stopped.
+       */
+      error?: Verification.Error;
+
+      /**
+       * Other device participating in verification.
+       */
+      otherDevice?: Verification.OtherDevice;
+
+      /**
+       * Other user participating in verification.
+       */
+      otherUserID?: string;
+
+      /**
+       * QR verification data.
+       */
+      qr?: Verification.Qr;
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      sas?: Verification.SAS;
+    }
+
+    export namespace Verification {
+      /**
+       * Verification error details, if verification stopped.
+       */
+      export interface Error {
+        /**
+         * Verification error code.
+         */
+        code: string;
+
+        /**
+         * User-facing verification error message.
+         */
+        reason: string;
+      }
+
+      /**
+       * Other device participating in verification.
+       */
+      export interface OtherDevice {
+        /**
+         * Other device ID.
+         */
+        id: string;
+
+        /**
+         * Other device display name, if known.
+         */
+        name?: string;
+      }
+
+      /**
+       * QR verification data.
+       */
+      export interface Qr {
+        /**
+         * QR code payload to display for verification.
+         */
+        data: string;
+      }
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      export interface SAS {
+        /**
+         * Emoji sequence to compare on both devices.
+         */
+        emojis: string;
+
+        /**
+         * Number sequence to compare on both devices.
+         */
+        decimals?: string;
+      }
+    }
+  }
+}
+
+/**
+ * Trusted-device verification progress.
+ */
+export interface Verification {
   /**
    * Verification ID to pass in verification action paths.
    */
-  verificationID: string;
+  id: string;
+
+  /**
+   * Verification actions that are valid for the current state.
+   */
+  availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+  /**
+   * Whether this device started or received the verification.
+   */
+  direction: 'incoming' | 'outgoing';
+
+  /**
+   * Verification methods supported for this transaction.
+   */
+  methods: Array<'qr' | 'sas'>;
+
+  /**
+   * Why this verification exists.
+   */
+  purpose: 'login' | 'device';
+
+  /**
+   * Current trusted-device verification state.
+   */
+  state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+
+  /**
+   * Verification error details, if verification stopped.
+   */
+  error?: Verification.Error;
+
+  /**
+   * Other device participating in verification.
+   */
+  otherDevice?: Verification.OtherDevice;
+
+  /**
+   * Other user participating in verification.
+   */
+  otherUserID?: string;
+
+  /**
+   * QR verification data.
+   */
+  qr?: Verification.Qr;
+
+  /**
+   * Emoji or number comparison data for verification.
+   */
+  sas?: Verification.SAS;
 }
 
-export namespace StartVerificationResponse {
+export namespace Verification {
   /**
-   * Current onboarding state after starting verification.
+   * Verification error details, if verification stopped.
    */
-  export interface AppState {
+  export interface Error {
+    /**
+     * Verification error code.
+     */
+    code: string;
+
+    /**
+     * User-facing verification error message.
+     */
+    reason: string;
+  }
+
+  /**
+   * Other device participating in verification.
+   */
+  export interface OtherDevice {
+    /**
+     * Other device ID.
+     */
+    id: string;
+
+    /**
+     * Other device display name, if known.
+     */
+    name?: string;
+  }
+
+  /**
+   * QR verification data.
+   */
+  export interface Qr {
+    /**
+     * QR code payload to display for verification.
+     */
+    data: string;
+  }
+
+  /**
+   * Emoji or number comparison data for verification.
+   */
+  export interface SAS {
+    /**
+     * Emoji sequence to compare on both devices.
+     */
+    emojis: string;
+
+    /**
+     * Number sequence to compare on both devices.
+     */
+    decimals?: string;
+  }
+}
+
+export interface VerificationResponse {
+  /**
+   * Current session state.
+   */
+  session: VerificationResponse.Session;
+
+  /**
+   * Trusted-device verification progress.
+   */
+  verification?: VerificationResponse.Verification;
+}
+
+export namespace VerificationResponse {
+  /**
+   * Current session state.
+   */
+  export interface Session {
     /**
      * Encrypted messaging setup status.
      */
-    e2ee: AppState.E2ee;
+    e2ee: Session.E2EE;
 
     /**
      * Current onboarding state for Beeper Desktop.
@@ -1022,19 +1480,19 @@ export namespace StartVerificationResponse {
     /**
      * Signed-in account details. Omitted until sign-in is complete.
      */
-    matrix?: AppState.Matrix;
+    matrix?: Session.Matrix;
 
     /**
      * Trusted-device verification progress.
      */
-    verification?: AppState.Verification;
+    verification?: Session.Verification;
   }
 
-  export namespace AppState {
+  export namespace Session {
     /**
      * Encrypted messaging setup status.
      */
-    export interface E2ee {
+    export interface E2EE {
       /**
        * Whether this account can verify trusted devices.
        */
@@ -1048,7 +1506,7 @@ export namespace StartVerificationResponse {
       /**
        * Whether the user confirmed that they saved their recovery key.
        */
-      hasBackedUpCode: boolean;
+      hasBackedUpRecoveryKey: boolean;
 
       /**
        * Whether encrypted messaging setup has started.
@@ -1063,7 +1521,7 @@ export namespace StartVerificationResponse {
       /**
        * Encrypted messaging keys available on this device.
        */
-      secrets: E2ee.Secrets;
+      secrets: E2EE.Secrets;
 
       /**
        * Whether secure key storage is available.
@@ -1078,10 +1536,10 @@ export namespace StartVerificationResponse {
       /**
        * Unix timestamp for when the recovery key was created.
        */
-      recoveryCodeGeneratedAt?: number;
+      recoveryKeyGeneratedAt?: number;
     }
 
-    export namespace E2ee {
+    export namespace E2EE {
       /**
        * Encrypted messaging keys available on this device.
        */
@@ -1099,7 +1557,7 @@ export namespace StartVerificationResponse {
         /**
          * Whether a recovery key is available.
          */
-        recoveryCode: boolean;
+        recoveryKey: boolean;
 
         /**
          * Whether the device trust key is available.
@@ -1138,16 +1596,34 @@ export namespace StartVerificationResponse {
      */
     export interface Verification {
       /**
+       * Verification ID to pass in verification action paths.
+       */
+      id: string;
+
+      /**
        * Verification actions that are valid for the current state.
        */
-      availableActions: Array<
-        'create' | 'qr.scan' | 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'
-      >;
+      availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+      /**
+       * Whether this device started or received the verification.
+       */
+      direction: 'incoming' | 'outgoing';
+
+      /**
+       * Verification methods supported for this transaction.
+       */
+      methods: Array<'qr' | 'sas'>;
+
+      /**
+       * Why this verification exists.
+       */
+      purpose: 'login' | 'device';
 
       /**
        * Current trusted-device verification state.
        */
-      state: 'idle' | 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+      state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
 
       /**
        * Verification error details, if verification stopped.
@@ -1155,44 +1631,24 @@ export namespace StartVerificationResponse {
       error?: Verification.Error;
 
       /**
-       * User ID that started verification.
-       */
-      from?: string;
-
-      /**
-       * Device that started verification.
-       */
-      fromDevice?: string;
-
-      /**
        * Other device participating in verification.
        */
-      otherDevice?: string;
+      otherDevice?: Verification.OtherDevice;
 
       /**
-       * QR code payload to display for verification.
+       * Other user participating in verification.
        */
-      qrData?: string;
+      otherUserID?: string;
+
+      /**
+       * QR verification data.
+       */
+      qr?: Verification.Qr;
 
       /**
        * Emoji or number comparison data for verification.
        */
-      sas?: Verification.Sas;
-
-      /**
-       * Whether emoji comparison is available.
-       */
-      supportsSAS?: boolean;
-
-      /**
-       * Whether QR code verification is available.
-       */
-      supportsScanQRCode?: boolean;
-
-      /**
-       * Verification ID to pass in verification action paths.
-       */
-      verificationID?: string;
+      sas?: Verification.SAS;
     }
 
     export namespace Verification {
@@ -1212,267 +1668,170 @@ export namespace StartVerificationResponse {
       }
 
       /**
+       * Other device participating in verification.
+       */
+      export interface OtherDevice {
+        /**
+         * Other device ID.
+         */
+        id: string;
+
+        /**
+         * Other device display name, if known.
+         */
+        name?: string;
+      }
+
+      /**
+       * QR verification data.
+       */
+      export interface Qr {
+        /**
+         * QR code payload to display for verification.
+         */
+        data: string;
+      }
+
+      /**
        * Emoji or number comparison data for verification.
        */
-      export interface Sas {
-        /**
-         * Number sequence to compare on both devices.
-         */
-        decimals: string;
-
+      export interface SAS {
         /**
          * Emoji sequence to compare on both devices.
          */
         emojis: string;
+
+        /**
+         * Number sequence to compare on both devices.
+         */
+        decimals?: string;
       }
     }
   }
-}
 
-export interface StateMutationResponse {
   /**
-   * Current onboarding state after the requested step.
+   * Trusted-device verification progress.
    */
-  appState: StateMutationResponse.AppState;
-}
-
-export namespace StateMutationResponse {
-  /**
-   * Current onboarding state after the requested step.
-   */
-  export interface AppState {
+  export interface Verification {
     /**
-     * Encrypted messaging setup status.
+     * Verification ID to pass in verification action paths.
      */
-    e2ee: AppState.E2ee;
+    id: string;
 
     /**
-     * Current onboarding state for Beeper Desktop.
+     * Verification actions that are valid for the current state.
      */
-    state:
-      | 'needs-login'
-      | 'initializing'
-      | 'needs-cross-signing-setup'
-      | 'needs-verification'
-      | 'needs-secrets'
-      | 'needs-first-sync'
-      | 'ready';
+    availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
 
     /**
-     * Signed-in account details. Omitted until sign-in is complete.
+     * Whether this device started or received the verification.
      */
-    matrix?: AppState.Matrix;
+    direction: 'incoming' | 'outgoing';
 
     /**
-     * Trusted-device verification progress.
+     * Verification methods supported for this transaction.
      */
-    verification?: AppState.Verification;
+    methods: Array<'qr' | 'sas'>;
+
+    /**
+     * Why this verification exists.
+     */
+    purpose: 'login' | 'device';
+
+    /**
+     * Current trusted-device verification state.
+     */
+    state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+
+    /**
+     * Verification error details, if verification stopped.
+     */
+    error?: Verification.Error;
+
+    /**
+     * Other device participating in verification.
+     */
+    otherDevice?: Verification.OtherDevice;
+
+    /**
+     * Other user participating in verification.
+     */
+    otherUserID?: string;
+
+    /**
+     * QR verification data.
+     */
+    qr?: Verification.Qr;
+
+    /**
+     * Emoji or number comparison data for verification.
+     */
+    sas?: Verification.SAS;
   }
 
-  export namespace AppState {
+  export namespace Verification {
     /**
-     * Encrypted messaging setup status.
+     * Verification error details, if verification stopped.
      */
-    export interface E2ee {
+    export interface Error {
       /**
-       * Whether this account can verify trusted devices.
+       * Verification error code.
        */
-      crossSigning: boolean;
-
-      /**
-       * Whether the first encrypted message sync is complete.
-       */
-      firstSyncDone: boolean;
+      code: string;
 
       /**
-       * Whether the user confirmed that they saved their recovery key.
+       * User-facing verification error message.
        */
-      hasBackedUpCode: boolean;
-
-      /**
-       * Whether encrypted messaging setup has started.
-       */
-      initialized: boolean;
-
-      /**
-       * Whether encrypted message backup is available.
-       */
-      keyBackup: boolean;
-
-      /**
-       * Encrypted messaging keys available on this device.
-       */
-      secrets: E2ee.Secrets;
-
-      /**
-       * Whether secure key storage is available.
-       */
-      secretStorage: boolean;
-
-      /**
-       * Whether this device is trusted for encrypted messages.
-       */
-      verified: boolean;
-
-      /**
-       * Unix timestamp for when the recovery key was created.
-       */
-      recoveryCodeGeneratedAt?: number;
-    }
-
-    export namespace E2ee {
-      /**
-       * Encrypted messaging keys available on this device.
-       */
-      export interface Secrets {
-        /**
-         * Whether the account identity key is available.
-         */
-        masterKey: boolean;
-
-        /**
-         * Whether the encrypted message backup key is available.
-         */
-        megolmBackupKey: boolean;
-
-        /**
-         * Whether a recovery key is available.
-         */
-        recoveryCode: boolean;
-
-        /**
-         * Whether the device trust key is available.
-         */
-        selfSigningKey: boolean;
-
-        /**
-         * Whether the user trust key is available.
-         */
-        userSigningKey: boolean;
-      }
+      reason: string;
     }
 
     /**
-     * Signed-in account details. Omitted until sign-in is complete.
+     * Other device participating in verification.
      */
-    export interface Matrix {
+    export interface OtherDevice {
       /**
-       * Current device ID.
+       * Other device ID.
        */
-      deviceID: string;
+      id: string;
 
       /**
-       * Beeper server URL for this account.
+       * Other device display name, if known.
        */
-      homeserver: string;
-
-      /**
-       * Signed-in Beeper user ID.
-       */
-      userID: string;
+      name?: string;
     }
 
     /**
-     * Trusted-device verification progress.
+     * QR verification data.
      */
-    export interface Verification {
-      /**
-       * Verification actions that are valid for the current state.
-       */
-      availableActions: Array<
-        'create' | 'qr.scan' | 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'
-      >;
-
-      /**
-       * Current trusted-device verification state.
-       */
-      state: 'idle' | 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
-
-      /**
-       * Verification error details, if verification stopped.
-       */
-      error?: Verification.Error;
-
-      /**
-       * User ID that started verification.
-       */
-      from?: string;
-
-      /**
-       * Device that started verification.
-       */
-      fromDevice?: string;
-
-      /**
-       * Other device participating in verification.
-       */
-      otherDevice?: string;
-
+    export interface Qr {
       /**
        * QR code payload to display for verification.
        */
-      qrData?: string;
-
-      /**
-       * Emoji or number comparison data for verification.
-       */
-      sas?: Verification.Sas;
-
-      /**
-       * Whether emoji comparison is available.
-       */
-      supportsSAS?: boolean;
-
-      /**
-       * Whether QR code verification is available.
-       */
-      supportsScanQRCode?: boolean;
-
-      /**
-       * Verification ID to pass in verification action paths.
-       */
-      verificationID?: string;
+      data: string;
     }
 
-    export namespace Verification {
+    /**
+     * Emoji or number comparison data for verification.
+     */
+    export interface SAS {
       /**
-       * Verification error details, if verification stopped.
+       * Emoji sequence to compare on both devices.
        */
-      export interface Error {
-        /**
-         * Verification error code.
-         */
-        code: string;
-
-        /**
-         * User-facing verification error message.
-         */
-        reason: string;
-      }
+      emojis: string;
 
       /**
-       * Emoji or number comparison data for verification.
+       * Number sequence to compare on both devices.
        */
-      export interface Sas {
-        /**
-         * Number sequence to compare on both devices.
-         */
-        decimals: string;
-
-        /**
-         * Emoji sequence to compare on both devices.
-         */
-        emojis: string;
-      }
+      decimals?: string;
     }
   }
 }
 
-export interface AppStatusResponse {
+export interface AppSessionResponse {
   /**
    * Encrypted messaging setup status.
    */
-  e2ee: AppStatusResponse.E2ee;
+  e2ee: AppSessionResponse.E2EE;
 
   /**
    * Current onboarding state for Beeper Desktop.
@@ -1489,19 +1848,19 @@ export interface AppStatusResponse {
   /**
    * Signed-in account details. Omitted until sign-in is complete.
    */
-  matrix?: AppStatusResponse.Matrix;
+  matrix?: AppSessionResponse.Matrix;
 
   /**
    * Trusted-device verification progress.
    */
-  verification?: AppStatusResponse.Verification;
+  verification?: AppSessionResponse.Verification;
 }
 
-export namespace AppStatusResponse {
+export namespace AppSessionResponse {
   /**
    * Encrypted messaging setup status.
    */
-  export interface E2ee {
+  export interface E2EE {
     /**
      * Whether this account can verify trusted devices.
      */
@@ -1515,7 +1874,7 @@ export namespace AppStatusResponse {
     /**
      * Whether the user confirmed that they saved their recovery key.
      */
-    hasBackedUpCode: boolean;
+    hasBackedUpRecoveryKey: boolean;
 
     /**
      * Whether encrypted messaging setup has started.
@@ -1530,7 +1889,7 @@ export namespace AppStatusResponse {
     /**
      * Encrypted messaging keys available on this device.
      */
-    secrets: E2ee.Secrets;
+    secrets: E2EE.Secrets;
 
     /**
      * Whether secure key storage is available.
@@ -1545,10 +1904,10 @@ export namespace AppStatusResponse {
     /**
      * Unix timestamp for when the recovery key was created.
      */
-    recoveryCodeGeneratedAt?: number;
+    recoveryKeyGeneratedAt?: number;
   }
 
-  export namespace E2ee {
+  export namespace E2EE {
     /**
      * Encrypted messaging keys available on this device.
      */
@@ -1566,7 +1925,7 @@ export namespace AppStatusResponse {
       /**
        * Whether a recovery key is available.
        */
-      recoveryCode: boolean;
+      recoveryKey: boolean;
 
       /**
        * Whether the device trust key is available.
@@ -1605,16 +1964,34 @@ export namespace AppStatusResponse {
    */
   export interface Verification {
     /**
+     * Verification ID to pass in verification action paths.
+     */
+    id: string;
+
+    /**
      * Verification actions that are valid for the current state.
      */
-    availableActions: Array<
-      'create' | 'qr.scan' | 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'
-    >;
+    availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+    /**
+     * Whether this device started or received the verification.
+     */
+    direction: 'incoming' | 'outgoing';
+
+    /**
+     * Verification methods supported for this transaction.
+     */
+    methods: Array<'qr' | 'sas'>;
+
+    /**
+     * Why this verification exists.
+     */
+    purpose: 'login' | 'device';
 
     /**
      * Current trusted-device verification state.
      */
-    state: 'idle' | 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+    state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
 
     /**
      * Verification error details, if verification stopped.
@@ -1622,44 +1999,24 @@ export namespace AppStatusResponse {
     error?: Verification.Error;
 
     /**
-     * User ID that started verification.
-     */
-    from?: string;
-
-    /**
-     * Device that started verification.
-     */
-    fromDevice?: string;
-
-    /**
      * Other device participating in verification.
      */
-    otherDevice?: string;
+    otherDevice?: Verification.OtherDevice;
 
     /**
-     * QR code payload to display for verification.
+     * Other user participating in verification.
      */
-    qrData?: string;
+    otherUserID?: string;
+
+    /**
+     * QR verification data.
+     */
+    qr?: Verification.Qr;
 
     /**
      * Emoji or number comparison data for verification.
      */
-    sas?: Verification.Sas;
-
-    /**
-     * Whether emoji comparison is available.
-     */
-    supportsSAS?: boolean;
-
-    /**
-     * Whether QR code verification is available.
-     */
-    supportsScanQRCode?: boolean;
-
-    /**
-     * Verification ID to pass in verification action paths.
-     */
-    verificationID?: string;
+    sas?: Verification.SAS;
   }
 
   export namespace Verification {
@@ -1679,36 +2036,62 @@ export namespace AppStatusResponse {
     }
 
     /**
+     * Other device participating in verification.
+     */
+    export interface OtherDevice {
+      /**
+       * Other device ID.
+       */
+      id: string;
+
+      /**
+       * Other device display name, if known.
+       */
+      name?: string;
+    }
+
+    /**
+     * QR verification data.
+     */
+    export interface Qr {
+      /**
+       * QR code payload to display for verification.
+       */
+      data: string;
+    }
+
+    /**
      * Emoji or number comparison data for verification.
      */
-    export interface Sas {
-      /**
-       * Number sequence to compare on both devices.
-       */
-      decimals: string;
-
+    export interface SAS {
       /**
        * Emoji sequence to compare on both devices.
        */
       emojis: string;
+
+      /**
+       * Number sequence to compare on both devices.
+       */
+      decimals?: string;
     }
   }
 }
 
 App.Login = Login;
 App.BaseLogin = BaseLogin;
-App.E2ee = E2eeAPIE2ee;
-App.BaseE2ee = BaseE2ee;
+App.Verifications = Verifications;
+App.BaseVerifications = BaseVerifications;
 
 export declare namespace App {
   export {
     type LoginRegistrationRequiredResponse as LoginRegistrationRequiredResponse,
     type LoginResponse as LoginResponse,
     type LoginResponseOutput as LoginResponseOutput,
-    type RecoveryCodeResetResponse as RecoveryCodeResetResponse,
-    type StartVerificationResponse as StartVerificationResponse,
-    type StateMutationResponse as StateMutationResponse,
-    type AppStatusResponse as AppStatusResponse,
+    type RecoveryKeyResetResponse as RecoveryKeyResetResponse,
+    type SessionMutationResponse as SessionMutationResponse,
+    type Verification as Verification,
+    type VerificationResponse as VerificationResponse,
+    type AppSessionResponse as AppSessionResponse,
   };
 
   export {
@@ -1723,5 +2106,15 @@ export declare namespace App {
     type LoginResponseParams as LoginResponseParams,
   };
 
-  export { E2eeAPIE2ee as E2ee, BaseE2ee as BaseE2ee };
+  export {
+    Verifications as Verifications,
+    BaseVerifications as BaseVerifications,
+    type VerificationCreateResponse as VerificationCreateResponse,
+    type VerificationRetrieveResponse as VerificationRetrieveResponse,
+    type VerificationListResponse as VerificationListResponse,
+    type VerificationAcceptResponse as VerificationAcceptResponse,
+    type VerificationCancelResponse as VerificationCancelResponse,
+    type VerificationCreateParams as VerificationCreateParams,
+    type VerificationCancelParams as VerificationCancelParams,
+  };
 }

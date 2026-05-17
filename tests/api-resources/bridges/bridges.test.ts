@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { BaseAccounts } from '@beeper/desktop-api/resources/accounts/accounts';
+import { BaseBridges } from '@beeper/desktop-api/resources/bridges/bridges';
 
 import BeeperDesktop from '@beeper/desktop-api';
 import { createClient, type PartialBeeperDesktop } from '@beeper/desktop-api/tree-shakable';
@@ -13,12 +13,12 @@ const client = new BeeperDesktop({
 const partialClient = createClient({
   accessToken: 'My Access Token',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-  resources: [BaseAccounts],
+  resources: [BaseBridges],
 });
 
-const runTests = (client: PartialBeeperDesktop<{ accounts: BaseAccounts }>) => {
+const runTests = (client: PartialBeeperDesktop<{ bridges: BaseBridges }>) => {
   test('retrieve', async () => {
-    const responsePromise = client.accounts.retrieve('accountID');
+    const responsePromise = client.bridges.retrieve('local-whatsapp');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -29,7 +29,18 @@ const runTests = (client: PartialBeeperDesktop<{ accounts: BaseAccounts }>) => {
   });
 
   test('list', async () => {
-    const responsePromise = client.accounts.list();
+    const responsePromise = client.bridges.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieveCapabilities', async () => {
+    const responsePromise = client.bridges.retrieveCapabilities('local-whatsapp');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -39,5 +50,5 @@ const runTests = (client: PartialBeeperDesktop<{ accounts: BaseAccounts }>) => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 };
-describe('resource accounts', () => runTests(client));
-describe('resource accounts (tree shakable, base)', () => runTests(partialClient));
+describe('resource bridges', () => runTests(client));
+describe('resource bridges (tree shakable, base)', () => runTests(partialClient));

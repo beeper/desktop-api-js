@@ -14,6 +14,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/shared.ts">APIError</a></code>
 - <code><a href="./src/resources/shared.ts">AppStateSnapshot</a></code>
 - <code><a href="./src/resources/shared.ts">Attachment</a></code>
 - <code><a href="./src/resources/shared.ts">Error</a></code>
@@ -26,10 +27,13 @@ Types:
 Types:
 
 - <code><a href="./src/resources/accounts/accounts.ts">Account</a></code>
+- <code><a href="./src/resources/accounts/accounts.ts">AccountBridge</a></code>
+- <code><a href="./src/resources/accounts/accounts.ts">AccountRetrieveResponse</a></code>
 - <code><a href="./src/resources/accounts/accounts.ts">AccountListResponse</a></code>
 
 Methods:
 
+- <code title="get /v1/accounts/{accountID}">client.accounts.<a href="./src/resources/accounts/accounts.ts">retrieve</a>(accountID) -> AccountRetrieveResponse</code>
 - <code title="get /v1/accounts">client.accounts.<a href="./src/resources/accounts/accounts.ts">list</a>() -> AccountListResponse</code>
 
 ## Contacts
@@ -47,12 +51,66 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/bridges.ts">BridgeAvailability</a></code>
-- <code><a href="./src/resources/bridges.ts">BridgeListResponse</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">Bridge</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">BridgeConnection</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">CookieField</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">DisappearingTimerCapability</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">GroupFieldCapability</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">GroupTypeCapabilities</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">LoginFlow</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">LoginInputField</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">LoginSession</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">ProvisioningCapabilities</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">ResolveIdentifierCapabilities</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">BridgeRetrieveResponse</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">BridgeListResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/bridges">client.bridges.<a href="./src/resources/bridges.ts">list</a>() -> BridgeListResponse</code>
+- <code title="get /v1/bridges/{bridgeID}">client.bridges.<a href="./src/resources/bridges/bridges.ts">retrieve</a>(bridgeID) -> BridgeRetrieveResponse</code>
+- <code title="get /v1/bridges">client.bridges.<a href="./src/resources/bridges/bridges.ts">list</a>() -> BridgeListResponse</code>
+- <code title="get /v1/bridges/{bridgeID}/capabilities">client.bridges.<a href="./src/resources/bridges/bridges.ts">retrieveCapabilities</a>(bridgeID) -> ProvisioningCapabilities</code>
+
+## LoginFlows
+
+Types:
+
+- <code><a href="./src/resources/bridges/login-flows.ts">LoginFlowListResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/bridges/{bridgeID}/login-flows">client.bridges.loginFlows.<a href="./src/resources/bridges/login-flows.ts">list</a>(bridgeID) -> LoginFlowListResponse</code>
+
+## Connections
+
+Types:
+
+- <code><a href="./src/resources/bridges/connections.ts">ConnectionListResponse</a></code>
+- <code><a href="./src/resources/bridges/connections.ts">ConnectionRemoveResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/bridges/{bridgeID}/connections/{loginID}">client.bridges.connections.<a href="./src/resources/bridges/connections.ts">retrieve</a>(loginID, { ...params }) -> BridgeConnection</code>
+- <code title="get /v1/bridges/{bridgeID}/connections">client.bridges.connections.<a href="./src/resources/bridges/connections.ts">list</a>(bridgeID) -> ConnectionListResponse</code>
+- <code title="post /v1/bridges/{bridgeID}/connections/{loginID}/remove">client.bridges.connections.<a href="./src/resources/bridges/connections.ts">remove</a>(loginID, { ...params }) -> ConnectionRemoveResponse</code>
+
+## LoginSessions
+
+Types:
+
+- <code><a href="./src/resources/bridges/login-sessions/login-sessions.ts">LoginSessionCancelResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/bridges/{bridgeID}/login-sessions">client.bridges.loginSessions.<a href="./src/resources/bridges/login-sessions/login-sessions.ts">create</a>(bridgeID, { ...params }) -> LoginSession</code>
+- <code title="get /v1/bridges/{bridgeID}/login-sessions/{loginSessionID}">client.bridges.loginSessions.<a href="./src/resources/bridges/login-sessions/login-sessions.ts">retrieve</a>(loginSessionID, { ...params }) -> LoginSession</code>
+- <code title="delete /v1/bridges/{bridgeID}/login-sessions/{loginSessionID}">client.bridges.loginSessions.<a href="./src/resources/bridges/login-sessions/login-sessions.ts">cancel</a>(loginSessionID, { ...params }) -> LoginSessionCancelResponse</code>
+
+### Steps
+
+Methods:
+
+- <code title="post /v1/bridges/{bridgeID}/login-sessions/{loginSessionID}/steps/{stepID}">client.bridges.loginSessions.steps.<a href="./src/resources/bridges/login-sessions/steps.ts">submit</a>(stepID, { ...params }) -> LoginSession</code>
 
 # Chats
 
@@ -145,233 +203,94 @@ Types:
 - <code><a href="./src/resources/app/app.ts">LoginRegistrationRequiredResponse</a></code>
 - <code><a href="./src/resources/app/app.ts">LoginResponse</a></code>
 - <code><a href="./src/resources/app/app.ts">LoginResponseOutput</a></code>
-- <code><a href="./src/resources/app/app.ts">RecoveryCodeResetResponse</a></code>
-- <code><a href="./src/resources/app/app.ts">StartVerificationResponse</a></code>
-- <code><a href="./src/resources/app/app.ts">StateMutationResponse</a></code>
-- <code><a href="./src/resources/app/app.ts">AppStatusResponse</a></code>
+- <code><a href="./src/resources/app/app.ts">RecoveryKeyResetResponse</a></code>
+- <code><a href="./src/resources/app/app.ts">SessionMutationResponse</a></code>
+- <code><a href="./src/resources/app/app.ts">Verification</a></code>
+- <code><a href="./src/resources/app/app.ts">VerificationResponse</a></code>
+- <code><a href="./src/resources/app/app.ts">AppSessionResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/app/status">client.app.<a href="./src/resources/app/app.ts">status</a>() -> AppStatusResponse</code>
+- <code title="get /v1/app/session">client.app.<a href="./src/resources/app/app.ts">session</a>() -> AppSessionResponse</code>
 
 ## Login
 
 Types:
 
-- <code><a href="./src/resources/app/login.ts">LoginEmailResponse</a></code>
-- <code><a href="./src/resources/app/login.ts">LoginRegisterResponse</a></code>
-- <code><a href="./src/resources/app/login.ts">LoginResponseResponse</a></code>
-- <code><a href="./src/resources/app/login.ts">LoginStartResponse</a></code>
+- <code><a href="./src/resources/app/login/login.ts">LoginEmailResponse</a></code>
+- <code><a href="./src/resources/app/login/login.ts">LoginRegisterResponse</a></code>
+- <code><a href="./src/resources/app/login/login.ts">LoginResponseResponse</a></code>
+- <code><a href="./src/resources/app/login/login.ts">LoginStartResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/app/login/email">client.app.login.<a href="./src/resources/app/login.ts">email</a>({ ...params }) -> unknown</code>
-- <code title="post /v1/app/login/register">client.app.login.<a href="./src/resources/app/login.ts">register</a>({ ...params }) -> LoginRegisterResponse</code>
-- <code title="post /v1/app/login/response">client.app.login.<a href="./src/resources/app/login.ts">response</a>({ ...params }) -> LoginResponseResponse</code>
-- <code title="post /v1/app/login/start">client.app.login.<a href="./src/resources/app/login.ts">start</a>() -> LoginStartResponse</code>
-
-## E2ee
-
-### RecoveryCode
-
-Types:
-
-- <code><a href="./src/resources/app/e2ee/recovery-code/recovery-code.ts">RecoveryCodeMarkBackedUpResponse</a></code>
-- <code><a href="./src/resources/app/e2ee/recovery-code/recovery-code.ts">RecoveryCodeVerifyResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/app/e2ee/recovery-code/mark-backed-up">client.app.e2ee.recoveryCode.<a href="./src/resources/app/e2ee/recovery-code/recovery-code.ts">markBackedUp</a>() -> RecoveryCodeMarkBackedUpResponse</code>
-- <code title="post /v1/app/e2ee/recovery-code/verify">client.app.e2ee.recoveryCode.<a href="./src/resources/app/e2ee/recovery-code/recovery-code.ts">verify</a>({ ...params }) -> RecoveryCodeVerifyResponse</code>
-
-#### Reset
-
-Types:
-
-- <code><a href="./src/resources/app/e2ee/recovery-code/reset.ts">ResetCreateResponse</a></code>
-- <code><a href="./src/resources/app/e2ee/recovery-code/reset.ts">ResetConfirmResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/app/e2ee/recovery-code/reset">client.app.e2ee.recoveryCode.reset.<a href="./src/resources/app/e2ee/recovery-code/reset.ts">create</a>({ ...params }) -> ResetCreateResponse</code>
-- <code title="post /v1/app/e2ee/recovery-code/reset/confirm">client.app.e2ee.recoveryCode.reset.<a href="./src/resources/app/e2ee/recovery-code/reset.ts">confirm</a>({ ...params }) -> ResetConfirmResponse</code>
+- <code title="post /v1/app/login/email">client.app.login.<a href="./src/resources/app/login/login.ts">email</a>({ ...params }) -> unknown</code>
+- <code title="post /v1/app/login/register">client.app.login.<a href="./src/resources/app/login/login.ts">register</a>({ ...params }) -> LoginRegisterResponse</code>
+- <code title="post /v1/app/login/response">client.app.login.<a href="./src/resources/app/login/login.ts">response</a>({ ...params }) -> LoginResponseResponse</code>
+- <code title="post /v1/app/login/start">client.app.login.<a href="./src/resources/app/login/login.ts">start</a>() -> LoginStartResponse</code>
 
 ### Verification
 
-Types:
-
-- <code><a href="./src/resources/app/e2ee/verification/verification.ts">VerificationCreateResponse</a></code>
-- <code><a href="./src/resources/app/e2ee/verification/verification.ts">VerificationAcceptResponse</a></code>
-- <code><a href="./src/resources/app/e2ee/verification/verification.ts">VerificationCancelResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/app/e2ee/verification">client.app.e2ee.verification.<a href="./src/resources/app/e2ee/verification/verification.ts">create</a>({ ...params }) -> VerificationCreateResponse</code>
-- <code title="post /v1/app/e2ee/verification/{verificationID}/accept">client.app.e2ee.verification.<a href="./src/resources/app/e2ee/verification/verification.ts">accept</a>(verificationID) -> VerificationAcceptResponse</code>
-- <code title="post /v1/app/e2ee/verification/{verificationID}/cancel">client.app.e2ee.verification.<a href="./src/resources/app/e2ee/verification/verification.ts">cancel</a>(verificationID, { ...params }) -> VerificationCancelResponse</code>
-
-#### Qr
+#### RecoveryKey
 
 Types:
 
-- <code><a href="./src/resources/app/e2ee/verification/qr.ts">QrConfirmScannedResponse</a></code>
-- <code><a href="./src/resources/app/e2ee/verification/qr.ts">QrScanResponse</a></code>
+- <code><a href="./src/resources/app/login/verification/recovery-key/recovery-key.ts">RecoveryKeyVerifyResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/app/e2ee/verification/{verificationID}/qr/confirm-scanned">client.app.e2ee.verification.qr.<a href="./src/resources/app/e2ee/verification/qr.ts">confirmScanned</a>(verificationID) -> QrConfirmScannedResponse</code>
-- <code title="post /v1/app/e2ee/verification/qr/scan">client.app.e2ee.verification.qr.<a href="./src/resources/app/e2ee/verification/qr.ts">scan</a>({ ...params }) -> QrScanResponse</code>
+- <code title="post /v1/app/login/verification/recovery-key">client.app.login.verification.recoveryKey.<a href="./src/resources/app/login/verification/recovery-key/recovery-key.ts">verify</a>({ ...params }) -> RecoveryKeyVerifyResponse</code>
 
-#### Sas
+##### Reset
 
 Types:
 
-- <code><a href="./src/resources/app/e2ee/verification/sas.ts">SaConfirmResponse</a></code>
-- <code><a href="./src/resources/app/e2ee/verification/sas.ts">SaStartResponse</a></code>
+- <code><a href="./src/resources/app/login/verification/recovery-key/reset.ts">ResetCreateResponse</a></code>
+- <code><a href="./src/resources/app/login/verification/recovery-key/reset.ts">ResetConfirmResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/app/e2ee/verification/{verificationID}/sas/confirm">client.app.e2ee.verification.sas.<a href="./src/resources/app/e2ee/verification/sas.ts">confirm</a>(verificationID) -> SaConfirmResponse</code>
-- <code title="post /v1/app/e2ee/verification/{verificationID}/sas/start">client.app.e2ee.verification.sas.<a href="./src/resources/app/e2ee/verification/sas.ts">start</a>(verificationID) -> SaStartResponse</code>
+- <code title="post /v1/app/login/verification/recovery-key/reset">client.app.login.verification.recoveryKey.reset.<a href="./src/resources/app/login/verification/recovery-key/reset.ts">create</a>({ ...params }) -> ResetCreateResponse</code>
+- <code title="post /v1/app/login/verification/recovery-key/reset/confirm">client.app.login.verification.recoveryKey.reset.<a href="./src/resources/app/login/verification/recovery-key/reset.ts">confirm</a>({ ...params }) -> ResetConfirmResponse</code>
 
-# Matrix
-
-## Users
+## Verifications
 
 Types:
 
-- <code><a href="./src/resources/matrix/users/users.ts">UserRetrieveProfileResponse</a></code>
+- <code><a href="./src/resources/app/verifications/verifications.ts">VerificationCreateResponse</a></code>
+- <code><a href="./src/resources/app/verifications/verifications.ts">VerificationRetrieveResponse</a></code>
+- <code><a href="./src/resources/app/verifications/verifications.ts">VerificationListResponse</a></code>
+- <code><a href="./src/resources/app/verifications/verifications.ts">VerificationAcceptResponse</a></code>
+- <code><a href="./src/resources/app/verifications/verifications.ts">VerificationCancelResponse</a></code>
 
 Methods:
 
-- <code title="get /_matrix/client/v3/profile/{userId}">client.matrix.users.<a href="./src/resources/matrix/users/users.ts">retrieveProfile</a>(userID) -> UserRetrieveProfileResponse</code>
+- <code title="post /v1/app/verifications">client.app.verifications.<a href="./src/resources/app/verifications/verifications.ts">create</a>({ ...params }) -> VerificationCreateResponse</code>
+- <code title="get /v1/app/verifications/{verificationID}">client.app.verifications.<a href="./src/resources/app/verifications/verifications.ts">retrieve</a>(verificationID) -> VerificationRetrieveResponse</code>
+- <code title="get /v1/app/verifications">client.app.verifications.<a href="./src/resources/app/verifications/verifications.ts">list</a>() -> VerificationListResponse</code>
+- <code title="post /v1/app/verifications/{verificationID}/accept">client.app.verifications.<a href="./src/resources/app/verifications/verifications.ts">accept</a>(verificationID) -> VerificationAcceptResponse</code>
+- <code title="post /v1/app/verifications/{verificationID}/cancel">client.app.verifications.<a href="./src/resources/app/verifications/verifications.ts">cancel</a>(verificationID, { ...params }) -> VerificationCancelResponse</code>
 
-### AccountData
+### Qr
 
 Types:
 
-- <code><a href="./src/resources/matrix/users/account-data.ts">AccountDataRetrieveResponse</a></code>
-- <code><a href="./src/resources/matrix/users/account-data.ts">AccountDataUpdateResponse</a></code>
+- <code><a href="./src/resources/app/verifications/qr.ts">QrConfirmScannedResponse</a></code>
+- <code><a href="./src/resources/app/verifications/qr.ts">QrScanResponse</a></code>
 
 Methods:
 
-- <code title="get /_matrix/client/v3/user/{userId}/account_data/{type}">client.matrix.users.accountData.<a href="./src/resources/matrix/users/account-data.ts">retrieve</a>(type, { ...params }) -> unknown</code>
-- <code title="put /_matrix/client/v3/user/{userId}/account_data/{type}">client.matrix.users.accountData.<a href="./src/resources/matrix/users/account-data.ts">update</a>(type, { ...params }) -> unknown</code>
+- <code title="post /v1/app/verifications/{verificationID}/qr/confirm-scanned">client.app.verifications.qr.<a href="./src/resources/app/verifications/qr.ts">confirmScanned</a>(verificationID) -> QrConfirmScannedResponse</code>
+- <code title="post /v1/app/verifications/qr/scan">client.app.verifications.qr.<a href="./src/resources/app/verifications/qr.ts">scan</a>({ ...params }) -> QrScanResponse</code>
 
-## Rooms
+### SAS
 
 Types:
 
-- <code><a href="./src/resources/matrix/rooms/rooms.ts">RoomCreateResponse</a></code>
-- <code><a href="./src/resources/matrix/rooms/rooms.ts">RoomJoinResponse</a></code>
-- <code><a href="./src/resources/matrix/rooms/rooms.ts">RoomLeaveResponse</a></code>
+- <code><a href="./src/resources/app/verifications/sas.ts">SASConfirmResponse</a></code>
+- <code><a href="./src/resources/app/verifications/sas.ts">SASStartResponse</a></code>
 
 Methods:
 
-- <code title="post /_matrix/client/v3/createRoom">client.matrix.rooms.<a href="./src/resources/matrix/rooms/rooms.ts">create</a>({ ...params }) -> RoomCreateResponse</code>
-- <code title="post /_matrix/client/v3/join/{roomIdOrAlias}">client.matrix.rooms.<a href="./src/resources/matrix/rooms/rooms.ts">join</a>(roomIDOrAlias, { ...params }) -> RoomJoinResponse</code>
-- <code title="post /_matrix/client/v3/rooms/{roomId}/leave">client.matrix.rooms.<a href="./src/resources/matrix/rooms/rooms.ts">leave</a>(roomID, { ...params }) -> unknown</code>
-
-### AccountData
-
-Types:
-
-- <code><a href="./src/resources/matrix/rooms/account-data.ts">AccountDataRetrieveResponse</a></code>
-- <code><a href="./src/resources/matrix/rooms/account-data.ts">AccountDataUpdateResponse</a></code>
-
-Methods:
-
-- <code title="get /_matrix/client/v3/user/{userId}/rooms/{roomId}/account_data/{type}">client.matrix.rooms.accountData.<a href="./src/resources/matrix/rooms/account-data.ts">retrieve</a>(type, { ...params }) -> unknown</code>
-- <code title="put /_matrix/client/v3/user/{userId}/rooms/{roomId}/account_data/{type}">client.matrix.rooms.accountData.<a href="./src/resources/matrix/rooms/account-data.ts">update</a>(type, { ...params }) -> unknown</code>
-
-### State
-
-Types:
-
-- <code><a href="./src/resources/matrix/rooms/state.ts">StateRetrieveResponse</a></code>
-- <code><a href="./src/resources/matrix/rooms/state.ts">StateListResponse</a></code>
-
-Methods:
-
-- <code title="get /_matrix/client/v3/rooms/{roomId}/state/{eventType}/{stateKey}">client.matrix.rooms.state.<a href="./src/resources/matrix/rooms/state.ts">retrieve</a>(stateKey, { ...params }) -> StateRetrieveResponse</code>
-- <code title="get /_matrix/client/v3/rooms/{roomId}/state">client.matrix.rooms.state.<a href="./src/resources/matrix/rooms/state.ts">list</a>(roomID) -> StateListResponse</code>
-
-### Events
-
-Types:
-
-- <code><a href="./src/resources/matrix/rooms/events.ts">EventRetrieveResponse</a></code>
-
-Methods:
-
-- <code title="get /_matrix/client/v3/rooms/{roomId}/event/{eventId}">client.matrix.rooms.events.<a href="./src/resources/matrix/rooms/events.ts">retrieve</a>(eventID, { ...params }) -> EventRetrieveResponse</code>
-
-## Bridges
-
-### Auth
-
-Types:
-
-- <code><a href="./src/resources/matrix/bridges/auth.ts">AuthListFlowsResponse</a></code>
-- <code><a href="./src/resources/matrix/bridges/auth.ts">AuthListLoginsResponse</a></code>
-- <code><a href="./src/resources/matrix/bridges/auth.ts">AuthLogoutResponse</a></code>
-- <code><a href="./src/resources/matrix/bridges/auth.ts">AuthStartLoginResponse</a></code>
-- <code><a href="./src/resources/matrix/bridges/auth.ts">AuthSubmitCookiesResponse</a></code>
-- <code><a href="./src/resources/matrix/bridges/auth.ts">AuthSubmitUserInputResponse</a></code>
-- <code><a href="./src/resources/matrix/bridges/auth.ts">AuthWaitForStepResponse</a></code>
-- <code><a href="./src/resources/matrix/bridges/auth.ts">AuthWhoamiResponse</a></code>
-
-Methods:
-
-- <code title="get /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/login/flows">client.matrix.bridges.auth.<a href="./src/resources/matrix/bridges/auth.ts">listFlows</a>(bridgeID) -> AuthListFlowsResponse</code>
-- <code title="get /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/logins">client.matrix.bridges.auth.<a href="./src/resources/matrix/bridges/auth.ts">listLogins</a>(bridgeID) -> AuthListLoginsResponse</code>
-- <code title="post /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/logout/{loginID}">client.matrix.bridges.auth.<a href="./src/resources/matrix/bridges/auth.ts">logout</a>(loginID, { ...params }) -> unknown</code>
-- <code title="post /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/login/start/{flowID}">client.matrix.bridges.auth.<a href="./src/resources/matrix/bridges/auth.ts">startLogin</a>(flowID, { ...params }) -> AuthStartLoginResponse</code>
-- <code title="post /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/login/step/{loginProcessID}/{stepID}/cookies">client.matrix.bridges.auth.<a href="./src/resources/matrix/bridges/auth.ts">submitCookies</a>(stepID, { ...params }) -> AuthSubmitCookiesResponse</code>
-- <code title="post /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/login/step/{loginProcessID}/{stepID}/user_input">client.matrix.bridges.auth.<a href="./src/resources/matrix/bridges/auth.ts">submitUserInput</a>(stepID, { ...params }) -> AuthSubmitUserInputResponse</code>
-- <code title="post /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/login/step/{loginProcessID}/{stepID}/display_and_wait">client.matrix.bridges.auth.<a href="./src/resources/matrix/bridges/auth.ts">waitForStep</a>(stepID, { ...params }) -> AuthWaitForStepResponse</code>
-- <code title="get /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/whoami">client.matrix.bridges.auth.<a href="./src/resources/matrix/bridges/auth.ts">whoami</a>(bridgeID) -> AuthWhoamiResponse</code>
-
-### Contacts
-
-Types:
-
-- <code><a href="./src/resources/matrix/bridges/contacts.ts">ContactListResponse</a></code>
-
-Methods:
-
-- <code title="get /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/contacts">client.matrix.bridges.contacts.<a href="./src/resources/matrix/bridges/contacts.ts">list</a>(bridgeID, { ...params }) -> ContactListResponse</code>
-
-### Users
-
-Types:
-
-- <code><a href="./src/resources/matrix/bridges/users.ts">UserResolveResponse</a></code>
-- <code><a href="./src/resources/matrix/bridges/users.ts">UserSearchResponse</a></code>
-
-Methods:
-
-- <code title="get /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/resolve_identifier/{identifier}">client.matrix.bridges.users.<a href="./src/resources/matrix/bridges/users.ts">resolve</a>(identifier, { ...params }) -> UserResolveResponse</code>
-- <code title="post /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/search_users">client.matrix.bridges.users.<a href="./src/resources/matrix/bridges/users.ts">search</a>(bridgeID, { ...params }) -> UserSearchResponse</code>
-
-### Rooms
-
-Types:
-
-- <code><a href="./src/resources/matrix/bridges/rooms.ts">RoomCreateDmResponse</a></code>
-- <code><a href="./src/resources/matrix/bridges/rooms.ts">RoomCreateGroupResponse</a></code>
-
-Methods:
-
-- <code title="post /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/create_dm/{identifier}">client.matrix.bridges.rooms.<a href="./src/resources/matrix/bridges/rooms.ts">createDm</a>(identifier, { ...params }) -> RoomCreateDmResponse</code>
-- <code title="post /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/create_group/{groupType}">client.matrix.bridges.rooms.<a href="./src/resources/matrix/bridges/rooms.ts">createGroup</a>(groupType, { ...params }) -> RoomCreateGroupResponse</code>
-
-### Capabilities
-
-Types:
-
-- <code><a href="./src/resources/matrix/bridges/capabilities.ts">CapabilityRetrieveResponse</a></code>
-
-Methods:
-
-- <code title="get /_matrix/client/unstable/com.beeper.bridge/{bridgeID}/_matrix/provision/v3/capabilities">client.matrix.bridges.capabilities.<a href="./src/resources/matrix/bridges/capabilities.ts">retrieve</a>(bridgeID) -> CapabilityRetrieveResponse</code>
+- <code title="post /v1/app/verifications/{verificationID}/sas/confirm">client.app.verifications.sas.<a href="./src/resources/app/verifications/sas.ts">confirm</a>(verificationID) -> SASConfirmResponse</code>
+- <code title="post /v1/app/verifications/{verificationID}/sas/start">client.app.verifications.sas.<a href="./src/resources/app/verifications/sas.ts">start</a>(verificationID) -> SASStartResponse</code>

@@ -37,7 +37,6 @@ import {
   AssetUploadResponse,
   Assets,
 } from './resources/assets';
-import { BridgeAvailability, BridgeListResponse, Bridges } from './resources/bridges';
 import { Info, InfoRetrieveResponse } from './resources/info';
 import {
   MessageDeleteParams,
@@ -50,17 +49,40 @@ import {
   MessageUpdateResponse,
   Messages,
 } from './resources/messages';
-import { Account, AccountListResponse, Accounts } from './resources/accounts/accounts';
+import {
+  Account,
+  AccountBridge,
+  AccountListResponse,
+  AccountRetrieveResponse,
+  Accounts,
+} from './resources/accounts/accounts';
 import {
   App,
-  AppStatusResponse,
+  AppSessionResponse,
   LoginRegistrationRequiredResponse,
   LoginResponse,
   LoginResponseOutput,
-  RecoveryCodeResetResponse,
-  StartVerificationResponse,
-  StateMutationResponse,
+  RecoveryKeyResetResponse,
+  SessionMutationResponse,
+  Verification,
+  VerificationResponse,
 } from './resources/app/app';
+import {
+  Bridge,
+  BridgeConnection,
+  BridgeListResponse,
+  BridgeRetrieveResponse,
+  Bridges,
+  CookieField,
+  DisappearingTimerCapability,
+  GroupFieldCapability,
+  GroupTypeCapabilities,
+  LoginFlow,
+  LoginInputField,
+  LoginSession,
+  ProvisioningCapabilities,
+  ResolveIdentifierCapabilities,
+} from './resources/bridges/bridges';
 import {
   Chat,
   ChatArchiveParams,
@@ -80,7 +102,6 @@ import {
   Chats,
   ChatsCursorSearch,
 } from './resources/chats/chats';
-import { Matrix } from './resources/matrix/matrix';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -862,7 +883,7 @@ export class BeeperDesktop extends BaseBeeperDesktop {
    */
   accounts: API.Accounts = new API.Accounts(this);
   /**
-   * Manage bridge-backed account types and account availability
+   * Manage bridge-backed account types, connections, and login sessions
    */
   bridges: API.Bridges = new API.Bridges(this);
   /**
@@ -885,10 +906,6 @@ export class BeeperDesktop extends BaseBeeperDesktop {
    * Manage Beeper app login and encrypted messaging setup
    */
   app: API.App = new API.App(this);
-  /**
-   * Matrix-compatible APIs for accounts, rooms, and connected network bridges.
-   */
-  matrix: API.Matrix = new API.Matrix(this);
 }
 
 BeeperDesktop.Accounts = Accounts;
@@ -898,7 +915,6 @@ BeeperDesktop.Messages = Messages;
 BeeperDesktop.Assets = Assets;
 BeeperDesktop.Info = Info;
 BeeperDesktop.App = App;
-BeeperDesktop.Matrix = Matrix;
 
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
@@ -919,11 +935,28 @@ export declare namespace BeeperDesktop {
     type SearchParams as SearchParams,
   };
 
-  export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
+  export {
+    Accounts as Accounts,
+    type Account as Account,
+    type AccountBridge as AccountBridge,
+    type AccountRetrieveResponse as AccountRetrieveResponse,
+    type AccountListResponse as AccountListResponse,
+  };
 
   export {
     Bridges as Bridges,
-    type BridgeAvailability as BridgeAvailability,
+    type Bridge as Bridge,
+    type BridgeConnection as BridgeConnection,
+    type CookieField as CookieField,
+    type DisappearingTimerCapability as DisappearingTimerCapability,
+    type GroupFieldCapability as GroupFieldCapability,
+    type GroupTypeCapabilities as GroupTypeCapabilities,
+    type LoginFlow as LoginFlow,
+    type LoginInputField as LoginInputField,
+    type LoginSession as LoginSession,
+    type ProvisioningCapabilities as ProvisioningCapabilities,
+    type ResolveIdentifierCapabilities as ResolveIdentifierCapabilities,
+    type BridgeRetrieveResponse as BridgeRetrieveResponse,
     type BridgeListResponse as BridgeListResponse,
   };
 
@@ -977,14 +1010,14 @@ export declare namespace BeeperDesktop {
     type LoginRegistrationRequiredResponse as LoginRegistrationRequiredResponse,
     type LoginResponse as LoginResponse,
     type LoginResponseOutput as LoginResponseOutput,
-    type RecoveryCodeResetResponse as RecoveryCodeResetResponse,
-    type StartVerificationResponse as StartVerificationResponse,
-    type StateMutationResponse as StateMutationResponse,
-    type AppStatusResponse as AppStatusResponse,
+    type RecoveryKeyResetResponse as RecoveryKeyResetResponse,
+    type SessionMutationResponse as SessionMutationResponse,
+    type Verification as Verification,
+    type VerificationResponse as VerificationResponse,
+    type AppSessionResponse as AppSessionResponse,
   };
 
-  export { Matrix as Matrix };
-
+  export type APIError = API.APIError;
   export type AppStateSnapshot = API.AppStateSnapshot;
   export type Attachment = API.Attachment;
   export type Error = API.Error;

@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { BaseApp } from '@beeper/desktop-api/resources/app/app';
+import { Bridges } from '@beeper/desktop-api/resources/bridges/bridges';
+import { BaseLoginFlows } from '@beeper/desktop-api/resources/bridges/login-flows';
 
 import BeeperDesktop from '@beeper/desktop-api';
 import { createClient, type PartialBeeperDesktop } from '@beeper/desktop-api/tree-shakable';
@@ -13,12 +14,18 @@ const client = new BeeperDesktop({
 const partialClient = createClient({
   accessToken: 'My Access Token',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-  resources: [BaseApp],
+  resources: [BaseLoginFlows],
 });
 
-const runTests = (client: PartialBeeperDesktop<{ app: BaseApp }>) => {
-  test('session', async () => {
-    const responsePromise = client.app.session();
+const parentPartialClient = createClient({
+  accessToken: 'My Access Token',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+  resources: [Bridges],
+});
+
+const runTests = (client: PartialBeeperDesktop<{ bridges: { loginFlows: BaseLoginFlows } }>) => {
+  test('list', async () => {
+    const responsePromise = client.bridges.loginFlows.list('local-whatsapp');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -28,5 +35,6 @@ const runTests = (client: PartialBeeperDesktop<{ app: BaseApp }>) => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 };
-describe('resource app', () => runTests(client));
-describe('resource app (tree shakable, base)', () => runTests(partialClient));
+describe('resource loginFlows', () => runTests(client));
+describe('resource loginFlows (tree shakable, base)', () => runTests(partialClient));
+describe('resource loginFlows (tree shakable, subresource)', () => runTests(parentPartialClient));
