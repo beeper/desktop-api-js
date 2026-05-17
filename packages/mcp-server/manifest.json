@@ -30,7 +30,7 @@
     "BEEPER_ACCESS_TOKEN": {
       "title": "access_token",
       "description": "Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for authenticated API operations.",
-      "required": false,
+      "required": true,
       "type": "string"
     }
   },
