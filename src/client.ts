@@ -56,20 +56,9 @@ import {
   AccountRetrieveResponse,
   Accounts,
 } from './resources/accounts/accounts';
-import {
-  App,
-  AppSessionResponse,
-  LoginRegistrationRequiredResponse,
-  LoginResponse,
-  LoginResponseOutput,
-  RecoveryKeyResetResponse,
-  SessionMutationResponse,
-  Verification,
-  VerificationResponse,
-} from './resources/app/app';
+import { App, Verification } from './resources/app/app';
 import {
   Bridge,
-  BridgeConnection,
   BridgeListResponse,
   BridgeRetrieveResponse,
   Bridges,
@@ -296,8 +285,8 @@ export class BaseBeeperDesktop {
   }
 
   /**
-   * Focus Beeper Desktop and optionally navigate to a specific chat, message, or
-   * pre-fill plain text and an image path.
+   * Focus Beeper Desktop and optionally open a specific chat, jump to a message, or
+   * pre-fill text and an image.
    *
    * @example
    * ```ts
@@ -312,9 +301,9 @@ export class BaseBeeperDesktop {
   }
 
   /**
-   * Returns matching chats, participant name matches in groups, and the first page
-   * of messages in one call. Paginate messages via search-messages. Paginate chats
-   * via search-chats.
+   * Return matching chats, participant matches in group chats, and the first page of
+   * message results in one call. Use the dedicated chat and message search endpoints
+   * for pagination.
    *
    * @example
    * ```ts
@@ -946,7 +935,6 @@ export declare namespace BeeperDesktop {
   export {
     Bridges as Bridges,
     type Bridge as Bridge,
-    type BridgeConnection as BridgeConnection,
     type CookieField as CookieField,
     type DisappearingTimerCapability as DisappearingTimerCapability,
     type GroupFieldCapability as GroupFieldCapability,
@@ -1005,17 +993,7 @@ export declare namespace BeeperDesktop {
 
   export { Info as Info, type InfoRetrieveResponse as InfoRetrieveResponse };
 
-  export {
-    App as App,
-    type LoginRegistrationRequiredResponse as LoginRegistrationRequiredResponse,
-    type LoginResponse as LoginResponse,
-    type LoginResponseOutput as LoginResponseOutput,
-    type RecoveryKeyResetResponse as RecoveryKeyResetResponse,
-    type SessionMutationResponse as SessionMutationResponse,
-    type Verification as Verification,
-    type VerificationResponse as VerificationResponse,
-    type AppSessionResponse as AppSessionResponse,
-  };
+  export { App as App, type Verification as Verification };
 
   export type APIError = API.APIError;
   export type AppStateSnapshot = API.AppStateSnapshot;

@@ -17,7 +17,8 @@ export interface AppStateSnapshot {
   e2ee: AppStateSnapshot.E2EE;
 
   /**
-   * Current onboarding state for Beeper Desktop.
+   * Current sign-in and encrypted messaging setup state for Beeper Desktop or Beeper
+   * Server.
    */
   state:
     | 'needs-login'
@@ -34,7 +35,7 @@ export interface AppStateSnapshot {
   matrix?: AppStateSnapshot.Matrix;
 
   /**
-   * Trusted-device verification progress.
+   * Trusted device verification progress.
    */
   verification?: AppStateSnapshot.Verification;
 }
@@ -132,7 +133,7 @@ export namespace AppStateSnapshot {
     deviceID: string;
 
     /**
-     * Beeper server URL for this account.
+     * Beeper homeserver URL for this account.
      */
     homeserver: string;
 
@@ -143,7 +144,7 @@ export namespace AppStateSnapshot {
   }
 
   /**
-   * Trusted-device verification progress.
+   * Trusted device verification progress.
    */
   export interface Verification {
     /**
@@ -187,7 +188,7 @@ export namespace AppStateSnapshot {
     otherDevice?: Verification.OtherDevice;
 
     /**
-     * Other user participating in verification.
+     * Other Beeper user participating in verification.
      */
     otherUserID?: string;
 
@@ -267,7 +268,7 @@ export interface Attachment {
   type: 'unknown' | 'img' | 'video' | 'audio';
 
   /**
-   * Attachment identifier (typically an mxc:// URL). Use the download file endpoint
+   * Attachment identifier, typically an mxc:// URL. Use the download file endpoint
    * to get a local file path.
    */
   id?: string;
@@ -309,7 +310,7 @@ export interface Attachment {
 
   /**
    * Preview image URL for video attachments (poster frame). May be temporary or
-   * local-only to this device; download promptly if durable access is needed.
+   * available only on this device; download promptly if durable access is needed.
    */
   posterImg?: string;
 
@@ -319,8 +320,8 @@ export interface Attachment {
   size?: Attachment.Size;
 
   /**
-   * Public URL or local file path to fetch the file. May be temporary or local-only
-   * to this device; download promptly if durable access is needed.
+   * Public URL or local file path to fetch the file. May be temporary or available
+   * only on this device; download promptly if durable access is needed.
    */
   srcURL?: string;
 
@@ -421,14 +422,14 @@ export interface Message {
   accountID: string;
 
   /**
-   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
-   * installation when available.
+   * Chat ID. Input routes also accept the local chat ID from this installation when
+   * available.
    */
   chatID: string;
 
   /**
-   * Matrix-style fully-qualified sender user ID, usually including a bridge prefix
-   * and homeserver.
+   * Fully qualified sender user ID. Network-backed IDs usually include the network
+   * prefix and homeserver.
    */
   senderID: string;
 
@@ -499,7 +500,7 @@ export interface Message {
   seen?: boolean | string | { [key: string]: boolean | string };
 
   /**
-   * Resolved sender display name (impersonator/full name/username/participant name).
+   * Resolved sender display name.
    */
   senderName?: string;
 
@@ -509,7 +510,7 @@ export interface Message {
   sendStatus?: Message.SendStatus;
 
   /**
-   * Matrix HTML body if present.
+   * Rich-text message body if present.
    */
   text?: string;
 
@@ -546,14 +547,14 @@ export namespace Message {
     url: string;
 
     /**
-     * Favicon URL if available. May be temporary or local-only to this device;
+     * Favicon URL if available. May be temporary or available only on this device;
      * download promptly if durable access is needed.
      */
     favicon?: string;
 
     /**
-     * Preview image URL if available. May be temporary or local-only to this device;
-     * download promptly if durable access is needed.
+     * Preview image URL if available. May be temporary or available only on this
+     * device; download promptly if durable access is needed.
      */
     img?: string;
 
@@ -604,7 +605,8 @@ export namespace Message {
     deliveredToUsers?: Array<string>;
 
     /**
-     * Internal bridge error detail. Intended for diagnostics, not end-user display.
+     * Diagnostic error detail from the messaging network adapter. Do not show directly
+     * to users.
      */
     internalError?: string;
 
@@ -645,7 +647,7 @@ export interface Reaction {
   emoji?: boolean;
 
   /**
-   * URL to the reaction's image. May be temporary or local-only to this device;
+   * URL to the reaction's image. May be temporary or available only on this device;
    * download promptly if durable access is needed.
    */
   imgURL?: string;
@@ -677,9 +679,9 @@ export interface User {
   fullName?: string;
 
   /**
-   * Avatar image URL if available. This may be a remote URL, Matrix media URL, data
-   * URL, or local filesystem URL depending on source and endpoint. May be temporary
-   * or local-only to this device; download promptly if durable access is needed.
+   * Avatar image URL if available. This may be a remote URL, media URL, data URL, or
+   * local file URL depending on the source. May be temporary or available only on
+   * this device; download promptly if durable access is needed.
    */
   imgURL?: string;
 

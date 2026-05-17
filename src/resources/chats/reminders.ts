@@ -16,7 +16,7 @@ export class BaseReminders extends APIResource {
   ] as const);
 
   /**
-   * Set a reminder for a chat at a specific time
+   * Set a reminder for a chat at a specific time.
    *
    * @example
    * ```ts
@@ -35,7 +35,7 @@ export class BaseReminders extends APIResource {
   }
 
   /**
-   * Clear an existing reminder from a chat
+   * Clear an existing reminder from a chat.
    *
    * @example
    * ```ts

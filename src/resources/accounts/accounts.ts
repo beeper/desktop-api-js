@@ -21,7 +21,7 @@ export class BaseAccounts extends APIResource {
   static override readonly _key: readonly ['accounts'] = Object.freeze(['accounts'] as const);
 
   /**
-   * Get one Chat Account connected to this Beeper Desktop instance.
+   * Get one chat account connected to this Beeper Client API server.
    *
    * @example
    * ```ts
@@ -33,8 +33,8 @@ export class BaseAccounts extends APIResource {
   }
 
   /**
-   * List Chat Accounts connected to this Beeper Desktop instance, including bridge
-   * metadata and network identity.
+   * List chat accounts connected to this Beeper Client API server, including bridge,
+   * network, user identity, and connection status.
    *
    * @example
    * ```ts
@@ -93,8 +93,8 @@ export interface Account {
   capabilities?: { [key: string]: unknown };
 
   /**
-   * Bridge login identity for this account, when known. This is not guaranteed to be
-   * one-to-one with accountID.
+   * Bridge login ID for this account, when known. One bridge login can contain
+   * multiple chat accounts.
    */
   loginID?: string;
 
@@ -115,14 +115,15 @@ export interface Account {
  */
 export interface AccountBridge {
   /**
-   * Bridge instance identifier. Matrix and cloud bridges often use the bridge type
-   * (for example matrix or discordgo); local bridges use a local bridge ID (for
-   * example local-whatsapp). Available in Beeper Desktop v4.2.785+.
+   * Bridge identifier. Beeper Cloud accounts often use the network type (for example
+   * matrix or discordgo); on-device accounts use a local bridge ID (for example
+   * local-whatsapp). Available in Beeper Desktop v4.2.785+.
    */
   id: string;
 
   /**
-   * Bridge provider for the account. Available in Beeper Desktop v4.2.785+.
+   * Where this account runs: on this device or in Beeper Cloud. Available in Beeper
+   * Desktop v4.2.785+.
    */
   provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk';
 
@@ -174,8 +175,8 @@ export interface AccountRetrieveResponse {
   capabilities?: { [key: string]: unknown };
 
   /**
-   * Bridge login identity for this account, when known. This is not guaranteed to be
-   * one-to-one with accountID.
+   * Bridge login ID for this account, when known. One bridge login can contain
+   * multiple chat accounts.
    */
   loginID?: string;
 
@@ -192,7 +193,7 @@ export interface AccountRetrieveResponse {
 }
 
 /**
- * Accounts configured on this device. Includes accountID, bridge metadata,
+ * Chat accounts configured on this device. Includes accountID, bridge metadata,
  * optional network name, and user identity.
  */
 export type AccountListResponse = Array<Account>;

@@ -7,7 +7,7 @@ import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
 
 /**
- * Bridge-backed account types, bridge connections, login sessions, and bridgev2 capabilities.
+ * Available bridges, bridge logins, login sessions for connect and reconnect flows, and advanced network capabilities.
  */
 export class BaseSteps extends APIResource {
   static override readonly _key: readonly ['bridges', 'loginSessions', 'steps'] = Object.freeze([
@@ -32,7 +32,7 @@ export class BaseSteps extends APIResource {
   }
 }
 /**
- * Bridge-backed account types, bridge connections, login sessions, and bridgev2 capabilities.
+ * Available bridges, bridge logins, login sessions for connect and reconnect flows, and advanced network capabilities.
  */
 export class Steps extends BaseSteps {}
 
@@ -53,17 +53,18 @@ export interface StepSubmitParams {
   type: 'user_input' | 'cookies' | 'display_and_wait';
 
   /**
-   * Body param
+   * Body param: Field values keyed by the field IDs from the current step.
    */
   fields?: { [key: string]: string };
 
   /**
-   * Body param
+   * Body param: Last browser URL reached during a cookies step, if available.
    */
   lastURL?: string;
 
   /**
-   * Body param
+   * Body param: How the step was completed. Omit unless the client needs to
+   * distinguish an embedded webview or browser extension.
    */
   source?: 'api' | 'webview' | 'browser_extension';
 }

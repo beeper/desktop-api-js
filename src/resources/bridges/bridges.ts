@@ -5,14 +5,7 @@ import * as BridgesAPI from './bridges';
 import * as Shared from '../shared';
 import * as AccountsAPI from '../accounts/accounts';
 import * as ConnectionsAPI from './connections';
-import {
-  BaseConnections,
-  ConnectionListResponse,
-  ConnectionRemoveParams,
-  ConnectionRemoveResponse,
-  ConnectionRetrieveParams,
-  Connections,
-} from './connections';
+import { BaseConnections, Connections } from './connections';
 import * as LoginFlowsAPI from './login-flows';
 import { BaseLoginFlows, LoginFlowListResponse, LoginFlows } from './login-flows';
 import * as LoginSessionsAPI from './login-sessions/login-sessions';
@@ -35,22 +28,24 @@ export class BaseBridges extends APIResource {
   static override readonly _key: readonly ['bridges'] = Object.freeze(['bridges'] as const);
 
   /**
-   * Get one bridge-backed account type and the connected accounts that use it.
+   * Get one bridge, including the chat accounts connected through it.
    */
   retrieve(bridgeID: string, options?: RequestOptions): APIPromise<BridgeRetrieveResponse> {
     return this._client.get(path`/v1/bridges/${bridgeID}`, options);
   }
 
   /**
-   * List bridge-backed account types that can be shown in add-account flows, grouped
-   * with connected accounts that use the same Account schema as GET /v1/accounts.
+   * List available bridges. A bridge is a chat-network connector that can connect or
+   * reconnect chat accounts. Connected accounts use the same Account schema as GET
+   * /v1/accounts.
    */
   list(options?: RequestOptions): APIPromise<BridgeListResponse> {
     return this._client.get('/v1/bridges', options);
   }
 
   /**
-   * Get bridgev2 provisioning capabilities for a bridge.
+   * Get advanced network capabilities for a bridge. This endpoint is intended for
+   * clients that build custom connect or chat-creation flows.
    */
   retrieveCapabilities(bridgeID: string, options?: RequestOptions): APIPromise<ProvisioningCapabilities> {
     return this._client.get(path`/v1/bridges/${bridgeID}/capabilities`, options);
@@ -66,11 +61,11 @@ export class Bridges extends BaseBridges {
 }
 
 /**
- * Bridge-backed account type that can be shown in add-account flows.
+ * Available bridge that can connect or reconnect chat accounts.
  */
 export interface Bridge {
   /**
-   * Bridge instance identifier. Use with bridge login-flow endpoints.
+   * Bridge ID. Use with bridge endpoints.
    */
   id: string;
 
@@ -86,17 +81,17 @@ export interface Bridge {
   activeAccountCount: number;
 
   /**
-   * Human-friendly account type name shown in Beeper Desktop.
+   * Human-friendly bridge name shown in Beeper.
    */
   displayName: string;
 
   /**
-   * Bridge provider.
+   * Where accounts for this bridge run: on this device or in Beeper Cloud.
    */
   provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk';
 
   /**
-   * Whether this bridge can currently be used to add an account.
+   * Whether this bridge can currently be used to connect new accounts.
    */
   status: 'available' | 'connected' | 'limit_reached' | 'temporarily_unavailable' | 'disabled';
 
@@ -106,7 +101,8 @@ export interface Bridge {
   supportsMultipleAccounts: boolean;
 
   /**
-   * Bridge type, such as matrix, discordgo, slackgo, whatsapp, telegram, or twitter.
+   * Underlying bridge type, such as matrix, discordgo, slackgo, whatsapp, telegram,
+   * or twitter.
    */
   type: string;
 
@@ -116,44 +112,30 @@ export interface Bridge {
   network?: string;
 
   /**
-   * Human-friendly status text matching Beeper Desktop account management language.
+   * Human-friendly status text matching Beeper account management language.
    */
   statusText?: string;
-}
-
-/**
- * Durable bridge connection identity. This is not guaranteed to be one-to-one with
- * a Desktop API account.
- */
-export interface BridgeConnection {
-  bridgeID: string;
-
-  loginID: string;
-
-  removeScopes: Array<'current-device' | 'all-devices'>;
-
-  status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown';
-
-  accountIDs?: Array<string>;
-
-  statusText?: string;
-
-  /**
-   * User the account belongs to.
-   */
-  user?: Shared.User;
 }
 
 export interface CookieField {
+  /**
+   * Field ID to send back in the fields object.
+   */
   id: string;
 
+  /**
+   * Cookie, header, or local storage key to collect.
+   */
   name?: string;
 
+  /**
+   * Browser storage source for this value.
+   */
   type?: 'cookie' | 'header' | 'local_storage';
 }
 
 /**
- * bridgev2 disappearing timer capability.
+ * Disappearing-message timer capability.
  */
 export interface DisappearingTimerCapability {
   types: Array<'' | 'after_read' | 'after_send'>;
@@ -164,7 +146,7 @@ export interface DisappearingTimerCapability {
 }
 
 /**
- * bridgev2 group field capability.
+ * Group creation field capability.
  */
 export interface GroupFieldCapability {
   allowed: boolean;
@@ -176,81 +158,114 @@ export interface GroupFieldCapability {
   required?: boolean;
 
   /**
-   * bridgev2 disappearing timer capability.
+   * Disappearing-message timer capability.
    */
   settings?: DisappearingTimerCapability;
 }
 
 /**
- * bridgev2 group type capabilities.
+ * Group creation capabilities for one group type.
  */
 export interface GroupTypeCapabilities {
   type_description: string;
 
   /**
-   * bridgev2 group field capability.
+   * Group creation field capability.
    */
   avatar?: GroupFieldCapability;
 
   /**
-   * bridgev2 group field capability.
+   * Group creation field capability.
    */
   disappear?: GroupFieldCapability;
 
   /**
-   * bridgev2 group field capability.
+   * Group creation field capability.
    */
   name?: GroupFieldCapability;
 
   /**
-   * bridgev2 group field capability.
+   * Group creation field capability.
    */
   parent?: GroupFieldCapability;
 
   /**
-   * bridgev2 group field capability.
+   * Group creation field capability.
    */
   participants?: GroupFieldCapability;
 
   /**
-   * bridgev2 group field capability.
+   * Group creation field capability.
    */
   topic?: GroupFieldCapability;
 
   /**
-   * bridgev2 group field capability.
+   * Group creation field capability.
    */
   username?: GroupFieldCapability;
 }
 
 /**
- * Bridge login flow.
+ * Connect or reconnect flow option for a bridge.
  */
 export interface LoginFlow {
+  /**
+   * Flow ID to pass when creating a bridge login session.
+   */
   id: string;
 
+  /**
+   * Short explanation for when to use this flow, when provided.
+   */
   description?: string;
 
+  /**
+   * Display name for the flow, when provided.
+   */
   name?: string;
 }
 
 export interface LoginInputField {
+  /**
+   * Field ID to send back in the fields object.
+   */
   id: string;
 
+  /**
+   * Initial field value, when provided by the network.
+   */
   initialValue?: string;
 
+  /**
+   * Field label to show to the user.
+   */
   label?: string;
 
+  /**
+   * True if the user can leave this field empty.
+   */
   optional?: boolean;
 
+  /**
+   * Placeholder text to show when the field is empty.
+   */
   placeholder?: string;
 
+  /**
+   * Suggested input type, such as text, password, or email.
+   */
   type?: string;
 }
 
 export interface LoginSession {
+  /**
+   * Bridge ID.
+   */
   bridgeID: string;
 
+  /**
+   * Temporary bridge login session ID.
+   */
   loginSessionID: string;
 
   status:
@@ -266,14 +281,15 @@ export interface LoginSession {
    */
   account?: AccountsAPI.Account;
 
+  /**
+   * Chat account ID for reconnect flows, when known.
+   */
   accountID?: string;
 
   /**
-   * Durable bridge connection identity. This is not guaranteed to be one-to-one with
-   * a Desktop API account.
+   * Step the client should show or complete next. Omitted when the session is
+   * complete, cancelled, or failed.
    */
-  connection?: BridgeConnection;
-
   currentStep?:
     | LoginSession.UserInput
     | LoginSession.Cookies
@@ -282,6 +298,15 @@ export interface LoginSession {
 
   error?: Shared.APIError;
 
+  /**
+   * Signed-in identity for a bridge. One bridge login can contain multiple chat
+   * accounts.
+   */
+  login?: LoginSession.Login;
+
+  /**
+   * Bridge login ID for reconnect flows, when known.
+   */
   loginID?: string;
 }
 
@@ -295,6 +320,9 @@ export namespace LoginSession {
 
     attachments?: Array<unknown>;
 
+    /**
+     * User-facing instructions for this step.
+     */
     instructions?: string;
   }
 
@@ -305,29 +333,48 @@ export namespace LoginSession {
 
     type: 'cookies';
 
+    /**
+     * URL to open for the user.
+     */
     url: string;
 
+    /**
+     * Regular expression that identifies the final URL after sign-in.
+     */
     expectedFinalURLRegex?: string;
 
+    /**
+     * Optional extraction script for browser-based sign-in helpers. Treat as an opaque
+     * helper value.
+     */
     extractJS?: string;
 
+    /**
+     * User-facing instructions for this browser step.
+     */
     instructions?: string;
 
+    /**
+     * Suggested user agent for the browser session.
+     */
     userAgent?: string;
   }
 
   export interface DisplayAndWait {
-    display: DisplayAndWait.Qr | DisplayAndWait.Emoji | DisplayAndWait.Nothing;
+    display: DisplayAndWait.QrCode | DisplayAndWait.Emoji | DisplayAndWait.Empty;
 
     stepID: string;
 
     type: 'display_and_wait';
 
+    /**
+     * User-facing instructions for this step.
+     */
     instructions?: string;
   }
 
   export namespace DisplayAndWait {
-    export interface Qr {
+    export interface QrCode {
       data: string;
 
       type: 'qr';
@@ -339,7 +386,7 @@ export namespace LoginSession {
       type: 'emoji';
     }
 
-    export interface Nothing {
+    export interface Empty {
       type: 'nothing';
     }
   }
@@ -353,25 +400,100 @@ export namespace LoginSession {
     account?: AccountsAPI.Account;
 
     /**
-     * Durable bridge connection identity. This is not guaranteed to be one-to-one with
-     * a Desktop API account.
+     * Completion instructions, when provided.
      */
-    connection?: BridgesAPI.BridgeConnection;
-
     instructions?: string;
 
+    /**
+     * Signed-in identity for a bridge. One bridge login can contain multiple chat
+     * accounts.
+     */
+    login?: Complete.Login;
+
     stepID?: string;
+  }
+
+  export namespace Complete {
+    /**
+     * Signed-in identity for a bridge. One bridge login can contain multiple chat
+     * accounts.
+     */
+    export interface Login {
+      /**
+       * Bridge ID.
+       */
+      bridgeID: string;
+
+      /**
+       * Bridge login ID.
+       */
+      loginID: string;
+
+      removeScopes: Array<'current-device' | 'all-devices'>;
+
+      status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown';
+
+      /**
+       * Chat accounts that belong to this bridge login, when known.
+       */
+      accountIDs?: Array<string>;
+
+      /**
+       * Human-friendly bridge login status text.
+       */
+      statusText?: string;
+
+      /**
+       * User the account belongs to.
+       */
+      user?: Shared.User;
+    }
+  }
+
+  /**
+   * Signed-in identity for a bridge. One bridge login can contain multiple chat
+   * accounts.
+   */
+  export interface Login {
+    /**
+     * Bridge ID.
+     */
+    bridgeID: string;
+
+    /**
+     * Bridge login ID.
+     */
+    loginID: string;
+
+    removeScopes: Array<'current-device' | 'all-devices'>;
+
+    status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown';
+
+    /**
+     * Chat accounts that belong to this bridge login, when known.
+     */
+    accountIDs?: Array<string>;
+
+    /**
+     * Human-friendly bridge login status text.
+     */
+    statusText?: string;
+
+    /**
+     * User the account belongs to.
+     */
+    user?: Shared.User;
   }
 }
 
 /**
- * bridgev2 provisioning capabilities.
+ * Advanced network capabilities for account lookup and group creation.
  */
 export interface ProvisioningCapabilities {
   group_creation: { [key: string]: GroupTypeCapabilities };
 
   /**
-   * bridgev2 resolve_identifier capabilities.
+   * Identifier lookup capabilities for this bridge.
    */
   resolve_identifier: ResolveIdentifierCapabilities;
 
@@ -379,7 +501,7 @@ export interface ProvisioningCapabilities {
 }
 
 /**
- * bridgev2 resolve_identifier capabilities.
+ * Identifier lookup capabilities for this bridge.
  */
 export interface ResolveIdentifierCapabilities {
   any_phone: boolean;
@@ -398,11 +520,11 @@ export interface ResolveIdentifierCapabilities {
 }
 
 /**
- * Bridge-backed account type that can be shown in add-account flows.
+ * Available bridge that can connect or reconnect chat accounts.
  */
 export interface BridgeRetrieveResponse {
   /**
-   * Bridge instance identifier. Use with bridge login-flow endpoints.
+   * Bridge ID. Use with bridge endpoints.
    */
   id: string;
 
@@ -418,17 +540,17 @@ export interface BridgeRetrieveResponse {
   activeAccountCount: number;
 
   /**
-   * Human-friendly account type name shown in Beeper Desktop.
+   * Human-friendly bridge name shown in Beeper.
    */
   displayName: string;
 
   /**
-   * Bridge provider.
+   * Where accounts for this bridge run: on this device or in Beeper Cloud.
    */
   provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk';
 
   /**
-   * Whether this bridge can currently be used to add an account.
+   * Whether this bridge can currently be used to connect new accounts.
    */
   status: 'available' | 'connected' | 'limit_reached' | 'temporarily_unavailable' | 'disabled';
 
@@ -438,7 +560,8 @@ export interface BridgeRetrieveResponse {
   supportsMultipleAccounts: boolean;
 
   /**
-   * Bridge type, such as matrix, discordgo, slackgo, whatsapp, telegram, or twitter.
+   * Underlying bridge type, such as matrix, discordgo, slackgo, whatsapp, telegram,
+   * or twitter.
    */
   type: string;
 
@@ -448,13 +571,13 @@ export interface BridgeRetrieveResponse {
   network?: string;
 
   /**
-   * Human-friendly status text matching Beeper Desktop account management language.
+   * Human-friendly status text matching Beeper account management language.
    */
   statusText?: string;
 }
 
 /**
- * Bridge-backed account types and their connected accounts.
+ * Available bridges and their connected accounts.
  */
 export interface BridgeListResponse {
   items: Array<Bridge>;
@@ -470,7 +593,6 @@ Bridges.BaseLoginSessions = BaseLoginSessions;
 export declare namespace Bridges {
   export {
     type Bridge as Bridge,
-    type BridgeConnection as BridgeConnection,
     type CookieField as CookieField,
     type DisappearingTimerCapability as DisappearingTimerCapability,
     type GroupFieldCapability as GroupFieldCapability,
@@ -490,14 +612,7 @@ export declare namespace Bridges {
     type LoginFlowListResponse as LoginFlowListResponse,
   };
 
-  export {
-    Connections as Connections,
-    BaseConnections as BaseConnections,
-    type ConnectionListResponse as ConnectionListResponse,
-    type ConnectionRemoveResponse as ConnectionRemoveResponse,
-    type ConnectionRetrieveParams as ConnectionRetrieveParams,
-    type ConnectionRemoveParams as ConnectionRemoveParams,
-  };
+  export { Connections as Connections, BaseConnections as BaseConnections };
 
   export {
     LoginSessions as LoginSessions,

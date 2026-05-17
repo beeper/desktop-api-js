@@ -14,8 +14,8 @@ export class BaseAssets extends APIResource {
   static override readonly _key: readonly ['assets'] = Object.freeze(['assets'] as const);
 
   /**
-   * Download a Matrix file using its mxc:// or localmxc:// URL to the device running
-   * Beeper Desktop and return the local file URL.
+   * Download a file from an mxc:// or localmxc:// URL to the device running the
+   * Beeper Client API and return the local file URL.
    *
    * @example
    * ```ts
@@ -51,7 +51,7 @@ export class BaseAssets extends APIResource {
 
   /**
    * Upload a file to a temporary location using multipart/form-data. Returns an
-   * uploadID that can be referenced when sending a message or materializing a draft
+   * uploadID that can be referenced when sending a message or creating a draft
    * attachment.
    *
    * @example
@@ -70,8 +70,8 @@ export class BaseAssets extends APIResource {
 
   /**
    * Upload a file using a JSON body with base64-encoded content. Returns an uploadID
-   * that can be referenced when sending a message or materializing a draft
-   * attachment. Alternative to the multipart upload endpoint.
+   * that can be referenced when sending a message or creating a draft attachment.
+   * Alternative to the multipart upload endpoint.
    *
    * @example
    * ```ts
@@ -200,7 +200,7 @@ export interface AssetUploadBase64Response {
 
 export interface AssetDownloadParams {
   /**
-   * Matrix content URL (mxc:// or localmxc://) for the file to download.
+   * Beeper media URL (mxc:// or localmxc://) for the file to download.
    */
   url: string;
 }
