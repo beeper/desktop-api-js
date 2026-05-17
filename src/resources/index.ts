@@ -9,18 +9,7 @@ export {
   type AccountRetrieveResponse,
   type AccountListResponse,
 } from './accounts/accounts';
-export {
-  App,
-  BaseApp,
-  type LoginRegistrationRequiredResponse,
-  type LoginResponse,
-  type LoginResponseOutput,
-  type RecoveryKeyResetResponse,
-  type SessionMutationResponse,
-  type Verification,
-  type VerificationResponse,
-  type AppSessionResponse,
-} from './app/app';
+export { App, BaseApp, type Verification } from './app/app';
 export {
   Assets,
   BaseAssets,
@@ -36,7 +25,6 @@ export {
   Bridges,
   BaseBridges,
   type Bridge,
-  type BridgeConnection,
   type CookieField,
   type DisappearingTimerCapability,
   type GroupFieldCapability,

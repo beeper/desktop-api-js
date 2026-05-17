@@ -7,7 +7,7 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * Bridge-backed account types, bridge connections, login sessions, and bridgev2 capabilities.
+ * Available bridges, bridge logins, login sessions for connect and reconnect flows, and advanced network capabilities.
  */
 export class BaseLoginFlows extends APIResource {
   static override readonly _key: readonly ['bridges', 'loginFlows'] = Object.freeze([
@@ -16,14 +16,15 @@ export class BaseLoginFlows extends APIResource {
   ] as const);
 
   /**
-   * List bridge login flows that can be used to start a bridge login session.
+   * List connect and reconnect flow options for a bridge. Use a flowID when creating
+   * a bridge login session.
    */
   list(bridgeID: string, options?: RequestOptions): APIPromise<LoginFlowListResponse> {
     return this._client.get(path`/v1/bridges/${bridgeID}/login-flows`, options);
   }
 }
 /**
- * Bridge-backed account types, bridge connections, login sessions, and bridgev2 capabilities.
+ * Available bridges, bridge logins, login sessions for connect and reconnect flows, and advanced network capabilities.
  */
 export class LoginFlows extends BaseLoginFlows {}
 

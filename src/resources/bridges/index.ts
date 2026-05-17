@@ -4,7 +4,6 @@ export {
   Bridges,
   BaseBridges,
   type Bridge,
-  type BridgeConnection,
   type CookieField,
   type DisappearingTimerCapability,
   type GroupFieldCapability,
@@ -17,14 +16,7 @@ export {
   type BridgeRetrieveResponse,
   type BridgeListResponse,
 } from './bridges';
-export {
-  Connections,
-  BaseConnections,
-  type ConnectionListResponse,
-  type ConnectionRemoveResponse,
-  type ConnectionRetrieveParams,
-  type ConnectionRemoveParams,
-} from './connections';
+export { Connections, BaseConnections } from './connections';
 export { LoginFlows, BaseLoginFlows, type LoginFlowListResponse } from './login-flows';
 export {
   LoginSessions,

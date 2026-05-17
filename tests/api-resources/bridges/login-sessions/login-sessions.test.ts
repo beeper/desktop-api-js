@@ -41,9 +41,9 @@ const runTests = (client: PartialBeeperDesktop<{ bridges: { loginSessions: BaseL
       client.bridges.loginSessions.create(
         'local-whatsapp',
         {
-          accountID: 'accountID',
-          flowID: 'flowID',
-          loginID: 'loginID',
+          accountID: 'x',
+          flowID: 'x',
+          loginID: 'x',
         },
         { path: '/_stainless_unknown_path' },
       ),
