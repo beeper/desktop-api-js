@@ -9,7 +9,7 @@ export {
   type AccountRetrieveResponse,
   type AccountListResponse,
 } from './accounts/accounts';
-export { App, BaseApp, type Verification } from './app/app';
+export { App, BaseApp, type Verification, type AppSessionResponse } from './app/app';
 export {
   Assets,
   BaseAssets,

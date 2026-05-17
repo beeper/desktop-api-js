@@ -244,6 +244,108 @@ export const sdkMethods: SdkMethod[] = [
     httpMethod: 'get',
     httpPath: '/v1/info',
   },
+  {
+    clientCallName: 'client.app.session',
+    fullyQualifiedName: 'app.session',
+    httpMethod: 'get',
+    httpPath: '/v1/app/setup',
+  },
+  {
+    clientCallName: 'client.app.login.email',
+    fullyQualifiedName: 'app.login.email',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/email',
+  },
+  {
+    clientCallName: 'client.app.login.register',
+    fullyQualifiedName: 'app.login.register',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/register',
+  },
+  {
+    clientCallName: 'client.app.login.response',
+    fullyQualifiedName: 'app.login.response',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/response',
+  },
+  {
+    clientCallName: 'client.app.login.start',
+    fullyQualifiedName: 'app.login.start',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/start',
+  },
+  {
+    clientCallName: 'client.app.login.verification.recoveryKey.verify',
+    fullyQualifiedName: 'app.login.verification.recoveryKey.verify',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/verification/recovery-key',
+  },
+  {
+    clientCallName: 'client.app.login.verification.recoveryKey.reset.create',
+    fullyQualifiedName: 'app.login.verification.recoveryKey.reset.create',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/verification/recovery-key/reset',
+  },
+  {
+    clientCallName: 'client.app.login.verification.recoveryKey.reset.confirm',
+    fullyQualifiedName: 'app.login.verification.recoveryKey.reset.confirm',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/verification/recovery-key/reset/confirm',
+  },
+  {
+    clientCallName: 'client.app.verifications.create',
+    fullyQualifiedName: 'app.verifications.create',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/verifications',
+  },
+  {
+    clientCallName: 'client.app.verifications.retrieve',
+    fullyQualifiedName: 'app.verifications.retrieve',
+    httpMethod: 'get',
+    httpPath: '/v1/app/setup/verifications/{verificationID}',
+  },
+  {
+    clientCallName: 'client.app.verifications.list',
+    fullyQualifiedName: 'app.verifications.list',
+    httpMethod: 'get',
+    httpPath: '/v1/app/setup/verifications',
+  },
+  {
+    clientCallName: 'client.app.verifications.accept',
+    fullyQualifiedName: 'app.verifications.accept',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/verifications/{verificationID}/accept',
+  },
+  {
+    clientCallName: 'client.app.verifications.cancel',
+    fullyQualifiedName: 'app.verifications.cancel',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/verifications/{verificationID}/cancel',
+  },
+  {
+    clientCallName: 'client.app.verifications.qr.confirmScanned',
+    fullyQualifiedName: 'app.verifications.qr.confirmScanned',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/verifications/{verificationID}/qr/confirm-scanned',
+  },
+  {
+    clientCallName: 'client.app.verifications.qr.scan',
+    fullyQualifiedName: 'app.verifications.qr.scan',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/verifications/qr/scan',
+  },
+  {
+    clientCallName: 'client.app.verifications.sas.confirm',
+    fullyQualifiedName: 'app.verifications.sas.confirm',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/verifications/{verificationID}/sas/confirm',
+  },
+  {
+    clientCallName: 'client.app.verifications.sas.start',
+    fullyQualifiedName: 'app.verifications.sas.start',
+    httpMethod: 'post',
+    httpPath: '/v1/app/setup/verifications/{verificationID}/sas/start',
+  },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {

@@ -1872,6 +1872,765 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
     },
   },
+  {
+    name: 'session',
+    endpoint: '/v1/app/setup',
+    httpMethod: 'get',
+    summary: 'Get Beeper app setup state',
+    description:
+      'Return the current Beeper Desktop or Beeper Server sign-in and encrypted messaging setup state. This endpoint is public before sign-in so apps can discover that sign-in is needed; after sign-in, pass a read token.',
+    stainlessPath: '(resource) app > (method) session',
+    qualified: 'client.app.session',
+    response:
+      "{ e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }",
+    markdown:
+      "## session\n\n`client.app.session(): { e2ee: object; state: string; matrix?: object; verification?: object; }`\n\n**get** `/v1/app/setup`\n\nReturn the current Beeper Desktop or Beeper Server sign-in and encrypted messaging setup state. This endpoint is public before sign-in so apps can discover that sign-in is needed; after sign-in, pass a read token.\n\n### Returns\n\n- `{ e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }`\n  - `state: string`\n  - `matrix?: { deviceID: string; homeserver: string; userID: string; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.session();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.session',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.session();\n\nconsole.log(response.e2ee);",
+      },
+      python: {
+        method: 'app.session',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.session()\nprint(response.e2ee)',
+      },
+      go: {
+        method: 'client.App.Session',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Session(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.E2EE)\n}\n',
+      },
+      cli: {
+        method: 'app session',
+        example: "beeper-desktop app session \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'app->session',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->session();\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'start',
+    endpoint: '/v1/app/setup/start',
+    httpMethod: 'post',
+    summary: 'Start Beeper app setup',
+    description:
+      'Start setting up Beeper Desktop or Beeper Server. The flow supports existing Beeper accounts and new account creation.',
+    stainlessPath: '(resource) app.login > (method) start',
+    qualified: 'client.app.login.start',
+    response: '{ setupRequestID: string; signInMethods: string[]; }',
+    markdown:
+      "## start\n\n`client.app.login.start(): { setupRequestID: string; signInMethods: string[]; }`\n\n**post** `/v1/app/setup/start`\n\nStart setting up Beeper Desktop or Beeper Server. The flow supports existing Beeper accounts and new account creation.\n\n### Returns\n\n- `{ setupRequestID: string; signInMethods: string[]; }`\n\n  - `setupRequestID: string`\n  - `signInMethods: string[]`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.start();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.start',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.start();\n\nconsole.log(response.setupRequestID);",
+      },
+      python: {
+        method: 'app.login.start',
+        example:
+          'from beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop()\nresponse = client.app.login.start()\nprint(response.setup_request_id)',
+      },
+      go: {
+        method: 'client.App.Login.Start',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Login.Start(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.SetupRequestID)\n}\n',
+      },
+      cli: {
+        method: 'login start',
+        example: "beeper-desktop app:login start \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'app->login->start',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->login->start();\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/start \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'email',
+    endpoint: '/v1/app/setup/email',
+    httpMethod: 'post',
+    summary: 'Send setup sign-in code',
+    description: 'Send a sign-in code to the user email address for app setup.',
+    stainlessPath: '(resource) app.login > (method) email',
+    qualified: 'client.app.login.email',
+    params: ['email: string;', 'setupRequestID: string;'],
+    markdown:
+      "## email\n\n`client.app.login.email(email: string, setupRequestID: string): void`\n\n**post** `/v1/app/setup/email`\n\nSend a sign-in code to the user email address for app setup.\n\n### Parameters\n\n- `email: string`\n  Email address to send the sign-in code to.\n\n- `setupRequestID: string`\n  Setup request ID returned by the start step.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.app.login.email({ email: 'dev@stainless.com', setupRequestID: 'setupRequestID' })\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.email',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.app.login.email({ email: 'dev@stainless.com', setupRequestID: 'setupRequestID' });",
+      },
+      python: {
+        method: 'app.login.email',
+        example:
+          'from beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop()\nclient.app.login.email(\n    email="dev@stainless.com",\n    setup_request_id="setupRequestID",\n)',
+      },
+      go: {
+        method: 'client.App.Login.Email',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.App.Login.Email(context.TODO(), beeperdesktopapi.AppLoginEmailParams{\n\t\tEmail:          "dev@stainless.com",\n\t\tSetupRequestID: "setupRequestID",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'login email',
+        example:
+          "beeper-desktop app:login email \\\n  --access-token 'My Access Token' \\\n  --email dev@stainless.com \\\n  --setup-request-id setupRequestID",
+      },
+      php: {
+        method: 'app->login->email',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$result = $client->app->login->email(\n  email: 'dev@stainless.com', setupRequestID: 'setupRequestID'\n);\n\nvar_dump($result);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/email \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "email": "dev@stainless.com",\n          "setupRequestID": "setupRequestID"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'response',
+    endpoint: '/v1/app/setup/response',
+    httpMethod: 'post',
+    summary: 'Complete setup sign-in with code',
+    description:
+      'Finish setup sign-in with the code sent to the user email address. If the user needs a new account, the response includes account creation copy and username suggestions.',
+    stainlessPath: '(resource) app.login > (method) response',
+    qualified: 'client.app.login.response',
+    params: ['response: string;', 'setupRequestID: string;'],
+    response:
+      "{ matrix: { accessToken: string; deviceID: string; homeserver: string; userID: string; }; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; } | { copy: { submit: 'Continue'; terms: 'By continuing, you agree to the Terms of Use and acknowledge the Privacy Policy.'; title: 'Choose your username'; usernamePlaceholder: 'Username'; }; leadToken: string; registrationRequired: true; setupRequestID: string; usernameSuggestions?: string[]; }",
+    markdown:
+      "## response\n\n`client.app.login.response(response: string, setupRequestID: string): { matrix: object; session: object; } | { copy: object; leadToken: string; registrationRequired: true; setupRequestID: string; usernameSuggestions?: string[]; }`\n\n**post** `/v1/app/setup/response`\n\nFinish setup sign-in with the code sent to the user email address. If the user needs a new account, the response includes account creation copy and username suggestions.\n\n### Parameters\n\n- `response: string`\n  Sign-in code from the user email.\n\n- `setupRequestID: string`\n  Setup request ID returned by the start step.\n\n### Returns\n\n- `{ matrix: { accessToken: string; deviceID: string; homeserver: string; userID: string; }; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; } | { copy: { submit: 'Continue'; terms: 'By continuing, you agree to the Terms of Use and acknowledge the Privacy Policy.'; title: 'Choose your username'; usernamePlaceholder: 'Username'; }; leadToken: string; registrationRequired: true; setupRequestID: string; usernameSuggestions?: string[]; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.response({ response: 'response', setupRequestID: 'setupRequestID' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.response',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.response({\n  response: 'response',\n  setupRequestID: 'setupRequestID',\n});\n\nconsole.log(response);",
+      },
+      python: {
+        method: 'app.login.response',
+        example:
+          'from beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop()\nresponse = client.app.login.response(\n    response="response",\n    setup_request_id="setupRequestID",\n)\nprint(response)',
+      },
+      go: {
+        method: 'client.App.Login.Response',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Login.Response(context.TODO(), beeperdesktopapi.AppLoginResponseParams{\n\t\tResponse:       "response",\n\t\tSetupRequestID: "setupRequestID",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
+      cli: {
+        method: 'login response',
+        example:
+          "beeper-desktop app:login response \\\n  --access-token 'My Access Token' \\\n  --response response \\\n  --setup-request-id setupRequestID",
+      },
+      php: {
+        method: 'app->login->response',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->login->response(\n  response: 'response', setupRequestID: 'setupRequestID'\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/response \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "response": "response",\n          "setupRequestID": "setupRequestID"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'register',
+    endpoint: '/v1/app/setup/register',
+    httpMethod: 'post',
+    summary: 'Create account for setup',
+    description: 'Create a Beeper account after the user chooses a username and accepts the Terms of Use.',
+    stainlessPath: '(resource) app.login > (method) register',
+    qualified: 'client.app.login.register',
+    params: ['acceptTerms: true;', 'leadToken: string;', 'setupRequestID: string;', 'username: string;'],
+    response:
+      "{ matrix: { accessToken: string; deviceID: string; homeserver: string; userID: string; }; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }",
+    markdown:
+      "## register\n\n`client.app.login.register(acceptTerms: true, leadToken: string, setupRequestID: string, username: string): { matrix: object; session: object; }`\n\n**post** `/v1/app/setup/register`\n\nCreate a Beeper account after the user chooses a username and accepts the Terms of Use.\n\n### Parameters\n\n- `acceptTerms: true`\n  Confirms that the user agreed to our [terms of use](https://www.beeper.com/terms-onboarding) and has read our [privacy policy](https://www.beeper.com/privacy).\n\n- `leadToken: string`\n  Registration token returned by Beeper.\n\n- `setupRequestID: string`\n  Setup request ID returned by the start step.\n\n- `username: string`\n  Username selected by the user.\n\n### Returns\n\n- `{ matrix: { accessToken: string; deviceID: string; homeserver: string; userID: string; }; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }`\n\n  - `matrix: { accessToken: string; deviceID: string; homeserver: string; userID: string; }`\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.register({\n  acceptTerms: true,\n  leadToken: 'leadToken',\n  setupRequestID: 'setupRequestID',\n  username: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.register',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.register({\n  acceptTerms: true,\n  leadToken: 'leadToken',\n  setupRequestID: 'setupRequestID',\n  username: 'x',\n});\n\nconsole.log(response.matrix);",
+      },
+      python: {
+        method: 'app.login.register',
+        example:
+          'from beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop()\nresponse = client.app.login.register(\n    accept_terms=True,\n    lead_token="leadToken",\n    setup_request_id="setupRequestID",\n    username="x",\n)\nprint(response.matrix)',
+      },
+      go: {
+        method: 'client.App.Login.Register',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Login.Register(context.TODO(), beeperdesktopapi.AppLoginRegisterParams{\n\t\tAcceptTerms:    true,\n\t\tLeadToken:      "leadToken",\n\t\tSetupRequestID: "setupRequestID",\n\t\tUsername:       "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Matrix)\n}\n',
+      },
+      cli: {
+        method: 'login register',
+        example:
+          "beeper-desktop app:login register \\\n  --access-token 'My Access Token' \\\n  --accept-terms true \\\n  --lead-token leadToken \\\n  --setup-request-id setupRequestID \\\n  --username x",
+      },
+      php: {
+        method: 'app->login->register',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->login->register(\n  acceptTerms: true,\n  leadToken: 'leadToken',\n  setupRequestID: 'setupRequestID',\n  username: 'x',\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/register \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "acceptTerms": true,\n          "leadToken": "leadToken",\n          "setupRequestID": "setupRequestID",\n          "username": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'verify',
+    endpoint: '/v1/app/setup/verification/recovery-key',
+    httpMethod: 'post',
+    summary: 'Verify with recovery key',
+    description: 'Unlock encrypted messages with the user recovery key.',
+    stainlessPath: '(resource) app.login.verification.recovery_key > (method) verify',
+    qualified: 'client.app.login.verification.recoveryKey.verify',
+    params: ['recoveryKey: string;'],
+    response:
+      "{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }",
+    markdown:
+      "## verify\n\n`client.app.login.verification.recoveryKey.verify(recoveryKey: string): { session: object; }`\n\n**post** `/v1/app/setup/verification/recovery-key`\n\nUnlock encrypted messages with the user recovery key.\n\n### Parameters\n\n- `recoveryKey: string`\n  Recovery key saved by the user.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.verification.recoveryKey.verify({ recoveryKey: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.verification.recoveryKey.verify',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.login.verification.recoveryKey.verify({ recoveryKey: 'x' });\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.login.verification.recovery_key.verify',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.login.verification.recovery_key.verify(\n    recovery_key="x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Login.Verification.RecoveryKey.Verify',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Login.Verification.RecoveryKey.Verify(context.TODO(), beeperdesktopapi.AppLoginVerificationRecoveryKeyVerifyParams{\n\t\tRecoveryKey: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'recovery_key verify',
+        example:
+          "beeper-desktop app:login:verification:recovery-key verify \\\n  --access-token 'My Access Token' \\\n  --recovery-key x",
+      },
+      php: {
+        method: 'app->login->verification->recoveryKey->verify',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->login->verification->recoveryKey->verify(\n  recoveryKey: 'x'\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verification/recovery-key \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "recoveryKey": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/app/setup/verification/recovery-key/reset',
+    httpMethod: 'post',
+    summary: 'Create new recovery key',
+    description: 'Create a new recovery key when the user cannot use the existing one.',
+    stainlessPath: '(resource) app.login.verification.recovery_key.reset > (method) create',
+    qualified: 'client.app.login.verification.recoveryKey.reset.create',
+    params: ['existingRecoveryKey?: string;'],
+    response:
+      "{ recoveryKey: string; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }",
+    markdown:
+      "## create\n\n`client.app.login.verification.recoveryKey.reset.create(existingRecoveryKey?: string): { recoveryKey: string; session: object; }`\n\n**post** `/v1/app/setup/verification/recovery-key/reset`\n\nCreate a new recovery key when the user cannot use the existing one.\n\n### Parameters\n\n- `existingRecoveryKey?: string`\n  Existing recovery key, if the user has it.\n\n### Returns\n\n- `{ recoveryKey: string; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }`\n\n  - `recoveryKey: string`\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst reset = await client.app.login.verification.recoveryKey.reset.create();\n\nconsole.log(reset);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.verification.recoveryKey.reset.create',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst reset = await client.app.login.verification.recoveryKey.reset.create();\n\nconsole.log(reset.recoveryKey);",
+      },
+      python: {
+        method: 'app.login.verification.recovery_key.reset.create',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nreset = client.app.login.verification.recovery_key.reset.create()\nprint(reset.recovery_key)',
+      },
+      go: {
+        method: 'client.App.Login.Verification.RecoveryKey.Reset.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\treset, err := client.App.Login.Verification.RecoveryKey.Reset.New(context.TODO(), beeperdesktopapi.AppLoginVerificationRecoveryKeyResetNewParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", reset.RecoveryKey)\n}\n',
+      },
+      cli: {
+        method: 'reset create',
+        example:
+          "beeper-desktop app:login:verification:recovery-key:reset create \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'app->login->verification->recoveryKey->reset->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$reset = $client->app->login->verification->recoveryKey->reset->create(\n  existingRecoveryKey: 'existingRecoveryKey'\n);\n\nvar_dump($reset);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verification/recovery-key/reset \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'confirm',
+    endpoint: '/v1/app/setup/verification/recovery-key/reset/confirm',
+    httpMethod: 'post',
+    summary: 'Confirm new recovery key',
+    description: 'Confirm that the new recovery key should be used for this account.',
+    stainlessPath: '(resource) app.login.verification.recovery_key.reset > (method) confirm',
+    qualified: 'client.app.login.verification.recoveryKey.reset.confirm',
+    params: ['recoveryKey: string;'],
+    response:
+      "{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }",
+    markdown:
+      "## confirm\n\n`client.app.login.verification.recoveryKey.reset.confirm(recoveryKey: string): { session: object; }`\n\n**post** `/v1/app/setup/verification/recovery-key/reset/confirm`\n\nConfirm that the new recovery key should be used for this account.\n\n### Parameters\n\n- `recoveryKey: string`\n  New recovery key returned by the reset step.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.verification.recoveryKey.reset.confirm({ recoveryKey: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.verification.recoveryKey.reset.confirm',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.login.verification.recoveryKey.reset.confirm({\n  recoveryKey: 'x',\n});\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.login.verification.recovery_key.reset.confirm',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.login.verification.recovery_key.reset.confirm(\n    recovery_key="x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Login.Verification.RecoveryKey.Reset.Confirm',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Login.Verification.RecoveryKey.Reset.Confirm(context.TODO(), beeperdesktopapi.AppLoginVerificationRecoveryKeyResetConfirmParams{\n\t\tRecoveryKey: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'reset confirm',
+        example:
+          "beeper-desktop app:login:verification:recovery-key:reset confirm \\\n  --access-token 'My Access Token' \\\n  --recovery-key x",
+      },
+      php: {
+        method: 'app->login->verification->recoveryKey->reset->confirm',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->login->verification->recoveryKey->reset->confirm(\n  recoveryKey: 'x'\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verification/recovery-key/reset/confirm \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "recoveryKey": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/app/setup/verifications',
+    httpMethod: 'get',
+    summary: 'List active verifications',
+    description:
+      'List pending and active device verifications. Use this to recover state without a WebSocket connection.',
+    stainlessPath: '(resource) app.verifications > (method) list',
+    qualified: 'client.app.verifications.list',
+    response:
+      "{ items: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }[]; }",
+    markdown:
+      "## list\n\n`client.app.verifications.list(): { items: object[]; }`\n\n**get** `/v1/app/setup/verifications`\n\nList pending and active device verifications. Use this to recover state without a WebSocket connection.\n\n### Returns\n\n- `{ items: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }[]; }`\n\n  - `items: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }[]`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst verifications = await client.app.verifications.list();\n\nconsole.log(verifications);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.list',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst verifications = await client.app.verifications.list();\n\nconsole.log(verifications.items);",
+      },
+      python: {
+        method: 'app.verifications.list',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nverifications = client.app.verifications.list()\nprint(verifications.items)',
+      },
+      go: {
+        method: 'client.App.Verifications.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tverifications, err := client.App.Verifications.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", verifications.Items)\n}\n',
+      },
+      cli: {
+        method: 'verifications list',
+        example: "beeper-desktop app:verifications list \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'app->verifications->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$verifications = $client->app->verifications->list();\n\nvar_dump($verifications);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/app/setup/verifications',
+    httpMethod: 'post',
+    summary: 'Start device verification',
+    description: 'Start verifying this device from another signed-in device.',
+    stainlessPath: '(resource) app.verifications > (method) create',
+    qualified: 'client.app.verifications.create',
+    params: ["purpose?: 'login' | 'device';", 'userID?: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## create\n\n`client.app.verifications.create(purpose?: 'login' | 'device', userID?: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications`\n\nStart verifying this device from another signed-in device.\n\n### Parameters\n\n- `purpose?: 'login' | 'device'`\n  Why this verification is being started.\n\n- `userID?: string`\n  Beeper user ID to verify. Defaults to the signed-in user.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst verification = await client.app.verifications.create();\n\nconsole.log(verification);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.create',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst verification = await client.app.verifications.create();\n\nconsole.log(verification.session);",
+      },
+      python: {
+        method: 'app.verifications.create',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nverification = client.app.verifications.create()\nprint(verification.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tverification, err := client.App.Verifications.New(context.TODO(), beeperdesktopapi.AppVerificationNewParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", verification.Session)\n}\n',
+      },
+      cli: {
+        method: 'verifications create',
+        example: "beeper-desktop app:verifications create \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'app->verifications->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$verification = $client->app->verifications->create(\n  purpose: 'login', userID: 'userID'\n);\n\nvar_dump($verification);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/app/setup/verifications/{verificationID}',
+    httpMethod: 'get',
+    summary: 'Get verification',
+    description: 'Get the current state of a device verification transaction.',
+    stainlessPath: '(resource) app.verifications > (method) retrieve',
+    qualified: 'client.app.verifications.retrieve',
+    params: ['verificationID: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## retrieve\n\n`client.app.verifications.retrieve(verificationID: string): { session: object; verification?: object; }`\n\n**get** `/v1/app/setup/verifications/{verificationID}`\n\nGet the current state of a device verification transaction.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst verification = await client.app.verifications.retrieve('x');\n\nconsole.log(verification);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.retrieve',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst verification = await client.app.verifications.retrieve('x');\n\nconsole.log(verification.session);",
+      },
+      python: {
+        method: 'app.verifications.retrieve',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nverification = client.app.verifications.retrieve(\n    "x",\n)\nprint(verification.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tverification, err := client.App.Verifications.Get(context.TODO(), "x")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", verification.Session)\n}\n',
+      },
+      cli: {
+        method: 'verifications retrieve',
+        example:
+          "beeper-desktop app:verifications retrieve \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$verification = $client->app->verifications->retrieve('x');\n\nvar_dump($verification);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'accept',
+    endpoint: '/v1/app/setup/verifications/{verificationID}/accept',
+    httpMethod: 'post',
+    summary: 'Accept device verification',
+    description: 'Accept an incoming device verification request.',
+    stainlessPath: '(resource) app.verifications > (method) accept',
+    qualified: 'client.app.verifications.accept',
+    params: ['verificationID: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## accept\n\n`client.app.verifications.accept(verificationID: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/{verificationID}/accept`\n\nAccept an incoming device verification request.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.accept('x');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.accept',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.accept('x');\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.accept',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.accept(\n    "x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.Accept',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.Accept(context.TODO(), "x")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'verifications accept',
+        example:
+          "beeper-desktop app:verifications accept \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->accept',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->accept('x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID/accept \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'cancel',
+    endpoint: '/v1/app/setup/verifications/{verificationID}/cancel',
+    httpMethod: 'post',
+    summary: 'Cancel device verification',
+    description: 'Cancel an active device verification request.',
+    stainlessPath: '(resource) app.verifications > (method) cancel',
+    qualified: 'client.app.verifications.cancel',
+    params: ['verificationID: string;', 'code?: string;', 'reason?: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## cancel\n\n`client.app.verifications.cancel(verificationID: string, code?: string, reason?: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/{verificationID}/cancel`\n\nCancel an active device verification request.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n- `code?: string`\n  Optional cancellation code.\n\n- `reason?: string`\n  Optional user-facing cancellation reason.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.cancel('x');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.cancel',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.cancel('x');\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.cancel',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.cancel(\n    verification_id="x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.Cancel',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.Cancel(\n\t\tcontext.TODO(),\n\t\t"x",\n\t\tbeeperdesktopapi.AppVerificationCancelParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'verifications cancel',
+        example:
+          "beeper-desktop app:verifications cancel \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->cancel',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->cancel(\n  'x', code: 'code', reason: 'reason'\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID/cancel \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'scan',
+    endpoint: '/v1/app/setup/verifications/qr/scan',
+    httpMethod: 'post',
+    summary: 'Scan verification QR code',
+    description: 'Submit the QR code scanned from another signed-in device.',
+    stainlessPath: '(resource) app.verifications.qr > (method) scan',
+    qualified: 'client.app.verifications.qr.scan',
+    params: ['data: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## scan\n\n`client.app.verifications.qr.scan(data: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/qr/scan`\n\nSubmit the QR code scanned from another signed-in device.\n\n### Parameters\n\n- `data: string`\n  QR code payload scanned from the other device.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.qr.scan({ data: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.qr.scan',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.qr.scan({ data: 'x' });\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.qr.scan',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.qr.scan(\n    data="x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.Qr.Scan',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.Qr.Scan(context.TODO(), beeperdesktopapi.AppVerificationQrScanParams{\n\t\tData: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'qr scan',
+        example:
+          "beeper-desktop app:verifications:qr scan \\\n  --access-token 'My Access Token' \\\n  --data x",
+      },
+      php: {
+        method: 'app->verifications->qr->scan',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->qr->scan(data: 'x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/qr/scan \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "data": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'confirm_scanned',
+    endpoint: '/v1/app/setup/verifications/{verificationID}/qr/confirm-scanned',
+    httpMethod: 'post',
+    summary: 'Confirm QR code scan',
+    description: 'Confirm that another device scanned this device QR code.',
+    stainlessPath: '(resource) app.verifications.qr > (method) confirm_scanned',
+    qualified: 'client.app.verifications.qr.confirmScanned',
+    params: ['verificationID: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## confirm_scanned\n\n`client.app.verifications.qr.confirmScanned(verificationID: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/{verificationID}/qr/confirm-scanned`\n\nConfirm that another device scanned this device QR code.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.qr.confirmScanned('x');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.qr.confirmScanned',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.qr.confirmScanned('x');\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.qr.confirm_scanned',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.qr.confirm_scanned(\n    "x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.Qr.ConfirmScanned',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.Qr.ConfirmScanned(context.TODO(), "x")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'qr confirm_scanned',
+        example:
+          "beeper-desktop app:verifications:qr confirm-scanned \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->qr->confirmScanned',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->qr->confirmScanned('x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID/qr/confirm-scanned \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'start',
+    endpoint: '/v1/app/setup/verifications/{verificationID}/sas/start',
+    httpMethod: 'post',
+    summary: 'Start emoji verification',
+    description: 'Start emoji comparison for device verification.',
+    stainlessPath: '(resource) app.verifications.sas > (method) start',
+    qualified: 'client.app.verifications.sas.start',
+    params: ['verificationID: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## start\n\n`client.app.verifications.sas.start(verificationID: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/{verificationID}/sas/start`\n\nStart emoji comparison for device verification.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.sas.start('x');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.sas.start',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.sas.start('x');\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.sas.start',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.sas.start(\n    "x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.SAS.Start',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.SAS.Start(context.TODO(), "x")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'sas start',
+        example:
+          "beeper-desktop app:verifications:sas start \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->sas->start',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->sas->start('x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID/sas/start \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'confirm',
+    endpoint: '/v1/app/setup/verifications/{verificationID}/sas/confirm',
+    httpMethod: 'post',
+    summary: 'Confirm emoji verification',
+    description: 'Confirm that the emoji or number sequence matches on both devices.',
+    stainlessPath: '(resource) app.verifications.sas > (method) confirm',
+    qualified: 'client.app.verifications.sas.confirm',
+    params: ['verificationID: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## confirm\n\n`client.app.verifications.sas.confirm(verificationID: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/{verificationID}/sas/confirm`\n\nConfirm that the emoji or number sequence matches on both devices.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.sas.confirm('x');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.sas.confirm',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.sas.confirm('x');\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.sas.confirm',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.sas.confirm(\n    "x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.SAS.Confirm',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.SAS.Confirm(context.TODO(), "x")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'sas confirm',
+        example:
+          "beeper-desktop app:verifications:sas confirm \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->sas->confirm',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->sas->confirm('x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID/sas/confirm \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [

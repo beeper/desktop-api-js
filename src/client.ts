@@ -56,7 +56,7 @@ import {
   AccountRetrieveResponse,
   Accounts,
 } from './resources/accounts/accounts';
-import { App, Verification } from './resources/app/app';
+import { App, AppSessionResponse, Verification } from './resources/app/app';
 import {
   Bridge,
   BridgeListResponse,
@@ -993,7 +993,7 @@ export declare namespace BeeperDesktop {
 
   export { Info as Info, type InfoRetrieveResponse as InfoRetrieveResponse };
 
-  export { App as App, type Verification as Verification };
+  export { App as App, type Verification as Verification, type AppSessionResponse as AppSessionResponse };
 
   export type APIError = API.APIError;
   export type AppStateSnapshot = API.AppStateSnapshot;
