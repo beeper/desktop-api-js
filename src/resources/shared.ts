@@ -2,6 +2,265 @@
 
 import { CursorNoLimit, CursorSearch } from '../core/pagination';
 
+export interface APIError {
+  code: string;
+
+  message: string;
+
+  details?: { [key: string]: unknown };
+}
+
+export interface AppStateSnapshot {
+  /**
+   * Encrypted messaging setup status.
+   */
+  e2ee: AppStateSnapshot.E2EE;
+
+  /**
+   * Current sign-in and encrypted messaging setup state for Beeper Desktop or Beeper
+   * Server.
+   */
+  state:
+    | 'needs-login'
+    | 'initializing'
+    | 'needs-cross-signing-setup'
+    | 'needs-verification'
+    | 'needs-secrets'
+    | 'needs-first-sync'
+    | 'ready';
+
+  /**
+   * Signed-in account details. Omitted until sign-in is complete.
+   */
+  matrix?: AppStateSnapshot.Matrix;
+
+  /**
+   * Trusted device verification progress.
+   */
+  verification?: AppStateSnapshot.Verification;
+}
+
+export namespace AppStateSnapshot {
+  /**
+   * Encrypted messaging setup status.
+   */
+  export interface E2EE {
+    /**
+     * Whether this account can verify trusted devices.
+     */
+    crossSigning: boolean;
+
+    /**
+     * Whether the first encrypted message sync is complete.
+     */
+    firstSyncDone: boolean;
+
+    /**
+     * Whether the user confirmed that they saved their recovery key.
+     */
+    hasBackedUpRecoveryKey: boolean;
+
+    /**
+     * Whether encrypted messaging setup has started.
+     */
+    initialized: boolean;
+
+    /**
+     * Whether encrypted message backup is available.
+     */
+    keyBackup: boolean;
+
+    /**
+     * Encrypted messaging keys available on this device.
+     */
+    secrets: E2EE.Secrets;
+
+    /**
+     * Whether secure key storage is available.
+     */
+    secretStorage: boolean;
+
+    /**
+     * Whether this device is trusted for encrypted messages.
+     */
+    verified: boolean;
+
+    /**
+     * Unix timestamp for when the recovery key was created.
+     */
+    recoveryKeyGeneratedAt?: number;
+  }
+
+  export namespace E2EE {
+    /**
+     * Encrypted messaging keys available on this device.
+     */
+    export interface Secrets {
+      /**
+       * Whether the account identity key is available.
+       */
+      masterKey: boolean;
+
+      /**
+       * Whether the encrypted message backup key is available.
+       */
+      megolmBackupKey: boolean;
+
+      /**
+       * Whether a recovery key is available.
+       */
+      recoveryKey: boolean;
+
+      /**
+       * Whether the device trust key is available.
+       */
+      selfSigningKey: boolean;
+
+      /**
+       * Whether the user trust key is available.
+       */
+      userSigningKey: boolean;
+    }
+  }
+
+  /**
+   * Signed-in account details. Omitted until sign-in is complete.
+   */
+  export interface Matrix {
+    /**
+     * Current device ID.
+     */
+    deviceID: string;
+
+    /**
+     * Beeper homeserver URL for this account.
+     */
+    homeserver: string;
+
+    /**
+     * Signed-in Beeper user ID.
+     */
+    userID: string;
+  }
+
+  /**
+   * Trusted device verification progress.
+   */
+  export interface Verification {
+    /**
+     * Verification ID to pass in verification action paths.
+     */
+    id: string;
+
+    /**
+     * Verification actions that are valid for the current state.
+     */
+    availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+    /**
+     * Whether this device started or received the verification.
+     */
+    direction: 'incoming' | 'outgoing';
+
+    /**
+     * Verification methods supported for this transaction.
+     */
+    methods: Array<'qr' | 'sas'>;
+
+    /**
+     * Why this verification exists.
+     */
+    purpose: 'login' | 'device';
+
+    /**
+     * Current trusted-device verification state.
+     */
+    state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+
+    /**
+     * Verification error details, if verification stopped.
+     */
+    error?: Verification.Error;
+
+    /**
+     * Other device participating in verification.
+     */
+    otherDevice?: Verification.OtherDevice;
+
+    /**
+     * Other Beeper user participating in verification.
+     */
+    otherUserID?: string;
+
+    /**
+     * QR verification data.
+     */
+    qr?: Verification.Qr;
+
+    /**
+     * Emoji or number comparison data for verification.
+     */
+    sas?: Verification.SAS;
+  }
+
+  export namespace Verification {
+    /**
+     * Verification error details, if verification stopped.
+     */
+    export interface Error {
+      /**
+       * Verification error code.
+       */
+      code: string;
+
+      /**
+       * User-facing verification error message.
+       */
+      reason: string;
+    }
+
+    /**
+     * Other device participating in verification.
+     */
+    export interface OtherDevice {
+      /**
+       * Other device ID.
+       */
+      id: string;
+
+      /**
+       * Other device display name, if known.
+       */
+      name?: string;
+    }
+
+    /**
+     * QR verification data.
+     */
+    export interface Qr {
+      /**
+       * QR code payload to display for verification.
+       */
+      data: string;
+    }
+
+    /**
+     * Emoji or number comparison data for verification.
+     */
+    export interface SAS {
+      /**
+       * Emoji sequence to compare on both devices.
+       */
+      emojis: string;
+
+      /**
+       * Number sequence to compare on both devices.
+       */
+      decimals?: string;
+    }
+  }
+}
+
 export interface Attachment {
   /**
    * Attachment type.
@@ -9,7 +268,7 @@ export interface Attachment {
   type: 'unknown' | 'img' | 'video' | 'audio';
 
   /**
-   * Attachment identifier (typically an mxc:// URL). Use the download file endpoint
+   * Attachment identifier, typically an mxc:// URL. Use the download file endpoint
    * to get a local file path.
    */
   id?: string;
@@ -51,7 +310,7 @@ export interface Attachment {
 
   /**
    * Preview image URL for video attachments (poster frame). May be temporary or
-   * local-only to this device; download promptly if durable access is needed.
+   * available only on this device; download promptly if durable access is needed.
    */
   posterImg?: string;
 
@@ -61,8 +320,8 @@ export interface Attachment {
   size?: Attachment.Size;
 
   /**
-   * Public URL or local file path to fetch the file. May be temporary or local-only
-   * to this device; download promptly if durable access is needed.
+   * Public URL or local file path to fetch the file. May be temporary or available
+   * only on this device; download promptly if durable access is needed.
    */
   srcURL?: string;
 
@@ -163,14 +422,14 @@ export interface Message {
   accountID: string;
 
   /**
-   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
-   * installation when available.
+   * Chat ID. Input routes also accept the local chat ID from this installation when
+   * available.
    */
   chatID: string;
 
   /**
-   * Matrix-style fully-qualified sender user ID, usually including a bridge prefix
-   * and homeserver.
+   * Fully qualified sender user ID. Network-backed IDs usually include the network
+   * prefix and homeserver.
    */
   senderID: string;
 
@@ -241,7 +500,7 @@ export interface Message {
   seen?: boolean | string | { [key: string]: boolean | string };
 
   /**
-   * Resolved sender display name (impersonator/full name/username/participant name).
+   * Resolved sender display name.
    */
   senderName?: string;
 
@@ -251,7 +510,7 @@ export interface Message {
   sendStatus?: Message.SendStatus;
 
   /**
-   * Matrix HTML body if present.
+   * Rich-text message body if present.
    */
   text?: string;
 
@@ -288,14 +547,14 @@ export namespace Message {
     url: string;
 
     /**
-     * Favicon URL if available. May be temporary or local-only to this device;
+     * Favicon URL if available. May be temporary or available only on this device;
      * download promptly if durable access is needed.
      */
     favicon?: string;
 
     /**
-     * Preview image URL if available. May be temporary or local-only to this device;
-     * download promptly if durable access is needed.
+     * Preview image URL if available. May be temporary or available only on this
+     * device; download promptly if durable access is needed.
      */
     img?: string;
 
@@ -346,7 +605,8 @@ export namespace Message {
     deliveredToUsers?: Array<string>;
 
     /**
-     * Internal bridge error detail. Intended for diagnostics, not end-user display.
+     * Diagnostic error detail from the messaging network adapter. Do not show directly
+     * to users.
      */
     internalError?: string;
 
@@ -387,7 +647,7 @@ export interface Reaction {
   emoji?: boolean;
 
   /**
-   * URL to the reaction's image. May be temporary or local-only to this device;
+   * URL to the reaction's image. May be temporary or available only on this device;
    * download promptly if durable access is needed.
    */
   imgURL?: string;
@@ -419,9 +679,9 @@ export interface User {
   fullName?: string;
 
   /**
-   * Avatar image URL if available. This may be a remote URL, Matrix media URL, data
-   * URL, or local filesystem URL depending on source and endpoint. May be temporary
-   * or local-only to this device; download promptly if durable access is needed.
+   * Avatar image URL if available. This may be a remote URL, media URL, data URL, or
+   * local file URL depending on the source. May be temporary or available only on
+   * this device; download promptly if durable access is needed.
    */
   imgURL?: string;
 

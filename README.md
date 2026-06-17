@@ -220,7 +220,7 @@ const client = createClient({
 });
 
 // ... then make API calls as usual.
-const accounts = await client.accounts.list();
+const account = await client.accounts.retrieve('accountID');
 const chat = await client.chats.create({
   accountID: 'accountID',
   participantIDs: ['string'],
@@ -246,7 +246,7 @@ const client: PartialBeeperDesktop<{ accounts: BaseAccounts }> = createClient({
 
 // Function parameter type
 async function main(client: PartialBeeperDesktop<{ accounts: BaseAccounts }>) {
-  const accounts = await client.accounts.list();
+  const account = await client.accounts.retrieve('accountID');
 }
 
 // Works with any client that has the accounts resource

@@ -3,7 +3,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { ClientOptions } from '@beeper/desktop-api';
-import cors from 'cors';
 import express from 'express';
 import pino from 'pino';
 import pinoHttp from 'pino-http';
@@ -11,11 +10,6 @@ import { getStainlessApiKey, parseClientAuthHeaders } from './auth';
 import { getLogger } from './logger';
 import { McpOptions } from './options';
 import { initMcpServer, newMcpServer } from './server';
-
-const oauthResourceIdentifier = (req: express.Request): string => {
-  const protocol = req.headers['x-forwarded-proto'] ?? req.protocol;
-  return `${protocol}://${req.get('host')}/`;
-};
 
 const newServer = async ({
   clientOptions,
@@ -32,28 +26,7 @@ const newServer = async ({
   const customInstructionsPath = mcpOptions.customInstructionsPath;
   const server = await newMcpServer({ stainlessApiKey, customInstructionsPath });
 
-  // parseClientAuthHeaders throws if the Authorization header uses an unsupported
-  // scheme, or (when the second arg is true) if the header is missing entirely.
-  // On error, we return 401 with WWW-Authenticate pointing to the OAuth metadata
-  // endpoint so clients know how to authenticate (RFC 9728).
-  let authOptions: Partial<ClientOptions>;
-  try {
-    authOptions = parseClientAuthHeaders(req, false);
-  } catch (error) {
-    const resourceIdentifier = oauthResourceIdentifier(req);
-    res.set(
-      'WWW-Authenticate',
-      `Bearer resource_metadata="${resourceIdentifier}.well-known/oauth-protected-resource"`,
-    );
-    res.status(401).json({
-      jsonrpc: '2.0',
-      error: {
-        code: -32000,
-        message: `Unauthorized: ${error instanceof Error ? error.message : error}`,
-      },
-    });
-    return null;
-  }
+  const authOptions = parseClientAuthHeaders(req, true);
 
   let upstreamClientEnvs: Record<string, string> | undefined;
   const clientEnvsHeader = req.headers['x-stainless-mcp-client-envs'];
@@ -152,16 +125,6 @@ const del = async (req: express.Request, res: express.Response) => {
   });
 };
 
-const oauthMetadata = (req: express.Request, res: express.Response) => {
-  const resourceIdentifier = oauthResourceIdentifier(req);
-  res.json({
-    resource: resourceIdentifier,
-    authorization_servers: ['http://localhost:23373'],
-    bearer_methods_supported: ['header'],
-    scopes_supported: 'read write',
-  });
-};
-
 const redactHeaders = (headers: Record<string, any>) => {
   const hiddenHeaders = /auth|cookie|key|token|x-stainless-mcp-client-envs/i;
   const filtered = { ...headers };
@@ -230,8 +193,6 @@ export const streamableHTTPApp = ({
       },
     }),
   );
-
-  app.get('/.well-known/oauth-protected-resource', cors(), oauthMetadata);
 
   app.get('/health', async (req: express.Request, res: express.Response) => {
     res.status(200).send('OK');

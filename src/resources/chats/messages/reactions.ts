@@ -69,8 +69,8 @@ export class Reactions extends BaseReactions {}
 
 export interface ReactionDeleteResponse {
   /**
-   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
-   * installation when available.
+   * Chat ID. Input routes also accept the local chat ID from this installation when
+   * available.
    */
   chatID: string;
 
@@ -93,8 +93,8 @@ export interface ReactionDeleteResponse {
 
 export interface ReactionAddResponse {
   /**
-   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
-   * installation when available.
+   * Chat ID. Input routes also accept the local chat ID from this installation when
+   * available.
    */
   chatID: string;
 
@@ -122,8 +122,8 @@ export interface ReactionAddResponse {
 
 export interface ReactionDeleteParams {
   /**
-   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
-   * installation when available.
+   * Chat ID. Input routes also accept the local chat ID from this installation when
+   * available.
    */
   chatID: string;
 
@@ -135,8 +135,8 @@ export interface ReactionDeleteParams {
 
 export interface ReactionAddParams {
   /**
-   * Path param: Chat ID. Input routes also accept the local chat ID from this Beeper
-   * Desktop installation when available.
+   * Path param: Chat ID. Input routes also accept the local chat ID from this
+   * installation when available.
    */
   chatID: string;
 

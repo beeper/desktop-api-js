@@ -72,14 +72,14 @@ export interface ContactSearchResponse {
 
 export interface ContactListParams extends CursorSearchParams {
   /**
-   * Optional search query for blended contact lookup.
+   * Optional search query for contact lookup.
    */
   query?: string;
 }
 
 export interface ContactSearchParams {
   /**
-   * Text to search users by. Network-specific behavior.
+   * Text to search contacts by. Matching behavior depends on the network.
    */
   query: string;
 }

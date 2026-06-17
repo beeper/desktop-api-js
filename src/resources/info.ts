@@ -12,7 +12,7 @@ export class BaseInfo extends APIResource {
 
   /**
    * Returns app, platform, server, endpoint discovery, OAuth, and WebSocket metadata
-   * for this Beeper Desktop instance.
+   * for this Beeper Client API server.
    */
   retrieve(options?: RequestOptions): APIPromise<InfoRetrieveResponse> {
     return this._client.get('/v1/info', { ...options, __security: {} });
@@ -123,7 +123,7 @@ export namespace InfoRetrieveResponse {
 
   export interface Server {
     /**
-     * Base URL of the Beeper Desktop API server
+     * Base URL of the Beeper Client API server
      */
     base_url: string;
 

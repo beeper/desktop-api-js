@@ -23,7 +23,7 @@ export class BaseMessages extends APIResource {
 
   /**
    * Retrieve a message by final message ID, pendingMessageID, or Matrix event ID.
-   * Chat ID may be a Beeper chat ID or local chat ID.
+   * chatID may be a Beeper chat ID or a local chat ID.
    *
    * @example
    * ```ts
@@ -153,21 +153,20 @@ export class Messages extends BaseMessages {}
 
 export interface MessageUpdateResponse extends Shared.Message {
   /**
-   * @deprecated DEPRECATED - use id instead. Compatibility alias for older clients.
+   * @deprecated Use id instead.
    */
   messageID: string;
 
   /**
-   * @deprecated DEPRECATED - compatibility field. Successful responses are already
-   * represented by the 200 status code.
+   * @deprecated Use the HTTP 200 response status instead.
    */
   success: true;
 }
 
 export interface MessageSendResponse {
   /**
-   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
-   * installation when available.
+   * Chat ID. Input routes also accept the local chat ID from this installation when
+   * available.
    */
   chatID: string;
 
@@ -181,16 +180,16 @@ export interface MessageSendResponse {
 
 export interface MessageRetrieveParams {
   /**
-   * Chat ID. Input routes also accept the local chat ID from this Beeper Desktop
-   * installation when available.
+   * Chat ID. Input routes also accept the local chat ID from this installation when
+   * available.
    */
   chatID: string;
 }
 
 export interface MessageUpdateParams {
   /**
-   * Path param: Chat ID. Input routes also accept the local chat ID from this Beeper
-   * Desktop installation when available.
+   * Path param: Chat ID. Input routes also accept the local chat ID from this
+   * installation when available.
    */
   chatID: string;
 
@@ -204,8 +203,8 @@ export interface MessageListParams extends CursorNoLimitParams {}
 
 export interface MessageDeleteParams {
   /**
-   * Path param: Chat ID. Input routes also accept the local chat ID from this Beeper
-   * Desktop installation when available.
+   * Path param: Chat ID. Input routes also accept the local chat ID from this
+   * installation when available.
    */
   chatID: string;
 
@@ -263,10 +262,10 @@ export interface MessageSearchParams extends CursorSearchParams {
   mediaTypes?: Array<'any' | 'video' | 'image' | 'link' | 'file'>;
 
   /**
-   * Literal word search (non-semantic). Finds messages containing these EXACT words
-   * in any order. Use single words users actually type, not concepts or phrases.
-   * Example: use "dinner" not "dinner plans", use "sick" not "health issues". If
-   * omitted, returns results filtered only by other parameters.
+   * Literal word search. Finds messages containing these words in any order. Use
+   * words the user actually typed, not inferred concepts. Example: use "dinner"
+   * rather than "dinner plans". If omitted, returns results filtered only by the
+   * other parameters.
    */
   query?: string;
 
@@ -289,8 +288,8 @@ export interface MessageSendParams {
   replyToMessageID?: string;
 
   /**
-   * Draft text. Plain text and Markdown are converted to Matrix HTML with the same
-   * rules used by send and edit.
+   * Draft text. Plain text and Markdown are converted to Beeper rich text with the
+   * same rules used by send and edit.
    */
   text?: string;
 }

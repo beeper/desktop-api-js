@@ -56,7 +56,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: 'Focus Beeper Desktop app',
     description:
-      'Focus Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill plain text and an image path.',
+      'Focus Beeper Desktop and optionally open a specific chat, jump to a message, or pre-fill text and an image.',
     stainlessPath: '(resource) $client > (method) focus',
     qualified: 'client.focus',
     params: [
@@ -67,7 +67,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     ],
     response: '{ success: boolean; }',
     markdown:
-      "## focus\n\n`client.focus(chatID?: string, draftAttachmentPath?: string, draftText?: string, messageID?: string): { success: boolean; }`\n\n**post** `/v1/focus`\n\nFocus Beeper Desktop and optionally navigate to a specific chat, message, or pre-fill plain text and an image path.\n\n### Parameters\n\n- `chatID?: string`\n  Optional Beeper chat ID (or local chat ID) to focus after opening the app. If omitted, only opens/focuses the app.\n\n- `draftAttachmentPath?: string`\n  Optional image path to populate in the message input field.\n\n- `draftText?: string`\n  Optional plain text to populate in the message input field.\n\n- `messageID?: string`\n  Optional message ID. Jumps to that message in the chat when opening.\n\n### Returns\n\n- `{ success: boolean; }`\n  Response indicating successful app focus action.\n\n  - `success: boolean`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.focus();\n\nconsole.log(response);\n```",
+      "## focus\n\n`client.focus(chatID?: string, draftAttachmentPath?: string, draftText?: string, messageID?: string): { success: boolean; }`\n\n**post** `/v1/focus`\n\nFocus Beeper Desktop and optionally open a specific chat, jump to a message, or pre-fill text and an image.\n\n### Parameters\n\n- `chatID?: string`\n  Optional Beeper chat ID (or local chat ID) to focus after opening the app. If omitted, only opens/focuses the app.\n\n- `draftAttachmentPath?: string`\n  Optional local image path to populate in the message input field.\n\n- `draftText?: string`\n  Optional plain text to populate in the message input field.\n\n- `messageID?: string`\n  Optional message ID. Jumps to that message in the chat when opening.\n\n### Returns\n\n- `{ success: boolean; }`\n  Response indicating successful app focus action.\n\n  - `success: boolean`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.focus();\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.focus',
@@ -86,7 +86,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       cli: {
         method: '$client focus',
-        example: "beeper-desktop-cli focus \\\n  --access-token 'My Access Token'",
+        example: "beeper-desktop focus \\\n  --access-token 'My Access Token'",
       },
       php: {
         method: 'focus',
@@ -105,14 +105,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'get',
     summary: 'Search',
     description:
-      'Returns matching chats, participant name matches in groups, and the first page of messages in one call. Paginate messages via search-messages. Paginate chats via search-chats.',
+      'Return matching chats, participant matches in group chats, and the first page of message results in one call. Use the dedicated chat and message search endpoints for pagination.',
     stainlessPath: '(resource) $client > (method) search',
     qualified: 'client.search',
     params: ['query: string;'],
     response:
       '{ results: { chats: object[]; in_groups: object[]; messages: { chats: object; hasMore: boolean; items: message[]; newestCursor: string; oldestCursor: string; }; }; }',
     markdown:
-      "## search\n\n`client.search(query: string): { results: object; }`\n\n**get** `/v1/search`\n\nReturns matching chats, participant name matches in groups, and the first page of messages in one call. Paginate messages via search-messages. Paginate chats via search-chats.\n\n### Parameters\n\n- `query: string`\n  User-typed search text. Literal word matching (non-semantic).\n\n### Returns\n\n- `{ results: { chats: object[]; in_groups: object[]; messages: { chats: object; hasMore: boolean; items: message[]; newestCursor: string; oldestCursor: string; }; }; }`\n\n  - `results: { chats: { id: string; accountID: string; network: string; participants: { hasMore: boolean; items: user[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: object; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: object; participantActions?: object; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: object; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }[]; in_groups: { id: string; accountID: string; network: string; participants: { hasMore: boolean; items: user[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: object; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: object; participantActions?: object; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: object; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }[]; messages: { chats: object; hasMore: boolean; items: { id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: attachment[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: object[]; mentions?: string[]; reactions?: reaction[]; seen?: boolean | string | object; senderName?: string; sendStatus?: object; text?: string; type?: string; }[]; newestCursor: string; oldestCursor: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.search({ query: 'x' });\n\nconsole.log(response);\n```",
+      "## search\n\n`client.search(query: string): { results: object; }`\n\n**get** `/v1/search`\n\nReturn matching chats, participant matches in group chats, and the first page of message results in one call. Use the dedicated chat and message search endpoints for pagination.\n\n### Parameters\n\n- `query: string`\n  User-typed search text. Uses literal word matching.\n\n### Returns\n\n- `{ results: { chats: object[]; in_groups: object[]; messages: { chats: object; hasMore: boolean; items: message[]; newestCursor: string; oldestCursor: string; }; }; }`\n\n  - `results: { chats: { id: string; accountID: string; network: string; participants: { hasMore: boolean; items: user[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: object; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: object; participantActions?: object; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: object; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }[]; in_groups: { id: string; accountID: string; network: string; participants: { hasMore: boolean; items: user[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: object; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: object; participantActions?: object; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: object; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }[]; messages: { chats: object; hasMore: boolean; items: { id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: attachment[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: object[]; mentions?: string[]; reactions?: reaction[]; seen?: boolean | string | object; senderName?: string; sendStatus?: object; text?: string; type?: string; }[]; newestCursor: string; oldestCursor: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.search({ query: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.search',
@@ -131,7 +131,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       cli: {
         method: '$client search',
-        example: "beeper-desktop-cli search \\\n  --access-token 'My Access Token' \\\n  --query x",
+        example: "beeper-desktop search \\\n  --access-token 'My Access Token' \\\n  --query x",
       },
       php: {
         method: 'search',
@@ -148,15 +148,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     name: 'list',
     endpoint: '/v1/accounts',
     httpMethod: 'get',
-    summary: 'List Chat Accounts',
+    summary: 'List chat accounts',
     description:
-      'List Chat Accounts connected to this Beeper Desktop instance, including bridge metadata and network identity.',
+      'List chat accounts connected to this Beeper Client API server, including bridge, network, user identity, and connection status.',
     stainlessPath: '(resource) accounts > (method) list',
     qualified: 'client.accounts.list',
     response:
-      "{ accountID: string; bridge: { id: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; type: string; }; user: object; network?: string; }[]",
+      '{ accountID: string; bridge: object; status: string; user: object; capabilities?: object; loginID?: string; network?: string; statusText?: string; }[]',
     markdown:
-      "## list\n\n`client.accounts.list(): object[]`\n\n**get** `/v1/accounts`\n\nList Chat Accounts connected to this Beeper Desktop instance, including bridge metadata and network identity.\n\n### Returns\n\n- `{ accountID: string; bridge: { id: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; type: string; }; user: object; network?: string; }[]`\n  Accounts configured on this device. Includes accountID, bridge metadata, optional network name, and user identity.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst accounts = await client.accounts.list();\n\nconsole.log(accounts);\n```",
+      "## list\n\n`client.accounts.list(): object[]`\n\n**get** `/v1/accounts`\n\nList chat accounts connected to this Beeper Client API server, including bridge, network, user identity, and connection status.\n\n### Returns\n\n- `{ accountID: string; bridge: object; status: string; user: object; capabilities?: object; loginID?: string; network?: string; statusText?: string; }[]`\n  Chat accounts configured on this device. Includes accountID, bridge metadata, optional network name, and user identity.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst accounts = await client.accounts.list();\n\nconsole.log(accounts);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accounts.list',
@@ -175,7 +175,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       cli: {
         method: 'accounts list',
-        example: "beeper-desktop-cli accounts list \\\n  --access-token 'My Access Token'",
+        example: "beeper-desktop accounts list \\\n  --access-token 'My Access Token'",
       },
       php: {
         method: 'accounts->list',
@@ -185,6 +185,51 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl http://localhost:23373/v1/accounts \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/accounts/{accountID}',
+    httpMethod: 'get',
+    summary: 'Get chat account',
+    description: 'Get one chat account connected to this Beeper Client API server.',
+    stainlessPath: '(resource) accounts > (method) retrieve',
+    qualified: 'client.accounts.retrieve',
+    params: ['accountID: string;'],
+    response:
+      "{ accountID: string; bridge: { id: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; type: string; }; status: string; user: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; capabilities?: object; loginID?: string; network?: string; statusText?: string; }",
+    markdown:
+      "## retrieve\n\n`client.accounts.retrieve(accountID: string): { accountID: string; bridge: account_bridge; status: string; user: user; capabilities?: object; loginID?: string; network?: string; statusText?: string; }`\n\n**get** `/v1/accounts/{accountID}`\n\nGet one chat account connected to this Beeper Client API server.\n\n### Parameters\n\n- `accountID: string`\n  Account ID this resource belongs to.\n\n### Returns\n\n- `{ accountID: string; bridge: { id: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; type: string; }; status: string; user: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; capabilities?: object; loginID?: string; network?: string; statusText?: string; }`\n  A chat account added to Beeper.\n\n  - `accountID: string`\n  - `bridge: { id: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; type: string; }`\n  - `status: string`\n  - `user: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }`\n  - `capabilities?: object`\n  - `loginID?: string`\n  - `network?: string`\n  - `statusText?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst account = await client.accounts.retrieve('accountID');\n\nconsole.log(account);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.accounts.retrieve',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst account = await client.accounts.retrieve('accountID');\n\nconsole.log(account.bridge);",
+      },
+      python: {
+        method: 'accounts.retrieve',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\naccount = client.accounts.retrieve(\n    "accountID",\n)\nprint(account.bridge)',
+      },
+      go: {
+        method: 'client.Accounts.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\taccount, err := client.Accounts.Get(context.TODO(), "accountID")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.Bridge)\n}\n',
+      },
+      cli: {
+        method: 'accounts retrieve',
+        example:
+          "beeper-desktop accounts retrieve \\\n  --access-token 'My Access Token' \\\n  --account-id accountID",
+      },
+      php: {
+        method: 'accounts->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$account = $client->accounts->retrieve('accountID');\n\nvar_dump($account);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/accounts/$ACCOUNT_ID \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
       },
     },
   },
@@ -201,7 +246,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; }',
     markdown:
-      "## search\n\n`client.accounts.contacts.search(accountID: string, query: string): { items: user[]; }`\n\n**get** `/v1/accounts/{accountID}/contacts`\n\nSearch contacts on a specific account using merged account contacts, network search, and exact identifier lookup.\n\n### Parameters\n\n- `accountID: string`\n  Account ID this resource belongs to.\n\n- `query: string`\n  Text to search users by. Network-specific behavior.\n\n### Returns\n\n- `{ items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; }`\n\n  - `items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.accounts.contacts.search('accountID', { query: 'x' });\n\nconsole.log(response);\n```",
+      "## search\n\n`client.accounts.contacts.search(accountID: string, query: string): { items: user[]; }`\n\n**get** `/v1/accounts/{accountID}/contacts`\n\nSearch contacts on a specific account using merged account contacts, network search, and exact identifier lookup.\n\n### Parameters\n\n- `accountID: string`\n  Account ID this resource belongs to.\n\n- `query: string`\n  Text to search contacts by. Matching behavior depends on the network.\n\n### Returns\n\n- `{ items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; }`\n\n  - `items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.accounts.contacts.search('accountID', { query: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.accounts.contacts.search',
@@ -221,7 +266,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'contacts search',
         example:
-          "beeper-desktop-cli accounts:contacts search \\\n  --access-token 'My Access Token' \\\n  --account-id accountID \\\n  --query x",
+          "beeper-desktop accounts:contacts search \\\n  --access-token 'My Access Token' \\\n  --account-id accountID \\\n  --query x",
       },
       php: {
         method: 'accounts->contacts->search',
@@ -252,7 +297,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }',
     markdown:
-      "## list\n\n`client.accounts.contacts.list(accountID: string, cursor?: string, direction?: 'after' | 'before', limit?: number, query?: string): { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }`\n\n**get** `/v1/accounts/{accountID}/contacts/list`\n\nList merged contacts for a specific account with cursor-based pagination.\n\n### Parameters\n\n- `accountID: string`\n  Account ID this resource belongs to.\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n- `limit?: number`\n  Maximum contacts to return per page.\n\n- `query?: string`\n  Optional search query for blended contact lookup.\n\n### Returns\n\n- `{ id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }`\n  User the account belongs to.\n\n  - `id: string`\n  - `cannotMessage?: boolean`\n  - `email?: string`\n  - `fullName?: string`\n  - `imgURL?: string`\n  - `isSelf?: boolean`\n  - `phoneNumber?: string`\n  - `username?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const user of client.accounts.contacts.list('accountID')) {\n  console.log(user);\n}\n```",
+      "## list\n\n`client.accounts.contacts.list(accountID: string, cursor?: string, direction?: 'after' | 'before', limit?: number, query?: string): { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }`\n\n**get** `/v1/accounts/{accountID}/contacts/list`\n\nList merged contacts for a specific account with cursor-based pagination.\n\n### Parameters\n\n- `accountID: string`\n  Account ID this resource belongs to.\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n- `limit?: number`\n  Maximum contacts to return per page.\n\n- `query?: string`\n  Optional search query for contact lookup.\n\n### Returns\n\n- `{ id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }`\n  User the account belongs to.\n\n  - `id: string`\n  - `cannotMessage?: boolean`\n  - `email?: string`\n  - `fullName?: string`\n  - `imgURL?: string`\n  - `isSelf?: boolean`\n  - `phoneNumber?: string`\n  - `username?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const user of client.accounts.contacts.list('accountID')) {\n  console.log(user);\n}\n```",
     perLanguage: {
       typescript: {
         method: 'client.accounts.contacts.list',
@@ -272,7 +317,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'contacts list',
         example:
-          "beeper-desktop-cli accounts:contacts list \\\n  --access-token 'My Access Token' \\\n  --account-id accountID",
+          "beeper-desktop accounts:contacts list \\\n  --access-token 'My Access Token' \\\n  --account-id accountID",
       },
       php: {
         method: 'accounts->contacts->list',
@@ -286,18 +331,386 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'list',
+    endpoint: '/v1/bridges',
+    httpMethod: 'get',
+    summary: 'List available bridges',
+    description:
+      'List available bridges. A bridge is a chat-network connector that can connect or reconnect chat accounts. Connected accounts use the same Account schema as GET /v1/accounts.',
+    stainlessPath: '(resource) bridges > (method) list',
+    qualified: 'client.bridges.list',
+    response:
+      "{ items: { id: string; accounts: account[]; activeAccountCount: number; displayName: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; status: 'available' | 'connected' | 'limit_reached' | 'temporarily_unavailable' | 'disabled'; supportsMultipleAccounts: boolean; type: string; network?: string; statusText?: string; }[]; }",
+    markdown:
+      "## list\n\n`client.bridges.list(): { items: bridge[]; }`\n\n**get** `/v1/bridges`\n\nList available bridges. A bridge is a chat-network connector that can connect or reconnect chat accounts. Connected accounts use the same Account schema as GET /v1/accounts.\n\n### Returns\n\n- `{ items: { id: string; accounts: account[]; activeAccountCount: number; displayName: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; status: 'available' | 'connected' | 'limit_reached' | 'temporarily_unavailable' | 'disabled'; supportsMultipleAccounts: boolean; type: string; network?: string; statusText?: string; }[]; }`\n  Available bridges and their connected accounts.\n\n  - `items: { id: string; accounts: { accountID: string; bridge: account_bridge; status: string; user: user; capabilities?: object; loginID?: string; network?: string; statusText?: string; }[]; activeAccountCount: number; displayName: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; status: 'available' | 'connected' | 'limit_reached' | 'temporarily_unavailable' | 'disabled'; supportsMultipleAccounts: boolean; type: string; network?: string; statusText?: string; }[]`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst bridges = await client.bridges.list();\n\nconsole.log(bridges);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.bridges.list',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst bridges = await client.bridges.list();\n\nconsole.log(bridges.items);",
+      },
+      python: {
+        method: 'bridges.list',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nbridges = client.bridges.list()\nprint(bridges.items)',
+      },
+      go: {
+        method: 'client.Bridges.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tbridges, err := client.Bridges.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", bridges.Items)\n}\n',
+      },
+      cli: {
+        method: 'bridges list',
+        example: "beeper-desktop bridges list \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'bridges->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$bridges = $client->bridges->list();\n\nvar_dump($bridges);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/bridges \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/bridges/{bridgeID}',
+    httpMethod: 'get',
+    summary: 'Get bridge',
+    description: 'Get one bridge, including the chat accounts connected through it.',
+    stainlessPath: '(resource) bridges > (method) retrieve',
+    qualified: 'client.bridges.retrieve',
+    params: ['bridgeID: string;'],
+    response:
+      "{ id: string; accounts: { accountID: string; bridge: account_bridge; status: string; user: user; capabilities?: object; loginID?: string; network?: string; statusText?: string; }[]; activeAccountCount: number; displayName: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; status: 'available' | 'connected' | 'limit_reached' | 'temporarily_unavailable' | 'disabled'; supportsMultipleAccounts: boolean; type: string; network?: string; statusText?: string; }",
+    markdown:
+      "## retrieve\n\n`client.bridges.retrieve(bridgeID: string): { id: string; accounts: account[]; activeAccountCount: number; displayName: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; status: 'available' | 'connected' | 'limit_reached' | 'temporarily_unavailable' | 'disabled'; supportsMultipleAccounts: boolean; type: string; network?: string; statusText?: string; }`\n\n**get** `/v1/bridges/{bridgeID}`\n\nGet one bridge, including the chat accounts connected through it.\n\n### Parameters\n\n- `bridgeID: string`\n  Bridge ID.\n\n### Returns\n\n- `{ id: string; accounts: { accountID: string; bridge: account_bridge; status: string; user: user; capabilities?: object; loginID?: string; network?: string; statusText?: string; }[]; activeAccountCount: number; displayName: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; status: 'available' | 'connected' | 'limit_reached' | 'temporarily_unavailable' | 'disabled'; supportsMultipleAccounts: boolean; type: string; network?: string; statusText?: string; }`\n  Available bridge that can connect or reconnect chat accounts.\n\n  - `id: string`\n  - `accounts: { accountID: string; bridge: { id: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; type: string; }; status: string; user: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; capabilities?: object; loginID?: string; network?: string; statusText?: string; }[]`\n  - `activeAccountCount: number`\n  - `displayName: string`\n  - `provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'`\n  - `status: 'available' | 'connected' | 'limit_reached' | 'temporarily_unavailable' | 'disabled'`\n  - `supportsMultipleAccounts: boolean`\n  - `type: string`\n  - `network?: string`\n  - `statusText?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst bridge = await client.bridges.retrieve('local-whatsapp');\n\nconsole.log(bridge);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.bridges.retrieve',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst bridge = await client.bridges.retrieve('local-whatsapp');\n\nconsole.log(bridge.id);",
+      },
+      python: {
+        method: 'bridges.retrieve',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nbridge = client.bridges.retrieve(\n    "local-whatsapp",\n)\nprint(bridge.id)',
+      },
+      go: {
+        method: 'client.Bridges.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tbridge, err := client.Bridges.Get(context.TODO(), "local-whatsapp")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", bridge.ID)\n}\n',
+      },
+      cli: {
+        method: 'bridges retrieve',
+        example:
+          "beeper-desktop bridges retrieve \\\n  --access-token 'My Access Token' \\\n  --bridge-id local-whatsapp",
+      },
+      php: {
+        method: 'bridges->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$bridge = $client->bridges->retrieve('local-whatsapp');\n\nvar_dump($bridge);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/bridges/$BRIDGE_ID \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'retrieve_capabilities',
+    endpoint: '/v1/bridges/{bridgeID}/capabilities',
+    httpMethod: 'get',
+    summary: 'Get bridge capabilities',
+    description:
+      'Get advanced network capabilities for a bridge. This endpoint is intended for clients that build custom connect or chat-creation flows.',
+    stainlessPath: '(resource) bridges > (method) retrieve_capabilities',
+    qualified: 'client.bridges.retrieveCapabilities',
+    params: ['bridgeID: string;'],
+    response:
+      '{ group_creation: object; resolve_identifier: { any_phone: boolean; contact_list: boolean; create_dm: boolean; lookup_email: boolean; lookup_phone: boolean; lookup_username: boolean; search: boolean; }; image_pack_import?: boolean; }',
+    markdown:
+      "## retrieve_capabilities\n\n`client.bridges.retrieveCapabilities(bridgeID: string): { group_creation: object; resolve_identifier: resolve_identifier_capabilities; image_pack_import?: boolean; }`\n\n**get** `/v1/bridges/{bridgeID}/capabilities`\n\nGet advanced network capabilities for a bridge. This endpoint is intended for clients that build custom connect or chat-creation flows.\n\n### Parameters\n\n- `bridgeID: string`\n  Bridge ID.\n\n### Returns\n\n- `{ group_creation: object; resolve_identifier: { any_phone: boolean; contact_list: boolean; create_dm: boolean; lookup_email: boolean; lookup_phone: boolean; lookup_username: boolean; search: boolean; }; image_pack_import?: boolean; }`\n  Advanced network capabilities for account lookup and group creation.\n\n  - `group_creation: object`\n  - `resolve_identifier: { any_phone: boolean; contact_list: boolean; create_dm: boolean; lookup_email: boolean; lookup_phone: boolean; lookup_username: boolean; search: boolean; }`\n  - `image_pack_import?: boolean`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst provisioningCapabilities = await client.bridges.retrieveCapabilities('local-whatsapp');\n\nconsole.log(provisioningCapabilities);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.bridges.retrieveCapabilities',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst provisioningCapabilities = await client.bridges.retrieveCapabilities('local-whatsapp');\n\nconsole.log(provisioningCapabilities.resolve_identifier);",
+      },
+      python: {
+        method: 'bridges.retrieve_capabilities',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nprovisioning_capabilities = client.bridges.retrieve_capabilities(\n    "local-whatsapp",\n)\nprint(provisioning_capabilities.resolve_identifier)',
+      },
+      go: {
+        method: 'client.Bridges.GetCapabilities',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tprovisioningCapabilities, err := client.Bridges.GetCapabilities(context.TODO(), "local-whatsapp")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", provisioningCapabilities.ResolveIdentifier)\n}\n',
+      },
+      cli: {
+        method: 'bridges retrieve_capabilities',
+        example:
+          "beeper-desktop bridges retrieve-capabilities \\\n  --access-token 'My Access Token' \\\n  --bridge-id local-whatsapp",
+      },
+      php: {
+        method: 'bridges->retrieveCapabilities',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$provisioningCapabilities = $client->bridges->retrieveCapabilities(\n  'local-whatsapp'\n);\n\nvar_dump($provisioningCapabilities);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/bridges/$BRIDGE_ID/capabilities \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/bridges/{bridgeID}/login-flows',
+    httpMethod: 'get',
+    summary: 'List login flows',
+    description:
+      'List connect and reconnect flow options for a bridge. Use a flowID when creating a bridge login session.',
+    stainlessPath: '(resource) bridges.login_flows > (method) list',
+    qualified: 'client.bridges.loginFlows.list',
+    params: ['bridgeID: string;'],
+    response: '{ items: { id: string; description?: string; name?: string; }[]; }',
+    markdown:
+      "## list\n\n`client.bridges.loginFlows.list(bridgeID: string): { items: login_flow[]; }`\n\n**get** `/v1/bridges/{bridgeID}/login-flows`\n\nList connect and reconnect flow options for a bridge. Use a flowID when creating a bridge login session.\n\n### Parameters\n\n- `bridgeID: string`\n  Bridge ID.\n\n### Returns\n\n- `{ items: { id: string; description?: string; name?: string; }[]; }`\n\n  - `items: { id: string; description?: string; name?: string; }[]`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst loginFlows = await client.bridges.loginFlows.list('local-whatsapp');\n\nconsole.log(loginFlows);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.bridges.loginFlows.list',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst loginFlows = await client.bridges.loginFlows.list('local-whatsapp');\n\nconsole.log(loginFlows.items);",
+      },
+      python: {
+        method: 'bridges.login_flows.list',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nlogin_flows = client.bridges.login_flows.list(\n    "local-whatsapp",\n)\nprint(login_flows.items)',
+      },
+      go: {
+        method: 'client.Bridges.LoginFlows.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tloginFlows, err := client.Bridges.LoginFlows.List(context.TODO(), "local-whatsapp")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", loginFlows.Items)\n}\n',
+      },
+      cli: {
+        method: 'login_flows list',
+        example:
+          "beeper-desktop bridges:login-flows list \\\n  --access-token 'My Access Token' \\\n  --bridge-id local-whatsapp",
+      },
+      php: {
+        method: 'bridges->loginFlows->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$loginFlows = $client->bridges->loginFlows->list('local-whatsapp');\n\nvar_dump($loginFlows);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/bridges/$BRIDGE_ID/login-flows \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/bridges/{bridgeID}/login-sessions',
+    httpMethod: 'post',
+    summary: 'Create bridge login session',
+    description:
+      'Start a temporary bridge login session to connect a new chat account or reconnect an existing bridge login. Omit loginID and accountID to connect a new account.',
+    stainlessPath: '(resource) bridges.login_sessions > (method) create',
+    qualified: 'client.bridges.loginSessions.create',
+    params: ['bridgeID: string;', 'accountID?: string;', 'flowID?: string;', 'loginID?: string;'],
+    response:
+      "{ bridgeID: string; loginSessionID: string; status: string; account?: object; accountID?: string; currentStep?: { fields: login_input_field[]; stepID: string; type: 'user_input'; attachments?: object[]; instructions?: string; } | { fields: cookie_field[]; stepID: string; type: 'cookies'; url: string; expectedFinalURLRegex?: string; extractJS?: string; instructions?: string; userAgent?: string; } | { display: object | object | object; stepID: string; type: 'display_and_wait'; instructions?: string; } | { type: 'complete'; account?: account; instructions?: string; login?: object; stepID?: string; }; error?: object; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: user; }; loginID?: string; }",
+    markdown:
+      "## create\n\n`client.bridges.loginSessions.create(bridgeID: string, accountID?: string, flowID?: string, loginID?: string): { bridgeID: string; loginSessionID: string; status: string; account?: account; accountID?: string; currentStep?: object | object | object | object; error?: api_error; login?: object; loginID?: string; }`\n\n**post** `/v1/bridges/{bridgeID}/login-sessions`\n\nStart a temporary bridge login session to connect a new chat account or reconnect an existing bridge login. Omit loginID and accountID to connect a new account.\n\n### Parameters\n\n- `bridgeID: string`\n  Bridge ID.\n\n- `accountID?: string`\n  Existing chat account ID to reconnect. Omit to connect a new account.\n\n- `flowID?: string`\n  Optional flow ID returned by the list login flows endpoint. If omitted, Beeper chooses the default flow.\n\n- `loginID?: string`\n  Existing bridge login ID to reconnect. Omit to connect a new account.\n\n### Returns\n\n- `{ bridgeID: string; loginSessionID: string; status: string; account?: { accountID: string; bridge: account_bridge; status: string; user: user; capabilities?: object; loginID?: string; network?: string; statusText?: string; }; accountID?: string; currentStep?: { fields: object[]; stepID: string; type: 'user_input'; attachments?: object[]; instructions?: string; } | { fields: object[]; stepID: string; type: 'cookies'; url: string; expectedFinalURLRegex?: string; extractJS?: string; instructions?: string; userAgent?: string; } | { display: { data: string; type: 'qr'; } | { imageURL: string; type: 'emoji'; } | { type: 'nothing'; }; stepID: string; type: 'display_and_wait'; instructions?: string; } | { type: 'complete'; account?: object; instructions?: string; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: user; }; stepID?: string; }; error?: { code: string; message: string; details?: object; }; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: object; }; loginID?: string; }`\n\n  - `bridgeID: string`\n  - `loginSessionID: string`\n  - `status: string`\n  - `account?: { accountID: string; bridge: { id: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; type: string; }; status: string; user: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; capabilities?: object; loginID?: string; network?: string; statusText?: string; }`\n  - `accountID?: string`\n  - `currentStep?: { fields: { id: string; initialValue?: string; label?: string; optional?: boolean; placeholder?: string; type?: string; }[]; stepID: string; type: 'user_input'; attachments?: object[]; instructions?: string; } | { fields: { id: string; name?: string; type?: 'cookie' | 'header' | 'local_storage'; }[]; stepID: string; type: 'cookies'; url: string; expectedFinalURLRegex?: string; extractJS?: string; instructions?: string; userAgent?: string; } | { display: { data: string; type: 'qr'; } | { imageURL: string; type: 'emoji'; } | { type: 'nothing'; }; stepID: string; type: 'display_and_wait'; instructions?: string; } | { type: 'complete'; account?: { accountID: string; bridge: object; status: string; user: object; capabilities?: object; loginID?: string; network?: string; statusText?: string; }; instructions?: string; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; }; stepID?: string; }`\n  - `error?: { code: string; message: string; details?: object; }`\n  - `login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; }`\n  - `loginID?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst loginSession = await client.bridges.loginSessions.create('local-whatsapp');\n\nconsole.log(loginSession);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.bridges.loginSessions.create',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst loginSession = await client.bridges.loginSessions.create('local-whatsapp');\n\nconsole.log(loginSession.bridgeID);",
+      },
+      python: {
+        method: 'bridges.login_sessions.create',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nlogin_session = client.bridges.login_sessions.create(\n    bridge_id="local-whatsapp",\n)\nprint(login_session.bridge_id)',
+      },
+      go: {
+        method: 'client.Bridges.LoginSessions.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tloginSession, err := client.Bridges.LoginSessions.New(\n\t\tcontext.TODO(),\n\t\t"local-whatsapp",\n\t\tbeeperdesktopapi.BridgeLoginSessionNewParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", loginSession.BridgeID)\n}\n',
+      },
+      cli: {
+        method: 'login_sessions create',
+        example:
+          "beeper-desktop bridges:login-sessions create \\\n  --access-token 'My Access Token' \\\n  --bridge-id local-whatsapp",
+      },
+      php: {
+        method: 'bridges->loginSessions->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$loginSession = $client->bridges->loginSessions->create(\n  'local-whatsapp', accountID: 'x', flowID: 'x', loginID: 'x'\n);\n\nvar_dump($loginSession);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/bridges/$BRIDGE_ID/login-sessions \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/bridges/{bridgeID}/login-sessions/{loginSessionID}',
+    httpMethod: 'get',
+    summary: 'Get bridge login session',
+    description: 'Get the current state of a temporary bridge login session.',
+    stainlessPath: '(resource) bridges.login_sessions > (method) retrieve',
+    qualified: 'client.bridges.loginSessions.retrieve',
+    params: ['bridgeID: string;', 'loginSessionID: string;'],
+    response:
+      "{ bridgeID: string; loginSessionID: string; status: string; account?: object; accountID?: string; currentStep?: { fields: login_input_field[]; stepID: string; type: 'user_input'; attachments?: object[]; instructions?: string; } | { fields: cookie_field[]; stepID: string; type: 'cookies'; url: string; expectedFinalURLRegex?: string; extractJS?: string; instructions?: string; userAgent?: string; } | { display: object | object | object; stepID: string; type: 'display_and_wait'; instructions?: string; } | { type: 'complete'; account?: account; instructions?: string; login?: object; stepID?: string; }; error?: object; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: user; }; loginID?: string; }",
+    markdown:
+      "## retrieve\n\n`client.bridges.loginSessions.retrieve(bridgeID: string, loginSessionID: string): { bridgeID: string; loginSessionID: string; status: string; account?: account; accountID?: string; currentStep?: object | object | object | object; error?: api_error; login?: object; loginID?: string; }`\n\n**get** `/v1/bridges/{bridgeID}/login-sessions/{loginSessionID}`\n\nGet the current state of a temporary bridge login session.\n\n### Parameters\n\n- `bridgeID: string`\n  Bridge ID.\n\n- `loginSessionID: string`\n  Temporary bridge login session ID.\n\n### Returns\n\n- `{ bridgeID: string; loginSessionID: string; status: string; account?: { accountID: string; bridge: account_bridge; status: string; user: user; capabilities?: object; loginID?: string; network?: string; statusText?: string; }; accountID?: string; currentStep?: { fields: object[]; stepID: string; type: 'user_input'; attachments?: object[]; instructions?: string; } | { fields: object[]; stepID: string; type: 'cookies'; url: string; expectedFinalURLRegex?: string; extractJS?: string; instructions?: string; userAgent?: string; } | { display: { data: string; type: 'qr'; } | { imageURL: string; type: 'emoji'; } | { type: 'nothing'; }; stepID: string; type: 'display_and_wait'; instructions?: string; } | { type: 'complete'; account?: object; instructions?: string; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: user; }; stepID?: string; }; error?: { code: string; message: string; details?: object; }; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: object; }; loginID?: string; }`\n\n  - `bridgeID: string`\n  - `loginSessionID: string`\n  - `status: string`\n  - `account?: { accountID: string; bridge: { id: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; type: string; }; status: string; user: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; capabilities?: object; loginID?: string; network?: string; statusText?: string; }`\n  - `accountID?: string`\n  - `currentStep?: { fields: { id: string; initialValue?: string; label?: string; optional?: boolean; placeholder?: string; type?: string; }[]; stepID: string; type: 'user_input'; attachments?: object[]; instructions?: string; } | { fields: { id: string; name?: string; type?: 'cookie' | 'header' | 'local_storage'; }[]; stepID: string; type: 'cookies'; url: string; expectedFinalURLRegex?: string; extractJS?: string; instructions?: string; userAgent?: string; } | { display: { data: string; type: 'qr'; } | { imageURL: string; type: 'emoji'; } | { type: 'nothing'; }; stepID: string; type: 'display_and_wait'; instructions?: string; } | { type: 'complete'; account?: { accountID: string; bridge: object; status: string; user: object; capabilities?: object; loginID?: string; network?: string; statusText?: string; }; instructions?: string; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; }; stepID?: string; }`\n  - `error?: { code: string; message: string; details?: object; }`\n  - `login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; }`\n  - `loginID?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst loginSession = await client.bridges.loginSessions.retrieve('123', { bridgeID: 'local-whatsapp' });\n\nconsole.log(loginSession);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.bridges.loginSessions.retrieve',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst loginSession = await client.bridges.loginSessions.retrieve('123', {\n  bridgeID: 'local-whatsapp',\n});\n\nconsole.log(loginSession.bridgeID);",
+      },
+      python: {
+        method: 'bridges.login_sessions.retrieve',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nlogin_session = client.bridges.login_sessions.retrieve(\n    login_session_id="123",\n    bridge_id="local-whatsapp",\n)\nprint(login_session.bridge_id)',
+      },
+      go: {
+        method: 'client.Bridges.LoginSessions.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tloginSession, err := client.Bridges.LoginSessions.Get(\n\t\tcontext.TODO(),\n\t\t"123",\n\t\tbeeperdesktopapi.BridgeLoginSessionGetParams{\n\t\t\tBridgeID: "local-whatsapp",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", loginSession.BridgeID)\n}\n',
+      },
+      cli: {
+        method: 'login_sessions retrieve',
+        example:
+          "beeper-desktop bridges:login-sessions retrieve \\\n  --access-token 'My Access Token' \\\n  --bridge-id local-whatsapp \\\n  --login-session-id 123",
+      },
+      php: {
+        method: 'bridges->loginSessions->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$loginSession = $client->bridges->loginSessions->retrieve(\n  '123', bridgeID: 'local-whatsapp'\n);\n\nvar_dump($loginSession);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/bridges/$BRIDGE_ID/login-sessions/$LOGIN_SESSION_ID \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'cancel',
+    endpoint: '/v1/bridges/{bridgeID}/login-sessions/{loginSessionID}',
+    httpMethod: 'delete',
+    summary: 'Cancel bridge login session',
+    description: 'Cancel a temporary bridge login session.',
+    stainlessPath: '(resource) bridges.login_sessions > (method) cancel',
+    qualified: 'client.bridges.loginSessions.cancel',
+    params: ['bridgeID: string;', 'loginSessionID: string;'],
+    response: "{ bridgeID: string; loginSessionID: string; status: 'cancelled'; }",
+    markdown:
+      "## cancel\n\n`client.bridges.loginSessions.cancel(bridgeID: string, loginSessionID: string): { bridgeID: string; loginSessionID: string; status: 'cancelled'; }`\n\n**delete** `/v1/bridges/{bridgeID}/login-sessions/{loginSessionID}`\n\nCancel a temporary bridge login session.\n\n### Parameters\n\n- `bridgeID: string`\n  Bridge ID.\n\n- `loginSessionID: string`\n  Temporary bridge login session ID.\n\n### Returns\n\n- `{ bridgeID: string; loginSessionID: string; status: 'cancelled'; }`\n\n  - `bridgeID: string`\n  - `loginSessionID: string`\n  - `status: 'cancelled'`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.bridges.loginSessions.cancel('123', { bridgeID: 'local-whatsapp' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.bridges.loginSessions.cancel',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.bridges.loginSessions.cancel('123', { bridgeID: 'local-whatsapp' });\n\nconsole.log(response.bridgeID);",
+      },
+      python: {
+        method: 'bridges.login_sessions.cancel',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.bridges.login_sessions.cancel(\n    login_session_id="123",\n    bridge_id="local-whatsapp",\n)\nprint(response.bridge_id)',
+      },
+      go: {
+        method: 'client.Bridges.LoginSessions.Cancel',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.Bridges.LoginSessions.Cancel(\n\t\tcontext.TODO(),\n\t\t"123",\n\t\tbeeperdesktopapi.BridgeLoginSessionCancelParams{\n\t\t\tBridgeID: "local-whatsapp",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.BridgeID)\n}\n',
+      },
+      cli: {
+        method: 'login_sessions cancel',
+        example:
+          "beeper-desktop bridges:login-sessions cancel \\\n  --access-token 'My Access Token' \\\n  --bridge-id local-whatsapp \\\n  --login-session-id 123",
+      },
+      php: {
+        method: 'bridges->loginSessions->cancel',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->bridges->loginSessions->cancel(\n  '123', bridgeID: 'local-whatsapp'\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/bridges/$BRIDGE_ID/login-sessions/$LOGIN_SESSION_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'submit',
+    endpoint: '/v1/bridges/{bridgeID}/login-sessions/{loginSessionID}/steps/{stepID}',
+    httpMethod: 'post',
+    summary: 'Submit login step',
+    description: 'Submit input for the current step of a bridge login session.',
+    stainlessPath: '(resource) bridges.login_sessions.steps > (method) submit',
+    qualified: 'client.bridges.loginSessions.steps.submit',
+    params: [
+      'bridgeID: string;',
+      'loginSessionID: string;',
+      'stepID: string;',
+      "type: 'user_input' | 'cookies' | 'display_and_wait';",
+      'fields?: object;',
+      'lastURL?: string;',
+      "source?: 'api' | 'webview' | 'browser_extension';",
+    ],
+    response:
+      "{ bridgeID: string; loginSessionID: string; status: string; account?: object; accountID?: string; currentStep?: { fields: login_input_field[]; stepID: string; type: 'user_input'; attachments?: object[]; instructions?: string; } | { fields: cookie_field[]; stepID: string; type: 'cookies'; url: string; expectedFinalURLRegex?: string; extractJS?: string; instructions?: string; userAgent?: string; } | { display: object | object | object; stepID: string; type: 'display_and_wait'; instructions?: string; } | { type: 'complete'; account?: account; instructions?: string; login?: object; stepID?: string; }; error?: object; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: user; }; loginID?: string; }",
+    markdown:
+      "## submit\n\n`client.bridges.loginSessions.steps.submit(bridgeID: string, loginSessionID: string, stepID: string, type: 'user_input' | 'cookies' | 'display_and_wait', fields?: object, lastURL?: string, source?: 'api' | 'webview' | 'browser_extension'): { bridgeID: string; loginSessionID: string; status: string; account?: account; accountID?: string; currentStep?: object | object | object | object; error?: api_error; login?: object; loginID?: string; }`\n\n**post** `/v1/bridges/{bridgeID}/login-sessions/{loginSessionID}/steps/{stepID}`\n\nSubmit input for the current step of a bridge login session.\n\n### Parameters\n\n- `bridgeID: string`\n  Bridge ID.\n\n- `loginSessionID: string`\n  Temporary bridge login session ID.\n\n- `stepID: string`\n  Current bridge login session step ID.\n\n- `type: 'user_input' | 'cookies' | 'display_and_wait'`\n\n- `fields?: object`\n  Field values keyed by the field IDs from the current step.\n\n- `lastURL?: string`\n  Last browser URL reached during a cookies step, if available.\n\n- `source?: 'api' | 'webview' | 'browser_extension'`\n  How the step was completed. Omit unless the client needs to distinguish an embedded webview or browser extension.\n\n### Returns\n\n- `{ bridgeID: string; loginSessionID: string; status: string; account?: { accountID: string; bridge: account_bridge; status: string; user: user; capabilities?: object; loginID?: string; network?: string; statusText?: string; }; accountID?: string; currentStep?: { fields: object[]; stepID: string; type: 'user_input'; attachments?: object[]; instructions?: string; } | { fields: object[]; stepID: string; type: 'cookies'; url: string; expectedFinalURLRegex?: string; extractJS?: string; instructions?: string; userAgent?: string; } | { display: { data: string; type: 'qr'; } | { imageURL: string; type: 'emoji'; } | { type: 'nothing'; }; stepID: string; type: 'display_and_wait'; instructions?: string; } | { type: 'complete'; account?: object; instructions?: string; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: user; }; stepID?: string; }; error?: { code: string; message: string; details?: object; }; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: object; }; loginID?: string; }`\n\n  - `bridgeID: string`\n  - `loginSessionID: string`\n  - `status: string`\n  - `account?: { accountID: string; bridge: { id: string; provider: 'cloud' | 'self-hosted' | 'local' | 'platform-sdk'; type: string; }; status: string; user: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; capabilities?: object; loginID?: string; network?: string; statusText?: string; }`\n  - `accountID?: string`\n  - `currentStep?: { fields: { id: string; initialValue?: string; label?: string; optional?: boolean; placeholder?: string; type?: string; }[]; stepID: string; type: 'user_input'; attachments?: object[]; instructions?: string; } | { fields: { id: string; name?: string; type?: 'cookie' | 'header' | 'local_storage'; }[]; stepID: string; type: 'cookies'; url: string; expectedFinalURLRegex?: string; extractJS?: string; instructions?: string; userAgent?: string; } | { display: { data: string; type: 'qr'; } | { imageURL: string; type: 'emoji'; } | { type: 'nothing'; }; stepID: string; type: 'display_and_wait'; instructions?: string; } | { type: 'complete'; account?: { accountID: string; bridge: object; status: string; user: object; capabilities?: object; loginID?: string; network?: string; statusText?: string; }; instructions?: string; login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; }; stepID?: string; }`\n  - `error?: { code: string; message: string; details?: object; }`\n  - `login?: { bridgeID: string; loginID: string; removeScopes: 'current-device' | 'all-devices'[]; status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown'; accountIDs?: string[]; statusText?: string; user?: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }; }`\n  - `loginID?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst loginSession = await client.bridges.loginSessions.steps.submit('x', {\n  bridgeID: 'local-whatsapp',\n  loginSessionID: '123',\n  type: 'user_input',\n});\n\nconsole.log(loginSession);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.bridges.loginSessions.steps.submit',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst loginSession = await client.bridges.loginSessions.steps.submit('x', {\n  bridgeID: 'local-whatsapp',\n  loginSessionID: '123',\n  type: 'user_input',\n});\n\nconsole.log(loginSession.bridgeID);",
+      },
+      python: {
+        method: 'bridges.login_sessions.steps.submit',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nlogin_session = client.bridges.login_sessions.steps.submit(\n    step_id="x",\n    bridge_id="local-whatsapp",\n    login_session_id="123",\n    type="user_input",\n)\nprint(login_session.bridge_id)',
+      },
+      go: {
+        method: 'client.Bridges.LoginSessions.Steps.Submit',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tloginSession, err := client.Bridges.LoginSessions.Steps.Submit(\n\t\tcontext.TODO(),\n\t\t"x",\n\t\tbeeperdesktopapi.BridgeLoginSessionStepSubmitParams{\n\t\t\tBridgeID:       "local-whatsapp",\n\t\t\tLoginSessionID: "123",\n\t\t\tType:           beeperdesktopapi.BridgeLoginSessionStepSubmitParamsTypeUserInput,\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", loginSession.BridgeID)\n}\n',
+      },
+      cli: {
+        method: 'steps submit',
+        example:
+          "beeper-desktop bridges:login-sessions:steps submit \\\n  --access-token 'My Access Token' \\\n  --bridge-id local-whatsapp \\\n  --login-session-id 123 \\\n  --step-id x \\\n  --type user_input",
+      },
+      php: {
+        method: 'bridges->loginSessions->steps->submit',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$loginSession = $client->bridges->loginSessions->steps->submit(\n  'x',\n  bridgeID: 'local-whatsapp',\n  loginSessionID: '123',\n  type: 'user_input',\n  fields: ['foo' => 'string'],\n  lastURL: 'lastURL',\n  source: 'api',\n);\n\nvar_dump($loginSession);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/bridges/$BRIDGE_ID/login-sessions/$LOGIN_SESSION_ID/steps/$STEP_ID \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "type": "user_input"\n        }\'',
+      },
+    },
+  },
+  {
     name: 'retrieve',
     endpoint: '/v1/chats/{chatID}',
     httpMethod: 'get',
     summary: 'Retrieve chat details',
-    description: 'Retrieve chat details including metadata, participants, and latest message',
+    description: 'Retrieve chat details, including metadata, participants, and the latest message.',
     stainlessPath: '(resource) chats > (method) retrieve',
     qualified: 'client.chats.retrieve',
     params: ['chatID: string;', 'maxParticipantCount?: number;'],
     response:
       "{ id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }",
     markdown:
-      "## retrieve\n\n`client.chats.retrieve(chatID: string, maxParticipantCount?: number): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**get** `/v1/chats/{chatID}`\n\nRetrieve chat details including metadata, participants, and latest message\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `maxParticipantCount?: number`\n  Maximum number of participants to return. Use -1 for all; otherwise 0-500. Defaults to 100. List and search endpoints return up to 20 participants per chat.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.retrieve('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat);\n```",
+      "## retrieve\n\n`client.chats.retrieve(chatID: string, maxParticipantCount?: number): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**get** `/v1/chats/{chatID}`\n\nRetrieve chat details, including metadata, participants, and the latest message.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `maxParticipantCount?: number`\n  Maximum number of participants to return. Use -1 for all; otherwise 0-500. Defaults to 100. List and search endpoints return up to 20 participants per chat.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.retrieve('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat);\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.retrieve',
@@ -317,7 +730,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'chats retrieve',
         example:
-          "beeper-desktop-cli chats retrieve \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+          "beeper-desktop chats retrieve \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'chats->retrieve',
@@ -368,7 +781,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'chats create',
         example:
-          "beeper-desktop-cli chats create \\\n  --access-token 'My Access Token' \\\n  --account-id accountID \\\n  --participant-id string \\\n  --type single",
+          "beeper-desktop chats create \\\n  --access-token 'My Access Token' \\\n  --account-id accountID \\\n  --participant-id string \\\n  --type single",
       },
       php: {
         method: 'chats->create',
@@ -387,7 +800,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: 'Start a direct chat',
     description:
-      'Resolve a user/contact and open a direct chat. Reuses and returns an existing direct chat when one is found. Available in Beeper Desktop v4.2.808+.',
+      'Resolve a user/contact and open a direct chat. Reuses and returns an existing direct chat when one is found. Available in Beeper v4.2.808+.',
     stainlessPath: '(resource) chats > (method) start',
     qualified: 'client.chats.start',
     params: [
@@ -399,7 +812,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }",
     markdown:
-      "## start\n\n`client.chats.start(accountID: string, user: { id?: string; email?: string; fullName?: string; phoneNumber?: string; username?: string; }, allowInvite?: boolean, messageText?: string): object`\n\n**post** `/v1/chats/start`\n\nResolve a user/contact and open a direct chat. Reuses and returns an existing direct chat when one is found. Available in Beeper Desktop v4.2.808+.\n\n### Parameters\n\n- `accountID: string`\n  Account to create or start the chat on.\n\n- `user: { id?: string; email?: string; fullName?: string; phoneNumber?: string; username?: string; }`\n  Merged user-like contact payload used to resolve the best identifier.\n  - `id?: string`\n    Known user ID when available.\n  - `email?: string`\n    Email candidate.\n  - `fullName?: string`\n    Display name hint used for ranking only.\n  - `phoneNumber?: string`\n    Phone number candidate (E.164 preferred).\n  - `username?: string`\n    Username/handle candidate.\n\n- `allowInvite?: boolean`\n  Whether invite-based DM creation is allowed when required by the platform.\n\n- `messageText?: string`\n  Optional first message content if the platform requires it to create the chat.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: user[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: object; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: object; participantActions?: object; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: object; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.chats.start({\n  accountID: 'accountID',\n  user: {},\n});\n\nconsole.log(response);\n```",
+      "## start\n\n`client.chats.start(accountID: string, user: { id?: string; email?: string; fullName?: string; phoneNumber?: string; username?: string; }, allowInvite?: boolean, messageText?: string): object`\n\n**post** `/v1/chats/start`\n\nResolve a user/contact and open a direct chat. Reuses and returns an existing direct chat when one is found. Available in Beeper v4.2.808+.\n\n### Parameters\n\n- `accountID: string`\n  Account to create or start the chat on.\n\n- `user: { id?: string; email?: string; fullName?: string; phoneNumber?: string; username?: string; }`\n  Contact-like user payload used to resolve the best identifier.\n  - `id?: string`\n    Known user ID when available.\n  - `email?: string`\n    Email candidate.\n  - `fullName?: string`\n    Display name hint used for ranking only.\n  - `phoneNumber?: string`\n    Phone number candidate (E.164 preferred).\n  - `username?: string`\n    Username/handle candidate.\n\n- `allowInvite?: boolean`\n  Whether invite-based DM creation is allowed when required by the platform.\n\n- `messageText?: string`\n  Optional first message content if the platform requires it to create the chat.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: user[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: object; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: object; participantActions?: object; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: object; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.chats.start({\n  accountID: 'accountID',\n  user: {},\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.start',
@@ -419,7 +832,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'chats start',
         example:
-          "beeper-desktop-cli chats start \\\n  --access-token 'My Access Token' \\\n  --account-id accountID \\\n  --user '{}'",
+          "beeper-desktop chats start \\\n  --access-token 'My Access Token' \\\n  --account-id accountID \\\n  --user '{}'",
       },
       php: {
         method: 'chats->start',
@@ -464,7 +877,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       cli: {
         method: 'chats list',
-        example: "beeper-desktop-cli chats list \\\n  --access-token 'My Access Token'",
+        example: "beeper-desktop chats list \\\n  --access-token 'My Access Token'",
       },
       php: {
         method: 'chats->list',
@@ -502,7 +915,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }",
     markdown:
-      "## search\n\n`client.chats.search(accountIDs?: string[], cursor?: string, direction?: 'after' | 'before', inbox?: 'primary' | 'low-priority' | 'archive', includeMuted?: boolean, lastActivityAfter?: string, lastActivityBefore?: string, limit?: number, query?: string, scope?: 'titles' | 'participants', type?: 'single' | 'group' | 'any', unreadOnly?: boolean): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**get** `/v1/chats/search`\n\nSearch chats by title, network, or participant names.\n\n### Parameters\n\n- `accountIDs?: string[]`\n  Provide an array of account IDs to filter chats from specific messaging accounts only\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n- `inbox?: 'primary' | 'low-priority' | 'archive'`\n  Filter by inbox type: \"primary\" (non-archived, non-low-priority), \"low-priority\", or \"archive\". If not specified, shows all chats.\n\n- `includeMuted?: boolean`\n  Include chats marked as Muted by the user, which are usually less important. Default: true. Set to false if the user wants a more refined search.\n\n- `lastActivityAfter?: string`\n  Provide an ISO datetime string to only retrieve chats with last activity after this time\n\n- `lastActivityBefore?: string`\n  Provide an ISO datetime string to only retrieve chats with last activity before this time\n\n- `limit?: number`\n  Set the maximum number of chats to retrieve. Valid range: 1-200, default is 50\n\n- `query?: string`\n  Literal token search (non-semantic). Use single words users type (e.g., \"dinner\"). When multiple words provided, ALL must match. Case-insensitive.\n\n- `scope?: 'titles' | 'participants'`\n  Search scope: 'titles' matches title + network; 'participants' matches participant names.\n\n- `type?: 'single' | 'group' | 'any'`\n  Specify the type of chats to retrieve: use \"single\" for direct messages, \"group\" for group chats, or \"any\" to get all types\n\n- `unreadOnly?: boolean`\n  Set to true to only retrieve chats that have unread messages\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const chat of client.chats.search()) {\n  console.log(chat);\n}\n```",
+      "## search\n\n`client.chats.search(accountIDs?: string[], cursor?: string, direction?: 'after' | 'before', inbox?: 'primary' | 'low-priority' | 'archive', includeMuted?: boolean, lastActivityAfter?: string, lastActivityBefore?: string, limit?: number, query?: string, scope?: 'titles' | 'participants', type?: 'single' | 'group' | 'any', unreadOnly?: boolean): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**get** `/v1/chats/search`\n\nSearch chats by title, network, or participant names.\n\n### Parameters\n\n- `accountIDs?: string[]`\n  Limit results to specific chat accounts.\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n- `inbox?: 'primary' | 'low-priority' | 'archive'`\n  Filter by inbox type: \"primary\" (non-archived, non-low-priority), \"low-priority\", or \"archive\". If not specified, shows all chats.\n\n- `includeMuted?: boolean`\n  Include chats marked as Muted by the user, which are usually less important. Default: true. Set to false if the user wants a more refined search.\n\n- `lastActivityAfter?: string`\n  Only include chats with last activity after this ISO 8601 datetime.\n\n- `lastActivityBefore?: string`\n  Only include chats with last activity before this ISO 8601 datetime.\n\n- `limit?: number`\n  Set the maximum number of chats to retrieve. Valid range: 1-200, default is 50\n\n- `query?: string`\n  Literal chat search. Use words the user typed, such as \"dinner\". When multiple words are provided, all must match. Case-insensitive.\n\n- `scope?: 'titles' | 'participants'`\n  Search scope: 'titles' matches title + network; 'participants' matches participant names.\n\n- `type?: 'single' | 'group' | 'any'`\n  Specify the type of chats to retrieve: use \"single\" for direct messages, \"group\" for group chats, or \"any\" to get all types\n\n- `unreadOnly?: boolean`\n  Set to true to only retrieve chats that have unread messages\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const chat of client.chats.search()) {\n  console.log(chat);\n}\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.search',
@@ -521,7 +934,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       cli: {
         method: 'chats search',
-        example: "beeper-desktop-cli chats search \\\n  --access-token 'My Access Token'",
+        example: "beeper-desktop chats search \\\n  --access-token 'My Access Token'",
       },
       php: {
         method: 'chats->search',
@@ -540,12 +953,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: 'Archive or unarchive a chat',
     description:
-      'Archive or unarchive a chat. Set archived=true to move to archive, archived=false to move back to inbox',
+      'Archive or unarchive a chat. Set archived=true to move it to Archive, or archived=false to move it back to the inbox.',
     stainlessPath: '(resource) chats > (method) archive',
     qualified: 'client.chats.archive',
     params: ['chatID: string;', 'archived?: boolean;'],
     markdown:
-      "## archive\n\n`client.chats.archive(chatID: string, archived?: boolean): void`\n\n**post** `/v1/chats/{chatID}/archive`\n\nArchive or unarchive a chat. Set archived=true to move to archive, archived=false to move back to inbox\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `archived?: boolean`\n  True to archive, false to unarchive\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.chats.archive('!NCdzlIaMjZUmvmvyHU:beeper.com')\n```",
+      "## archive\n\n`client.chats.archive(chatID: string, archived?: boolean): void`\n\n**post** `/v1/chats/{chatID}/archive`\n\nArchive or unarchive a chat. Set archived=true to move it to Archive, or archived=false to move it back to the inbox.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `archived?: boolean`\n  True to archive, false to unarchive\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.chats.archive('!NCdzlIaMjZUmvmvyHU:beeper.com')\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.archive',
@@ -565,7 +978,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'chats archive',
         example:
-          "beeper-desktop-cli chats archive \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+          "beeper-desktop chats archive \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'chats->archive',
@@ -584,7 +997,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'patch',
     summary: 'Update chat',
     description:
-      'Update supported chat fields. Non-empty draft objects are accepted only when the current draft is empty. Send draft=null to clear the draft before setting new draft text or attachments.',
+      'Update supported chat fields. Non-empty drafts are accepted only when the current draft is empty. Send draft=null to clear the draft before setting new draft text or attachments.',
     stainlessPath: '(resource) chats > (method) update',
     qualified: 'client.chats.update',
     params: [
@@ -602,7 +1015,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }",
     markdown:
-      "## update\n\n`client.chats.update(chatID: string, description?: string, draft?: { text: string; attachments?: object; }, imgURL?: string, isArchived?: boolean, isLowPriority?: boolean, isMuted?: boolean, isPinned?: boolean, messageExpirySeconds?: number, title?: string): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**patch** `/v1/chats/{chatID}`\n\nUpdate supported chat fields. Non-empty draft objects are accepted only when the current draft is empty. Send draft=null to clear the draft before setting new draft text or attachments.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `description?: string`\n  Group chat description/topic. Support depends on the chat account and chat permissions.\n\n- `draft?: { text: string; attachments?: object; }`\n  Draft object to set or clear. Non-empty drafts are only accepted when the current draft is empty. Send draft=null to clear text and attachments together before setting a new draft.\n  - `text: string`\n    Draft text. Plain text and Markdown are converted to Matrix HTML with the same rules used by send and edit.\n  - `attachments?: object`\n    Draft attachments keyed by attachment ID. Each attachment must reference an uploadID returned by the upload file endpoint.\n\n- `imgURL?: string`\n  Local filesystem path to a group chat avatar image. Support depends on the chat account and chat permissions.\n\n- `isArchived?: boolean`\n  Archive or unarchive the chat.\n\n- `isLowPriority?: boolean`\n  Mark or unmark the chat as low priority when supported by the account.\n\n- `isMuted?: boolean`\n  Mute or unmute the chat.\n\n- `isPinned?: boolean`\n  Pin or unpin the chat when supported by the account.\n\n- `messageExpirySeconds?: number`\n  Disappearing-message timer in seconds, or null to clear when supported.\n\n- `title?: string`\n  Custom chat title. Support depends on the chat account and chat permissions.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.update('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat);\n```",
+      "## update\n\n`client.chats.update(chatID: string, description?: string, draft?: { text: string; attachments?: object; }, imgURL?: string, isArchived?: boolean, isLowPriority?: boolean, isMuted?: boolean, isPinned?: boolean, messageExpirySeconds?: number, title?: string): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**patch** `/v1/chats/{chatID}`\n\nUpdate supported chat fields. Non-empty drafts are accepted only when the current draft is empty. Send draft=null to clear the draft before setting new draft text or attachments.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `description?: string`\n  Group chat description/topic. Support depends on the chat account and chat permissions.\n\n- `draft?: { text: string; attachments?: object; }`\n  Draft object to set or clear. Non-empty drafts are only accepted when the current draft is empty. Send draft=null to clear text and attachments together before setting a new draft.\n  - `text: string`\n    Draft text. Plain text and Markdown are converted to Beeper rich text with the same rules used by send and edit.\n  - `attachments?: object`\n    Draft attachments keyed by attachment ID. Each attachment must reference an uploadID returned by the upload file endpoint.\n\n- `imgURL?: string`\n  Local filesystem path to a group chat avatar image. Support depends on the chat account and chat permissions.\n\n- `isArchived?: boolean`\n  Archive or unarchive the chat.\n\n- `isLowPriority?: boolean`\n  Mark or unmark the chat as low priority when supported by the account.\n\n- `isMuted?: boolean`\n  Mute or unmute the chat.\n\n- `isPinned?: boolean`\n  Pin or unpin the chat when supported by the account.\n\n- `messageExpirySeconds?: number`\n  Disappearing-message timer in seconds, or null to clear when supported.\n\n- `title?: string`\n  Custom chat title. Support depends on the chat account and chat permissions.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.update('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat);\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.update',
@@ -622,7 +1035,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'chats update',
         example:
-          "beeper-desktop-cli chats update \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+          "beeper-desktop chats update \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'chats->update',
@@ -647,7 +1060,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }",
     markdown:
-      "## mark_read\n\n`client.chats.markRead(chatID: string, messageID?: string): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**post** `/v1/chats/{chatID}/read`\n\nMark a chat as read, optionally through a specific message ID.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `messageID?: string`\n  Optional message ID to mark read through.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.markRead('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat);\n```",
+      "## mark_read\n\n`client.chats.markRead(chatID: string, messageID?: string): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**post** `/v1/chats/{chatID}/read`\n\nMark a chat as read, optionally through a specific message ID.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `messageID?: string`\n  Optional message ID to mark read through.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.markRead('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat);\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.markRead',
@@ -667,7 +1080,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'chats mark_read',
         example:
-          "beeper-desktop-cli chats mark-read \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+          "beeper-desktop chats mark-read \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'chats->markRead',
@@ -692,7 +1105,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }",
     markdown:
-      "## mark_unread\n\n`client.chats.markUnread(chatID: string, messageID?: string): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**post** `/v1/chats/{chatID}/unread`\n\nMark a chat as unread, optionally from a specific message ID.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `messageID?: string`\n  Optional message ID to mark unread from.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.markUnread('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat);\n```",
+      "## mark_unread\n\n`client.chats.markUnread(chatID: string, messageID?: string): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**post** `/v1/chats/{chatID}/unread`\n\nMark a chat as unread, optionally from a specific message ID.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `messageID?: string`\n  Optional message ID to mark unread from.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.markUnread('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat);\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.markUnread',
@@ -712,7 +1125,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'chats mark_unread',
         example:
-          "beeper-desktop-cli chats mark-unread \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+          "beeper-desktop chats mark-unread \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'chats->markUnread',
@@ -731,14 +1144,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: 'Notify anyway',
     description:
-      'Force a delivery notification when supported by the underlying network. Currently intended for iMessage on macOS; unsupported networks return an error.',
+      'Send a notification despite the recipient focus state when the network supports it. Currently intended for iMessage on macOS; unsupported networks return an error.',
     stainlessPath: '(resource) chats > (method) notify_anyway',
     qualified: 'client.chats.notifyAnyway',
     params: ['chatID: string;'],
     response:
       "{ id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }",
     markdown:
-      "## notify_anyway\n\n`client.chats.notifyAnyway(chatID: string): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**post** `/v1/chats/{chatID}/notify-anyway`\n\nForce a delivery notification when supported by the underlying network. Currently intended for iMessage on macOS; unsupported networks return an error.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.notifyAnyway('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat);\n```",
+      "## notify_anyway\n\n`client.chats.notifyAnyway(chatID: string): { id: string; accountID: string; network: string; participants: object; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: object; description?: string; draft?: object; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: object; snooze?: object; unreadMentionsCount?: number; }`\n\n**post** `/v1/chats/{chatID}/notify-anyway`\n\nSend a notification despite the recipient focus state when the network supports it. Currently intended for iMessage on macOS; unsupported networks return an error.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n### Returns\n\n- `{ id: string; accountID: string; network: string; participants: { hasMore: boolean; items: object[]; total: number; }; title: string; type: 'single' | 'group'; unreadCount: number; capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: object; description?: object; disappearingTimer?: object; title?: object; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }; description?: string; draft?: { text: string; attachments?: object; }; imgURL?: string; isArchived?: boolean; isLowPriority?: boolean; isMarkedUnread?: boolean; isMuted?: boolean; isPinned?: boolean; isReadOnly?: boolean; lastActivity?: string; lastReadMessageSortKey?: string; localChatID?: string; messageExpirySeconds?: number; reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }; snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }; unreadMentionsCount?: number; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `network: string`\n  - `participants: { hasMore: boolean; items: { id: string; cannotMessage?: boolean; email?: string; fullName?: string; imgURL?: string; isSelf?: boolean; phoneNumber?: string; username?: string; }[]; total: number; }`\n  - `title: string`\n  - `type: 'single' | 'group'`\n  - `unreadCount: number`\n  - `capabilities?: { allowedReactions?: string[]; archive?: boolean; attachments?: object; customEmojiReactions?: boolean; delete?: -2 | -1 | 0 | 1 | 2; deleteChat?: boolean; deleteChatForEveryone?: boolean; deleteForMe?: boolean; deleteMaxAge?: number; disappearingTimer?: { omitEmptyTimer?: boolean; timers?: number[]; types?: 'afterRead' | 'afterSend'[]; }; edit?: -2 | -1 | 0 | 1 | 2; editMaxAge?: number; editMaxCount?: number; formatting?: object; locationMessage?: -2 | -1 | 0 | 1 | 2; markAsUnread?: boolean; maxTextLength?: number; messageRequest?: { acceptWithButton?: -2 | -1 | 0 | 1 | 2; acceptWithMessage?: -2 | -1 | 0 | 1 | 2; }; participantActions?: { ban?: -2 | -1 | 0 | 1 | 2; invite?: -2 | -1 | 0 | 1 | 2; kick?: -2 | -1 | 0 | 1 | 2; leave?: -2 | -1 | 0 | 1 | 2; revokeInvite?: -2 | -1 | 0 | 1 | 2; }; poll?: -2 | -1 | 0 | 1 | 2; reaction?: -2 | -1 | 0 | 1 | 2; reactionCount?: number; readReceipts?: boolean; reply?: -2 | -1 | 0 | 1 | 2; state?: { avatar?: { level: -2 | -1 | 0 | 1 | 2; }; description?: { level: -2 | -1 | 0 | 1 | 2; }; disappearingTimer?: { level: -2 | -1 | 0 | 1 | 2; }; title?: { level: -2 | -1 | 0 | 1 | 2; }; }; thread?: -2 | -1 | 0 | 1 | 2; typingNotifications?: boolean; }`\n  - `description?: string`\n  - `draft?: { text: string; attachments?: object; }`\n  - `imgURL?: string`\n  - `isArchived?: boolean`\n  - `isLowPriority?: boolean`\n  - `isMarkedUnread?: boolean`\n  - `isMuted?: boolean`\n  - `isPinned?: boolean`\n  - `isReadOnly?: boolean`\n  - `lastActivity?: string`\n  - `lastReadMessageSortKey?: string`\n  - `localChatID?: string`\n  - `messageExpirySeconds?: number`\n  - `reminder?: { dismissOnIncomingMessage?: boolean; remindAt?: string; }`\n  - `snooze?: { snoozeUntil?: string; userSnoozedAt?: string; }`\n  - `unreadMentionsCount?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst chat = await client.chats.notifyAnyway('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(chat);\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.notifyAnyway',
@@ -758,7 +1171,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'chats notify_anyway',
         example:
-          "beeper-desktop-cli chats notify-anyway \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+          "beeper-desktop chats notify-anyway \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'chats->notifyAnyway',
@@ -776,12 +1189,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/v1/chats/{chatID}/reminders',
     httpMethod: 'post',
     summary: 'Create a chat reminder',
-    description: 'Set a reminder for a chat at a specific time',
+    description: 'Set a reminder for a chat at a specific time.',
     stainlessPath: '(resource) chats.reminders > (method) create',
     qualified: 'client.chats.reminders.create',
     params: ['chatID: string;', 'reminder: { remindAt: string; dismissOnIncomingMessage?: boolean; };'],
     markdown:
-      "## create\n\n`client.chats.reminders.create(chatID: string, reminder: { remindAt: string; dismissOnIncomingMessage?: boolean; }): void`\n\n**post** `/v1/chats/{chatID}/reminders`\n\nSet a reminder for a chat at a specific time\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `reminder: { remindAt: string; dismissOnIncomingMessage?: boolean; }`\n  Reminder configuration\n  - `remindAt: string`\n    Timestamp when the reminder should trigger.\n  - `dismissOnIncomingMessage?: boolean`\n    Cancel reminder if someone messages in the chat\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', { reminder: { remindAt: '2025-08-31T23:30:12.520Z' } })\n```",
+      "## create\n\n`client.chats.reminders.create(chatID: string, reminder: { remindAt: string; dismissOnIncomingMessage?: boolean; }): void`\n\n**post** `/v1/chats/{chatID}/reminders`\n\nSet a reminder for a chat at a specific time.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `reminder: { remindAt: string; dismissOnIncomingMessage?: boolean; }`\n  Reminder configuration\n  - `remindAt: string`\n    Timestamp when the reminder should trigger.\n  - `dismissOnIncomingMessage?: boolean`\n    Cancel reminder if someone messages in the chat\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.chats.reminders.create('!NCdzlIaMjZUmvmvyHU:beeper.com', { reminder: { remindAt: '2025-08-31T23:30:12.520Z' } })\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.reminders.create',
@@ -801,7 +1214,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'reminders create',
         example:
-          "beeper-desktop-cli chats:reminders create \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --reminder \"{remindAt: '2025-08-31T23:30:12.520Z'}\"",
+          "beeper-desktop chats:reminders create \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --reminder \"{remindAt: '2025-08-31T23:30:12.520Z'}\"",
       },
       php: {
         method: 'chats->reminders->create',
@@ -819,12 +1232,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/v1/chats/{chatID}/reminders',
     httpMethod: 'delete',
     summary: 'Delete a chat reminder',
-    description: 'Clear an existing reminder from a chat',
+    description: 'Clear an existing reminder from a chat.',
     stainlessPath: '(resource) chats.reminders > (method) delete',
     qualified: 'client.chats.reminders.delete',
     params: ['chatID: string;'],
     markdown:
-      "## delete\n\n`client.chats.reminders.delete(chatID: string): void`\n\n**delete** `/v1/chats/{chatID}/reminders`\n\nClear an existing reminder from a chat\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.chats.reminders.delete('!NCdzlIaMjZUmvmvyHU:beeper.com')\n```",
+      "## delete\n\n`client.chats.reminders.delete(chatID: string): void`\n\n**delete** `/v1/chats/{chatID}/reminders`\n\nClear an existing reminder from a chat.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.chats.reminders.delete('!NCdzlIaMjZUmvmvyHU:beeper.com')\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.reminders.delete',
@@ -844,7 +1257,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'reminders delete',
         example:
-          "beeper-desktop-cli chats:reminders delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+          "beeper-desktop chats:reminders delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'chats->reminders->delete',
@@ -869,7 +1282,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       '{ chatID: string; messageID: string; reactionKey: string; success: true; transactionID: string; }',
     markdown:
-      "## add\n\n`client.chats.messages.reactions.add(chatID: string, messageID: string, reactionKey: string, transactionID?: string): { chatID: string; messageID: string; reactionKey: string; success: true; transactionID: string; }`\n\n**post** `/v1/chats/{chatID}/messages/{messageID}/reactions`\n\nAdd a reaction to an existing message.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `messageID: string`\n  Message ID.\n\n- `reactionKey: string`\n  Reaction key to add (emoji, shortcode, or custom emoji key)\n\n- `transactionID?: string`\n  Optional transaction ID for deduplication and send tracking\n\n### Returns\n\n- `{ chatID: string; messageID: string; reactionKey: string; success: true; transactionID: string; }`\n\n  - `chatID: string`\n  - `messageID: string`\n  - `reactionKey: string`\n  - `success: true`\n  - `transactionID: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.chats.messages.reactions.add('1343993', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', reactionKey: 'x' });\n\nconsole.log(response);\n```",
+      "## add\n\n`client.chats.messages.reactions.add(chatID: string, messageID: string, reactionKey: string, transactionID?: string): { chatID: string; messageID: string; reactionKey: string; success: true; transactionID: string; }`\n\n**post** `/v1/chats/{chatID}/messages/{messageID}/reactions`\n\nAdd a reaction to an existing message.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `messageID: string`\n  Message ID.\n\n- `reactionKey: string`\n  Reaction key to add (emoji, shortcode, or custom emoji key)\n\n- `transactionID?: string`\n  Optional transaction ID for deduplication and send tracking\n\n### Returns\n\n- `{ chatID: string; messageID: string; reactionKey: string; success: true; transactionID: string; }`\n\n  - `chatID: string`\n  - `messageID: string`\n  - `reactionKey: string`\n  - `success: true`\n  - `transactionID: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.chats.messages.reactions.add('1343993', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', reactionKey: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.messages.reactions.add',
@@ -889,7 +1302,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'reactions add',
         example:
-          "beeper-desktop-cli chats:messages:reactions add \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993 \\\n  --reaction-key x",
+          "beeper-desktop chats:messages:reactions add \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993 \\\n  --reaction-key x",
       },
       php: {
         method: 'chats->messages->reactions->add',
@@ -913,7 +1326,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     params: ['chatID: string;', 'messageID: string;', 'reactionKey: string;'],
     response: '{ chatID: string; messageID: string; reactionKey: string; success: true; }',
     markdown:
-      "## delete\n\n`client.chats.messages.reactions.delete(chatID: string, messageID: string, reactionKey: string): { chatID: string; messageID: string; reactionKey: string; success: true; }`\n\n**delete** `/v1/chats/{chatID}/messages/{messageID}/reactions/{reactionKey}`\n\nRemove the reaction added by the authenticated user from an existing message.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `messageID: string`\n  Message ID.\n\n- `reactionKey: string`\n  Reaction key to remove (emoji, shortcode, or custom emoji key)\n\n### Returns\n\n- `{ chatID: string; messageID: string; reactionKey: string; success: true; }`\n\n  - `chatID: string`\n  - `messageID: string`\n  - `reactionKey: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst reaction = await client.chats.messages.reactions.delete('x', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', messageID: '1343993' });\n\nconsole.log(reaction);\n```",
+      "## delete\n\n`client.chats.messages.reactions.delete(chatID: string, messageID: string, reactionKey: string): { chatID: string; messageID: string; reactionKey: string; success: true; }`\n\n**delete** `/v1/chats/{chatID}/messages/{messageID}/reactions/{reactionKey}`\n\nRemove the reaction added by the authenticated user from an existing message.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `messageID: string`\n  Message ID.\n\n- `reactionKey: string`\n  Reaction key to remove (emoji, shortcode, or custom emoji key)\n\n### Returns\n\n- `{ chatID: string; messageID: string; reactionKey: string; success: true; }`\n\n  - `chatID: string`\n  - `messageID: string`\n  - `reactionKey: string`\n  - `success: true`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst reaction = await client.chats.messages.reactions.delete('x', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', messageID: '1343993' });\n\nconsole.log(reaction);\n```",
     perLanguage: {
       typescript: {
         method: 'client.chats.messages.reactions.delete',
@@ -933,7 +1346,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'reactions delete',
         example:
-          "beeper-desktop-cli chats:messages:reactions delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993 \\\n  --reaction-key x",
+          "beeper-desktop chats:messages:reactions delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993 \\\n  --reaction-key x",
       },
       php: {
         method: 'chats->messages->reactions->delete',
@@ -972,7 +1385,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: object; srcURL?: string; transcription?: object; }[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }",
     markdown:
-      "## search\n\n`client.messages.search(accountIDs?: string[], chatIDs?: string[], chatType?: 'group' | 'single', cursor?: string, dateAfter?: string, dateBefore?: string, direction?: 'after' | 'before', excludeLowPriority?: boolean, includeMuted?: boolean, limit?: number, mediaTypes?: 'any' | 'video' | 'image' | 'link' | 'file'[], query?: string, sender?: string): { id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: attachment[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: object[]; mentions?: string[]; reactions?: reaction[]; seen?: boolean | string | object; senderName?: string; sendStatus?: object; text?: string; type?: string; }`\n\n**get** `/v1/messages/search`\n\nSearch messages across chats.\n\n### Parameters\n\n- `accountIDs?: string[]`\n  Limit search to specific account IDs.\n\n- `chatIDs?: string[]`\n  Limit search to specific chat IDs.\n\n- `chatType?: 'group' | 'single'`\n  Filter by chat type: 'group' for group chats, 'single' for 1:1 chats.\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `dateAfter?: string`\n  Only include messages with timestamp strictly after this ISO 8601 datetime (e.g., '2024-07-01T00:00:00Z' or '2024-07-01T00:00:00+02:00').\n\n- `dateBefore?: string`\n  Only include messages with timestamp strictly before this ISO 8601 datetime (e.g., '2024-07-31T23:59:59Z' or '2024-07-31T23:59:59+02:00').\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n- `excludeLowPriority?: boolean`\n  Exclude messages marked Low Priority by the user. Default: true. Set to false to include all.\n\n- `includeMuted?: boolean`\n  Include messages in chats marked as Muted by the user, which are usually less important. Default: true. Set to false if the user wants a more refined search.\n\n- `limit?: number`\n  Maximum number of messages to return.\n\n- `mediaTypes?: 'any' | 'video' | 'image' | 'link' | 'file'[]`\n  Filter messages by media types. Use ['any'] for any media type, or specify exact types like ['video', 'image']. Omit for no media filtering.\n\n- `query?: string`\n  Literal word search (non-semantic). Finds messages containing these EXACT words in any order. Use single words users actually type, not concepts or phrases. Example: use \"dinner\" not \"dinner plans\", use \"sick\" not \"health issues\". If omitted, returns results filtered only by other parameters.\n\n- `sender?: string`\n  Filter by sender: 'me' (messages sent by the authenticated user), 'others' (messages sent by others), or a specific user ID string (user.id).\n\n### Returns\n\n- `{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: object; srcURL?: string; transcription?: object; }[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `chatID: string`\n  - `senderID: string`\n  - `sortKey: string`\n  - `timestamp: string`\n  - `attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: { height?: number; width?: number; }; srcURL?: string; transcription?: { engine: string; transcription: string; language?: string; }; }[]`\n  - `editedTimestamp?: string`\n  - `isDeleted?: boolean`\n  - `isHidden?: boolean`\n  - `isSender?: boolean`\n  - `isUnread?: boolean`\n  - `linkedMessageID?: string`\n  - `links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]`\n  - `mentions?: string[]`\n  - `reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]`\n  - `seen?: boolean | string | object`\n  - `senderName?: string`\n  - `sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }`\n  - `text?: string`\n  - `type?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const message of client.messages.search()) {\n  console.log(message);\n}\n```",
+      "## search\n\n`client.messages.search(accountIDs?: string[], chatIDs?: string[], chatType?: 'group' | 'single', cursor?: string, dateAfter?: string, dateBefore?: string, direction?: 'after' | 'before', excludeLowPriority?: boolean, includeMuted?: boolean, limit?: number, mediaTypes?: 'any' | 'video' | 'image' | 'link' | 'file'[], query?: string, sender?: string): { id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: attachment[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: object[]; mentions?: string[]; reactions?: reaction[]; seen?: boolean | string | object; senderName?: string; sendStatus?: object; text?: string; type?: string; }`\n\n**get** `/v1/messages/search`\n\nSearch messages across chats.\n\n### Parameters\n\n- `accountIDs?: string[]`\n  Limit search to specific account IDs.\n\n- `chatIDs?: string[]`\n  Limit search to specific chat IDs.\n\n- `chatType?: 'group' | 'single'`\n  Filter by chat type: 'group' for group chats, 'single' for 1:1 chats.\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `dateAfter?: string`\n  Only include messages with timestamp strictly after this ISO 8601 datetime (e.g., '2024-07-01T00:00:00Z' or '2024-07-01T00:00:00+02:00').\n\n- `dateBefore?: string`\n  Only include messages with timestamp strictly before this ISO 8601 datetime (e.g., '2024-07-31T23:59:59Z' or '2024-07-31T23:59:59+02:00').\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n- `excludeLowPriority?: boolean`\n  Exclude messages marked Low Priority by the user. Default: true. Set to false to include all.\n\n- `includeMuted?: boolean`\n  Include messages in chats marked as Muted by the user, which are usually less important. Default: true. Set to false if the user wants a more refined search.\n\n- `limit?: number`\n  Maximum number of messages to return.\n\n- `mediaTypes?: 'any' | 'video' | 'image' | 'link' | 'file'[]`\n  Filter messages by media types. Use ['any'] for any media type, or specify exact types like ['video', 'image']. Omit for no media filtering.\n\n- `query?: string`\n  Literal word search. Finds messages containing these words in any order. Use words the user actually typed, not inferred concepts. Example: use \"dinner\" rather than \"dinner plans\". If omitted, returns results filtered only by the other parameters.\n\n- `sender?: string`\n  Filter by sender: 'me' (messages sent by the authenticated user), 'others' (messages sent by others), or a specific user ID string (user.id).\n\n### Returns\n\n- `{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: object; srcURL?: string; transcription?: object; }[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `chatID: string`\n  - `senderID: string`\n  - `sortKey: string`\n  - `timestamp: string`\n  - `attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: { height?: number; width?: number; }; srcURL?: string; transcription?: { engine: string; transcription: string; language?: string; }; }[]`\n  - `editedTimestamp?: string`\n  - `isDeleted?: boolean`\n  - `isHidden?: boolean`\n  - `isSender?: boolean`\n  - `isUnread?: boolean`\n  - `linkedMessageID?: string`\n  - `links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]`\n  - `mentions?: string[]`\n  - `reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]`\n  - `seen?: boolean | string | object`\n  - `senderName?: string`\n  - `sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }`\n  - `text?: string`\n  - `type?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const message of client.messages.search()) {\n  console.log(message);\n}\n```",
     perLanguage: {
       typescript: {
         method: 'client.messages.search',
@@ -991,7 +1404,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       cli: {
         method: 'messages search',
-        example: "beeper-desktop-cli messages search \\\n  --access-token 'My Access Token'",
+        example: "beeper-desktop messages search \\\n  --access-token 'My Access Token'",
       },
       php: {
         method: 'messages->search',
@@ -1016,7 +1429,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: object; srcURL?: string; transcription?: object; }[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }",
     markdown:
-      "## list\n\n`client.messages.list(chatID: string, cursor?: string, direction?: 'after' | 'before'): { id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: attachment[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: object[]; mentions?: string[]; reactions?: reaction[]; seen?: boolean | string | object; senderName?: string; sendStatus?: object; text?: string; type?: string; }`\n\n**get** `/v1/chats/{chatID}/messages`\n\nList all messages in a chat with cursor-based pagination. Sorted by timestamp.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n### Returns\n\n- `{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: object; srcURL?: string; transcription?: object; }[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `chatID: string`\n  - `senderID: string`\n  - `sortKey: string`\n  - `timestamp: string`\n  - `attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: { height?: number; width?: number; }; srcURL?: string; transcription?: { engine: string; transcription: string; language?: string; }; }[]`\n  - `editedTimestamp?: string`\n  - `isDeleted?: boolean`\n  - `isHidden?: boolean`\n  - `isSender?: boolean`\n  - `isUnread?: boolean`\n  - `linkedMessageID?: string`\n  - `links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]`\n  - `mentions?: string[]`\n  - `reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]`\n  - `seen?: boolean | string | object`\n  - `senderName?: string`\n  - `sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }`\n  - `text?: string`\n  - `type?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const message of client.messages.list('!NCdzlIaMjZUmvmvyHU:beeper.com')) {\n  console.log(message);\n}\n```",
+      "## list\n\n`client.messages.list(chatID: string, cursor?: string, direction?: 'after' | 'before'): { id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: attachment[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: object[]; mentions?: string[]; reactions?: reaction[]; seen?: boolean | string | object; senderName?: string; sendStatus?: object; text?: string; type?: string; }`\n\n**get** `/v1/chats/{chatID}/messages`\n\nList all messages in a chat with cursor-based pagination. Sorted by timestamp.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `cursor?: string`\n  Opaque pagination cursor; do not inspect. Use together with 'direction'.\n\n- `direction?: 'after' | 'before'`\n  Pagination direction used with 'cursor': 'before' fetches older results, 'after' fetches newer results. Defaults to 'before' when only 'cursor' is provided.\n\n### Returns\n\n- `{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: object; srcURL?: string; transcription?: object; }[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `chatID: string`\n  - `senderID: string`\n  - `sortKey: string`\n  - `timestamp: string`\n  - `attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: { height?: number; width?: number; }; srcURL?: string; transcription?: { engine: string; transcription: string; language?: string; }; }[]`\n  - `editedTimestamp?: string`\n  - `isDeleted?: boolean`\n  - `isHidden?: boolean`\n  - `isSender?: boolean`\n  - `isUnread?: boolean`\n  - `linkedMessageID?: string`\n  - `links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]`\n  - `mentions?: string[]`\n  - `reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]`\n  - `seen?: boolean | string | object`\n  - `senderName?: string`\n  - `sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }`\n  - `text?: string`\n  - `type?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\n// Automatically fetches more pages as needed.\nfor await (const message of client.messages.list('!NCdzlIaMjZUmvmvyHU:beeper.com')) {\n  console.log(message);\n}\n```",
     perLanguage: {
       typescript: {
         method: 'client.messages.list',
@@ -1036,7 +1449,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'messages list',
         example:
-          "beeper-desktop-cli messages list \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+          "beeper-desktop messages list \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'messages->list',
@@ -1066,7 +1479,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     ],
     response: '{ chatID: string; pendingMessageID: string; }',
     markdown:
-      "## send\n\n`client.messages.send(chatID: string, attachment?: { uploadID: string; duration?: number; fileName?: string; mimeType?: string; size?: { height: number; width: number; }; type?: 'image' | 'video' | 'audio' | 'file' | 'gif' | 'voice-note' | 'sticker'; }, replyToMessageID?: string, text?: string): { chatID: string; pendingMessageID: string; }`\n\n**post** `/v1/chats/{chatID}/messages`\n\nSend a text message to a specific chat. Supports replying to existing messages. Returns a pending message ID.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `attachment?: { uploadID: string; duration?: number; fileName?: string; mimeType?: string; size?: { height: number; width: number; }; type?: 'image' | 'video' | 'audio' | 'file' | 'gif' | 'voice-note' | 'sticker'; }`\n  Single attachment to send with the message\n  - `uploadID: string`\n    Upload ID from uploadAsset endpoint. Required to reference uploaded files.\n  - `duration?: number`\n    Duration in seconds (optional override of cached value)\n  - `fileName?: string`\n    Filename (optional override of cached value)\n  - `mimeType?: string`\n    MIME type (optional override of cached value)\n  - `size?: { height: number; width: number; }`\n    Dimensions (optional override of cached value)\n  - `type?: 'image' | 'video' | 'audio' | 'file' | 'gif' | 'voice-note' | 'sticker'`\n    Attachment type hint (image, video, audio, file, gif, voice-note, sticker). If omitted, auto-detected from mimeType\n\n- `replyToMessageID?: string`\n  Provide a message ID to send this as a reply to an existing message\n\n- `text?: string`\n  Draft text. Plain text and Markdown are converted to Matrix HTML with the same rules used by send and edit.\n\n### Returns\n\n- `{ chatID: string; pendingMessageID: string; }`\n\n  - `chatID: string`\n  - `pendingMessageID: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.messages.send('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(response);\n```",
+      "## send\n\n`client.messages.send(chatID: string, attachment?: { uploadID: string; duration?: number; fileName?: string; mimeType?: string; size?: { height: number; width: number; }; type?: 'image' | 'video' | 'audio' | 'file' | 'gif' | 'voice-note' | 'sticker'; }, replyToMessageID?: string, text?: string): { chatID: string; pendingMessageID: string; }`\n\n**post** `/v1/chats/{chatID}/messages`\n\nSend a text message to a specific chat. Supports replying to existing messages. Returns a pending message ID.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `attachment?: { uploadID: string; duration?: number; fileName?: string; mimeType?: string; size?: { height: number; width: number; }; type?: 'image' | 'video' | 'audio' | 'file' | 'gif' | 'voice-note' | 'sticker'; }`\n  Single attachment to send with the message\n  - `uploadID: string`\n    Upload ID from uploadAsset endpoint. Required to reference uploaded files.\n  - `duration?: number`\n    Duration in seconds (optional override of cached value)\n  - `fileName?: string`\n    Filename (optional override of cached value)\n  - `mimeType?: string`\n    MIME type (optional override of cached value)\n  - `size?: { height: number; width: number; }`\n    Dimensions (optional override of cached value)\n  - `type?: 'image' | 'video' | 'audio' | 'file' | 'gif' | 'voice-note' | 'sticker'`\n    Attachment type hint (image, video, audio, file, gif, voice-note, sticker). If omitted, auto-detected from mimeType\n\n- `replyToMessageID?: string`\n  Provide a message ID to send this as a reply to an existing message\n\n- `text?: string`\n  Draft text. Plain text and Markdown are converted to Beeper rich text with the same rules used by send and edit.\n\n### Returns\n\n- `{ chatID: string; pendingMessageID: string; }`\n\n  - `chatID: string`\n  - `pendingMessageID: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.messages.send('!NCdzlIaMjZUmvmvyHU:beeper.com');\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.messages.send',
@@ -1086,7 +1499,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'messages send',
         example:
-          "beeper-desktop-cli messages send \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
+          "beeper-desktop messages send \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com'",
       },
       php: {
         method: 'messages->send',
@@ -1105,14 +1518,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'get',
     summary: 'Retrieve a message',
     description:
-      'Retrieve a message by final message ID, pendingMessageID, or Matrix event ID. Chat ID may be a Beeper chat ID or local chat ID.',
+      'Retrieve a message by final message ID, pendingMessageID, or Matrix event ID. chatID may be a Beeper chat ID or a local chat ID.',
     stainlessPath: '(resource) messages > (method) retrieve',
     qualified: 'client.messages.retrieve',
     params: ['chatID: string;', 'messageID: string;'],
     response:
       "{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: object; srcURL?: string; transcription?: object; }[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }",
     markdown:
-      "## retrieve\n\n`client.messages.retrieve(chatID: string, messageID: string): { id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: attachment[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: object[]; mentions?: string[]; reactions?: reaction[]; seen?: boolean | string | object; senderName?: string; sendStatus?: object; text?: string; type?: string; }`\n\n**get** `/v1/chats/{chatID}/messages/{messageID}`\n\nRetrieve a message by final message ID, pendingMessageID, or Matrix event ID. Chat ID may be a Beeper chat ID or local chat ID.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `messageID: string`\n  Message ID.\n\n### Returns\n\n- `{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: object; srcURL?: string; transcription?: object; }[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `chatID: string`\n  - `senderID: string`\n  - `sortKey: string`\n  - `timestamp: string`\n  - `attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: { height?: number; width?: number; }; srcURL?: string; transcription?: { engine: string; transcription: string; language?: string; }; }[]`\n  - `editedTimestamp?: string`\n  - `isDeleted?: boolean`\n  - `isHidden?: boolean`\n  - `isSender?: boolean`\n  - `isUnread?: boolean`\n  - `linkedMessageID?: string`\n  - `links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]`\n  - `mentions?: string[]`\n  - `reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]`\n  - `seen?: boolean | string | object`\n  - `senderName?: string`\n  - `sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }`\n  - `text?: string`\n  - `type?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst message = await client.messages.retrieve('1343993', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });\n\nconsole.log(message);\n```",
+      "## retrieve\n\n`client.messages.retrieve(chatID: string, messageID: string): { id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: attachment[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: object[]; mentions?: string[]; reactions?: reaction[]; seen?: boolean | string | object; senderName?: string; sendStatus?: object; text?: string; type?: string; }`\n\n**get** `/v1/chats/{chatID}/messages/{messageID}`\n\nRetrieve a message by final message ID, pendingMessageID, or Matrix event ID. chatID may be a Beeper chat ID or a local chat ID.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `messageID: string`\n  Message ID.\n\n### Returns\n\n- `{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: object; srcURL?: string; transcription?: object; }[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }`\n\n  - `id: string`\n  - `accountID: string`\n  - `chatID: string`\n  - `senderID: string`\n  - `sortKey: string`\n  - `timestamp: string`\n  - `attachments?: { type: 'unknown' | 'img' | 'video' | 'audio'; id?: string; duration?: number; fileName?: string; fileSize?: number; isGif?: boolean; isSticker?: boolean; isVoiceNote?: boolean; mimeType?: string; posterImg?: string; size?: { height?: number; width?: number; }; srcURL?: string; transcription?: { engine: string; transcription: string; language?: string; }; }[]`\n  - `editedTimestamp?: string`\n  - `isDeleted?: boolean`\n  - `isHidden?: boolean`\n  - `isSender?: boolean`\n  - `isUnread?: boolean`\n  - `linkedMessageID?: string`\n  - `links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: { height?: number; width?: number; }; originalURL?: string; summary?: string; }[]`\n  - `mentions?: string[]`\n  - `reactions?: { id: string; participantID: string; reactionKey: string; emoji?: boolean; imgURL?: string; }[]`\n  - `seen?: boolean | string | object`\n  - `senderName?: string`\n  - `sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }`\n  - `text?: string`\n  - `type?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst message = await client.messages.retrieve('1343993', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' });\n\nconsole.log(message);\n```",
     perLanguage: {
       typescript: {
         method: 'client.messages.retrieve',
@@ -1132,7 +1545,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'messages retrieve',
         example:
-          "beeper-desktop-cli messages retrieve \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993",
+          "beeper-desktop messages retrieve \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993",
       },
       php: {
         method: 'messages->retrieve',
@@ -1157,7 +1570,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: object[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: object; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: object[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }",
     markdown:
-      "## update\n\n`client.messages.update(chatID: string, messageID: string, text: string): object`\n\n**put** `/v1/chats/{chatID}/messages/{messageID}`\n\nEdit the text content of an existing message. Messages with attachments cannot be edited.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `messageID: string`\n  Message ID.\n\n- `text: string`\n  New text content for the message\n\n### Returns\n\n- `{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: object[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: object; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: object[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst message = await client.messages.update('1343993', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', text: 'x' });\n\nconsole.log(message);\n```",
+      "## update\n\n`client.messages.update(chatID: string, messageID: string, text: string): object`\n\n**put** `/v1/chats/{chatID}/messages/{messageID}`\n\nEdit the text content of an existing message. Messages with attachments cannot be edited.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `messageID: string`\n  Message ID.\n\n- `text: string`\n  New text content for the message\n\n### Returns\n\n- `{ id: string; accountID: string; chatID: string; senderID: string; sortKey: string; timestamp: string; attachments?: object[]; editedTimestamp?: string; isDeleted?: boolean; isHidden?: boolean; isSender?: boolean; isUnread?: boolean; linkedMessageID?: string; links?: { title: string; url: string; favicon?: string; img?: string; imgSize?: object; originalURL?: string; summary?: string; }[]; mentions?: string[]; reactions?: object[]; seen?: boolean | string | object; senderName?: string; sendStatus?: { status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT'; timestamp: string; deliveredToUsers?: string[]; internalError?: string; message?: string; reason?: string; }; text?: string; type?: string; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst message = await client.messages.update('1343993', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com', text: 'x' });\n\nconsole.log(message);\n```",
     perLanguage: {
       typescript: {
         method: 'client.messages.update',
@@ -1177,7 +1590,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'messages update',
         example:
-          "beeper-desktop-cli messages update \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993 \\\n  --text x",
+          "beeper-desktop messages update \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993 \\\n  --text x",
       },
       php: {
         method: 'messages->update',
@@ -1201,7 +1614,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.messages.delete',
     params: ['chatID: string;', 'messageID: string;', 'forEveryone?: boolean;'],
     markdown:
-      "## delete\n\n`client.messages.delete(chatID: string, messageID: string, forEveryone?: boolean): void`\n\n**delete** `/v1/chats/{chatID}/messages/{messageID}`\n\nDelete a message by final message ID. Pending message IDs are not accepted because messages cannot be deleted while sending.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this Beeper Desktop installation when available.\n\n- `messageID: string`\n  Message ID.\n\n- `forEveryone?: boolean`\n  True to request deletion for everyone when the network supports it; false to delete only for the authenticated user when supported.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.messages.delete('1343993', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' })\n```",
+      "## delete\n\n`client.messages.delete(chatID: string, messageID: string, forEveryone?: boolean): void`\n\n**delete** `/v1/chats/{chatID}/messages/{messageID}`\n\nDelete a message by final message ID. Pending message IDs are not accepted because messages cannot be deleted while sending.\n\n### Parameters\n\n- `chatID: string`\n  Chat ID. Input routes also accept the local chat ID from this installation when available.\n\n- `messageID: string`\n  Message ID.\n\n- `forEveryone?: boolean`\n  True to request deletion for everyone when the network supports it; false to delete only for the authenticated user when supported.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.messages.delete('1343993', { chatID: '!NCdzlIaMjZUmvmvyHU:beeper.com' })\n```",
     perLanguage: {
       typescript: {
         method: 'client.messages.delete',
@@ -1221,7 +1634,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'messages delete',
         example:
-          "beeper-desktop-cli messages delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993",
+          "beeper-desktop messages delete \\\n  --access-token 'My Access Token' \\\n  --chat-id '!NCdzlIaMjZUmvmvyHU:beeper.com' \\\n  --message-id 1343993",
       },
       php: {
         method: 'messages->delete',
@@ -1240,13 +1653,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: 'Download a file',
     description:
-      'Download a Matrix file using its mxc:// or localmxc:// URL to the device running Beeper Desktop and return the local file URL.',
+      'Download a file from an mxc:// or localmxc:// URL to the device running the Beeper Client API and return the local file URL.',
     stainlessPath: '(resource) assets > (method) download',
     qualified: 'client.assets.download',
     params: ['url: string;'],
     response: '{ error?: string; srcURL?: string; }',
     markdown:
-      "## download\n\n`client.assets.download(url: string): { error?: string; srcURL?: string; }`\n\n**post** `/v1/assets/download`\n\nDownload a Matrix file using its mxc:// or localmxc:// URL to the device running Beeper Desktop and return the local file URL.\n\n### Parameters\n\n- `url: string`\n  Matrix content URL (mxc:// or localmxc://) for the file to download.\n\n### Returns\n\n- `{ error?: string; srcURL?: string; }`\n\n  - `error?: string`\n  - `srcURL?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.assets.download({ url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ' });\n\nconsole.log(response);\n```",
+      "## download\n\n`client.assets.download(url: string): { error?: string; srcURL?: string; }`\n\n**post** `/v1/assets/download`\n\nDownload a file from an mxc:// or localmxc:// URL to the device running the Beeper Client API and return the local file URL.\n\n### Parameters\n\n- `url: string`\n  Beeper media URL (mxc:// or localmxc://) for the file to download.\n\n### Returns\n\n- `{ error?: string; srcURL?: string; }`\n\n  - `error?: string`\n  - `srcURL?: string`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.assets.download({ url: 'mxc://example.org/Q4x9CqGz1pB3Oa6XgJ' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.assets.download',
@@ -1266,7 +1679,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'assets download',
         example:
-          "beeper-desktop-cli assets download \\\n  --access-token 'My Access Token' \\\n  --url mxc://example.org/Q4x9CqGz1pB3Oa6XgJ",
+          "beeper-desktop assets download \\\n  --access-token 'My Access Token' \\\n  --url mxc://example.org/Q4x9CqGz1pB3Oa6XgJ",
       },
       php: {
         method: 'assets->download',
@@ -1285,14 +1698,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: 'Upload a file',
     description:
-      'Upload a file to a temporary location using multipart/form-data. Returns an uploadID that can be referenced when sending a message or materializing a draft attachment.',
+      'Upload a file to a temporary location using multipart/form-data. Returns an uploadID that can be referenced when sending a message or creating a draft attachment.',
     stainlessPath: '(resource) assets > (method) upload',
     qualified: 'client.assets.upload',
     params: ['file: string;', 'fileName?: string;', 'mimeType?: string;'],
     response:
       '{ duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }',
     markdown:
-      "## upload\n\n`client.assets.upload(file: string, fileName?: string, mimeType?: string): { duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n**post** `/v1/assets/upload`\n\nUpload a file to a temporary location using multipart/form-data. Returns an uploadID that can be referenced when sending a message or materializing a draft attachment.\n\n### Parameters\n\n- `file: string`\n  The file to upload (max 500 MB).\n\n- `fileName?: string`\n  Original filename. Defaults to the uploaded file name if omitted\n\n- `mimeType?: string`\n  MIME type. Auto-detected from magic bytes if omitted\n\n### Returns\n\n- `{ duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n  - `duration?: number`\n  - `error?: string`\n  - `fileName?: string`\n  - `fileSize?: number`\n  - `height?: number`\n  - `mimeType?: string`\n  - `srcURL?: string`\n  - `uploadID?: string`\n  - `width?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.assets.upload({ file: fs.createReadStream('path/to/file') });\n\nconsole.log(response);\n```",
+      "## upload\n\n`client.assets.upload(file: string, fileName?: string, mimeType?: string): { duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n**post** `/v1/assets/upload`\n\nUpload a file to a temporary location using multipart/form-data. Returns an uploadID that can be referenced when sending a message or creating a draft attachment.\n\n### Parameters\n\n- `file: string`\n  The file to upload (max 500 MB).\n\n- `fileName?: string`\n  Original filename. Defaults to the uploaded file name if omitted\n\n- `mimeType?: string`\n  MIME type. Auto-detected from magic bytes if omitted\n\n### Returns\n\n- `{ duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n  - `duration?: number`\n  - `error?: string`\n  - `fileName?: string`\n  - `fileSize?: number`\n  - `height?: number`\n  - `mimeType?: string`\n  - `srcURL?: string`\n  - `uploadID?: string`\n  - `width?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.assets.upload({ file: fs.createReadStream('path/to/file') });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.assets.upload',
@@ -1312,7 +1725,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'assets upload',
         example:
-          "beeper-desktop-cli assets upload \\\n  --access-token 'My Access Token' \\\n  --file 'Example data'",
+          "beeper-desktop assets upload \\\n  --access-token 'My Access Token' \\\n  --file 'Example data'",
       },
       php: {
         method: 'assets->upload',
@@ -1331,14 +1744,14 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: 'Upload a file (base64)',
     description:
-      'Upload a file using a JSON body with base64-encoded content. Returns an uploadID that can be referenced when sending a message or materializing a draft attachment. Alternative to the multipart upload endpoint.',
+      'Upload a file using a JSON body with base64-encoded content. Returns an uploadID that can be referenced when sending a message or creating a draft attachment. Alternative to the multipart upload endpoint.',
     stainlessPath: '(resource) assets > (method) upload_base64',
     qualified: 'client.assets.uploadBase64',
     params: ['content: string;', 'fileName?: string;', 'mimeType?: string;'],
     response:
       '{ duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }',
     markdown:
-      "## upload_base64\n\n`client.assets.uploadBase64(content: string, fileName?: string, mimeType?: string): { duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n**post** `/v1/assets/upload/base64`\n\nUpload a file using a JSON body with base64-encoded content. Returns an uploadID that can be referenced when sending a message or materializing a draft attachment. Alternative to the multipart upload endpoint.\n\n### Parameters\n\n- `content: string`\n  Base64-encoded file content (max ~500MB decoded)\n\n- `fileName?: string`\n  Original filename. Generated if omitted\n\n- `mimeType?: string`\n  MIME type. Auto-detected from magic bytes if omitted\n\n### Returns\n\n- `{ duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n  - `duration?: number`\n  - `error?: string`\n  - `fileName?: string`\n  - `fileSize?: number`\n  - `height?: number`\n  - `mimeType?: string`\n  - `srcURL?: string`\n  - `uploadID?: string`\n  - `width?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.assets.uploadBase64({ content: 'x' });\n\nconsole.log(response);\n```",
+      "## upload_base64\n\n`client.assets.uploadBase64(content: string, fileName?: string, mimeType?: string): { duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n**post** `/v1/assets/upload/base64`\n\nUpload a file using a JSON body with base64-encoded content. Returns an uploadID that can be referenced when sending a message or creating a draft attachment. Alternative to the multipart upload endpoint.\n\n### Parameters\n\n- `content: string`\n  Base64-encoded file content (max ~500MB decoded)\n\n- `fileName?: string`\n  Original filename. Generated if omitted\n\n- `mimeType?: string`\n  MIME type. Auto-detected from magic bytes if omitted\n\n### Returns\n\n- `{ duration?: number; error?: string; fileName?: string; fileSize?: number; height?: number; mimeType?: string; srcURL?: string; uploadID?: string; width?: number; }`\n\n  - `duration?: number`\n  - `error?: string`\n  - `fileName?: string`\n  - `fileSize?: number`\n  - `height?: number`\n  - `mimeType?: string`\n  - `srcURL?: string`\n  - `uploadID?: string`\n  - `width?: number`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.assets.uploadBase64({ content: 'x' });\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.assets.uploadBase64',
@@ -1358,7 +1771,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'assets upload_base64',
         example:
-          "beeper-desktop-cli assets upload-base64 \\\n  --access-token 'My Access Token' \\\n  --content x",
+          "beeper-desktop assets upload-base64 \\\n  --access-token 'My Access Token' \\\n  --content x",
       },
       php: {
         method: 'assets->uploadBase64',
@@ -1402,7 +1815,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       cli: {
         method: 'assets serve',
-        example: "beeper-desktop-cli assets serve \\\n  --access-token 'My Access Token' \\\n  --url x",
+        example: "beeper-desktop assets serve \\\n  --access-token 'My Access Token' \\\n  --url x",
       },
       php: {
         method: 'assets->serve',
@@ -1421,13 +1834,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'get',
     summary: 'Retrieve server info',
     description:
-      'Returns app, platform, server, endpoint discovery, OAuth, and WebSocket metadata for this Beeper Desktop instance.',
+      'Returns app, platform, server, endpoint discovery, OAuth, and WebSocket metadata for this Beeper Client API server.',
     stainlessPath: '(resource) info > (method) retrieve',
     qualified: 'client.info.retrieve',
     response:
       '{ app: { bundle_id: string; name: string; version: string; }; endpoints: { mcp: string; oauth: { authorization_endpoint: string; introspection_endpoint: string; registration_endpoint: string; revocation_endpoint: string; token_endpoint: string; userinfo_endpoint: string; }; spec: string; ws_events: string; }; platform: { arch: string; os: string; release?: string; }; server: { base_url: string; hostname: string; mcp_enabled: boolean; port: number; remote_access: boolean; status: string; }; }',
     markdown:
-      "## retrieve\n\n`client.info.retrieve(): { app: object; endpoints: object; platform: object; server: object; }`\n\n**get** `/v1/info`\n\nReturns app, platform, server, endpoint discovery, OAuth, and WebSocket metadata for this Beeper Desktop instance.\n\n### Returns\n\n- `{ app: { bundle_id: string; name: string; version: string; }; endpoints: { mcp: string; oauth: { authorization_endpoint: string; introspection_endpoint: string; registration_endpoint: string; revocation_endpoint: string; token_endpoint: string; userinfo_endpoint: string; }; spec: string; ws_events: string; }; platform: { arch: string; os: string; release?: string; }; server: { base_url: string; hostname: string; mcp_enabled: boolean; port: number; remote_access: boolean; status: string; }; }`\n\n  - `app: { bundle_id: string; name: string; version: string; }`\n  - `endpoints: { mcp: string; oauth: { authorization_endpoint: string; introspection_endpoint: string; registration_endpoint: string; revocation_endpoint: string; token_endpoint: string; userinfo_endpoint: string; }; spec: string; ws_events: string; }`\n  - `platform: { arch: string; os: string; release?: string; }`\n  - `server: { base_url: string; hostname: string; mcp_enabled: boolean; port: number; remote_access: boolean; status: string; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst info = await client.info.retrieve();\n\nconsole.log(info);\n```",
+      "## retrieve\n\n`client.info.retrieve(): { app: object; endpoints: object; platform: object; server: object; }`\n\n**get** `/v1/info`\n\nReturns app, platform, server, endpoint discovery, OAuth, and WebSocket metadata for this Beeper Client API server.\n\n### Returns\n\n- `{ app: { bundle_id: string; name: string; version: string; }; endpoints: { mcp: string; oauth: { authorization_endpoint: string; introspection_endpoint: string; registration_endpoint: string; revocation_endpoint: string; token_endpoint: string; userinfo_endpoint: string; }; spec: string; ws_events: string; }; platform: { arch: string; os: string; release?: string; }; server: { base_url: string; hostname: string; mcp_enabled: boolean; port: number; remote_access: boolean; status: string; }; }`\n\n  - `app: { bundle_id: string; name: string; version: string; }`\n  - `endpoints: { mcp: string; oauth: { authorization_endpoint: string; introspection_endpoint: string; registration_endpoint: string; revocation_endpoint: string; token_endpoint: string; userinfo_endpoint: string; }; spec: string; ws_events: string; }`\n  - `platform: { arch: string; os: string; release?: string; }`\n  - `server: { base_url: string; hostname: string; mcp_enabled: boolean; port: number; remote_access: boolean; status: string; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst info = await client.info.retrieve();\n\nconsole.log(info);\n```",
     perLanguage: {
       typescript: {
         method: 'client.info.retrieve',
@@ -1446,7 +1859,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       cli: {
         method: 'info retrieve',
-        example: "beeper-desktop-cli info retrieve \\\n  --access-token 'My Access Token'",
+        example: "beeper-desktop info retrieve \\\n  --access-token 'My Access Token'",
       },
       php: {
         method: 'info->retrieve',
@@ -1459,13 +1872,772 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
     },
   },
+  {
+    name: 'session',
+    endpoint: '/v1/app/setup',
+    httpMethod: 'get',
+    summary: 'Get Beeper app setup state',
+    description:
+      'Return the current Beeper Desktop or Beeper Server sign-in and encrypted messaging setup state. This endpoint is public before sign-in so apps can discover that sign-in is needed; after sign-in, pass a read token.',
+    stainlessPath: '(resource) app > (method) session',
+    qualified: 'client.app.session',
+    response:
+      "{ e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }",
+    markdown:
+      "## session\n\n`client.app.session(): { e2ee: object; state: string; matrix?: object; verification?: object; }`\n\n**get** `/v1/app/setup`\n\nReturn the current Beeper Desktop or Beeper Server sign-in and encrypted messaging setup state. This endpoint is public before sign-in so apps can discover that sign-in is needed; after sign-in, pass a read token.\n\n### Returns\n\n- `{ e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }`\n  - `state: string`\n  - `matrix?: { deviceID: string; homeserver: string; userID: string; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.session();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.session',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.session();\n\nconsole.log(response.e2ee);",
+      },
+      python: {
+        method: 'app.session',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.session()\nprint(response.e2ee)',
+      },
+      go: {
+        method: 'client.App.Session',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Session(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.E2EE)\n}\n',
+      },
+      cli: {
+        method: 'app session',
+        example: "beeper-desktop app session \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'app->session',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->session();\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'start',
+    endpoint: '/v1/app/setup/start',
+    httpMethod: 'post',
+    summary: 'Start Beeper app setup',
+    description:
+      'Start setting up Beeper Desktop or Beeper Server. The flow supports existing Beeper accounts and new account creation.',
+    stainlessPath: '(resource) app.login > (method) start',
+    qualified: 'client.app.login.start',
+    response: '{ setupRequestID: string; signInMethods: string[]; }',
+    markdown:
+      "## start\n\n`client.app.login.start(): { setupRequestID: string; signInMethods: string[]; }`\n\n**post** `/v1/app/setup/start`\n\nStart setting up Beeper Desktop or Beeper Server. The flow supports existing Beeper accounts and new account creation.\n\n### Returns\n\n- `{ setupRequestID: string; signInMethods: string[]; }`\n\n  - `setupRequestID: string`\n  - `signInMethods: string[]`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.start();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.start',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.start();\n\nconsole.log(response.setupRequestID);",
+      },
+      python: {
+        method: 'app.login.start',
+        example:
+          'from beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop()\nresponse = client.app.login.start()\nprint(response.setup_request_id)',
+      },
+      go: {
+        method: 'client.App.Login.Start',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Login.Start(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.SetupRequestID)\n}\n',
+      },
+      cli: {
+        method: 'login start',
+        example: "beeper-desktop app:login start \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'app->login->start',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->login->start();\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/start \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'email',
+    endpoint: '/v1/app/setup/email',
+    httpMethod: 'post',
+    summary: 'Send setup sign-in code',
+    description: 'Send a sign-in code to the user email address for app setup.',
+    stainlessPath: '(resource) app.login > (method) email',
+    qualified: 'client.app.login.email',
+    params: ['email: string;', 'setupRequestID: string;'],
+    markdown:
+      "## email\n\n`client.app.login.email(email: string, setupRequestID: string): void`\n\n**post** `/v1/app/setup/email`\n\nSend a sign-in code to the user email address for app setup.\n\n### Parameters\n\n- `email: string`\n  Email address to send the sign-in code to.\n\n- `setupRequestID: string`\n  Setup request ID returned by the start step.\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.app.login.email({ email: 'dev@stainless.com', setupRequestID: 'setupRequestID' })\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.email',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nawait client.app.login.email({ email: 'dev@stainless.com', setupRequestID: 'setupRequestID' });",
+      },
+      python: {
+        method: 'app.login.email',
+        example:
+          'from beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop()\nclient.app.login.email(\n    email="dev@stainless.com",\n    setup_request_id="setupRequestID",\n)',
+      },
+      go: {
+        method: 'client.App.Login.Email',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\terr := client.App.Login.Email(context.TODO(), beeperdesktopapi.AppLoginEmailParams{\n\t\tEmail:          "dev@stainless.com",\n\t\tSetupRequestID: "setupRequestID",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
+      },
+      cli: {
+        method: 'login email',
+        example:
+          "beeper-desktop app:login email \\\n  --access-token 'My Access Token' \\\n  --email dev@stainless.com \\\n  --setup-request-id setupRequestID",
+      },
+      php: {
+        method: 'app->login->email',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$result = $client->app->login->email(\n  email: 'dev@stainless.com', setupRequestID: 'setupRequestID'\n);\n\nvar_dump($result);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/email \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "email": "dev@stainless.com",\n          "setupRequestID": "setupRequestID"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'response',
+    endpoint: '/v1/app/setup/response',
+    httpMethod: 'post',
+    summary: 'Complete setup sign-in with code',
+    description:
+      'Finish setup sign-in with the code sent to the user email address. If the user needs a new account, the response includes account creation copy and username suggestions.',
+    stainlessPath: '(resource) app.login > (method) response',
+    qualified: 'client.app.login.response',
+    params: ['response: string;', 'setupRequestID: string;'],
+    response:
+      "{ matrix: { accessToken: string; deviceID: string; homeserver: string; userID: string; }; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; } | { copy: { submit: 'Continue'; terms: 'By continuing, you agree to the Terms of Use and acknowledge the Privacy Policy.'; title: 'Choose your username'; usernamePlaceholder: 'Username'; }; leadToken: string; registrationRequired: true; setupRequestID: string; usernameSuggestions?: string[]; }",
+    markdown:
+      "## response\n\n`client.app.login.response(response: string, setupRequestID: string): { matrix: object; session: object; } | { copy: object; leadToken: string; registrationRequired: true; setupRequestID: string; usernameSuggestions?: string[]; }`\n\n**post** `/v1/app/setup/response`\n\nFinish setup sign-in with the code sent to the user email address. If the user needs a new account, the response includes account creation copy and username suggestions.\n\n### Parameters\n\n- `response: string`\n  Sign-in code from the user email.\n\n- `setupRequestID: string`\n  Setup request ID returned by the start step.\n\n### Returns\n\n- `{ matrix: { accessToken: string; deviceID: string; homeserver: string; userID: string; }; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; } | { copy: { submit: 'Continue'; terms: 'By continuing, you agree to the Terms of Use and acknowledge the Privacy Policy.'; title: 'Choose your username'; usernamePlaceholder: 'Username'; }; leadToken: string; registrationRequired: true; setupRequestID: string; usernameSuggestions?: string[]; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.response({ response: 'response', setupRequestID: 'setupRequestID' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.response',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.response({\n  response: 'response',\n  setupRequestID: 'setupRequestID',\n});\n\nconsole.log(response);",
+      },
+      python: {
+        method: 'app.login.response',
+        example:
+          'from beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop()\nresponse = client.app.login.response(\n    response="response",\n    setup_request_id="setupRequestID",\n)\nprint(response)',
+      },
+      go: {
+        method: 'client.App.Login.Response',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Login.Response(context.TODO(), beeperdesktopapi.AppLoginResponseParams{\n\t\tResponse:       "response",\n\t\tSetupRequestID: "setupRequestID",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
+      cli: {
+        method: 'login response',
+        example:
+          "beeper-desktop app:login response \\\n  --access-token 'My Access Token' \\\n  --response response \\\n  --setup-request-id setupRequestID",
+      },
+      php: {
+        method: 'app->login->response',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->login->response(\n  response: 'response', setupRequestID: 'setupRequestID'\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/response \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "response": "response",\n          "setupRequestID": "setupRequestID"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'register',
+    endpoint: '/v1/app/setup/register',
+    httpMethod: 'post',
+    summary: 'Create account for setup',
+    description: 'Create a Beeper account after the user chooses a username and accepts the Terms of Use.',
+    stainlessPath: '(resource) app.login > (method) register',
+    qualified: 'client.app.login.register',
+    params: ['acceptTerms: true;', 'leadToken: string;', 'setupRequestID: string;', 'username: string;'],
+    response:
+      "{ matrix: { accessToken: string; deviceID: string; homeserver: string; userID: string; }; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }",
+    markdown:
+      "## register\n\n`client.app.login.register(acceptTerms: true, leadToken: string, setupRequestID: string, username: string): { matrix: object; session: object; }`\n\n**post** `/v1/app/setup/register`\n\nCreate a Beeper account after the user chooses a username and accepts the Terms of Use.\n\n### Parameters\n\n- `acceptTerms: true`\n  Confirms that the user agreed to our [terms of use](https://www.beeper.com/terms-onboarding) and has read our [privacy policy](https://www.beeper.com/privacy).\n\n- `leadToken: string`\n  Registration token returned by Beeper.\n\n- `setupRequestID: string`\n  Setup request ID returned by the start step.\n\n- `username: string`\n  Username selected by the user.\n\n### Returns\n\n- `{ matrix: { accessToken: string; deviceID: string; homeserver: string; userID: string; }; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }`\n\n  - `matrix: { accessToken: string; deviceID: string; homeserver: string; userID: string; }`\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.register({\n  acceptTerms: true,\n  leadToken: 'leadToken',\n  setupRequestID: 'setupRequestID',\n  username: 'x',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.register',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.register({\n  acceptTerms: true,\n  leadToken: 'leadToken',\n  setupRequestID: 'setupRequestID',\n  username: 'x',\n});\n\nconsole.log(response.matrix);",
+      },
+      python: {
+        method: 'app.login.register',
+        example:
+          'from beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop()\nresponse = client.app.login.register(\n    accept_terms=True,\n    lead_token="leadToken",\n    setup_request_id="setupRequestID",\n    username="x",\n)\nprint(response.matrix)',
+      },
+      go: {
+        method: 'client.App.Login.Register',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Login.Register(context.TODO(), beeperdesktopapi.AppLoginRegisterParams{\n\t\tAcceptTerms:    true,\n\t\tLeadToken:      "leadToken",\n\t\tSetupRequestID: "setupRequestID",\n\t\tUsername:       "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Matrix)\n}\n',
+      },
+      cli: {
+        method: 'login register',
+        example:
+          "beeper-desktop app:login register \\\n  --access-token 'My Access Token' \\\n  --accept-terms true \\\n  --lead-token leadToken \\\n  --setup-request-id setupRequestID \\\n  --username x",
+      },
+      php: {
+        method: 'app->login->register',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->login->register(\n  acceptTerms: true,\n  leadToken: 'leadToken',\n  setupRequestID: 'setupRequestID',\n  username: 'x',\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/register \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "acceptTerms": true,\n          "leadToken": "leadToken",\n          "setupRequestID": "setupRequestID",\n          "username": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'verify',
+    endpoint: '/v1/app/setup/verification/recovery-key',
+    httpMethod: 'post',
+    summary: 'Verify with recovery key',
+    description: 'Unlock encrypted messages with the user recovery key.',
+    stainlessPath: '(resource) app.login.verification.recovery_key > (method) verify',
+    qualified: 'client.app.login.verification.recoveryKey.verify',
+    params: ['recoveryKey: string;'],
+    response:
+      "{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }",
+    markdown:
+      "## verify\n\n`client.app.login.verification.recoveryKey.verify(recoveryKey: string): { session: object; }`\n\n**post** `/v1/app/setup/verification/recovery-key`\n\nUnlock encrypted messages with the user recovery key.\n\n### Parameters\n\n- `recoveryKey: string`\n  Recovery key saved by the user.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.verification.recoveryKey.verify({ recoveryKey: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.verification.recoveryKey.verify',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.login.verification.recoveryKey.verify({ recoveryKey: 'x' });\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.login.verification.recovery_key.verify',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.login.verification.recovery_key.verify(\n    recovery_key="x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Login.Verification.RecoveryKey.Verify',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Login.Verification.RecoveryKey.Verify(context.TODO(), beeperdesktopapi.AppLoginVerificationRecoveryKeyVerifyParams{\n\t\tRecoveryKey: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'recovery_key verify',
+        example:
+          "beeper-desktop app:login:verification:recovery-key verify \\\n  --access-token 'My Access Token' \\\n  --recovery-key x",
+      },
+      php: {
+        method: 'app->login->verification->recoveryKey->verify',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->login->verification->recoveryKey->verify(\n  recoveryKey: 'x'\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verification/recovery-key \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "recoveryKey": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/app/setup/verification/recovery-key/reset',
+    httpMethod: 'post',
+    summary: 'Create new recovery key',
+    description: 'Create a new recovery key when the user cannot use the existing one.',
+    stainlessPath: '(resource) app.login.verification.recovery_key.reset > (method) create',
+    qualified: 'client.app.login.verification.recoveryKey.reset.create',
+    params: ['existingRecoveryKey?: string;'],
+    response:
+      "{ recoveryKey: string; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }",
+    markdown:
+      "## create\n\n`client.app.login.verification.recoveryKey.reset.create(existingRecoveryKey?: string): { recoveryKey: string; session: object; }`\n\n**post** `/v1/app/setup/verification/recovery-key/reset`\n\nCreate a new recovery key when the user cannot use the existing one.\n\n### Parameters\n\n- `existingRecoveryKey?: string`\n  Existing recovery key, if the user has it.\n\n### Returns\n\n- `{ recoveryKey: string; session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }`\n\n  - `recoveryKey: string`\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst reset = await client.app.login.verification.recoveryKey.reset.create();\n\nconsole.log(reset);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.verification.recoveryKey.reset.create',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst reset = await client.app.login.verification.recoveryKey.reset.create();\n\nconsole.log(reset.recoveryKey);",
+      },
+      python: {
+        method: 'app.login.verification.recovery_key.reset.create',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nreset = client.app.login.verification.recovery_key.reset.create()\nprint(reset.recovery_key)',
+      },
+      go: {
+        method: 'client.App.Login.Verification.RecoveryKey.Reset.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\treset, err := client.App.Login.Verification.RecoveryKey.Reset.New(context.TODO(), beeperdesktopapi.AppLoginVerificationRecoveryKeyResetNewParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", reset.RecoveryKey)\n}\n',
+      },
+      cli: {
+        method: 'reset create',
+        example:
+          "beeper-desktop app:login:verification:recovery-key:reset create \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'app->login->verification->recoveryKey->reset->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$reset = $client->app->login->verification->recoveryKey->reset->create(\n  existingRecoveryKey: 'existingRecoveryKey'\n);\n\nvar_dump($reset);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verification/recovery-key/reset \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'confirm',
+    endpoint: '/v1/app/setup/verification/recovery-key/reset/confirm',
+    httpMethod: 'post',
+    summary: 'Confirm new recovery key',
+    description: 'Confirm that the new recovery key should be used for this account.',
+    stainlessPath: '(resource) app.login.verification.recovery_key.reset > (method) confirm',
+    qualified: 'client.app.login.verification.recoveryKey.reset.confirm',
+    params: ['recoveryKey: string;'],
+    response:
+      "{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }",
+    markdown:
+      "## confirm\n\n`client.app.login.verification.recoveryKey.reset.confirm(recoveryKey: string): { session: object; }`\n\n**post** `/v1/app/setup/verification/recovery-key/reset/confirm`\n\nConfirm that the new recovery key should be used for this account.\n\n### Parameters\n\n- `recoveryKey: string`\n  New recovery key returned by the reset step.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.login.verification.recoveryKey.reset.confirm({ recoveryKey: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.login.verification.recoveryKey.reset.confirm',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.login.verification.recoveryKey.reset.confirm({\n  recoveryKey: 'x',\n});\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.login.verification.recovery_key.reset.confirm',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.login.verification.recovery_key.reset.confirm(\n    recovery_key="x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Login.Verification.RecoveryKey.Reset.Confirm',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Login.Verification.RecoveryKey.Reset.Confirm(context.TODO(), beeperdesktopapi.AppLoginVerificationRecoveryKeyResetConfirmParams{\n\t\tRecoveryKey: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'reset confirm',
+        example:
+          "beeper-desktop app:login:verification:recovery-key:reset confirm \\\n  --access-token 'My Access Token' \\\n  --recovery-key x",
+      },
+      php: {
+        method: 'app->login->verification->recoveryKey->reset->confirm',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->login->verification->recoveryKey->reset->confirm(\n  recoveryKey: 'x'\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verification/recovery-key/reset/confirm \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "recoveryKey": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/app/setup/verifications',
+    httpMethod: 'get',
+    summary: 'List active verifications',
+    description:
+      'List pending and active device verifications. Use this to recover state without a WebSocket connection.',
+    stainlessPath: '(resource) app.verifications > (method) list',
+    qualified: 'client.app.verifications.list',
+    response:
+      "{ items: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }[]; }",
+    markdown:
+      "## list\n\n`client.app.verifications.list(): { items: object[]; }`\n\n**get** `/v1/app/setup/verifications`\n\nList pending and active device verifications. Use this to recover state without a WebSocket connection.\n\n### Returns\n\n- `{ items: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }[]; }`\n\n  - `items: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }[]`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst verifications = await client.app.verifications.list();\n\nconsole.log(verifications);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.list',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst verifications = await client.app.verifications.list();\n\nconsole.log(verifications.items);",
+      },
+      python: {
+        method: 'app.verifications.list',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nverifications = client.app.verifications.list()\nprint(verifications.items)',
+      },
+      go: {
+        method: 'client.App.Verifications.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tverifications, err := client.App.Verifications.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", verifications.Items)\n}\n',
+      },
+      cli: {
+        method: 'verifications list',
+        example: "beeper-desktop app:verifications list \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'app->verifications->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$verifications = $client->app->verifications->list();\n\nvar_dump($verifications);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/app/setup/verifications',
+    httpMethod: 'post',
+    summary: 'Start device verification',
+    description: 'Start verifying this device from another signed-in device.',
+    stainlessPath: '(resource) app.verifications > (method) create',
+    qualified: 'client.app.verifications.create',
+    params: ["purpose?: 'login' | 'device';", 'userID?: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## create\n\n`client.app.verifications.create(purpose?: 'login' | 'device', userID?: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications`\n\nStart verifying this device from another signed-in device.\n\n### Parameters\n\n- `purpose?: 'login' | 'device'`\n  Why this verification is being started.\n\n- `userID?: string`\n  Beeper user ID to verify. Defaults to the signed-in user.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst verification = await client.app.verifications.create();\n\nconsole.log(verification);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.create',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst verification = await client.app.verifications.create();\n\nconsole.log(verification.session);",
+      },
+      python: {
+        method: 'app.verifications.create',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nverification = client.app.verifications.create()\nprint(verification.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tverification, err := client.App.Verifications.New(context.TODO(), beeperdesktopapi.AppVerificationNewParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", verification.Session)\n}\n',
+      },
+      cli: {
+        method: 'verifications create',
+        example: "beeper-desktop app:verifications create \\\n  --access-token 'My Access Token'",
+      },
+      php: {
+        method: 'app->verifications->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$verification = $client->app->verifications->create(\n  purpose: 'login', userID: 'userID'\n);\n\nvar_dump($verification);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/app/setup/verifications/{verificationID}',
+    httpMethod: 'get',
+    summary: 'Get verification',
+    description: 'Get the current state of a device verification transaction.',
+    stainlessPath: '(resource) app.verifications > (method) retrieve',
+    qualified: 'client.app.verifications.retrieve',
+    params: ['verificationID: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## retrieve\n\n`client.app.verifications.retrieve(verificationID: string): { session: object; verification?: object; }`\n\n**get** `/v1/app/setup/verifications/{verificationID}`\n\nGet the current state of a device verification transaction.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst verification = await client.app.verifications.retrieve('x');\n\nconsole.log(verification);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.retrieve',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst verification = await client.app.verifications.retrieve('x');\n\nconsole.log(verification.session);",
+      },
+      python: {
+        method: 'app.verifications.retrieve',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nverification = client.app.verifications.retrieve(\n    "x",\n)\nprint(verification.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tverification, err := client.App.Verifications.Get(context.TODO(), "x")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", verification.Session)\n}\n',
+      },
+      cli: {
+        method: 'verifications retrieve',
+        example:
+          "beeper-desktop app:verifications retrieve \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$verification = $client->app->verifications->retrieve('x');\n\nvar_dump($verification);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'accept',
+    endpoint: '/v1/app/setup/verifications/{verificationID}/accept',
+    httpMethod: 'post',
+    summary: 'Accept device verification',
+    description: 'Accept an incoming device verification request.',
+    stainlessPath: '(resource) app.verifications > (method) accept',
+    qualified: 'client.app.verifications.accept',
+    params: ['verificationID: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## accept\n\n`client.app.verifications.accept(verificationID: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/{verificationID}/accept`\n\nAccept an incoming device verification request.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.accept('x');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.accept',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.accept('x');\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.accept',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.accept(\n    "x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.Accept',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.Accept(context.TODO(), "x")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'verifications accept',
+        example:
+          "beeper-desktop app:verifications accept \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->accept',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->accept('x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID/accept \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'cancel',
+    endpoint: '/v1/app/setup/verifications/{verificationID}/cancel',
+    httpMethod: 'post',
+    summary: 'Cancel device verification',
+    description: 'Cancel an active device verification request.',
+    stainlessPath: '(resource) app.verifications > (method) cancel',
+    qualified: 'client.app.verifications.cancel',
+    params: ['verificationID: string;', 'code?: string;', 'reason?: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## cancel\n\n`client.app.verifications.cancel(verificationID: string, code?: string, reason?: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/{verificationID}/cancel`\n\nCancel an active device verification request.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n- `code?: string`\n  Optional cancellation code.\n\n- `reason?: string`\n  Optional user-facing cancellation reason.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.cancel('x');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.cancel',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.cancel('x');\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.cancel',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.cancel(\n    verification_id="x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.Cancel',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.Cancel(\n\t\tcontext.TODO(),\n\t\t"x",\n\t\tbeeperdesktopapi.AppVerificationCancelParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'verifications cancel',
+        example:
+          "beeper-desktop app:verifications cancel \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->cancel',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->cancel(\n  'x', code: 'code', reason: 'reason'\n);\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID/cancel \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'scan',
+    endpoint: '/v1/app/setup/verifications/qr/scan',
+    httpMethod: 'post',
+    summary: 'Scan verification QR code',
+    description: 'Submit the QR code scanned from another signed-in device.',
+    stainlessPath: '(resource) app.verifications.qr > (method) scan',
+    qualified: 'client.app.verifications.qr.scan',
+    params: ['data: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## scan\n\n`client.app.verifications.qr.scan(data: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/qr/scan`\n\nSubmit the QR code scanned from another signed-in device.\n\n### Parameters\n\n- `data: string`\n  QR code payload scanned from the other device.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.qr.scan({ data: 'x' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.qr.scan',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.qr.scan({ data: 'x' });\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.qr.scan',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.qr.scan(\n    data="x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.Qr.Scan',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.Qr.Scan(context.TODO(), beeperdesktopapi.AppVerificationQrScanParams{\n\t\tData: "x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'qr scan',
+        example:
+          "beeper-desktop app:verifications:qr scan \\\n  --access-token 'My Access Token' \\\n  --data x",
+      },
+      php: {
+        method: 'app->verifications->qr->scan',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->qr->scan(data: 'x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/qr/scan \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN" \\\n    -d \'{\n          "data": "x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'confirm_scanned',
+    endpoint: '/v1/app/setup/verifications/{verificationID}/qr/confirm-scanned',
+    httpMethod: 'post',
+    summary: 'Confirm QR code scan',
+    description: 'Confirm that another device scanned this device QR code.',
+    stainlessPath: '(resource) app.verifications.qr > (method) confirm_scanned',
+    qualified: 'client.app.verifications.qr.confirmScanned',
+    params: ['verificationID: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## confirm_scanned\n\n`client.app.verifications.qr.confirmScanned(verificationID: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/{verificationID}/qr/confirm-scanned`\n\nConfirm that another device scanned this device QR code.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.qr.confirmScanned('x');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.qr.confirmScanned',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.qr.confirmScanned('x');\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.qr.confirm_scanned',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.qr.confirm_scanned(\n    "x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.Qr.ConfirmScanned',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.Qr.ConfirmScanned(context.TODO(), "x")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'qr confirm_scanned',
+        example:
+          "beeper-desktop app:verifications:qr confirm-scanned \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->qr->confirmScanned',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->qr->confirmScanned('x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID/qr/confirm-scanned \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'start',
+    endpoint: '/v1/app/setup/verifications/{verificationID}/sas/start',
+    httpMethod: 'post',
+    summary: 'Start emoji verification',
+    description: 'Start emoji comparison for device verification.',
+    stainlessPath: '(resource) app.verifications.sas > (method) start',
+    qualified: 'client.app.verifications.sas.start',
+    params: ['verificationID: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## start\n\n`client.app.verifications.sas.start(verificationID: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/{verificationID}/sas/start`\n\nStart emoji comparison for device verification.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.sas.start('x');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.sas.start',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.sas.start('x');\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.sas.start',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.sas.start(\n    "x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.SAS.Start',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.SAS.Start(context.TODO(), "x")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'sas start',
+        example:
+          "beeper-desktop app:verifications:sas start \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->sas->start',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->sas->start('x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID/sas/start \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
+  {
+    name: 'confirm',
+    endpoint: '/v1/app/setup/verifications/{verificationID}/sas/confirm',
+    httpMethod: 'post',
+    summary: 'Confirm emoji verification',
+    description: 'Confirm that the emoji or number sequence matches on both devices.',
+    stainlessPath: '(resource) app.verifications.sas > (method) confirm',
+    qualified: 'client.app.verifications.sas.confirm',
+    params: ['verificationID: string;'],
+    response:
+      "{ session: { e2ee: object; state: string; matrix?: object; verification?: object; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }",
+    markdown:
+      "## confirm\n\n`client.app.verifications.sas.confirm(verificationID: string): { session: object; verification?: object; }`\n\n**post** `/v1/app/setup/verifications/{verificationID}/sas/confirm`\n\nConfirm that the emoji or number sequence matches on both devices.\n\n### Parameters\n\n- `verificationID: string`\n  Verification ID.\n\n### Returns\n\n- `{ session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: object; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: object; otherDevice?: object; otherUserID?: string; qr?: object; sas?: object; }; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n\n  - `session: { e2ee: { crossSigning: boolean; firstSyncDone: boolean; hasBackedUpRecoveryKey: boolean; initialized: boolean; keyBackup: boolean; secrets: { masterKey: boolean; megolmBackupKey: boolean; recoveryKey: boolean; selfSigningKey: boolean; userSigningKey: boolean; }; secretStorage: boolean; verified: boolean; recoveryKeyGeneratedAt?: number; }; state: string; matrix?: { deviceID: string; homeserver: string; userID: string; }; verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }; }`\n  - `verification?: { id: string; availableActions: 'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'[]; direction: 'incoming' | 'outgoing'; methods: 'qr' | 'sas'[]; purpose: 'login' | 'device'; state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error'; error?: { code: string; reason: string; }; otherDevice?: { id: string; name?: string; }; otherUserID?: string; qr?: { data: string; }; sas?: { emojis: string; decimals?: string; }; }`\n\n### Example\n\n```typescript\nimport BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop();\n\nconst response = await client.app.verifications.sas.confirm('x');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.app.verifications.sas.confirm',
+        example:
+          "import BeeperDesktop from '@beeper/desktop-api';\n\nconst client = new BeeperDesktop({\n  accessToken: process.env['BEEPER_ACCESS_TOKEN'], // This is the default and can be omitted\n});\n\nconst response = await client.app.verifications.sas.confirm('x');\n\nconsole.log(response.session);",
+      },
+      python: {
+        method: 'app.verifications.sas.confirm',
+        example:
+          'import os\nfrom beeper_desktop_api import BeeperDesktop\n\nclient = BeeperDesktop(\n    access_token=os.environ.get("BEEPER_ACCESS_TOKEN"),  # This is the default and can be omitted\n)\nresponse = client.app.verifications.sas.confirm(\n    "x",\n)\nprint(response.session)',
+      },
+      go: {
+        method: 'client.App.Verifications.SAS.Confirm',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/beeper/desktop-api-go"\n\t"github.com/beeper/desktop-api-go/option"\n)\n\nfunc main() {\n\tclient := beeperdesktopapi.NewClient(\n\t\toption.WithAccessToken("My Access Token"),\n\t)\n\tresponse, err := client.App.Verifications.SAS.Confirm(context.TODO(), "x")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Session)\n}\n',
+      },
+      cli: {
+        method: 'sas confirm',
+        example:
+          "beeper-desktop app:verifications:sas confirm \\\n  --access-token 'My Access Token' \\\n  --verification-id x",
+      },
+      php: {
+        method: 'app->verifications->sas->confirm',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(accessToken: 'My Access Token');\n\n$response = $client->app->verifications->sas->confirm('x');\n\nvar_dump($response);",
+      },
+      http: {
+        example:
+          'curl http://localhost:23373/v1/app/setup/verifications/$VERIFICATION_ID/sas/confirm \\\n    -X POST \\\n    -H "Authorization: Bearer $BEEPER_ACCESS_TOKEN"',
+      },
+    },
+  },
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
   {
     language: 'cli',
     content:
-      "# Beeper Desktop CLI\n\nThe official CLI for the [Beeper Desktop REST API](https://developers.beeper.com/desktop-api/).\n\n<!-- x-release-please-start-version -->\n\n## Installation\n\n### Installing with Homebrew\n\n~~~sh\nbrew install beeper/tap/beeper-desktop-cli\n~~~\n\n### Installing with Go\n\nTo test or install the CLI locally, you need [Go](https://go.dev/doc/install) version 1.22 or later installed.\n\n~~~sh\ngo install 'github.com/beeper/desktop-api-cli/cmd/beeper-desktop-cli@latest'\n~~~\n\nOnce you have run `go install`, the binary is placed in your Go bin directory:\n\n- **Default location**: `$HOME/go/bin` (or `$GOPATH/bin` if GOPATH is set)\n- **Check your path**: Run `go env GOPATH` to see the base directory\n\nIf commands aren't found after installation, add the Go bin directory to your PATH:\n\n~~~sh\n# Add to your shell profile (.zshrc, .bashrc, etc.)\nexport PATH=\"$PATH:$(go env GOPATH)/bin\"\n~~~\n\n<!-- x-release-please-end -->\n\n### Running Locally\n\nAfter cloning the git repository for this project, you can use the\n`scripts/run` script to run the tool locally:\n\n~~~sh\n./scripts/run args...\n~~~\n\n## Usage\n\nThe CLI follows a resource-based command structure:\n\n~~~sh\nbeeper-desktop-cli [resource] <command> [flags...]\n~~~\n\n~~~sh\nbeeper-desktop-cli chats search \\\n  --access-token 'My Access Token' \\\n  --account-id matrix \\\n  --account-id discordgo \\\n  --account-id local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc \\\n  --include-muted \\\n  --limit 3 \\\n  --type single\n~~~\n\nFor details about specific commands, use the `--help` flag.\n\n### Environment variables\n\n| Environment variable  | Description                                                                                           | Required |\n| --------------------- | ----------------------------------------------------------------------------------------------------- | -------- |\n| `BEEPER_ACCESS_TOKEN` | Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for all API operations. | yes      |\n\n### Global flags\n\n- `--access-token` - Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for all API operations. (can also be set with `BEEPER_ACCESS_TOKEN` env var)\n- `--help` - Show command line usage\n- `--debug` - Enable debug logging (includes HTTP request/response details)\n- `--version`, `-v` - Show the CLI version\n- `--base-url` - Use a custom API backend URL\n- `--format` - Change the output format (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--format-error` - Change the output format for errors (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--transform` - Transform the data output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n- `--transform-error` - Transform the error output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n\n### Passing files as arguments\n\nTo pass files to your API, you can use the `@myfile.ext` syntax:\n\n~~~bash\nbeeper-desktop-cli <command> --arg @abe.jpg\n~~~\n\nFiles can also be passed inside JSON or YAML blobs:\n\n~~~bash\nbeeper-desktop-cli <command> --arg '{image: \"@abe.jpg\"}'\n# Equivalent:\nbeeper-desktop-cli <command> <<YAML\narg:\n  image: \"@abe.jpg\"\nYAML\n~~~\n\nIf you need to pass a string literal that begins with an `@` sign, you can\nescape the `@` sign to avoid accidentally passing a file.\n\n~~~bash\nbeeper-desktop-cli <command> --username '\\@abe'\n~~~\n\n#### Explicit encoding\n\nFor JSON endpoints, the CLI tool does filetype sniffing to determine whether the\nfile contents should be sent as a string literal (for plain text files) or as a\nbase64-encoded string literal (for binary files). If you need to explicitly send\nthe file as either plain text or base64-encoded data, you can use\n`@file://myfile.txt` (for string encoding) or `@data://myfile.dat` (for\nbase64-encoding). Note that absolute paths will begin with `@file://` or\n`@data://`, followed by a third `/` (for example, `@file:///tmp/file.txt`).\n\n~~~bash\nbeeper-desktop-cli <command> --arg @data://file.txt\n~~~\n\n## Linking different Go SDK versions\n\nYou can link the CLI against a different version of the Beeper Desktop Go SDK\nfor development purposes using the `./scripts/link` script.\n\nTo link to a specific version from a repository (version can be a branch,\ngit tag, or commit hash):\n\n~~~bash\n./scripts/link github.com/org/repo@version\n~~~\n\nTo link to a local copy of the SDK:\n\n~~~bash\n./scripts/link ../path/to/beeperdesktopapi-go\n~~~\n\nIf you run the link script without any arguments, it will default to `../beeperdesktopapi-go`.\n",
+      "# CLI for Beeper Desktop\n\nThe official CLI for the [Beeper Desktop REST API](https://developers.beeper.com/desktop-api/).\n\n<!-- x-release-please-start-version -->\n\n## Installation\n\n### Installing with Go\n\nTo test or install the CLI locally, you need [Go](https://go.dev/doc/install) version 1.22 or later installed.\n\n~~~sh\ngo install 'github.com/beeper/desktop-api-cli/cmd/beeper-desktop@latest'\n~~~\n\nOnce you have run `go install`, the binary is placed in your Go bin directory:\n\n- **Default location**: `$HOME/go/bin` (or `$GOPATH/bin` if GOPATH is set)\n- **Check your path**: Run `go env GOPATH` to see the base directory\n\nIf commands aren't found after installation, add the Go bin directory to your PATH:\n\n~~~sh\n# Add to your shell profile (.zshrc, .bashrc, etc.)\nexport PATH=\"$PATH:$(go env GOPATH)/bin\"\n~~~\n\n<!-- x-release-please-end -->\n\n### Running Locally\n\nAfter cloning the git repository for this project, you can use the\n`scripts/run` script to run the tool locally:\n\n~~~sh\n./scripts/run args...\n~~~\n\n## Usage\n\nThe CLI follows a resource-based command structure:\n\n~~~sh\nbeeper-desktop [resource] <command> [flags...]\n~~~\n\n~~~sh\nbeeper-desktop chats search \\\n  --access-token 'My Access Token' \\\n  --account-id matrix \\\n  --account-id discordgo \\\n  --account-id local-whatsapp_ba_EvYDBBsZbRQAy3UOSWqG0LuTVkc \\\n  --include-muted \\\n  --limit 3 \\\n  --type single\n~~~\n\nFor details about specific commands, use the `--help` flag.\n\n### Environment variables\n\n| Environment variable  | Description                                                                                                     | Required |\n| --------------------- | --------------------------------------------------------------------------------------------------------------- | -------- |\n| `BEEPER_ACCESS_TOKEN` | Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for authenticated API operations. | yes      |\n\n### Global flags\n\n- `--access-token` - Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for authenticated API operations. (can also be set with `BEEPER_ACCESS_TOKEN` env var)\n- `--help` - Show command line usage\n- `--debug` - Enable debug logging (includes HTTP request/response details)\n- `--version`, `-v` - Show the CLI version\n- `--base-url` - Use a custom API backend URL\n- `--format` - Change the output format (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--format-error` - Change the output format for errors (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--transform` - Transform the data output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n- `--transform-error` - Transform the error output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n\n### Passing files as arguments\n\nTo pass files to your API, you can use the `@myfile.ext` syntax:\n\n~~~bash\nbeeper-desktop <command> --arg @abe.jpg\n~~~\n\nFiles can also be passed inside JSON or YAML blobs:\n\n~~~bash\nbeeper-desktop <command> --arg '{image: \"@abe.jpg\"}'\n# Equivalent:\nbeeper-desktop <command> <<YAML\narg:\n  image: \"@abe.jpg\"\nYAML\n~~~\n\nIf you need to pass a string literal that begins with an `@` sign, you can\nescape the `@` sign to avoid accidentally passing a file.\n\n~~~bash\nbeeper-desktop <command> --username '\\@abe'\n~~~\n\n#### Explicit encoding\n\nFor JSON endpoints, the CLI tool does filetype sniffing to determine whether the\nfile contents should be sent as a string literal (for plain text files) or as a\nbase64-encoded string literal (for binary files). If you need to explicitly send\nthe file as either plain text or base64-encoded data, you can use\n`@file://myfile.txt` (for string encoding) or `@data://myfile.dat` (for\nbase64-encoding). Note that absolute paths will begin with `@file://` or\n`@data://`, followed by a third `/` (for example, `@file:///tmp/file.txt`).\n\n~~~bash\nbeeper-desktop <command> --arg @data://file.txt\n~~~\n\n## Linking different Go SDK versions\n\nYou can link the CLI against a different version of the Beeper Desktop Go SDK\nfor development purposes using the `./scripts/link` script.\n\nTo link to a specific version from a repository (version can be a branch,\ngit tag, or commit hash):\n\n~~~bash\n./scripts/link github.com/org/repo@version\n~~~\n\nTo link to a local copy of the SDK:\n\n~~~bash\n./scripts/link ../path/to/beeperdesktopapi-go\n~~~\n\nIf you run the link script without any arguments, it will default to `../beeperdesktopapi-go`.\n",
   },
   {
     language: 'go',

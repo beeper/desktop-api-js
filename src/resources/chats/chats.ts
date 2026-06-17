@@ -41,7 +41,7 @@ export class BaseChats extends APIResource {
   }
 
   /**
-   * Retrieve chat details including metadata, participants, and latest message
+   * Retrieve chat details, including metadata, participants, and the latest message.
    *
    * @example
    * ```ts
@@ -59,7 +59,7 @@ export class BaseChats extends APIResource {
   }
 
   /**
-   * Update supported chat fields. Non-empty draft objects are accepted only when the
+   * Update supported chat fields. Non-empty drafts are accepted only when the
    * current draft is empty. Send draft=null to clear the draft before setting new
    * draft text or attachments.
    *
@@ -98,8 +98,8 @@ export class BaseChats extends APIResource {
   }
 
   /**
-   * Archive or unarchive a chat. Set archived=true to move to archive,
-   * archived=false to move back to inbox
+   * Archive or unarchive a chat. Set archived=true to move it to Archive, or
+   * archived=false to move it back to the inbox.
    *
    * @example
    * ```ts
@@ -157,8 +157,9 @@ export class BaseChats extends APIResource {
   }
 
   /**
-   * Force a delivery notification when supported by the underlying network.
-   * Currently intended for iMessage on macOS; unsupported networks return an error.
+   * Send a notification despite the recipient focus state when the network supports
+   * it. Currently intended for iMessage on macOS; unsupported networks return an
+   * error.
    *
    * @example
    * ```ts
@@ -195,7 +196,7 @@ export class BaseChats extends APIResource {
 
   /**
    * Resolve a user/contact and open a direct chat. Reuses and returns an existing
-   * direct chat when one is found. Available in Beeper Desktop v4.2.808+.
+   * direct chat when one is found. Available in Beeper v4.2.808+.
    *
    * @example
    * ```ts
@@ -318,7 +319,7 @@ export interface Chat {
   lastReadMessageSortKey?: string;
 
   /**
-   * Local chat ID specific to this Beeper Desktop installation.
+   * Local chat ID specific to this installation.
    */
   localChatID?: string | null;
 
@@ -375,7 +376,7 @@ export namespace Chat {
       isAdmin?: boolean;
 
       /**
-       * True if this participant represents a network or bridge bot.
+       * True if this participant represents an automated network account.
        */
       isNetworkBot?: boolean;
 
@@ -735,7 +736,7 @@ export namespace Chat {
    */
   export interface Draft {
     /**
-     * Matrix HTML draft body.
+     * Rich-text draft body as returned by Beeper.
      */
     text: string;
 
@@ -838,13 +839,12 @@ export namespace Chat {
 
 export interface ChatCreateResponse extends Chat {
   /**
-   * @deprecated DEPRECATED - use id instead. Compatibility alias for older clients.
+   * @deprecated Use id instead.
    */
   chatID: string;
 
   /**
-   * @deprecated DEPRECATED - legacy start-chat status for older clients. New clients
-   * should inspect the returned Chat instead.
+   * @deprecated Inspect the returned Chat instead.
    */
   status?: 'existing' | 'created';
 }
@@ -861,13 +861,12 @@ export interface ChatListResponse extends Chat {
 
 export interface ChatStartResponse extends Chat {
   /**
-   * @deprecated DEPRECATED - use id instead. Compatibility alias for older clients.
+   * @deprecated Use id instead.
    */
   chatID: string;
 
   /**
-   * @deprecated DEPRECATED - legacy start-chat status for older clients. New clients
-   * should inspect the returned Chat instead.
+   * @deprecated Inspect the returned Chat instead.
    */
   status?: 'existing' | 'created';
 }
@@ -968,8 +967,8 @@ export namespace ChatUpdateParams {
    */
   export interface Draft {
     /**
-     * Draft text. Plain text and Markdown are converted to Matrix HTML with the same
-     * rules used by send and edit.
+     * Draft text. Plain text and Markdown are converted to Beeper rich text with the
+     * same rules used by send and edit.
      */
     text: string;
 
@@ -1064,8 +1063,7 @@ export interface ChatNotifyAnywayParams {}
 
 export interface ChatSearchParams extends CursorSearchParams {
   /**
-   * Provide an array of account IDs to filter chats from specific messaging accounts
-   * only
+   * Limit results to specific chat accounts.
    */
   accountIDs?: Array<string>;
 
@@ -1082,20 +1080,18 @@ export interface ChatSearchParams extends CursorSearchParams {
   includeMuted?: boolean | null;
 
   /**
-   * Provide an ISO datetime string to only retrieve chats with last activity after
-   * this time
+   * Only include chats with last activity after this ISO 8601 datetime.
    */
   lastActivityAfter?: string;
 
   /**
-   * Provide an ISO datetime string to only retrieve chats with last activity before
-   * this time
+   * Only include chats with last activity before this ISO 8601 datetime.
    */
   lastActivityBefore?: string;
 
   /**
-   * Literal token search (non-semantic). Use single words users type (e.g.,
-   * "dinner"). When multiple words provided, ALL must match. Case-insensitive.
+   * Literal chat search. Use words the user typed, such as "dinner". When multiple
+   * words are provided, all must match. Case-insensitive.
    */
   query?: string;
 
@@ -1124,7 +1120,7 @@ export interface ChatStartParams {
   accountID: string;
 
   /**
-   * Merged user-like contact payload used to resolve the best identifier.
+   * Contact-like user payload used to resolve the best identifier.
    */
   user: ChatStartParams.User;
 
@@ -1141,7 +1137,7 @@ export interface ChatStartParams {
 
 export namespace ChatStartParams {
   /**
-   * Merged user-like contact payload used to resolve the best identifier.
+   * Contact-like user payload used to resolve the best identifier.
    */
   export interface User {
     /**

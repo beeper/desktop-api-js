@@ -1,5 +1,31 @@
 # Changelog
 
+## 5.1.0 (2026-06-17)
+
+Full Changelog: [v5.0.0...v5.1.0](https://github.com/beeper/desktop-api-js/compare/v5.0.0...v5.1.0)
+
+### Features
+
+* **api:** add login flow, verifications, recovery key methods to app ([b9c1714](https://github.com/beeper/desktop-api-js/commit/b9c1714410139c2139b597338cd002d785653e85))
+* **api:** api update ([0a91186](https://github.com/beeper/desktop-api-js/commit/0a91186fa1a0811dc9eeb9d43c8093aaeb115e95))
+* **api:** remove cli ([40669cb](https://github.com/beeper/desktop-api-js/commit/40669cb5d53274627d81fc4554d4c5d29647e373))
+
+
+### Bug Fixes
+
+* **client:** send content-type header for requests with an omitted optional body ([97da145](https://github.com/beeper/desktop-api-js/commit/97da14556d40a85e66939a10c7cc667f0e5e6cfb))
+* **mcp:** require auth for standalone HTTP server ([eb86fa5](https://github.com/beeper/desktop-api-js/commit/eb86fa551df33109e963e2faf304b0380ac504f2))
+* **mcp:** use `pure-lockfile` when building mcp server ([1d94580](https://github.com/beeper/desktop-api-js/commit/1d9458098e244c852f32813b59ae558f8c61b11c))
+* **typescript:** upgrade tsc-multi so that it works with Node 26 ([550009b](https://github.com/beeper/desktop-api-js/commit/550009b71f922f605d4ca0e0059bbed6627e5fbe))
+
+
+### Chores
+
+* **internal:** codegen related update ([1db6c60](https://github.com/beeper/desktop-api-js/commit/1db6c606b61fe36e7ee14a1e178b6cb31b67545a))
+* **internal:** regenerate SDK with no functional changes ([8b59f3a](https://github.com/beeper/desktop-api-js/commit/8b59f3a10dc81df3e61d1d467f221edf4fc2d032))
+* redact api-key headers in debug logs ([f34de70](https://github.com/beeper/desktop-api-js/commit/f34de708e01ce81a9cb6a9dcd180c44e76b4f2fd))
+* **tests:** remove redundant File import ([91bb886](https://github.com/beeper/desktop-api-js/commit/91bb8861dbbe6cbf63c3c8f6a3a03c76d579c084))
+
 ## 5.0.0 (2026-05-07)
 
 Full Changelog: [v4.8.0...v5.0.0](https://github.com/beeper/desktop-api-js/compare/v4.8.0...v5.0.0)
