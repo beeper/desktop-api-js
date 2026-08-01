@@ -122,6 +122,27 @@ export function codeTool({
   return { metadata, tool, handler };
 }
 
+/**
+ * Grants the Deno subprocess net access to its own control socket, and nothing else.
+ *
+ * `@valtown/deno-http-worker` serves its control channel with `Deno.serve({ path })` over a Unix
+ * socket, and since Deno 2.9 binding one needs net access on top of read/write access:
+ *
+ *   NotCapable: Requires net access to "unix:/.../<uuid>-deno-http.sock"
+ *
+ * The library generates that path itself and never exposes it, so recover it from the argv the
+ * library built: it is the only bare (non-flag) argument ending in the socket suffix. Deno's
+ * allowlist matches a Unix socket by full path only — a directory prefix is not accepted — so this
+ * is as tightly as the permission can be scoped.
+ */
+function withControlSocketNetAccess(args: string[]): string[] {
+  const socketPath = args.find((arg) => !arg.startsWith('-') && arg.endsWith('-deno-http.sock'));
+  if (socketPath === undefined) {
+    return args;
+  }
+  return args.map((arg) => (arg.startsWith('--allow-net=') ? `${arg},unix:${socketPath}` : arg));
+}
+
 const localDenoHandler = async ({
   reqContext,
   args,
@@ -146,7 +167,7 @@ const localDenoHandler = async ({
   const packageNodeModulesPath = path.resolve(packageRoot, 'node_modules');
 
   // Check if deno is in PATH
-  const { execSync } = await import('node:child_process');
+  const { execSync, spawn } = await import('node:child_process');
   try {
     execSync('command -v deno', { stdio: 'ignore' });
     denoPath = 'deno';
@@ -195,6 +216,9 @@ const localDenoHandler = async ({
       '--allow-env',
     ],
     printOutput: true,
+    // The worker library appends its own permission flags for the control socket, so patch the
+    // final argv rather than the flags above.
+    spawnFunc: (command, args, options) => spawn(command, withControlSocketNetAccess(args), options),
     spawnOptions: {
       cwd: path.dirname(workerPath),
       // Merge any upstream client envs into the Deno subprocess environment,
