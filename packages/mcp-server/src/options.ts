@@ -108,7 +108,7 @@ export function parseCLIOptions(): CLIOptions {
       description: 'What transport to use; stdio for local servers or http for remote servers',
     })
     .env('MCP_SERVER')
-    .version(true)
+    .version()
     .help();
 
   const argv = opts.parseSync();
