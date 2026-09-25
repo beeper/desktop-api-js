@@ -1,5 +1,23 @@
 # Changelog
 
+## 6.0.0 (unreleased)
+
+Full Changelog: [v5.0.0...v6.0.0](https://github.com/beeper/desktop-api-js/compare/v5.0.0...v6.0.0)
+
+### Breaking changes
+
+- App sign-in and verification methods now live under `client.app.setup` instead of `client.app.login`.
+- Bridge login methods now live under `client.bridges.logins` instead of `client.bridges.connections`.
+
+### Features
+
+- Refresh the TypeScript SDK against the current Desktop API, including label listing and updated chat, account, and setup models.
+
+### Fixes
+
+- Preserve the JSON content-type header when a request omits an optional body.
+- Require authentication for the standalone MCP HTTP server.
+
 ## 5.0.0 (2026-05-07)
 
 Full Changelog: [v4.8.0...v5.0.0](https://github.com/beeper/desktop-api-js/compare/v4.8.0...v5.0.0)
