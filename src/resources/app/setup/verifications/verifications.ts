@@ -1,20 +1,21 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../../../core/resource';
-import * as QrAPI from './qr';
-import { BaseQr, Qr as QrAPIQr, QrConfirmScannedResponse, QrScanParams, QrScanResponse } from './qr';
+import { APIResource } from '../../../../core/resource';
+import * as QRAPI from './qr';
+import { BaseQR, QR as QrapiQR, QRConfirmScannedResponse, QRScanParams, QRScanResponse } from './qr';
 import * as SASAPI from './sas';
 import { BaseSAS, SAS as SasapiSAS, SASConfirmResponse, SASStartResponse } from './sas';
-import { APIPromise } from '../../../core/api-promise';
-import { RequestOptions } from '../../../internal/request-options';
-import { path } from '../../../internal/utils/path';
+import { APIPromise } from '../../../../core/api-promise';
+import { RequestOptions } from '../../../../internal/request-options';
+import { path } from '../../../../internal/utils/path';
 
 /**
  * Manage device verification transactions
  */
 export class BaseVerifications extends APIResource {
-  static override readonly _key: readonly ['app', 'verifications'] = Object.freeze([
+  static override readonly _key: readonly ['app', 'setup', 'verifications'] = Object.freeze([
     'app',
+    'setup',
     'verifications',
   ] as const);
 
@@ -68,7 +69,7 @@ export class BaseVerifications extends APIResource {
  * Manage device verification transactions
  */
 export class Verifications extends BaseVerifications {
-  qr: QrAPI.Qr = new QrAPI.Qr(this._client);
+  qr: QRAPI.QR = new QRAPI.QR(this._client);
   sas: SASAPI.SAS = new SASAPI.SAS(this._client);
 }
 
@@ -273,7 +274,7 @@ export namespace VerificationCreateResponse {
       /**
        * QR verification data.
        */
-      qr?: Verification.Qr;
+      qr?: Verification.QR;
 
       /**
        * Emoji or number comparison data for verification.
@@ -315,7 +316,7 @@ export namespace VerificationCreateResponse {
       /**
        * QR verification data.
        */
-      export interface Qr {
+      export interface QR {
         /**
          * QR code payload to display for verification.
          */
@@ -391,7 +392,7 @@ export namespace VerificationCreateResponse {
     /**
      * QR verification data.
      */
-    qr?: Verification.Qr;
+    qr?: Verification.QR;
 
     /**
      * Emoji or number comparison data for verification.
@@ -433,7 +434,7 @@ export namespace VerificationCreateResponse {
     /**
      * QR verification data.
      */
-    export interface Qr {
+    export interface QR {
       /**
        * QR code payload to display for verification.
        */
@@ -658,7 +659,7 @@ export namespace VerificationRetrieveResponse {
       /**
        * QR verification data.
        */
-      qr?: Verification.Qr;
+      qr?: Verification.QR;
 
       /**
        * Emoji or number comparison data for verification.
@@ -700,7 +701,7 @@ export namespace VerificationRetrieveResponse {
       /**
        * QR verification data.
        */
-      export interface Qr {
+      export interface QR {
         /**
          * QR code payload to display for verification.
          */
@@ -776,7 +777,7 @@ export namespace VerificationRetrieveResponse {
     /**
      * QR verification data.
      */
-    qr?: Verification.Qr;
+    qr?: Verification.QR;
 
     /**
      * Emoji or number comparison data for verification.
@@ -818,7 +819,7 @@ export namespace VerificationRetrieveResponse {
     /**
      * QR verification data.
      */
-    export interface Qr {
+    export interface QR {
       /**
        * QR code payload to display for verification.
        */
@@ -899,7 +900,7 @@ export namespace VerificationListResponse {
     /**
      * QR verification data.
      */
-    qr?: Item.Qr;
+    qr?: Item.QR;
 
     /**
      * Emoji or number comparison data for verification.
@@ -941,7 +942,7 @@ export namespace VerificationListResponse {
     /**
      * QR verification data.
      */
-    export interface Qr {
+    export interface QR {
       /**
        * QR code payload to display for verification.
        */
@@ -1166,7 +1167,7 @@ export namespace VerificationAcceptResponse {
       /**
        * QR verification data.
        */
-      qr?: Verification.Qr;
+      qr?: Verification.QR;
 
       /**
        * Emoji or number comparison data for verification.
@@ -1208,7 +1209,7 @@ export namespace VerificationAcceptResponse {
       /**
        * QR verification data.
        */
-      export interface Qr {
+      export interface QR {
         /**
          * QR code payload to display for verification.
          */
@@ -1284,7 +1285,7 @@ export namespace VerificationAcceptResponse {
     /**
      * QR verification data.
      */
-    qr?: Verification.Qr;
+    qr?: Verification.QR;
 
     /**
      * Emoji or number comparison data for verification.
@@ -1326,7 +1327,7 @@ export namespace VerificationAcceptResponse {
     /**
      * QR verification data.
      */
-    export interface Qr {
+    export interface QR {
       /**
        * QR code payload to display for verification.
        */
@@ -1551,7 +1552,7 @@ export namespace VerificationCancelResponse {
       /**
        * QR verification data.
        */
-      qr?: Verification.Qr;
+      qr?: Verification.QR;
 
       /**
        * Emoji or number comparison data for verification.
@@ -1593,7 +1594,7 @@ export namespace VerificationCancelResponse {
       /**
        * QR verification data.
        */
-      export interface Qr {
+      export interface QR {
         /**
          * QR code payload to display for verification.
          */
@@ -1669,7 +1670,7 @@ export namespace VerificationCancelResponse {
     /**
      * QR verification data.
      */
-    qr?: Verification.Qr;
+    qr?: Verification.QR;
 
     /**
      * Emoji or number comparison data for verification.
@@ -1711,7 +1712,7 @@ export namespace VerificationCancelResponse {
     /**
      * QR verification data.
      */
-    export interface Qr {
+    export interface QR {
       /**
        * QR code payload to display for verification.
        */
@@ -1759,8 +1760,8 @@ export interface VerificationCancelParams {
   reason?: string;
 }
 
-Verifications.Qr = QrAPIQr;
-Verifications.BaseQr = BaseQr;
+Verifications.QR = QrapiQR;
+Verifications.BaseQR = BaseQR;
 Verifications.SAS = SasapiSAS;
 Verifications.BaseSAS = BaseSAS;
 
@@ -1776,11 +1777,11 @@ export declare namespace Verifications {
   };
 
   export {
-    QrAPIQr as Qr,
-    BaseQr as BaseQr,
-    type QrConfirmScannedResponse as QrConfirmScannedResponse,
-    type QrScanResponse as QrScanResponse,
-    type QrScanParams as QrScanParams,
+    QrapiQR as QR,
+    BaseQR as BaseQR,
+    type QRConfirmScannedResponse as QRConfirmScannedResponse,
+    type QRScanResponse as QRScanResponse,
+    type QRScanParams as QRScanParams,
   };
 
   export {

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIResource } from '../../../../../core/resource';
+import { APIResource } from '../../../../core/resource';
 import * as ResetAPI from './reset';
 import {
   BaseReset,
@@ -10,17 +10,16 @@ import {
   ResetCreateParams,
   ResetCreateResponse,
 } from './reset';
-import { APIPromise } from '../../../../../core/api-promise';
-import { RequestOptions } from '../../../../../internal/request-options';
+import { APIPromise } from '../../../../core/api-promise';
+import { RequestOptions } from '../../../../internal/request-options';
 
 /**
- * First-party sign-in and encrypted messaging setup for Beeper Desktop and Beeper Server.
+ * Manage recovery-key setup for encrypted messages
  */
 export class BaseRecoveryKey extends APIResource {
-  static override readonly _key: readonly ['app', 'login', 'verification', 'recoveryKey'] = Object.freeze([
+  static override readonly _key: readonly ['app', 'setup', 'recoveryKey'] = Object.freeze([
     'app',
-    'login',
-    'verification',
+    'setup',
     'recoveryKey',
   ] as const);
 
@@ -32,7 +31,7 @@ export class BaseRecoveryKey extends APIResource {
   }
 }
 /**
- * First-party sign-in and encrypted messaging setup for Beeper Desktop and Beeper Server.
+ * Manage recovery-key setup for encrypted messages
  */
 export class RecoveryKey extends BaseRecoveryKey {
   reset: ResetAPI.Reset = new ResetAPI.Reset(this._client);
@@ -234,7 +233,7 @@ export namespace RecoveryKeyVerifyResponse {
       /**
        * QR verification data.
        */
-      qr?: Verification.Qr;
+      qr?: Verification.QR;
 
       /**
        * Emoji or number comparison data for verification.
@@ -276,7 +275,7 @@ export namespace RecoveryKeyVerifyResponse {
       /**
        * QR verification data.
        */
-      export interface Qr {
+      export interface QR {
         /**
          * QR code payload to display for verification.
          */

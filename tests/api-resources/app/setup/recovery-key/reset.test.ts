@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { RecoveryKey } from '@beeper/desktop-api/resources/app/login/verification/recovery-key/recovery-key';
-import { BaseReset } from '@beeper/desktop-api/resources/app/login/verification/recovery-key/reset';
+import { RecoveryKey } from '@beeper/desktop-api/resources/app/setup/recovery-key/recovery-key';
+import { BaseReset } from '@beeper/desktop-api/resources/app/setup/recovery-key/reset';
 
 import BeeperDesktop from '@beeper/desktop-api';
 import { createClient, type PartialBeeperDesktop } from '@beeper/desktop-api/tree-shakable';
@@ -24,10 +24,10 @@ const parentPartialClient = createClient({
 });
 
 const runTests = (
-  client: PartialBeeperDesktop<{ app: { login: { verification: { recoveryKey: { reset: BaseReset } } } } }>,
+  client: PartialBeeperDesktop<{ app: { setup: { recoveryKey: { reset: BaseReset } } } }>,
 ) => {
   test('create', async () => {
-    const responsePromise = client.app.login.verification.recoveryKey.reset.create();
+    const responsePromise = client.app.setup.recoveryKey.reset.create();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -40,7 +40,7 @@ const runTests = (
   test('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.app.login.verification.recoveryKey.reset.create(
+      client.app.setup.recoveryKey.reset.create(
         { existingRecoveryKey: 'existingRecoveryKey' },
         { path: '/_stainless_unknown_path' },
       ),
@@ -48,7 +48,7 @@ const runTests = (
   });
 
   test('confirm: only required params', async () => {
-    const responsePromise = client.app.login.verification.recoveryKey.reset.confirm({ recoveryKey: 'x' });
+    const responsePromise = client.app.setup.recoveryKey.reset.confirm({ recoveryKey: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -59,7 +59,7 @@ const runTests = (
   });
 
   test('confirm: required and optional params', async () => {
-    const response = await client.app.login.verification.recoveryKey.reset.confirm({ recoveryKey: 'x' });
+    const response = await client.app.setup.recoveryKey.reset.confirm({ recoveryKey: 'x' });
   });
 };
 describe('resource reset', () => runTests(client));

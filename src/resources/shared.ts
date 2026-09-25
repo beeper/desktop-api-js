@@ -195,7 +195,7 @@ export namespace AppStateSnapshot {
     /**
      * QR verification data.
      */
-    qr?: Verification.Qr;
+    qr?: Verification.QR;
 
     /**
      * Emoji or number comparison data for verification.
@@ -237,7 +237,7 @@ export namespace AppStateSnapshot {
     /**
      * QR verification data.
      */
-    export interface Qr {
+    export interface QR {
       /**
        * QR code payload to display for verification.
        */
@@ -362,6 +362,423 @@ export namespace Attachment {
   }
 }
 
+/**
+ * Capabilities for one attachment message type.
+ */
+export interface AttachmentCapabilities {
+  /**
+   * Supported MIME types or MIME patterns for this file message type. Missing MIME
+   * types should be treated as rejected.
+   */
+  mimeTypes: { [key: string]: -2 | -1 | 0 | 1 | 2 };
+
+  /**
+   * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+   * supported.
+   */
+  caption?: -2 | -1 | 0 | 1 | 2;
+
+  /**
+   * Maximum caption length when captions are supported.
+   */
+  maxCaptionLength?: number;
+
+  /**
+   * Maximum audio or video duration in seconds.
+   */
+  maxDuration?: number;
+
+  /**
+   * Maximum image or video height in pixels.
+   */
+  maxHeight?: number;
+
+  /**
+   * Maximum file size in bytes.
+   */
+  maxSize?: number;
+
+  /**
+   * Maximum image or video width in pixels.
+   */
+  maxWidth?: number;
+
+  /**
+   * True if this file type can be sent as view-once media.
+   */
+  viewOnce?: boolean;
+}
+
+/**
+ * Chat capabilities reported by the platform.
+ */
+export interface ChatCapabilities {
+  /**
+   * Allowed Unicode reactions. Omitted means all emoji reactions are allowed.
+   */
+  allowedReactions?: Array<string>;
+
+  /**
+   * True if archive/unarchive is supported.
+   */
+  archive?: boolean;
+
+  /**
+   * Supported attachment message types and their per-type constraints, keyed by
+   * Matrix msgtype or pseudo-msgtype (for example m.image, m.video,
+   * org.matrix.msc3245.voice). Missing message types should be treated as rejected.
+   */
+  attachments?: { [key: string]: AttachmentCapabilities };
+
+  /**
+   * True if custom emoji reactions are supported.
+   */
+  customEmojiReactions?: boolean;
+
+  /**
+   * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+   * supported.
+   */
+  delete?: -2 | -1 | 0 | 1 | 2;
+
+  /**
+   * True if deleting chats for the authenticated user is supported.
+   */
+  deleteChat?: boolean;
+
+  /**
+   * True if deleting chats for everyone is supported.
+   */
+  deleteChatForEveryone?: boolean;
+
+  /**
+   * True if deleting messages only for the authenticated user is supported.
+   */
+  deleteForMe?: boolean;
+
+  /**
+   * Maximum message age for delete-for-everyone, in seconds.
+   */
+  deleteMaxAge?: number;
+
+  /**
+   * Disappearing-message timer capabilities.
+   */
+  disappearingTimer?: ChatCapabilities.DisappearingTimer;
+
+  /**
+   * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+   * supported.
+   */
+  edit?: -2 | -1 | 0 | 1 | 2;
+
+  /**
+   * Maximum message age for edits, in seconds.
+   */
+  editMaxAge?: number;
+
+  /**
+   * Maximum number of edits allowed for one message.
+   */
+  editMaxCount?: number;
+
+  /**
+   * Supported rich-text formatting features keyed by feature name (for example bold,
+   * inline_code, code_block.syntax_highlighting). Omitted means no formatting
+   * support is advertised.
+   */
+  formatting?: { [key: string]: -2 | -1 | 0 | 1 | 2 };
+
+  /**
+   * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+   * supported.
+   */
+  locationMessage?: -2 | -1 | 0 | 1 | 2;
+
+  /**
+   * True if marking chats unread is supported.
+   */
+  markAsUnread?: boolean;
+
+  /**
+   * Maximum length of normal text messages.
+   */
+  maxTextLength?: number;
+
+  /**
+   * Message request capabilities.
+   */
+  messageRequest?: ChatCapabilities.MessageRequest;
+
+  /**
+   * Participant management capabilities.
+   */
+  participantActions?: ChatCapabilities.ParticipantActions;
+
+  /**
+   * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+   * supported.
+   */
+  poll?: -2 | -1 | 0 | 1 | 2;
+
+  /**
+   * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+   * supported.
+   */
+  reaction?: -2 | -1 | 0 | 1 | 2;
+
+  /**
+   * Maximum number of reactions allowed on a single message.
+   */
+  reactionCount?: number;
+
+  /**
+   * True if read receipts are supported.
+   */
+  readReceipts?: boolean;
+
+  /**
+   * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+   * supported.
+   */
+  reply?: -2 | -1 | 0 | 1 | 2;
+
+  /**
+   * Chat state update capabilities.
+   */
+  state?: ChatStateCapabilities;
+
+  /**
+   * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+   * supported.
+   */
+  thread?: -2 | -1 | 0 | 1 | 2;
+
+  /**
+   * True if typing notifications are supported.
+   */
+  typingNotifications?: boolean;
+}
+
+export namespace ChatCapabilities {
+  /**
+   * Disappearing-message timer capabilities.
+   */
+  export interface DisappearingTimer {
+    /**
+     * True if empty timer objects should be omitted from message content.
+     */
+    omitEmptyTimer?: boolean;
+
+    /**
+     * Allowed disappearing timer values in milliseconds. Omitted means any timer is
+     * allowed.
+     */
+    timers?: Array<number>;
+
+    /**
+     * Supported disappearing timer types.
+     */
+    types?: Array<'afterRead' | 'afterReadByRecipient' | 'afterSend'>;
+  }
+
+  /**
+   * Message request capabilities.
+   */
+  export interface MessageRequest {
+    /**
+     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+     * supported.
+     */
+    acceptWithButton?: -2 | -1 | 0 | 1 | 2;
+
+    /**
+     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+     * supported.
+     */
+    acceptWithMessage?: -2 | -1 | 0 | 1 | 2;
+  }
+
+  /**
+   * Participant management capabilities.
+   */
+  export interface ParticipantActions {
+    /**
+     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+     * supported.
+     */
+    ban?: -2 | -1 | 0 | 1 | 2;
+
+    /**
+     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+     * supported.
+     */
+    invite?: -2 | -1 | 0 | 1 | 2;
+
+    /**
+     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+     * supported.
+     */
+    kick?: -2 | -1 | 0 | 1 | 2;
+
+    /**
+     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+     * supported.
+     */
+    leave?: -2 | -1 | 0 | 1 | 2;
+
+    /**
+     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+     * supported.
+     */
+    revokeInvite?: -2 | -1 | 0 | 1 | 2;
+  }
+}
+
+/**
+ * Current draft object for this chat, or null when no draft is set.
+ */
+export interface ChatDraft {
+  /**
+   * Rich-text draft body as returned by Beeper.
+   */
+  text: string;
+
+  /**
+   * Draft attachments keyed by attachment ID.
+   */
+  attachments?: { [key: string]: DraftAttachment };
+}
+
+/**
+ * Chat state update capabilities.
+ */
+export interface ChatStateCapabilities {
+  /**
+   * Chat avatar state capability.
+   */
+  avatar?: ChatStateCapabilities.Avatar;
+
+  /**
+   * Chat description/topic state capability.
+   */
+  description?: ChatStateCapabilities.Description;
+
+  /**
+   * Disappearing-message timer state capability.
+   */
+  disappearingTimer?: ChatStateCapabilities.DisappearingTimer;
+
+  /**
+   * Chat title state capability.
+   */
+  title?: ChatStateCapabilities.Title;
+}
+
+export namespace ChatStateCapabilities {
+  /**
+   * Chat avatar state capability.
+   */
+  export interface Avatar {
+    /**
+     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+     * supported.
+     */
+    level: -2 | -1 | 0 | 1 | 2;
+  }
+
+  /**
+   * Chat description/topic state capability.
+   */
+  export interface Description {
+    /**
+     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+     * supported.
+     */
+    level: -2 | -1 | 0 | 1 | 2;
+  }
+
+  /**
+   * Disappearing-message timer state capability.
+   */
+  export interface DisappearingTimer {
+    /**
+     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+     * supported.
+     */
+    level: -2 | -1 | 0 | 1 | 2;
+  }
+
+  /**
+   * Chat title state capability.
+   */
+  export interface Title {
+    /**
+     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
+     * supported.
+     */
+    level: -2 | -1 | 0 | 1 | 2;
+  }
+}
+
+export interface DraftAttachment {
+  /**
+   * Draft attachment identifier.
+   */
+  id: string;
+
+  /**
+   * Draft attachment type. GIF and recorded audio are mutually exclusive types.
+   */
+  type: 'file' | 'gif' | 'recorded_audio';
+
+  /**
+   * Audio duration in seconds if known.
+   */
+  audioDurationSeconds?: number;
+
+  /**
+   * Original filename if available.
+   */
+  fileName?: string;
+
+  /**
+   * Local filesystem path for the draft attachment.
+   */
+  filePath?: string;
+
+  /**
+   * File size in bytes if known.
+   */
+  fileSize?: number;
+
+  /**
+   * MIME type if known.
+   */
+  mimeType?: string;
+
+  /**
+   * Pixel dimensions of the attachment.
+   */
+  size?: DraftAttachment.Size;
+
+  /**
+   * Sticker identifier if the draft attachment is a sticker.
+   */
+  stickerID?: string;
+}
+
+export namespace DraftAttachment {
+  /**
+   * Pixel dimensions of the attachment.
+   */
+  export interface Size {
+    height?: number;
+
+    width?: number;
+  }
+}
+
 export interface Error {
   /**
    * Machine-readable error code
@@ -407,6 +824,59 @@ export namespace Error {
        */
       path: Array<string | number>;
     }
+  }
+}
+
+/**
+ * Link preview included with a message.
+ */
+export interface LinkPreview {
+  /**
+   * Link preview title.
+   */
+  title: string;
+
+  /**
+   * Resolved link URL.
+   */
+  url: string;
+
+  /**
+   * Favicon URL if available. May be temporary or available only on this device;
+   * download promptly if durable access is needed.
+   */
+  favicon?: string;
+
+  /**
+   * Preview image URL if available. May be temporary or available only on this
+   * device; download promptly if durable access is needed.
+   */
+  img?: string;
+
+  /**
+   * Preview image dimensions.
+   */
+  imgSize?: LinkPreview.ImgSize;
+
+  /**
+   * Original URL when the displayed URL is shortened or redirected.
+   */
+  originalURL?: string;
+
+  /**
+   * Link preview summary.
+   */
+  summary?: string;
+}
+
+export namespace LinkPreview {
+  /**
+   * Preview image dimensions.
+   */
+  export interface ImgSize {
+    height?: number;
+
+    width?: number;
   }
 }
 
@@ -481,7 +951,7 @@ export interface Message {
   /**
    * Link previews included with this message, if any.
    */
-  links?: Array<Message.Link>;
+  links?: Array<LinkPreview>;
 
   /**
    * Mentioned user IDs, @room, or null for legacy messages that require text
@@ -507,7 +977,7 @@ export interface Message {
   /**
    * Message send status for this message, when reported by the bridge.
    */
-  sendStatus?: Message.SendStatus;
+  sendStatus?: SendStatus;
 
   /**
    * Rich-text message body if present.
@@ -529,97 +999,6 @@ export interface Message {
     | 'STICKER'
     | 'LOCATION'
     | 'REACTION';
-}
-
-export namespace Message {
-  /**
-   * Link preview included with a message.
-   */
-  export interface Link {
-    /**
-     * Link preview title.
-     */
-    title: string;
-
-    /**
-     * Resolved link URL.
-     */
-    url: string;
-
-    /**
-     * Favicon URL if available. May be temporary or available only on this device;
-     * download promptly if durable access is needed.
-     */
-    favicon?: string;
-
-    /**
-     * Preview image URL if available. May be temporary or available only on this
-     * device; download promptly if durable access is needed.
-     */
-    img?: string;
-
-    /**
-     * Preview image dimensions.
-     */
-    imgSize?: Link.ImgSize;
-
-    /**
-     * Original URL when the displayed URL is shortened or redirected.
-     */
-    originalURL?: string;
-
-    /**
-     * Link preview summary.
-     */
-    summary?: string;
-  }
-
-  export namespace Link {
-    /**
-     * Preview image dimensions.
-     */
-    export interface ImgSize {
-      height?: number;
-
-      width?: number;
-    }
-  }
-
-  /**
-   * Message send status for this message, when reported by the bridge.
-   */
-  export interface SendStatus {
-    /**
-     * Current status of the message send attempt.
-     */
-    status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT';
-
-    /**
-     * Timestamp for the send status event.
-     */
-    timestamp: string;
-
-    /**
-     * User IDs the message was delivered to, when reported by the network.
-     */
-    deliveredToUsers?: Array<string>;
-
-    /**
-     * Diagnostic error detail from the messaging network adapter. Do not show directly
-     * to users.
-     */
-    internalError?: string;
-
-    /**
-     * Human-readable send status or failure message.
-     */
-    message?: string;
-
-    /**
-     * Machine-readable failure reason. Present when the send status is a failure.
-     */
-    reason?: string;
-  }
 }
 
 export interface Reaction {
@@ -651,6 +1030,42 @@ export interface Reaction {
    * download promptly if durable access is needed.
    */
   imgURL?: string;
+}
+
+/**
+ * Message send status for this message, when reported by the bridge.
+ */
+export interface SendStatus {
+  /**
+   * Current status of the message send attempt.
+   */
+  status: 'SUCCESS' | 'PENDING' | 'FAIL_RETRIABLE' | 'FAIL_PERMANENT';
+
+  /**
+   * Timestamp for the send status event.
+   */
+  timestamp: string;
+
+  /**
+   * User IDs the message was delivered to, when reported by the network.
+   */
+  deliveredToUsers?: Array<string>;
+
+  /**
+   * Diagnostic error detail from the messaging network adapter. Do not show directly
+   * to users.
+   */
+  internalError?: string;
+
+  /**
+   * Human-readable send status or failure message.
+   */
+  message?: string;
+
+  /**
+   * Machine-readable failure reason. Present when the send status is a failure.
+   */
+  reason?: string;
 }
 
 /**
