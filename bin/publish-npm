@@ -19,7 +19,7 @@ VERSION="$(jq -r -e '.version' ./package.json)"
 #     "detail": "'the_package' is not in this registry..."
 #   }
 # }
-NPM_INFO="$(npm view "$PACKAGE_NAME" version --json 2>/dev/null || true)"
+NPM_INFO="$(npm view "$PACKAGE_NAME" version --json --registry=https://registry.npmjs.org 2>/dev/null || true)"
 
 # Check if we got an E404 error
 if echo "$NPM_INFO" | jq -e '.error.code == "E404"' > /dev/null 2>&1; then
@@ -56,4 +56,4 @@ else
 fi
 
 # Publish with the appropriate tag
-npm publish --tag "$TAG" --access public
+npm publish --tag "$TAG" --access public --registry=https://registry.npmjs.org

@@ -6,17 +6,17 @@ Full Changelog: [v5.0.0...v6.0.0](https://github.com/beeper/desktop-api-js/compa
 
 ### Breaking changes
 
-- App sign-in and verification methods now live under `client.app.setup` instead of `client.app.login`.
-- Bridge login methods now live under `client.bridges.logins` instead of `client.bridges.connections`.
+- Some exported TypeScript types moved: `Chat.Capabilities` is now `Shared.ChatCapabilities`, `Chat.Draft` is `Shared.ChatDraft`, and `Shared.Message.SendStatus` is `Shared.SendStatus`. The corresponding response JSON fields are unchanged.
+- Standalone MCP HTTP requests now require a Bearer token or `x-beeper-access-token` header; anonymous requests no longer work.
 
 ### Features
 
+- Add `client.app.setup` for sign-in and verification, and `client.bridges.logins` for bridge login management. These methods were not in published v5. Unreleased `next` builds had `client.app.login` and an empty `client.bridges.connections` resource, respectively.
 - Refresh the TypeScript SDK against the current Desktop API, including label listing and updated chat, account, and setup models.
 
 ### Fixes
 
 - Preserve the JSON content-type header when a request omits an optional body.
-- Require authentication for the standalone MCP HTTP server.
 
 ## 5.0.0 (2026-05-07)
 
