@@ -9,7 +9,17 @@ export {
   type AccountRetrieveResponse,
   type AccountListResponse,
 } from './accounts/accounts';
-export { App, BaseApp, type Verification, type AppSessionResponse } from './app/app';
+export {
+  App,
+  BaseApp,
+  type RecoveryKeyResetResponse,
+  type SetupCompleteResponse,
+  type SetupRegistrationRequiredResponse,
+  type SetupResponseOutput,
+  type SetupStateResponse,
+  type Verification,
+  type VerificationResponse,
+} from './app/app';
 export {
   Assets,
   BaseAssets,
@@ -25,6 +35,7 @@ export {
   Bridges,
   BaseBridges,
   type Bridge,
+  type BridgeLogin,
   type CookieField,
   type DisappearingTimerCapability,
   type GroupFieldCapability,
@@ -58,6 +69,7 @@ export {
   type ChatsCursorSearch,
 } from './chats/chats';
 export { Info, BaseInfo, type InfoRetrieveResponse } from './info';
+export { Labels, BaseLabels, type Label, type LabelListResponse } from './labels';
 export {
   Messages,
   BaseMessages,

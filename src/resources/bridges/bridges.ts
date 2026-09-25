@@ -4,10 +4,17 @@ import { APIResource } from '../../core/resource';
 import * as BridgesAPI from './bridges';
 import * as Shared from '../shared';
 import * as AccountsAPI from '../accounts/accounts';
-import * as ConnectionsAPI from './connections';
-import { BaseConnections, Connections } from './connections';
 import * as LoginFlowsAPI from './login-flows';
 import { BaseLoginFlows, LoginFlowListResponse, LoginFlows } from './login-flows';
+import * as LoginsAPI from './logins';
+import {
+  BaseLogins,
+  LoginListResponse,
+  LoginRemoveParams,
+  LoginRemoveResponse,
+  LoginRetrieveParams,
+  Logins,
+} from './logins';
 import * as LoginSessionsAPI from './login-sessions/login-sessions';
 import {
   BaseLoginSessions,
@@ -22,7 +29,7 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * Manage bridge-backed account types, connections, and login sessions
+ * Manage available bridges, connect or reconnect chat accounts
  */
 export class BaseBridges extends APIResource {
   static override readonly _key: readonly ['bridges'] = Object.freeze(['bridges'] as const);
@@ -52,11 +59,11 @@ export class BaseBridges extends APIResource {
   }
 }
 /**
- * Manage bridge-backed account types, connections, and login sessions
+ * Manage available bridges, connect or reconnect chat accounts
  */
 export class Bridges extends BaseBridges {
   loginFlows: LoginFlowsAPI.LoginFlows = new LoginFlowsAPI.LoginFlows(this._client);
-  connections: ConnectionsAPI.Connections = new ConnectionsAPI.Connections(this._client);
+  logins: LoginsAPI.Logins = new LoginsAPI.Logins(this._client);
   loginSessions: LoginSessionsAPI.LoginSessions = new LoginSessionsAPI.LoginSessions(this._client);
 }
 
@@ -117,6 +124,41 @@ export interface Bridge {
   statusText?: string;
 }
 
+/**
+ * Signed-in identity for a bridge. One bridge login can contain multiple chat
+ * accounts.
+ */
+export interface BridgeLogin {
+  /**
+   * Bridge ID.
+   */
+  bridgeID: string;
+
+  /**
+   * Bridge login ID.
+   */
+  loginID: string;
+
+  removeScopes: Array<'current-device' | 'all-devices'>;
+
+  status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown';
+
+  /**
+   * Chat accounts that belong to this bridge login, when known.
+   */
+  accountIDs?: Array<string>;
+
+  /**
+   * Human-friendly bridge login status text.
+   */
+  statusText?: string;
+
+  /**
+   * User the account belongs to.
+   */
+  user?: Shared.User;
+}
+
 export interface CookieField {
   /**
    * Field ID to send back in the fields object.
@@ -138,7 +180,7 @@ export interface CookieField {
  * Disappearing-message timer capability.
  */
 export interface DisappearingTimerCapability {
-  types: Array<'' | 'after_read' | 'after_send'>;
+  types: Array<'' | 'after_read' | 'after_read_by_recipient' | 'after_send'>;
 
   omit_empty_timer?: true;
 
@@ -302,7 +344,7 @@ export interface LoginSession {
    * Signed-in identity for a bridge. One bridge login can contain multiple chat
    * accounts.
    */
-  login?: LoginSession.Login;
+  login?: BridgeLogin;
 
   /**
    * Bridge login ID for reconnect flows, when known.
@@ -361,7 +403,7 @@ export namespace LoginSession {
   }
 
   export interface DisplayAndWait {
-    display: DisplayAndWait.QrCode | DisplayAndWait.Emoji | DisplayAndWait.Empty;
+    display: DisplayAndWait.QRCode | DisplayAndWait.Emoji | DisplayAndWait.Code | DisplayAndWait.Empty;
 
     stepID: string;
 
@@ -374,7 +416,7 @@ export namespace LoginSession {
   }
 
   export namespace DisplayAndWait {
-    export interface QrCode {
+    export interface QRCode {
       data: string;
 
       type: 'qr';
@@ -384,6 +426,12 @@ export namespace LoginSession {
       imageURL: string;
 
       type: 'emoji';
+    }
+
+    export interface Code {
+      data: string;
+
+      type: 'code';
     }
 
     export interface Empty {
@@ -408,81 +456,9 @@ export namespace LoginSession {
      * Signed-in identity for a bridge. One bridge login can contain multiple chat
      * accounts.
      */
-    login?: Complete.Login;
+    login?: BridgesAPI.BridgeLogin;
 
     stepID?: string;
-  }
-
-  export namespace Complete {
-    /**
-     * Signed-in identity for a bridge. One bridge login can contain multiple chat
-     * accounts.
-     */
-    export interface Login {
-      /**
-       * Bridge ID.
-       */
-      bridgeID: string;
-
-      /**
-       * Bridge login ID.
-       */
-      loginID: string;
-
-      removeScopes: Array<'current-device' | 'all-devices'>;
-
-      status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown';
-
-      /**
-       * Chat accounts that belong to this bridge login, when known.
-       */
-      accountIDs?: Array<string>;
-
-      /**
-       * Human-friendly bridge login status text.
-       */
-      statusText?: string;
-
-      /**
-       * User the account belongs to.
-       */
-      user?: Shared.User;
-    }
-  }
-
-  /**
-   * Signed-in identity for a bridge. One bridge login can contain multiple chat
-   * accounts.
-   */
-  export interface Login {
-    /**
-     * Bridge ID.
-     */
-    bridgeID: string;
-
-    /**
-     * Bridge login ID.
-     */
-    loginID: string;
-
-    removeScopes: Array<'current-device' | 'all-devices'>;
-
-    status: 'connected' | 'connecting' | 'needs_login' | 'logged_out' | 'unknown';
-
-    /**
-     * Chat accounts that belong to this bridge login, when known.
-     */
-    accountIDs?: Array<string>;
-
-    /**
-     * Human-friendly bridge login status text.
-     */
-    statusText?: string;
-
-    /**
-     * User the account belongs to.
-     */
-    user?: Shared.User;
   }
 }
 
@@ -585,14 +561,15 @@ export interface BridgeListResponse {
 
 Bridges.LoginFlows = LoginFlows;
 Bridges.BaseLoginFlows = BaseLoginFlows;
-Bridges.Connections = Connections;
-Bridges.BaseConnections = BaseConnections;
+Bridges.Logins = Logins;
+Bridges.BaseLogins = BaseLogins;
 Bridges.LoginSessions = LoginSessions;
 Bridges.BaseLoginSessions = BaseLoginSessions;
 
 export declare namespace Bridges {
   export {
     type Bridge as Bridge,
+    type BridgeLogin as BridgeLogin,
     type CookieField as CookieField,
     type DisappearingTimerCapability as DisappearingTimerCapability,
     type GroupFieldCapability as GroupFieldCapability,
@@ -612,7 +589,14 @@ export declare namespace Bridges {
     type LoginFlowListResponse as LoginFlowListResponse,
   };
 
-  export { Connections as Connections, BaseConnections as BaseConnections };
+  export {
+    Logins as Logins,
+    BaseLogins as BaseLogins,
+    type LoginListResponse as LoginListResponse,
+    type LoginRemoveResponse as LoginRemoveResponse,
+    type LoginRetrieveParams as LoginRetrieveParams,
+    type LoginRemoveParams as LoginRemoveParams,
+  };
 
   export {
     LoginSessions as LoginSessions,

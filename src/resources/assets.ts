@@ -8,7 +8,7 @@ import { RequestOptions } from '../internal/request-options';
 import { multipartFormRequestOptions } from '../internal/uploads';
 
 /**
- * Manage assets in Beeper Desktop, like message attachments
+ * Manage files for message attachments
  */
 export class BaseAssets extends APIResource {
   static override readonly _key: readonly ['assets'] = Object.freeze(['assets'] as const);
@@ -88,7 +88,7 @@ export class BaseAssets extends APIResource {
   }
 }
 /**
- * Manage assets in Beeper Desktop, like message attachments
+ * Manage files for message attachments
  */
 export class Assets extends BaseAssets {}
 

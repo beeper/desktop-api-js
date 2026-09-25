@@ -165,8 +165,8 @@ export interface MessageUpdateResponse extends Shared.Message {
 
 export interface MessageSendResponse {
   /**
-   * Chat ID. Input routes also accept the local chat ID from this installation when
-   * available.
+   * Chat the message was actually sent to. When sending to a merged chat, this is
+   * the member chat the send was routed to.
    */
   chatID: string;
 

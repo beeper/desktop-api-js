@@ -1,53 +1,1261 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as LoginAPI from './login/login';
+import * as SetupAPI from './setup/setup';
 import {
-  BaseLogin,
-  Login,
-  LoginEmailParams,
-  LoginRegisterParams,
-  LoginRegisterResponse,
-  LoginResponseParams,
-  LoginResponseResponse,
-  LoginStartResponse,
-} from './login/login';
-import * as VerificationsAPI from './verifications/verifications';
-import {
-  BaseVerifications,
-  VerificationAcceptResponse,
-  VerificationCancelParams,
-  VerificationCancelResponse,
-  VerificationCreateParams,
-  VerificationCreateResponse,
-  VerificationListResponse,
-  VerificationRetrieveResponse,
-  Verifications,
-} from './verifications/verifications';
-import { APIPromise } from '../../core/api-promise';
-import { RequestOptions } from '../../internal/request-options';
+  BaseSetup,
+  Setup,
+  SetupEmailParams,
+  SetupRegisterParams,
+  SetupRegisterResponse,
+  SetupResponseParams,
+  SetupResponseResponse,
+  SetupRetrieveResponse,
+  SetupStartResponse,
+} from './setup/setup';
 
 /**
- * Manage Beeper app login and encrypted messaging setup
+ * Manage Beeper account setup and encrypted messaging setup
  */
 export class BaseApp extends APIResource {
   static override readonly _key: readonly ['app'] = Object.freeze(['app'] as const);
-
-  /**
-   * Return the current Beeper Desktop or Beeper Server sign-in and encrypted
-   * messaging setup state. This endpoint is public before sign-in so apps can
-   * discover that sign-in is needed; after sign-in, pass a read token.
-   */
-  session(options?: RequestOptions): APIPromise<AppSessionResponse> {
-    return this._client.get('/v1/app/setup', options);
-  }
 }
 /**
- * Manage Beeper app login and encrypted messaging setup
+ * Manage Beeper account setup and encrypted messaging setup
  */
 export class App extends BaseApp {
-  login: LoginAPI.Login = new LoginAPI.Login(this._client);
-  verifications: VerificationsAPI.Verifications = new VerificationsAPI.Verifications(this._client);
+  setup: SetupAPI.Setup = new SetupAPI.Setup(this._client);
+}
+
+export interface RecoveryKeyResetResponse {
+  /**
+   * New recovery key. Show it once and ask the user to save it.
+   */
+  recoveryKey: string;
+
+  /**
+   * Current app sign-in and encrypted messaging setup state after creating the new
+   * recovery key.
+   */
+  session: RecoveryKeyResetResponse.Session;
+}
+
+export namespace RecoveryKeyResetResponse {
+  /**
+   * Current app sign-in and encrypted messaging setup state after creating the new
+   * recovery key.
+   */
+  export interface Session {
+    /**
+     * Encrypted messaging setup status.
+     */
+    e2ee: Session.E2EE;
+
+    /**
+     * Current sign-in and encrypted messaging setup state for Beeper Desktop or Beeper
+     * Server.
+     */
+    state:
+      | 'needs-login'
+      | 'initializing'
+      | 'needs-cross-signing-setup'
+      | 'needs-verification'
+      | 'needs-secrets'
+      | 'needs-first-sync'
+      | 'ready';
+
+    /**
+     * Signed-in account details. Omitted until sign-in is complete.
+     */
+    matrix?: Session.Matrix;
+
+    /**
+     * Trusted device verification progress.
+     */
+    verification?: Session.Verification;
+  }
+
+  export namespace Session {
+    /**
+     * Encrypted messaging setup status.
+     */
+    export interface E2EE {
+      /**
+       * Whether this account can verify trusted devices.
+       */
+      crossSigning: boolean;
+
+      /**
+       * Whether the first encrypted message sync is complete.
+       */
+      firstSyncDone: boolean;
+
+      /**
+       * Whether the user confirmed that they saved their recovery key.
+       */
+      hasBackedUpRecoveryKey: boolean;
+
+      /**
+       * Whether encrypted messaging setup has started.
+       */
+      initialized: boolean;
+
+      /**
+       * Whether encrypted message backup is available.
+       */
+      keyBackup: boolean;
+
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      secrets: E2EE.Secrets;
+
+      /**
+       * Whether secure key storage is available.
+       */
+      secretStorage: boolean;
+
+      /**
+       * Whether this device is trusted for encrypted messages.
+       */
+      verified: boolean;
+
+      /**
+       * Unix timestamp for when the recovery key was created.
+       */
+      recoveryKeyGeneratedAt?: number;
+    }
+
+    export namespace E2EE {
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      export interface Secrets {
+        /**
+         * Whether the account identity key is available.
+         */
+        masterKey: boolean;
+
+        /**
+         * Whether the encrypted message backup key is available.
+         */
+        megolmBackupKey: boolean;
+
+        /**
+         * Whether a recovery key is available.
+         */
+        recoveryKey: boolean;
+
+        /**
+         * Whether the device trust key is available.
+         */
+        selfSigningKey: boolean;
+
+        /**
+         * Whether the user trust key is available.
+         */
+        userSigningKey: boolean;
+      }
+    }
+
+    /**
+     * Signed-in account details. Omitted until sign-in is complete.
+     */
+    export interface Matrix {
+      /**
+       * Current device ID.
+       */
+      deviceID: string;
+
+      /**
+       * Beeper homeserver URL for this account.
+       */
+      homeserver: string;
+
+      /**
+       * Signed-in Beeper user ID.
+       */
+      userID: string;
+    }
+
+    /**
+     * Trusted device verification progress.
+     */
+    export interface Verification {
+      /**
+       * Verification ID to pass in verification action paths.
+       */
+      id: string;
+
+      /**
+       * Verification actions that are valid for the current state.
+       */
+      availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+      /**
+       * Whether this device started or received the verification.
+       */
+      direction: 'incoming' | 'outgoing';
+
+      /**
+       * Verification methods supported for this transaction.
+       */
+      methods: Array<'qr' | 'sas'>;
+
+      /**
+       * Why this verification exists.
+       */
+      purpose: 'login' | 'device';
+
+      /**
+       * Current trusted-device verification state.
+       */
+      state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+
+      /**
+       * Verification error details, if verification stopped.
+       */
+      error?: Verification.Error;
+
+      /**
+       * Other device participating in verification.
+       */
+      otherDevice?: Verification.OtherDevice;
+
+      /**
+       * Other Beeper user participating in verification.
+       */
+      otherUserID?: string;
+
+      /**
+       * QR verification data.
+       */
+      qr?: Verification.QR;
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      sas?: Verification.SAS;
+    }
+
+    export namespace Verification {
+      /**
+       * Verification error details, if verification stopped.
+       */
+      export interface Error {
+        /**
+         * Verification error code.
+         */
+        code: string;
+
+        /**
+         * User-facing verification error message.
+         */
+        reason: string;
+      }
+
+      /**
+       * Other device participating in verification.
+       */
+      export interface OtherDevice {
+        /**
+         * Other device ID.
+         */
+        id: string;
+
+        /**
+         * Other device display name, if known.
+         */
+        name?: string;
+      }
+
+      /**
+       * QR verification data.
+       */
+      export interface QR {
+        /**
+         * QR code payload to display for verification.
+         */
+        data: string;
+      }
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      export interface SAS {
+        /**
+         * Emoji sequence to compare on both devices.
+         */
+        emojis: string;
+
+        /**
+         * Number sequence to compare on both devices.
+         */
+        decimals?: string;
+      }
+    }
+  }
+}
+
+export interface SetupCompleteResponse {
+  /**
+   * Account credentials for first-party app setup.
+   */
+  matrix: SetupCompleteResponse.Matrix;
+
+  /**
+   * Current app sign-in and encrypted messaging setup state after sign-in.
+   */
+  session: SetupCompleteResponse.Session;
+}
+
+export namespace SetupCompleteResponse {
+  /**
+   * Account credentials for first-party app setup.
+   */
+  export interface Matrix {
+    /**
+     * Beeper account access token. Returned once for first-party app setup.
+     */
+    accessToken: string;
+
+    /**
+     * Current device ID.
+     */
+    deviceID: string;
+
+    /**
+     * Beeper homeserver URL for this account.
+     */
+    homeserver: string;
+
+    /**
+     * Signed-in Beeper user ID.
+     */
+    userID: string;
+  }
+
+  /**
+   * Current app sign-in and encrypted messaging setup state after sign-in.
+   */
+  export interface Session {
+    /**
+     * Encrypted messaging setup status.
+     */
+    e2ee: Session.E2EE;
+
+    /**
+     * Current sign-in and encrypted messaging setup state for Beeper Desktop or Beeper
+     * Server.
+     */
+    state:
+      | 'needs-login'
+      | 'initializing'
+      | 'needs-cross-signing-setup'
+      | 'needs-verification'
+      | 'needs-secrets'
+      | 'needs-first-sync'
+      | 'ready';
+
+    /**
+     * Signed-in account details. Omitted until sign-in is complete.
+     */
+    matrix?: Session.Matrix;
+
+    /**
+     * Trusted device verification progress.
+     */
+    verification?: Session.Verification;
+  }
+
+  export namespace Session {
+    /**
+     * Encrypted messaging setup status.
+     */
+    export interface E2EE {
+      /**
+       * Whether this account can verify trusted devices.
+       */
+      crossSigning: boolean;
+
+      /**
+       * Whether the first encrypted message sync is complete.
+       */
+      firstSyncDone: boolean;
+
+      /**
+       * Whether the user confirmed that they saved their recovery key.
+       */
+      hasBackedUpRecoveryKey: boolean;
+
+      /**
+       * Whether encrypted messaging setup has started.
+       */
+      initialized: boolean;
+
+      /**
+       * Whether encrypted message backup is available.
+       */
+      keyBackup: boolean;
+
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      secrets: E2EE.Secrets;
+
+      /**
+       * Whether secure key storage is available.
+       */
+      secretStorage: boolean;
+
+      /**
+       * Whether this device is trusted for encrypted messages.
+       */
+      verified: boolean;
+
+      /**
+       * Unix timestamp for when the recovery key was created.
+       */
+      recoveryKeyGeneratedAt?: number;
+    }
+
+    export namespace E2EE {
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      export interface Secrets {
+        /**
+         * Whether the account identity key is available.
+         */
+        masterKey: boolean;
+
+        /**
+         * Whether the encrypted message backup key is available.
+         */
+        megolmBackupKey: boolean;
+
+        /**
+         * Whether a recovery key is available.
+         */
+        recoveryKey: boolean;
+
+        /**
+         * Whether the device trust key is available.
+         */
+        selfSigningKey: boolean;
+
+        /**
+         * Whether the user trust key is available.
+         */
+        userSigningKey: boolean;
+      }
+    }
+
+    /**
+     * Signed-in account details. Omitted until sign-in is complete.
+     */
+    export interface Matrix {
+      /**
+       * Current device ID.
+       */
+      deviceID: string;
+
+      /**
+       * Beeper homeserver URL for this account.
+       */
+      homeserver: string;
+
+      /**
+       * Signed-in Beeper user ID.
+       */
+      userID: string;
+    }
+
+    /**
+     * Trusted device verification progress.
+     */
+    export interface Verification {
+      /**
+       * Verification ID to pass in verification action paths.
+       */
+      id: string;
+
+      /**
+       * Verification actions that are valid for the current state.
+       */
+      availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+      /**
+       * Whether this device started or received the verification.
+       */
+      direction: 'incoming' | 'outgoing';
+
+      /**
+       * Verification methods supported for this transaction.
+       */
+      methods: Array<'qr' | 'sas'>;
+
+      /**
+       * Why this verification exists.
+       */
+      purpose: 'login' | 'device';
+
+      /**
+       * Current trusted-device verification state.
+       */
+      state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+
+      /**
+       * Verification error details, if verification stopped.
+       */
+      error?: Verification.Error;
+
+      /**
+       * Other device participating in verification.
+       */
+      otherDevice?: Verification.OtherDevice;
+
+      /**
+       * Other Beeper user participating in verification.
+       */
+      otherUserID?: string;
+
+      /**
+       * QR verification data.
+       */
+      qr?: Verification.QR;
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      sas?: Verification.SAS;
+    }
+
+    export namespace Verification {
+      /**
+       * Verification error details, if verification stopped.
+       */
+      export interface Error {
+        /**
+         * Verification error code.
+         */
+        code: string;
+
+        /**
+         * User-facing verification error message.
+         */
+        reason: string;
+      }
+
+      /**
+       * Other device participating in verification.
+       */
+      export interface OtherDevice {
+        /**
+         * Other device ID.
+         */
+        id: string;
+
+        /**
+         * Other device display name, if known.
+         */
+        name?: string;
+      }
+
+      /**
+       * QR verification data.
+       */
+      export interface QR {
+        /**
+         * QR code payload to display for verification.
+         */
+        data: string;
+      }
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      export interface SAS {
+        /**
+         * Emoji sequence to compare on both devices.
+         */
+        emojis: string;
+
+        /**
+         * Number sequence to compare on both devices.
+         */
+        decimals?: string;
+      }
+    }
+  }
+}
+
+export interface SetupRegistrationRequiredResponse {
+  /**
+   * Copy to display during account creation.
+   */
+  copy: SetupRegistrationRequiredResponse.Copy;
+
+  /**
+   * Registration token returned by Beeper.
+   */
+  leadToken: string;
+
+  /**
+   * Indicates that the user needs to create a Beeper account.
+   */
+  registrationRequired: true;
+
+  /**
+   * Setup request ID to use when creating the account.
+   */
+  setupRequestID: string;
+
+  /**
+   * Suggested usernames for the new account.
+   */
+  usernameSuggestions?: Array<string>;
+}
+
+export namespace SetupRegistrationRequiredResponse {
+  /**
+   * Copy to display during account creation.
+   */
+  export interface Copy {
+    /**
+     * Submit button label.
+     */
+    submit: 'Continue';
+
+    /**
+     * Terms and privacy notice to show before account creation.
+     */
+    terms: 'By continuing, you agree to the Terms of Use and acknowledge the Privacy Policy.';
+
+    /**
+     * Title for the username step.
+     */
+    title: 'Choose your username';
+
+    /**
+     * Placeholder for the username field.
+     */
+    usernamePlaceholder: 'Username';
+  }
+}
+
+export type SetupResponseOutput = SetupResponseOutput.Success | SetupResponseOutput.RegistrationRequired;
+
+export namespace SetupResponseOutput {
+  export interface Success {
+    /**
+     * Account credentials for first-party app setup.
+     */
+    matrix: Success.Matrix;
+
+    /**
+     * Current app sign-in and encrypted messaging setup state after sign-in.
+     */
+    session: Success.Session;
+  }
+
+  export namespace Success {
+    /**
+     * Account credentials for first-party app setup.
+     */
+    export interface Matrix {
+      /**
+       * Beeper account access token. Returned once for first-party app setup.
+       */
+      accessToken: string;
+
+      /**
+       * Current device ID.
+       */
+      deviceID: string;
+
+      /**
+       * Beeper homeserver URL for this account.
+       */
+      homeserver: string;
+
+      /**
+       * Signed-in Beeper user ID.
+       */
+      userID: string;
+    }
+
+    /**
+     * Current app sign-in and encrypted messaging setup state after sign-in.
+     */
+    export interface Session {
+      /**
+       * Encrypted messaging setup status.
+       */
+      e2ee: Session.E2EE;
+
+      /**
+       * Current sign-in and encrypted messaging setup state for Beeper Desktop or Beeper
+       * Server.
+       */
+      state:
+        | 'needs-login'
+        | 'initializing'
+        | 'needs-cross-signing-setup'
+        | 'needs-verification'
+        | 'needs-secrets'
+        | 'needs-first-sync'
+        | 'ready';
+
+      /**
+       * Signed-in account details. Omitted until sign-in is complete.
+       */
+      matrix?: Session.Matrix;
+
+      /**
+       * Trusted device verification progress.
+       */
+      verification?: Session.Verification;
+    }
+
+    export namespace Session {
+      /**
+       * Encrypted messaging setup status.
+       */
+      export interface E2EE {
+        /**
+         * Whether this account can verify trusted devices.
+         */
+        crossSigning: boolean;
+
+        /**
+         * Whether the first encrypted message sync is complete.
+         */
+        firstSyncDone: boolean;
+
+        /**
+         * Whether the user confirmed that they saved their recovery key.
+         */
+        hasBackedUpRecoveryKey: boolean;
+
+        /**
+         * Whether encrypted messaging setup has started.
+         */
+        initialized: boolean;
+
+        /**
+         * Whether encrypted message backup is available.
+         */
+        keyBackup: boolean;
+
+        /**
+         * Encrypted messaging keys available on this device.
+         */
+        secrets: E2EE.Secrets;
+
+        /**
+         * Whether secure key storage is available.
+         */
+        secretStorage: boolean;
+
+        /**
+         * Whether this device is trusted for encrypted messages.
+         */
+        verified: boolean;
+
+        /**
+         * Unix timestamp for when the recovery key was created.
+         */
+        recoveryKeyGeneratedAt?: number;
+      }
+
+      export namespace E2EE {
+        /**
+         * Encrypted messaging keys available on this device.
+         */
+        export interface Secrets {
+          /**
+           * Whether the account identity key is available.
+           */
+          masterKey: boolean;
+
+          /**
+           * Whether the encrypted message backup key is available.
+           */
+          megolmBackupKey: boolean;
+
+          /**
+           * Whether a recovery key is available.
+           */
+          recoveryKey: boolean;
+
+          /**
+           * Whether the device trust key is available.
+           */
+          selfSigningKey: boolean;
+
+          /**
+           * Whether the user trust key is available.
+           */
+          userSigningKey: boolean;
+        }
+      }
+
+      /**
+       * Signed-in account details. Omitted until sign-in is complete.
+       */
+      export interface Matrix {
+        /**
+         * Current device ID.
+         */
+        deviceID: string;
+
+        /**
+         * Beeper homeserver URL for this account.
+         */
+        homeserver: string;
+
+        /**
+         * Signed-in Beeper user ID.
+         */
+        userID: string;
+      }
+
+      /**
+       * Trusted device verification progress.
+       */
+      export interface Verification {
+        /**
+         * Verification ID to pass in verification action paths.
+         */
+        id: string;
+
+        /**
+         * Verification actions that are valid for the current state.
+         */
+        availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+        /**
+         * Whether this device started or received the verification.
+         */
+        direction: 'incoming' | 'outgoing';
+
+        /**
+         * Verification methods supported for this transaction.
+         */
+        methods: Array<'qr' | 'sas'>;
+
+        /**
+         * Why this verification exists.
+         */
+        purpose: 'login' | 'device';
+
+        /**
+         * Current trusted-device verification state.
+         */
+        state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+
+        /**
+         * Verification error details, if verification stopped.
+         */
+        error?: Verification.Error;
+
+        /**
+         * Other device participating in verification.
+         */
+        otherDevice?: Verification.OtherDevice;
+
+        /**
+         * Other Beeper user participating in verification.
+         */
+        otherUserID?: string;
+
+        /**
+         * QR verification data.
+         */
+        qr?: Verification.QR;
+
+        /**
+         * Emoji or number comparison data for verification.
+         */
+        sas?: Verification.SAS;
+      }
+
+      export namespace Verification {
+        /**
+         * Verification error details, if verification stopped.
+         */
+        export interface Error {
+          /**
+           * Verification error code.
+           */
+          code: string;
+
+          /**
+           * User-facing verification error message.
+           */
+          reason: string;
+        }
+
+        /**
+         * Other device participating in verification.
+         */
+        export interface OtherDevice {
+          /**
+           * Other device ID.
+           */
+          id: string;
+
+          /**
+           * Other device display name, if known.
+           */
+          name?: string;
+        }
+
+        /**
+         * QR verification data.
+         */
+        export interface QR {
+          /**
+           * QR code payload to display for verification.
+           */
+          data: string;
+        }
+
+        /**
+         * Emoji or number comparison data for verification.
+         */
+        export interface SAS {
+          /**
+           * Emoji sequence to compare on both devices.
+           */
+          emojis: string;
+
+          /**
+           * Number sequence to compare on both devices.
+           */
+          decimals?: string;
+        }
+      }
+    }
+  }
+
+  export interface RegistrationRequired {
+    /**
+     * Copy to display during account creation.
+     */
+    copy: RegistrationRequired.Copy;
+
+    /**
+     * Registration token returned by Beeper.
+     */
+    leadToken: string;
+
+    /**
+     * Indicates that the user needs to create a Beeper account.
+     */
+    registrationRequired: true;
+
+    /**
+     * Setup request ID to use when creating the account.
+     */
+    setupRequestID: string;
+
+    /**
+     * Suggested usernames for the new account.
+     */
+    usernameSuggestions?: Array<string>;
+  }
+
+  export namespace RegistrationRequired {
+    /**
+     * Copy to display during account creation.
+     */
+    export interface Copy {
+      /**
+       * Submit button label.
+       */
+      submit: 'Continue';
+
+      /**
+       * Terms and privacy notice to show before account creation.
+       */
+      terms: 'By continuing, you agree to the Terms of Use and acknowledge the Privacy Policy.';
+
+      /**
+       * Title for the username step.
+       */
+      title: 'Choose your username';
+
+      /**
+       * Placeholder for the username field.
+       */
+      usernamePlaceholder: 'Username';
+    }
+  }
+}
+
+export interface SetupStateResponse {
+  /**
+   * Current app sign-in and encrypted messaging setup state.
+   */
+  session: SetupStateResponse.Session;
+}
+
+export namespace SetupStateResponse {
+  /**
+   * Current app sign-in and encrypted messaging setup state.
+   */
+  export interface Session {
+    /**
+     * Encrypted messaging setup status.
+     */
+    e2ee: Session.E2EE;
+
+    /**
+     * Current sign-in and encrypted messaging setup state for Beeper Desktop or Beeper
+     * Server.
+     */
+    state:
+      | 'needs-login'
+      | 'initializing'
+      | 'needs-cross-signing-setup'
+      | 'needs-verification'
+      | 'needs-secrets'
+      | 'needs-first-sync'
+      | 'ready';
+
+    /**
+     * Signed-in account details. Omitted until sign-in is complete.
+     */
+    matrix?: Session.Matrix;
+
+    /**
+     * Trusted device verification progress.
+     */
+    verification?: Session.Verification;
+  }
+
+  export namespace Session {
+    /**
+     * Encrypted messaging setup status.
+     */
+    export interface E2EE {
+      /**
+       * Whether this account can verify trusted devices.
+       */
+      crossSigning: boolean;
+
+      /**
+       * Whether the first encrypted message sync is complete.
+       */
+      firstSyncDone: boolean;
+
+      /**
+       * Whether the user confirmed that they saved their recovery key.
+       */
+      hasBackedUpRecoveryKey: boolean;
+
+      /**
+       * Whether encrypted messaging setup has started.
+       */
+      initialized: boolean;
+
+      /**
+       * Whether encrypted message backup is available.
+       */
+      keyBackup: boolean;
+
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      secrets: E2EE.Secrets;
+
+      /**
+       * Whether secure key storage is available.
+       */
+      secretStorage: boolean;
+
+      /**
+       * Whether this device is trusted for encrypted messages.
+       */
+      verified: boolean;
+
+      /**
+       * Unix timestamp for when the recovery key was created.
+       */
+      recoveryKeyGeneratedAt?: number;
+    }
+
+    export namespace E2EE {
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      export interface Secrets {
+        /**
+         * Whether the account identity key is available.
+         */
+        masterKey: boolean;
+
+        /**
+         * Whether the encrypted message backup key is available.
+         */
+        megolmBackupKey: boolean;
+
+        /**
+         * Whether a recovery key is available.
+         */
+        recoveryKey: boolean;
+
+        /**
+         * Whether the device trust key is available.
+         */
+        selfSigningKey: boolean;
+
+        /**
+         * Whether the user trust key is available.
+         */
+        userSigningKey: boolean;
+      }
+    }
+
+    /**
+     * Signed-in account details. Omitted until sign-in is complete.
+     */
+    export interface Matrix {
+      /**
+       * Current device ID.
+       */
+      deviceID: string;
+
+      /**
+       * Beeper homeserver URL for this account.
+       */
+      homeserver: string;
+
+      /**
+       * Signed-in Beeper user ID.
+       */
+      userID: string;
+    }
+
+    /**
+     * Trusted device verification progress.
+     */
+    export interface Verification {
+      /**
+       * Verification ID to pass in verification action paths.
+       */
+      id: string;
+
+      /**
+       * Verification actions that are valid for the current state.
+       */
+      availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+      /**
+       * Whether this device started or received the verification.
+       */
+      direction: 'incoming' | 'outgoing';
+
+      /**
+       * Verification methods supported for this transaction.
+       */
+      methods: Array<'qr' | 'sas'>;
+
+      /**
+       * Why this verification exists.
+       */
+      purpose: 'login' | 'device';
+
+      /**
+       * Current trusted-device verification state.
+       */
+      state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+
+      /**
+       * Verification error details, if verification stopped.
+       */
+      error?: Verification.Error;
+
+      /**
+       * Other device participating in verification.
+       */
+      otherDevice?: Verification.OtherDevice;
+
+      /**
+       * Other Beeper user participating in verification.
+       */
+      otherUserID?: string;
+
+      /**
+       * QR verification data.
+       */
+      qr?: Verification.QR;
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      sas?: Verification.SAS;
+    }
+
+    export namespace Verification {
+      /**
+       * Verification error details, if verification stopped.
+       */
+      export interface Error {
+        /**
+         * Verification error code.
+         */
+        code: string;
+
+        /**
+         * User-facing verification error message.
+         */
+        reason: string;
+      }
+
+      /**
+       * Other device participating in verification.
+       */
+      export interface OtherDevice {
+        /**
+         * Other device ID.
+         */
+        id: string;
+
+        /**
+         * Other device display name, if known.
+         */
+        name?: string;
+      }
+
+      /**
+       * QR verification data.
+       */
+      export interface QR {
+        /**
+         * QR code payload to display for verification.
+         */
+        data: string;
+      }
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      export interface SAS {
+        /**
+         * Emoji sequence to compare on both devices.
+         */
+        emojis: string;
+
+        /**
+         * Number sequence to compare on both devices.
+         */
+        decimals?: string;
+      }
+    }
+  }
 }
 
 /**
@@ -102,7 +1310,7 @@ export interface Verification {
   /**
    * QR verification data.
    */
-  qr?: Verification.Qr;
+  qr?: Verification.QR;
 
   /**
    * Emoji or number comparison data for verification.
@@ -144,7 +1352,7 @@ export namespace Verification {
   /**
    * QR verification data.
    */
-  export interface Qr {
+  export interface QR {
     /**
      * QR code payload to display for verification.
      */
@@ -167,137 +1375,271 @@ export namespace Verification {
   }
 }
 
-export interface AppSessionResponse {
+export interface VerificationResponse {
   /**
-   * Encrypted messaging setup status.
+   * Current app sign-in and encrypted messaging setup state.
    */
-  e2ee: AppSessionResponse.E2EE;
-
-  /**
-   * Current sign-in and encrypted messaging setup state for Beeper Desktop or Beeper
-   * Server.
-   */
-  state:
-    | 'needs-login'
-    | 'initializing'
-    | 'needs-cross-signing-setup'
-    | 'needs-verification'
-    | 'needs-secrets'
-    | 'needs-first-sync'
-    | 'ready';
-
-  /**
-   * Signed-in account details. Omitted until sign-in is complete.
-   */
-  matrix?: AppSessionResponse.Matrix;
+  session: VerificationResponse.Session;
 
   /**
    * Trusted device verification progress.
    */
-  verification?: AppSessionResponse.Verification;
+  verification?: VerificationResponse.Verification;
 }
 
-export namespace AppSessionResponse {
+export namespace VerificationResponse {
   /**
-   * Encrypted messaging setup status.
+   * Current app sign-in and encrypted messaging setup state.
    */
-  export interface E2EE {
+  export interface Session {
     /**
-     * Whether this account can verify trusted devices.
+     * Encrypted messaging setup status.
      */
-    crossSigning: boolean;
+    e2ee: Session.E2EE;
 
     /**
-     * Whether the first encrypted message sync is complete.
+     * Current sign-in and encrypted messaging setup state for Beeper Desktop or Beeper
+     * Server.
      */
-    firstSyncDone: boolean;
+    state:
+      | 'needs-login'
+      | 'initializing'
+      | 'needs-cross-signing-setup'
+      | 'needs-verification'
+      | 'needs-secrets'
+      | 'needs-first-sync'
+      | 'ready';
 
     /**
-     * Whether the user confirmed that they saved their recovery key.
+     * Signed-in account details. Omitted until sign-in is complete.
      */
-    hasBackedUpRecoveryKey: boolean;
+    matrix?: Session.Matrix;
 
     /**
-     * Whether encrypted messaging setup has started.
+     * Trusted device verification progress.
      */
-    initialized: boolean;
-
-    /**
-     * Whether encrypted message backup is available.
-     */
-    keyBackup: boolean;
-
-    /**
-     * Encrypted messaging keys available on this device.
-     */
-    secrets: E2EE.Secrets;
-
-    /**
-     * Whether secure key storage is available.
-     */
-    secretStorage: boolean;
-
-    /**
-     * Whether this device is trusted for encrypted messages.
-     */
-    verified: boolean;
-
-    /**
-     * Unix timestamp for when the recovery key was created.
-     */
-    recoveryKeyGeneratedAt?: number;
+    verification?: Session.Verification;
   }
 
-  export namespace E2EE {
+  export namespace Session {
     /**
-     * Encrypted messaging keys available on this device.
+     * Encrypted messaging setup status.
      */
-    export interface Secrets {
+    export interface E2EE {
       /**
-       * Whether the account identity key is available.
+       * Whether this account can verify trusted devices.
        */
-      masterKey: boolean;
+      crossSigning: boolean;
 
       /**
-       * Whether the encrypted message backup key is available.
+       * Whether the first encrypted message sync is complete.
        */
-      megolmBackupKey: boolean;
+      firstSyncDone: boolean;
 
       /**
-       * Whether a recovery key is available.
+       * Whether the user confirmed that they saved their recovery key.
        */
-      recoveryKey: boolean;
+      hasBackedUpRecoveryKey: boolean;
 
       /**
-       * Whether the device trust key is available.
+       * Whether encrypted messaging setup has started.
        */
-      selfSigningKey: boolean;
+      initialized: boolean;
 
       /**
-       * Whether the user trust key is available.
+       * Whether encrypted message backup is available.
        */
-      userSigningKey: boolean;
+      keyBackup: boolean;
+
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      secrets: E2EE.Secrets;
+
+      /**
+       * Whether secure key storage is available.
+       */
+      secretStorage: boolean;
+
+      /**
+       * Whether this device is trusted for encrypted messages.
+       */
+      verified: boolean;
+
+      /**
+       * Unix timestamp for when the recovery key was created.
+       */
+      recoveryKeyGeneratedAt?: number;
     }
-  }
 
-  /**
-   * Signed-in account details. Omitted until sign-in is complete.
-   */
-  export interface Matrix {
-    /**
-     * Current device ID.
-     */
-    deviceID: string;
+    export namespace E2EE {
+      /**
+       * Encrypted messaging keys available on this device.
+       */
+      export interface Secrets {
+        /**
+         * Whether the account identity key is available.
+         */
+        masterKey: boolean;
+
+        /**
+         * Whether the encrypted message backup key is available.
+         */
+        megolmBackupKey: boolean;
+
+        /**
+         * Whether a recovery key is available.
+         */
+        recoveryKey: boolean;
+
+        /**
+         * Whether the device trust key is available.
+         */
+        selfSigningKey: boolean;
+
+        /**
+         * Whether the user trust key is available.
+         */
+        userSigningKey: boolean;
+      }
+    }
 
     /**
-     * Beeper homeserver URL for this account.
+     * Signed-in account details. Omitted until sign-in is complete.
      */
-    homeserver: string;
+    export interface Matrix {
+      /**
+       * Current device ID.
+       */
+      deviceID: string;
+
+      /**
+       * Beeper homeserver URL for this account.
+       */
+      homeserver: string;
+
+      /**
+       * Signed-in Beeper user ID.
+       */
+      userID: string;
+    }
 
     /**
-     * Signed-in Beeper user ID.
+     * Trusted device verification progress.
      */
-    userID: string;
+    export interface Verification {
+      /**
+       * Verification ID to pass in verification action paths.
+       */
+      id: string;
+
+      /**
+       * Verification actions that are valid for the current state.
+       */
+      availableActions: Array<'accept' | 'cancel' | 'qr.confirmScanned' | 'sas.start' | 'sas.confirm'>;
+
+      /**
+       * Whether this device started or received the verification.
+       */
+      direction: 'incoming' | 'outgoing';
+
+      /**
+       * Verification methods supported for this transaction.
+       */
+      methods: Array<'qr' | 'sas'>;
+
+      /**
+       * Why this verification exists.
+       */
+      purpose: 'login' | 'device';
+
+      /**
+       * Current trusted-device verification state.
+       */
+      state: 'requested' | 'ready' | 'sas_ready' | 'qr_scanned' | 'done' | 'cancelled' | 'error';
+
+      /**
+       * Verification error details, if verification stopped.
+       */
+      error?: Verification.Error;
+
+      /**
+       * Other device participating in verification.
+       */
+      otherDevice?: Verification.OtherDevice;
+
+      /**
+       * Other Beeper user participating in verification.
+       */
+      otherUserID?: string;
+
+      /**
+       * QR verification data.
+       */
+      qr?: Verification.QR;
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      sas?: Verification.SAS;
+    }
+
+    export namespace Verification {
+      /**
+       * Verification error details, if verification stopped.
+       */
+      export interface Error {
+        /**
+         * Verification error code.
+         */
+        code: string;
+
+        /**
+         * User-facing verification error message.
+         */
+        reason: string;
+      }
+
+      /**
+       * Other device participating in verification.
+       */
+      export interface OtherDevice {
+        /**
+         * Other device ID.
+         */
+        id: string;
+
+        /**
+         * Other device display name, if known.
+         */
+        name?: string;
+      }
+
+      /**
+       * QR verification data.
+       */
+      export interface QR {
+        /**
+         * QR code payload to display for verification.
+         */
+        data: string;
+      }
+
+      /**
+       * Emoji or number comparison data for verification.
+       */
+      export interface SAS {
+        /**
+         * Emoji sequence to compare on both devices.
+         */
+        emojis: string;
+
+        /**
+         * Number sequence to compare on both devices.
+         */
+        decimals?: string;
+      }
+    }
   }
 
   /**
@@ -352,7 +1694,7 @@ export namespace AppSessionResponse {
     /**
      * QR verification data.
      */
-    qr?: Verification.Qr;
+    qr?: Verification.QR;
 
     /**
      * Emoji or number comparison data for verification.
@@ -394,7 +1736,7 @@ export namespace AppSessionResponse {
     /**
      * QR verification data.
      */
-    export interface Qr {
+    export interface QR {
       /**
        * QR code payload to display for verification.
        */
@@ -418,34 +1760,29 @@ export namespace AppSessionResponse {
   }
 }
 
-App.Login = Login;
-App.BaseLogin = BaseLogin;
-App.Verifications = Verifications;
-App.BaseVerifications = BaseVerifications;
+App.Setup = Setup;
+App.BaseSetup = BaseSetup;
 
 export declare namespace App {
-  export { type Verification as Verification, type AppSessionResponse as AppSessionResponse };
-
   export {
-    Login as Login,
-    BaseLogin as BaseLogin,
-    type LoginRegisterResponse as LoginRegisterResponse,
-    type LoginResponseResponse as LoginResponseResponse,
-    type LoginStartResponse as LoginStartResponse,
-    type LoginEmailParams as LoginEmailParams,
-    type LoginRegisterParams as LoginRegisterParams,
-    type LoginResponseParams as LoginResponseParams,
+    type RecoveryKeyResetResponse as RecoveryKeyResetResponse,
+    type SetupCompleteResponse as SetupCompleteResponse,
+    type SetupRegistrationRequiredResponse as SetupRegistrationRequiredResponse,
+    type SetupResponseOutput as SetupResponseOutput,
+    type SetupStateResponse as SetupStateResponse,
+    type Verification as Verification,
+    type VerificationResponse as VerificationResponse,
   };
 
   export {
-    Verifications as Verifications,
-    BaseVerifications as BaseVerifications,
-    type VerificationCreateResponse as VerificationCreateResponse,
-    type VerificationRetrieveResponse as VerificationRetrieveResponse,
-    type VerificationListResponse as VerificationListResponse,
-    type VerificationAcceptResponse as VerificationAcceptResponse,
-    type VerificationCancelResponse as VerificationCancelResponse,
-    type VerificationCreateParams as VerificationCreateParams,
-    type VerificationCancelParams as VerificationCancelParams,
+    Setup as Setup,
+    BaseSetup as BaseSetup,
+    type SetupRetrieveResponse as SetupRetrieveResponse,
+    type SetupRegisterResponse as SetupRegisterResponse,
+    type SetupResponseResponse as SetupResponseResponse,
+    type SetupStartResponse as SetupStartResponse,
+    type SetupEmailParams as SetupEmailParams,
+    type SetupRegisterParams as SetupRegisterParams,
+    type SetupResponseParams as SetupResponseParams,
   };
 }

@@ -38,6 +38,7 @@ import {
   Assets,
 } from './resources/assets';
 import { Info, InfoRetrieveResponse } from './resources/info';
+import { Label, LabelListResponse, Labels } from './resources/labels';
 import {
   MessageDeleteParams,
   MessageListParams,
@@ -56,10 +57,20 @@ import {
   AccountRetrieveResponse,
   Accounts,
 } from './resources/accounts/accounts';
-import { App, AppSessionResponse, Verification } from './resources/app/app';
+import {
+  App,
+  RecoveryKeyResetResponse,
+  SetupCompleteResponse,
+  SetupRegistrationRequiredResponse,
+  SetupResponseOutput,
+  SetupStateResponse,
+  Verification,
+  VerificationResponse,
+} from './resources/app/app';
 import {
   Bridge,
   BridgeListResponse,
+  BridgeLogin,
   BridgeRetrieveResponse,
   Bridges,
   CookieField,
@@ -880,7 +891,7 @@ export class BeeperDesktop extends BaseBeeperDesktop {
    */
   accounts: API.Accounts = new API.Accounts(this);
   /**
-   * Manage bridge-backed account types, connections, and login sessions
+   * Manage available bridges, connect or reconnect chat accounts
    */
   bridges: API.Bridges = new API.Bridges(this);
   /**
@@ -888,11 +899,15 @@ export class BeeperDesktop extends BaseBeeperDesktop {
    */
   chats: API.Chats = new API.Chats(this);
   /**
+   * User-created labels that organize chats
+   */
+  labels: API.Labels = new API.Labels(this);
+  /**
    * Manage messages in chats
    */
   messages: API.Messages = new API.Messages(this);
   /**
-   * Manage assets in Beeper Desktop, like message attachments
+   * Manage files for message attachments
    */
   assets: API.Assets = new API.Assets(this);
   /**
@@ -900,7 +915,7 @@ export class BeeperDesktop extends BaseBeeperDesktop {
    */
   info: API.Info = new API.Info(this);
   /**
-   * Manage Beeper app login and encrypted messaging setup
+   * Manage Beeper account setup and encrypted messaging setup
    */
   app: API.App = new API.App(this);
 }
@@ -908,6 +923,7 @@ export class BeeperDesktop extends BaseBeeperDesktop {
 BeeperDesktop.Accounts = Accounts;
 BeeperDesktop.Bridges = Bridges;
 BeeperDesktop.Chats = Chats;
+BeeperDesktop.Labels = Labels;
 BeeperDesktop.Messages = Messages;
 BeeperDesktop.Assets = Assets;
 BeeperDesktop.Info = Info;
@@ -943,6 +959,7 @@ export declare namespace BeeperDesktop {
   export {
     Bridges as Bridges,
     type Bridge as Bridge,
+    type BridgeLogin as BridgeLogin,
     type CookieField as CookieField,
     type DisappearingTimerCapability as DisappearingTimerCapability,
     type GroupFieldCapability as GroupFieldCapability,
@@ -976,6 +993,8 @@ export declare namespace BeeperDesktop {
     type ChatStartParams as ChatStartParams,
   };
 
+  export { Labels as Labels, type Label as Label, type LabelListResponse as LabelListResponse };
+
   export {
     Messages as Messages,
     type MessageUpdateResponse as MessageUpdateResponse,
@@ -1001,13 +1020,29 @@ export declare namespace BeeperDesktop {
 
   export { Info as Info, type InfoRetrieveResponse as InfoRetrieveResponse };
 
-  export { App as App, type Verification as Verification, type AppSessionResponse as AppSessionResponse };
+  export {
+    App as App,
+    type RecoveryKeyResetResponse as RecoveryKeyResetResponse,
+    type SetupCompleteResponse as SetupCompleteResponse,
+    type SetupRegistrationRequiredResponse as SetupRegistrationRequiredResponse,
+    type SetupResponseOutput as SetupResponseOutput,
+    type SetupStateResponse as SetupStateResponse,
+    type Verification as Verification,
+    type VerificationResponse as VerificationResponse,
+  };
 
   export type APIError = API.APIError;
   export type AppStateSnapshot = API.AppStateSnapshot;
   export type Attachment = API.Attachment;
+  export type AttachmentCapabilities = API.AttachmentCapabilities;
+  export type ChatCapabilities = API.ChatCapabilities;
+  export type ChatDraft = API.ChatDraft;
+  export type ChatStateCapabilities = API.ChatStateCapabilities;
+  export type DraftAttachment = API.DraftAttachment;
   export type Error = API.Error;
+  export type LinkPreview = API.LinkPreview;
   export type Message = API.Message;
   export type Reaction = API.Reaction;
+  export type SendStatus = API.SendStatus;
   export type User = API.User;
 }

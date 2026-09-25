@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Qr, BaseQr, type QrConfirmScannedResponse, type QrScanResponse, type QrScanParams } from './qr';
+export { QR, BaseQR, type QRConfirmScannedResponse, type QRScanResponse, type QRScanParams } from './qr';
 export { SAS, BaseSAS, type SASConfirmResponse, type SASStartResponse } from './sas';
 export {
   Verifications,
