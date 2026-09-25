@@ -14,10 +14,19 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/shared.ts">APIError</a></code>
+- <code><a href="./src/resources/shared.ts">AppStateSnapshot</a></code>
 - <code><a href="./src/resources/shared.ts">Attachment</a></code>
+- <code><a href="./src/resources/shared.ts">AttachmentCapabilities</a></code>
+- <code><a href="./src/resources/shared.ts">ChatCapabilities</a></code>
+- <code><a href="./src/resources/shared.ts">ChatDraft</a></code>
+- <code><a href="./src/resources/shared.ts">ChatStateCapabilities</a></code>
+- <code><a href="./src/resources/shared.ts">DraftAttachment</a></code>
 - <code><a href="./src/resources/shared.ts">Error</a></code>
+- <code><a href="./src/resources/shared.ts">LinkPreview</a></code>
 - <code><a href="./src/resources/shared.ts">Message</a></code>
 - <code><a href="./src/resources/shared.ts">Reaction</a></code>
+- <code><a href="./src/resources/shared.ts">SendStatus</a></code>
 - <code><a href="./src/resources/shared.ts">User</a></code>
 
 # Accounts
@@ -25,10 +34,13 @@ Types:
 Types:
 
 - <code><a href="./src/resources/accounts/accounts.ts">Account</a></code>
+- <code><a href="./src/resources/accounts/accounts.ts">AccountBridge</a></code>
+- <code><a href="./src/resources/accounts/accounts.ts">AccountRetrieveResponse</a></code>
 - <code><a href="./src/resources/accounts/accounts.ts">AccountListResponse</a></code>
 
 Methods:
 
+- <code title="get /v1/accounts/{accountID}">client.accounts.<a href="./src/resources/accounts/accounts.ts">retrieve</a>(accountID) -> AccountRetrieveResponse</code>
 - <code title="get /v1/accounts">client.accounts.<a href="./src/resources/accounts/accounts.ts">list</a>() -> AccountListResponse</code>
 
 ## Contacts
@@ -41,6 +53,71 @@ Methods:
 
 - <code title="get /v1/accounts/{accountID}/contacts/list">client.accounts.contacts.<a href="./src/resources/accounts/contacts.ts">list</a>(accountID, { ...params }) -> UsersCursorSearch</code>
 - <code title="get /v1/accounts/{accountID}/contacts">client.accounts.contacts.<a href="./src/resources/accounts/contacts.ts">search</a>(accountID, { ...params }) -> ContactSearchResponse</code>
+
+# Bridges
+
+Types:
+
+- <code><a href="./src/resources/bridges/bridges.ts">Bridge</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">BridgeLogin</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">CookieField</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">DisappearingTimerCapability</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">GroupFieldCapability</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">GroupTypeCapabilities</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">LoginFlow</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">LoginInputField</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">LoginSession</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">ProvisioningCapabilities</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">ResolveIdentifierCapabilities</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">BridgeRetrieveResponse</a></code>
+- <code><a href="./src/resources/bridges/bridges.ts">BridgeListResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/bridges/{bridgeID}">client.bridges.<a href="./src/resources/bridges/bridges.ts">retrieve</a>(bridgeID) -> BridgeRetrieveResponse</code>
+- <code title="get /v1/bridges">client.bridges.<a href="./src/resources/bridges/bridges.ts">list</a>() -> BridgeListResponse</code>
+- <code title="get /v1/bridges/{bridgeID}/capabilities">client.bridges.<a href="./src/resources/bridges/bridges.ts">retrieveCapabilities</a>(bridgeID) -> ProvisioningCapabilities</code>
+
+## LoginFlows
+
+Types:
+
+- <code><a href="./src/resources/bridges/login-flows.ts">LoginFlowListResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/bridges/{bridgeID}/login-flows">client.bridges.loginFlows.<a href="./src/resources/bridges/login-flows.ts">list</a>(bridgeID) -> LoginFlowListResponse</code>
+
+## Logins
+
+Types:
+
+- <code><a href="./src/resources/bridges/logins.ts">LoginListResponse</a></code>
+- <code><a href="./src/resources/bridges/logins.ts">LoginRemoveResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/bridges/{bridgeID}/logins/{loginID}">client.bridges.logins.<a href="./src/resources/bridges/logins.ts">retrieve</a>(loginID, { ...params }) -> BridgeLogin</code>
+- <code title="get /v1/bridges/{bridgeID}/logins">client.bridges.logins.<a href="./src/resources/bridges/logins.ts">list</a>(bridgeID) -> LoginListResponse</code>
+- <code title="post /v1/bridges/{bridgeID}/logins/{loginID}/remove">client.bridges.logins.<a href="./src/resources/bridges/logins.ts">remove</a>(loginID, { ...params }) -> LoginRemoveResponse</code>
+
+## LoginSessions
+
+Types:
+
+- <code><a href="./src/resources/bridges/login-sessions/login-sessions.ts">LoginSessionCancelResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/bridges/{bridgeID}/login-sessions">client.bridges.loginSessions.<a href="./src/resources/bridges/login-sessions/login-sessions.ts">create</a>(bridgeID, { ...params }) -> LoginSession</code>
+- <code title="get /v1/bridges/{bridgeID}/login-sessions/{loginSessionID}">client.bridges.loginSessions.<a href="./src/resources/bridges/login-sessions/login-sessions.ts">retrieve</a>(loginSessionID, { ...params }) -> LoginSession</code>
+- <code title="delete /v1/bridges/{bridgeID}/login-sessions/{loginSessionID}">client.bridges.loginSessions.<a href="./src/resources/bridges/login-sessions/login-sessions.ts">cancel</a>(loginSessionID, { ...params }) -> LoginSessionCancelResponse</code>
+
+### Steps
+
+Methods:
+
+- <code title="post /v1/bridges/{bridgeID}/login-sessions/{loginSessionID}/steps/{stepID}">client.bridges.loginSessions.steps.<a href="./src/resources/bridges/login-sessions/steps.ts">submit</a>(stepID, { ...params }) -> LoginSession</code>
 
 # Chats
 
@@ -85,6 +162,17 @@ Methods:
 - <code title="delete /v1/chats/{chatID}/messages/{messageID}/reactions/{reactionKey}">client.chats.messages.reactions.<a href="./src/resources/chats/messages/reactions.ts">delete</a>(reactionKey, { ...params }) -> ReactionDeleteResponse</code>
 - <code title="post /v1/chats/{chatID}/messages/{messageID}/reactions">client.chats.messages.reactions.<a href="./src/resources/chats/messages/reactions.ts">add</a>(messageID, { ...params }) -> ReactionAddResponse</code>
 
+# Labels
+
+Types:
+
+- <code><a href="./src/resources/labels.ts">Label</a></code>
+- <code><a href="./src/resources/labels.ts">LabelListResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/labels">client.labels.<a href="./src/resources/labels.ts">list</a>() -> LabelListResponse</code>
+
 # Messages
 
 Types:
@@ -125,3 +213,96 @@ Types:
 Methods:
 
 - <code title="get /v1/info">client.info.<a href="./src/resources/info.ts">retrieve</a>() -> InfoRetrieveResponse</code>
+
+# App
+
+Types:
+
+- <code><a href="./src/resources/app/app.ts">RecoveryKeyResetResponse</a></code>
+- <code><a href="./src/resources/app/app.ts">SetupCompleteResponse</a></code>
+- <code><a href="./src/resources/app/app.ts">SetupRegistrationRequiredResponse</a></code>
+- <code><a href="./src/resources/app/app.ts">SetupResponseOutput</a></code>
+- <code><a href="./src/resources/app/app.ts">SetupStateResponse</a></code>
+- <code><a href="./src/resources/app/app.ts">Verification</a></code>
+- <code><a href="./src/resources/app/app.ts">VerificationResponse</a></code>
+
+## Setup
+
+Types:
+
+- <code><a href="./src/resources/app/setup/setup.ts">SetupRetrieveResponse</a></code>
+- <code><a href="./src/resources/app/setup/setup.ts">SetupRegisterResponse</a></code>
+- <code><a href="./src/resources/app/setup/setup.ts">SetupResponseResponse</a></code>
+- <code><a href="./src/resources/app/setup/setup.ts">SetupStartResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/app/setup">client.app.setup.<a href="./src/resources/app/setup/setup.ts">retrieve</a>() -> SetupRetrieveResponse</code>
+- <code title="post /v1/app/setup/email">client.app.setup.<a href="./src/resources/app/setup/setup.ts">email</a>({ ...params }) -> void</code>
+- <code title="post /v1/app/setup/register">client.app.setup.<a href="./src/resources/app/setup/setup.ts">register</a>({ ...params }) -> SetupRegisterResponse</code>
+- <code title="post /v1/app/setup/response">client.app.setup.<a href="./src/resources/app/setup/setup.ts">response</a>({ ...params }) -> SetupResponseResponse</code>
+- <code title="post /v1/app/setup/start">client.app.setup.<a href="./src/resources/app/setup/setup.ts">start</a>() -> SetupStartResponse</code>
+
+### RecoveryKey
+
+Types:
+
+- <code><a href="./src/resources/app/setup/recovery-key/recovery-key.ts">RecoveryKeyVerifyResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/app/setup/verification/recovery-key">client.app.setup.recoveryKey.<a href="./src/resources/app/setup/recovery-key/recovery-key.ts">verify</a>({ ...params }) -> RecoveryKeyVerifyResponse</code>
+
+#### Reset
+
+Types:
+
+- <code><a href="./src/resources/app/setup/recovery-key/reset.ts">ResetCreateResponse</a></code>
+- <code><a href="./src/resources/app/setup/recovery-key/reset.ts">ResetConfirmResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/app/setup/verification/recovery-key/reset">client.app.setup.recoveryKey.reset.<a href="./src/resources/app/setup/recovery-key/reset.ts">create</a>({ ...params }) -> ResetCreateResponse</code>
+- <code title="post /v1/app/setup/verification/recovery-key/reset/confirm">client.app.setup.recoveryKey.reset.<a href="./src/resources/app/setup/recovery-key/reset.ts">confirm</a>({ ...params }) -> ResetConfirmResponse</code>
+
+### Verifications
+
+Types:
+
+- <code><a href="./src/resources/app/setup/verifications/verifications.ts">VerificationCreateResponse</a></code>
+- <code><a href="./src/resources/app/setup/verifications/verifications.ts">VerificationRetrieveResponse</a></code>
+- <code><a href="./src/resources/app/setup/verifications/verifications.ts">VerificationListResponse</a></code>
+- <code><a href="./src/resources/app/setup/verifications/verifications.ts">VerificationAcceptResponse</a></code>
+- <code><a href="./src/resources/app/setup/verifications/verifications.ts">VerificationCancelResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/app/setup/verifications">client.app.setup.verifications.<a href="./src/resources/app/setup/verifications/verifications.ts">create</a>({ ...params }) -> VerificationCreateResponse</code>
+- <code title="get /v1/app/setup/verifications/{verificationID}">client.app.setup.verifications.<a href="./src/resources/app/setup/verifications/verifications.ts">retrieve</a>(verificationID) -> VerificationRetrieveResponse</code>
+- <code title="get /v1/app/setup/verifications">client.app.setup.verifications.<a href="./src/resources/app/setup/verifications/verifications.ts">list</a>() -> VerificationListResponse</code>
+- <code title="post /v1/app/setup/verifications/{verificationID}/accept">client.app.setup.verifications.<a href="./src/resources/app/setup/verifications/verifications.ts">accept</a>(verificationID) -> VerificationAcceptResponse</code>
+- <code title="post /v1/app/setup/verifications/{verificationID}/cancel">client.app.setup.verifications.<a href="./src/resources/app/setup/verifications/verifications.ts">cancel</a>(verificationID, { ...params }) -> VerificationCancelResponse</code>
+
+#### QR
+
+Types:
+
+- <code><a href="./src/resources/app/setup/verifications/qr.ts">QRConfirmScannedResponse</a></code>
+- <code><a href="./src/resources/app/setup/verifications/qr.ts">QRScanResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/app/setup/verifications/{verificationID}/qr/confirm-scanned">client.app.setup.verifications.qr.<a href="./src/resources/app/setup/verifications/qr.ts">confirmScanned</a>(verificationID) -> QRConfirmScannedResponse</code>
+- <code title="post /v1/app/setup/verifications/qr/scan">client.app.setup.verifications.qr.<a href="./src/resources/app/setup/verifications/qr.ts">scan</a>({ ...params }) -> QRScanResponse</code>
+
+#### SAS
+
+Types:
+
+- <code><a href="./src/resources/app/setup/verifications/sas.ts">SASConfirmResponse</a></code>
+- <code><a href="./src/resources/app/setup/verifications/sas.ts">SASStartResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/app/setup/verifications/{verificationID}/sas/confirm">client.app.setup.verifications.sas.<a href="./src/resources/app/setup/verifications/sas.ts">confirm</a>(verificationID) -> SASConfirmResponse</code>
+- <code title="post /v1/app/setup/verifications/{verificationID}/sas/start">client.app.setup.verifications.sas.<a href="./src/resources/app/setup/verifications/sas.ts">start</a>(verificationID) -> SASStartResponse</code>

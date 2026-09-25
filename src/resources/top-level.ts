@@ -72,7 +72,7 @@ export interface FocusParams {
   chatID?: string;
 
   /**
-   * Optional image path to populate in the message input field.
+   * Optional local image path to populate in the message input field.
    */
   draftAttachmentPath?: string;
 
@@ -89,7 +89,7 @@ export interface FocusParams {
 
 export interface SearchParams {
   /**
-   * User-typed search text. Literal word matching (non-semantic).
+   * User-typed search text. Uses literal word matching.
    */
   query: string;
 }

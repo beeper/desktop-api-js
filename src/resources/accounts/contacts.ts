@@ -43,7 +43,9 @@ export class BaseContacts extends APIResource {
 
   /**
    * Search contacts on a specific account using merged account contacts, network
-   * search, and exact identifier lookup.
+   * search, and exact identifier lookup. The exact lookup only runs when the query
+   * is a phone number, email address, or username; pass one of those to resolve a
+   * specific person.
    *
    * @example
    * ```ts
@@ -72,14 +74,17 @@ export interface ContactSearchResponse {
 
 export interface ContactListParams extends CursorSearchParams {
   /**
-   * Optional search query for blended contact lookup.
+   * Optional search query for contact lookup.
    */
   query?: string;
 }
 
 export interface ContactSearchParams {
   /**
-   * Text to search users by. Network-specific behavior.
+   * Text to search contacts by. A phone number, email address, or username written
+   * with a leading @ is additionally looked up as an exact identifier on the
+   * network; any other text, such as a bare handle or a person or business name,
+   * searches existing contacts only. Matching behavior depends on the network.
    */
   query: string;
 }

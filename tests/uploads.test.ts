@@ -1,7 +1,6 @@
 import fs from 'fs';
 import type { ResponseLike } from '@beeper/desktop-api/internal/to-file';
 import { toFile } from '@beeper/desktop-api/core/uploads';
-import { File } from 'node:buffer';
 
 class MyClass {
   name: string = 'foo';

@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as LabelsAPI from '../labels';
 import * as Shared from '../shared';
 import * as RemindersAPI from './reminders';
 import { BaseReminders, ReminderCreateParams, Reminders } from './reminders';
@@ -41,7 +42,7 @@ export class BaseChats extends APIResource {
   }
 
   /**
-   * Retrieve chat details including metadata, participants, and latest message
+   * Retrieve chat details, including metadata, participants, and the latest message.
    *
    * @example
    * ```ts
@@ -59,7 +60,7 @@ export class BaseChats extends APIResource {
   }
 
   /**
-   * Update supported chat fields. Non-empty draft objects are accepted only when the
+   * Update supported chat fields. Non-empty drafts are accepted only when the
    * current draft is empty. Send draft=null to clear the draft before setting new
    * draft text or attachments.
    *
@@ -98,8 +99,8 @@ export class BaseChats extends APIResource {
   }
 
   /**
-   * Archive or unarchive a chat. Set archived=true to move to archive,
-   * archived=false to move back to inbox
+   * Archive or unarchive a chat. Set archived=true to move it to Archive, or
+   * archived=false to move it back to the inbox.
    *
    * @example
    * ```ts
@@ -157,8 +158,9 @@ export class BaseChats extends APIResource {
   }
 
   /**
-   * Force a delivery notification when supported by the underlying network.
-   * Currently intended for iMessage on macOS; unsupported networks return an error.
+   * Send a notification despite the recipient focus state when the network supports
+   * it. Currently intended for iMessage on macOS; unsupported networks return an
+   * error.
    *
    * @example
    * ```ts
@@ -195,7 +197,7 @@ export class BaseChats extends APIResource {
 
   /**
    * Resolve a user/contact and open a direct chat. Reuses and returns an existing
-   * direct chat when one is found. Available in Beeper Desktop v4.2.808+.
+   * direct chat when one is found. Available in Beeper v4.2.808+.
    *
    * @example
    * ```ts
@@ -260,7 +262,7 @@ export interface Chat {
   /**
    * Chat capabilities reported by the platform.
    */
-  capabilities?: Chat.Capabilities;
+  capabilities?: Shared.ChatCapabilities;
 
   /**
    * Group chat description/topic when available.
@@ -270,7 +272,7 @@ export interface Chat {
   /**
    * Current draft object for this chat, or null when no draft is set.
    */
-  draft?: Chat.Draft | null;
+  draft?: Shared.ChatDraft | null;
 
   /**
    * Local filesystem path to the chat avatar image when available.
@@ -308,6 +310,12 @@ export interface Chat {
   isReadOnly?: boolean;
 
   /**
+   * Labels applied to this chat. Absent when the chat has none, or when labels are
+   * not enabled for this user.
+   */
+  labels?: Array<LabelsAPI.Label>;
+
+  /**
    * Timestamp of last activity.
    */
   lastActivity?: string;
@@ -318,9 +326,25 @@ export interface Chat {
   lastReadMessageSortKey?: string;
 
   /**
-   * Local chat ID specific to this Beeper Desktop installation.
+   * Local chat ID specific to this installation.
    */
   localChatID?: string | null;
+
+  /**
+   * Present when this chat is a merged chat: one person whose conversations across
+   * networks (or across accounts on the same network) are grouped into a single
+   * chat. A merged chat holds no messages of its own - read messages from the member
+   * chats, and send either to a member directly or to the merged chat ID to route
+   * automatically.
+   */
+  merge?: Chat.Merge;
+
+  /**
+   * When this chat is a member of a merged chat, the ID of that merged chat. Clients
+   * that render merged chats as one conversation should list the merged chat and
+   * hide chats carrying this field.
+   */
+  mergedIntoChatID?: string;
 
   /**
    * Disappearing-message timer in seconds when available.
@@ -375,7 +399,7 @@ export namespace Chat {
       isAdmin?: boolean;
 
       /**
-       * True if this participant represents a network or bridge bot.
+       * True if this participant represents an automated network account.
        */
       isNetworkBot?: boolean;
 
@@ -387,422 +411,24 @@ export namespace Chat {
   }
 
   /**
-   * Chat capabilities reported by the platform.
+   * Present when this chat is a merged chat: one person whose conversations across
+   * networks (or across accounts on the same network) are grouped into a single
+   * chat. A merged chat holds no messages of its own - read messages from the member
+   * chats, and send either to a member directly or to the merged chat ID to route
+   * automatically.
    */
-  export interface Capabilities {
+  export interface Merge {
     /**
-     * Allowed Unicode reactions. Omitted means all emoji reactions are allowed.
+     * Chat IDs of the member chats grouped by this merged chat.
      */
-    allowedReactions?: Array<string>;
-
-    /**
-     * True if archive/unarchive is supported.
-     */
-    archive?: boolean;
+    chatIDs: Array<string>;
 
     /**
-     * Supported attachment message types and their per-type constraints, keyed by
-     * Matrix msgtype or pseudo-msgtype (for example m.image, m.video,
-     * org.matrix.msc3245.voice). Missing message types should be treated as rejected.
+     * Member chat that receives messages sent to the merged chat, when the user has
+     * picked one. This preference is per-device; when absent, sends route to the most
+     * recently active member.
      */
-    attachments?: { [key: string]: Capabilities.Attachments };
-
-    /**
-     * True if custom emoji reactions are supported.
-     */
-    customEmojiReactions?: boolean;
-
-    /**
-     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-     * supported.
-     */
-    delete?: -2 | -1 | 0 | 1 | 2;
-
-    /**
-     * True if deleting chats for the authenticated user is supported.
-     */
-    deleteChat?: boolean;
-
-    /**
-     * True if deleting chats for everyone is supported.
-     */
-    deleteChatForEveryone?: boolean;
-
-    /**
-     * True if deleting messages only for the authenticated user is supported.
-     */
-    deleteForMe?: boolean;
-
-    /**
-     * Maximum message age for delete-for-everyone, in seconds.
-     */
-    deleteMaxAge?: number;
-
-    /**
-     * Disappearing-message timer capabilities.
-     */
-    disappearingTimer?: Capabilities.DisappearingTimer;
-
-    /**
-     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-     * supported.
-     */
-    edit?: -2 | -1 | 0 | 1 | 2;
-
-    /**
-     * Maximum message age for edits, in seconds.
-     */
-    editMaxAge?: number;
-
-    /**
-     * Maximum number of edits allowed for one message.
-     */
-    editMaxCount?: number;
-
-    /**
-     * Supported rich-text formatting features keyed by feature name (for example bold,
-     * inline_code, code_block.syntax_highlighting). Omitted means no formatting
-     * support is advertised.
-     */
-    formatting?: { [key: string]: -2 | -1 | 0 | 1 | 2 };
-
-    /**
-     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-     * supported.
-     */
-    locationMessage?: -2 | -1 | 0 | 1 | 2;
-
-    /**
-     * True if marking chats unread is supported.
-     */
-    markAsUnread?: boolean;
-
-    /**
-     * Maximum length of normal text messages.
-     */
-    maxTextLength?: number;
-
-    /**
-     * Message request capabilities.
-     */
-    messageRequest?: Capabilities.MessageRequest;
-
-    /**
-     * Participant management capabilities.
-     */
-    participantActions?: Capabilities.ParticipantActions;
-
-    /**
-     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-     * supported.
-     */
-    poll?: -2 | -1 | 0 | 1 | 2;
-
-    /**
-     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-     * supported.
-     */
-    reaction?: -2 | -1 | 0 | 1 | 2;
-
-    /**
-     * Maximum number of reactions allowed on a single message.
-     */
-    reactionCount?: number;
-
-    /**
-     * True if read receipts are supported.
-     */
-    readReceipts?: boolean;
-
-    /**
-     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-     * supported.
-     */
-    reply?: -2 | -1 | 0 | 1 | 2;
-
-    /**
-     * Chat state update capabilities.
-     */
-    state?: Capabilities.State;
-
-    /**
-     * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-     * supported.
-     */
-    thread?: -2 | -1 | 0 | 1 | 2;
-
-    /**
-     * True if typing notifications are supported.
-     */
-    typingNotifications?: boolean;
-  }
-
-  export namespace Capabilities {
-    /**
-     * Capabilities for one attachment message type.
-     */
-    export interface Attachments {
-      /**
-       * Supported MIME types or MIME patterns for this file message type. Missing MIME
-       * types should be treated as rejected.
-       */
-      mimeTypes: { [key: string]: -2 | -1 | 0 | 1 | 2 };
-
-      /**
-       * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-       * supported.
-       */
-      caption?: -2 | -1 | 0 | 1 | 2;
-
-      /**
-       * Maximum caption length when captions are supported.
-       */
-      maxCaptionLength?: number;
-
-      /**
-       * Maximum audio or video duration in seconds.
-       */
-      maxDuration?: number;
-
-      /**
-       * Maximum image or video height in pixels.
-       */
-      maxHeight?: number;
-
-      /**
-       * Maximum file size in bytes.
-       */
-      maxSize?: number;
-
-      /**
-       * Maximum image or video width in pixels.
-       */
-      maxWidth?: number;
-
-      /**
-       * True if this file type can be sent as view-once media.
-       */
-      viewOnce?: boolean;
-    }
-
-    /**
-     * Disappearing-message timer capabilities.
-     */
-    export interface DisappearingTimer {
-      /**
-       * True if empty timer objects should be omitted from message content.
-       */
-      omitEmptyTimer?: boolean;
-
-      /**
-       * Allowed disappearing timer values in milliseconds. Omitted means any timer is
-       * allowed.
-       */
-      timers?: Array<number>;
-
-      /**
-       * Supported disappearing timer types.
-       */
-      types?: Array<'afterRead' | 'afterSend'>;
-    }
-
-    /**
-     * Message request capabilities.
-     */
-    export interface MessageRequest {
-      /**
-       * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-       * supported.
-       */
-      acceptWithButton?: -2 | -1 | 0 | 1 | 2;
-
-      /**
-       * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-       * supported.
-       */
-      acceptWithMessage?: -2 | -1 | 0 | 1 | 2;
-    }
-
-    /**
-     * Participant management capabilities.
-     */
-    export interface ParticipantActions {
-      /**
-       * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-       * supported.
-       */
-      ban?: -2 | -1 | 0 | 1 | 2;
-
-      /**
-       * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-       * supported.
-       */
-      invite?: -2 | -1 | 0 | 1 | 2;
-
-      /**
-       * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-       * supported.
-       */
-      kick?: -2 | -1 | 0 | 1 | 2;
-
-      /**
-       * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-       * supported.
-       */
-      leave?: -2 | -1 | 0 | 1 | 2;
-
-      /**
-       * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-       * supported.
-       */
-      revokeInvite?: -2 | -1 | 0 | 1 | 2;
-    }
-
-    /**
-     * Chat state update capabilities.
-     */
-    export interface State {
-      /**
-       * Chat avatar state capability.
-       */
-      avatar?: State.Avatar;
-
-      /**
-       * Chat description/topic state capability.
-       */
-      description?: State.Description;
-
-      /**
-       * Disappearing-message timer state capability.
-       */
-      disappearingTimer?: State.DisappearingTimer;
-
-      /**
-       * Chat title state capability.
-       */
-      title?: State.Title;
-    }
-
-    export namespace State {
-      /**
-       * Chat avatar state capability.
-       */
-      export interface Avatar {
-        /**
-         * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-         * supported.
-         */
-        level: -2 | -1 | 0 | 1 | 2;
-      }
-
-      /**
-       * Chat description/topic state capability.
-       */
-      export interface Description {
-        /**
-         * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-         * supported.
-         */
-        level: -2 | -1 | 0 | 1 | 2;
-      }
-
-      /**
-       * Disappearing-message timer state capability.
-       */
-      export interface DisappearingTimer {
-        /**
-         * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-         * supported.
-         */
-        level: -2 | -1 | 0 | 1 | 2;
-      }
-
-      /**
-       * Chat title state capability.
-       */
-      export interface Title {
-        /**
-         * -2: rejected, -1: dropped, 0: unsupported, 1: partially supported, 2: fully
-         * supported.
-         */
-        level: -2 | -1 | 0 | 1 | 2;
-      }
-    }
-  }
-
-  /**
-   * Current draft object for this chat, or null when no draft is set.
-   */
-  export interface Draft {
-    /**
-     * Matrix HTML draft body.
-     */
-    text: string;
-
-    /**
-     * Draft attachments keyed by attachment ID.
-     */
-    attachments?: { [key: string]: Draft.Attachments };
-  }
-
-  export namespace Draft {
-    export interface Attachments {
-      /**
-       * Draft attachment identifier.
-       */
-      id: string;
-
-      /**
-       * Draft attachment type. GIF and recorded audio are mutually exclusive types.
-       */
-      type: 'file' | 'gif' | 'recorded_audio';
-
-      /**
-       * Audio duration in seconds if known.
-       */
-      audioDurationSeconds?: number;
-
-      /**
-       * Original filename if available.
-       */
-      fileName?: string;
-
-      /**
-       * Local filesystem path for the draft attachment.
-       */
-      filePath?: string;
-
-      /**
-       * File size in bytes if known.
-       */
-      fileSize?: number;
-
-      /**
-       * MIME type if known.
-       */
-      mimeType?: string;
-
-      /**
-       * Pixel dimensions of the attachment.
-       */
-      size?: Attachments.Size;
-
-      /**
-       * Sticker identifier if the draft attachment is a sticker.
-       */
-      stickerID?: string;
-    }
-
-    export namespace Attachments {
-      /**
-       * Pixel dimensions of the attachment.
-       */
-      export interface Size {
-        height?: number;
-
-        width?: number;
-      }
-    }
+    defaultChatID?: string;
   }
 
   /**
@@ -838,13 +464,12 @@ export namespace Chat {
 
 export interface ChatCreateResponse extends Chat {
   /**
-   * @deprecated DEPRECATED - use id instead. Compatibility alias for older clients.
+   * @deprecated Use id instead.
    */
   chatID: string;
 
   /**
-   * @deprecated DEPRECATED - legacy start-chat status for older clients. New clients
-   * should inspect the returned Chat instead.
+   * @deprecated Inspect the returned Chat instead.
    */
   status?: 'existing' | 'created';
 }
@@ -861,13 +486,12 @@ export interface ChatListResponse extends Chat {
 
 export interface ChatStartResponse extends Chat {
   /**
-   * @deprecated DEPRECATED - use id instead. Compatibility alias for older clients.
+   * @deprecated Use id instead.
    */
   chatID: string;
 
   /**
-   * @deprecated DEPRECATED - legacy start-chat status for older clients. New clients
-   * should inspect the returned Chat instead.
+   * @deprecated Inspect the returned Chat instead.
    */
   status?: 'existing' | 'created';
 }
@@ -968,8 +592,8 @@ export namespace ChatUpdateParams {
    */
   export interface Draft {
     /**
-     * Draft text. Plain text and Markdown are converted to Matrix HTML with the same
-     * rules used by send and edit.
+     * Draft text. Plain text and Markdown are converted to Beeper rich text with the
+     * same rules used by send and edit.
      */
     text: string;
 
@@ -1037,6 +661,11 @@ export interface ChatListParams extends CursorNoLimitParams {
    * Limit to specific account IDs. If omitted, fetches from all accounts.
    */
   accountIDs?: Array<string>;
+
+  /**
+   * Set the maximum number of chats to retrieve. Valid range: 1-200, default is 25
+   */
+  limit?: number;
 }
 
 export interface ChatArchiveParams {
@@ -1064,14 +693,14 @@ export interface ChatNotifyAnywayParams {}
 
 export interface ChatSearchParams extends CursorSearchParams {
   /**
-   * Provide an array of account IDs to filter chats from specific messaging accounts
-   * only
+   * Limit results to specific chat accounts.
    */
   accountIDs?: Array<string>;
 
   /**
-   * Filter by inbox type: "primary" (non-archived, non-low-priority),
-   * "low-priority", or "archive". If not specified, shows all chats.
+   * Filter by inbox type: "primary" (the chats the Beeper inbox shows: non-archived,
+   * non-low-priority, honoring inbox visibility rules and labels), "low-priority",
+   * or "archive". If not specified, shows all chats.
    */
   inbox?: 'primary' | 'low-priority' | 'archive';
 
@@ -1082,20 +711,23 @@ export interface ChatSearchParams extends CursorSearchParams {
   includeMuted?: boolean | null;
 
   /**
-   * Provide an ISO datetime string to only retrieve chats with last activity after
-   * this time
+   * Only include chats that carry this label. Label IDs come from GET /v1/labels.
+   */
+  labelID?: string;
+
+  /**
+   * Only include chats with last activity after this ISO 8601 datetime.
    */
   lastActivityAfter?: string;
 
   /**
-   * Provide an ISO datetime string to only retrieve chats with last activity before
-   * this time
+   * Only include chats with last activity before this ISO 8601 datetime.
    */
   lastActivityBefore?: string;
 
   /**
-   * Literal token search (non-semantic). Use single words users type (e.g.,
-   * "dinner"). When multiple words provided, ALL must match. Case-insensitive.
+   * Literal chat search. Use words the user typed, such as "dinner". When multiple
+   * words are provided, all must match. Case-insensitive.
    */
   query?: string;
 
@@ -1124,7 +756,7 @@ export interface ChatStartParams {
   accountID: string;
 
   /**
-   * Merged user-like contact payload used to resolve the best identifier.
+   * Contact-like user payload used to resolve the best identifier.
    */
   user: ChatStartParams.User;
 
@@ -1141,7 +773,7 @@ export interface ChatStartParams {
 
 export namespace ChatStartParams {
   /**
-   * Merged user-like contact payload used to resolve the best identifier.
+   * Contact-like user payload used to resolve the best identifier.
    */
   export interface User {
     /**

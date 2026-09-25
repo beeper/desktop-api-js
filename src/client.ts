@@ -38,6 +38,7 @@ import {
   Assets,
 } from './resources/assets';
 import { Info, InfoRetrieveResponse } from './resources/info';
+import { Label, LabelListResponse, Labels } from './resources/labels';
 import {
   MessageDeleteParams,
   MessageListParams,
@@ -49,7 +50,39 @@ import {
   MessageUpdateResponse,
   Messages,
 } from './resources/messages';
-import { Account, AccountListResponse, Accounts } from './resources/accounts/accounts';
+import {
+  Account,
+  AccountBridge,
+  AccountListResponse,
+  AccountRetrieveResponse,
+  Accounts,
+} from './resources/accounts/accounts';
+import {
+  App,
+  RecoveryKeyResetResponse,
+  SetupCompleteResponse,
+  SetupRegistrationRequiredResponse,
+  SetupResponseOutput,
+  SetupStateResponse,
+  Verification,
+  VerificationResponse,
+} from './resources/app/app';
+import {
+  Bridge,
+  BridgeListResponse,
+  BridgeLogin,
+  BridgeRetrieveResponse,
+  Bridges,
+  CookieField,
+  DisappearingTimerCapability,
+  GroupFieldCapability,
+  GroupTypeCapabilities,
+  LoginFlow,
+  LoginInputField,
+  LoginSession,
+  ProvisioningCapabilities,
+  ResolveIdentifierCapabilities,
+} from './resources/bridges/bridges';
 import {
   Chat,
   ChatArchiveParams,
@@ -84,7 +117,7 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for all API operations.
+   * Bearer access token obtained via OAuth2 PKCE flow or created in-app. Required for authenticated API operations.
    */
   accessToken?: string | undefined;
 
@@ -263,8 +296,8 @@ export class BaseBeeperDesktop {
   }
 
   /**
-   * Focus Beeper Desktop and optionally navigate to a specific chat, message, or
-   * pre-fill plain text and an image path.
+   * Focus Beeper Desktop and optionally open a specific chat, jump to a message, or
+   * pre-fill text and an image.
    *
    * @example
    * ```ts
@@ -279,9 +312,9 @@ export class BaseBeeperDesktop {
   }
 
   /**
-   * Returns matching chats, participant name matches in groups, and the first page
-   * of messages in one call. Paginate messages via search-messages. Paginate chats
-   * via search-chats.
+   * Return matching chats, participant matches in group chats, and the first page of
+   * message results in one call. Use the dedicated chat and message search endpoints
+   * for pagination.
    *
    * @example
    * ```ts
@@ -775,11 +808,19 @@ export class BaseBeeperDesktop {
     return () => controller.abort();
   }
 
-  private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
+  private buildBody({ options }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
   } {
+    const { body, headers: rawHeaders } = options;
     if (!body) {
+      // A resource method always passes a `body` key when its operation defines a
+      // request body, even if the caller omitted an optional body param. Keep the
+      // content-type for those, and only elide it for operations with no body at
+      // all (e.g. GET/DELETE).
+      if (body == null && 'body' in options) {
+        return this.#encoder({ body, headers: buildHeaders([rawHeaders]) });
+      }
       return { bodyHeaders: undefined, body: undefined };
     }
     const headers = buildHeaders([rawHeaders]);
@@ -850,28 +891,43 @@ export class BeeperDesktop extends BaseBeeperDesktop {
    */
   accounts: API.Accounts = new API.Accounts(this);
   /**
+   * Manage available bridges, connect or reconnect chat accounts
+   */
+  bridges: API.Bridges = new API.Bridges(this);
+  /**
    * Manage chats
    */
   chats: API.Chats = new API.Chats(this);
+  /**
+   * User-created labels that organize chats
+   */
+  labels: API.Labels = new API.Labels(this);
   /**
    * Manage messages in chats
    */
   messages: API.Messages = new API.Messages(this);
   /**
-   * Manage assets in Beeper Desktop, like message attachments
+   * Manage files for message attachments
    */
   assets: API.Assets = new API.Assets(this);
   /**
    * Server discovery and capability metadata. Use /v1/info before authentication setup.
    */
   info: API.Info = new API.Info(this);
+  /**
+   * Manage Beeper account setup and encrypted messaging setup
+   */
+  app: API.App = new API.App(this);
 }
 
 BeeperDesktop.Accounts = Accounts;
+BeeperDesktop.Bridges = Bridges;
 BeeperDesktop.Chats = Chats;
+BeeperDesktop.Labels = Labels;
 BeeperDesktop.Messages = Messages;
 BeeperDesktop.Assets = Assets;
 BeeperDesktop.Info = Info;
+BeeperDesktop.App = App;
 
 export declare namespace BeeperDesktop {
   export type RequestOptions = Opts.RequestOptions;
@@ -892,7 +948,30 @@ export declare namespace BeeperDesktop {
     type SearchParams as SearchParams,
   };
 
-  export { Accounts as Accounts, type Account as Account, type AccountListResponse as AccountListResponse };
+  export {
+    Accounts as Accounts,
+    type Account as Account,
+    type AccountBridge as AccountBridge,
+    type AccountRetrieveResponse as AccountRetrieveResponse,
+    type AccountListResponse as AccountListResponse,
+  };
+
+  export {
+    Bridges as Bridges,
+    type Bridge as Bridge,
+    type BridgeLogin as BridgeLogin,
+    type CookieField as CookieField,
+    type DisappearingTimerCapability as DisappearingTimerCapability,
+    type GroupFieldCapability as GroupFieldCapability,
+    type GroupTypeCapabilities as GroupTypeCapabilities,
+    type LoginFlow as LoginFlow,
+    type LoginInputField as LoginInputField,
+    type LoginSession as LoginSession,
+    type ProvisioningCapabilities as ProvisioningCapabilities,
+    type ResolveIdentifierCapabilities as ResolveIdentifierCapabilities,
+    type BridgeRetrieveResponse as BridgeRetrieveResponse,
+    type BridgeListResponse as BridgeListResponse,
+  };
 
   export {
     Chats as Chats,
@@ -913,6 +992,8 @@ export declare namespace BeeperDesktop {
     type ChatSearchParams as ChatSearchParams,
     type ChatStartParams as ChatStartParams,
   };
+
+  export { Labels as Labels, type Label as Label, type LabelListResponse as LabelListResponse };
 
   export {
     Messages as Messages,
@@ -939,9 +1020,29 @@ export declare namespace BeeperDesktop {
 
   export { Info as Info, type InfoRetrieveResponse as InfoRetrieveResponse };
 
+  export {
+    App as App,
+    type RecoveryKeyResetResponse as RecoveryKeyResetResponse,
+    type SetupCompleteResponse as SetupCompleteResponse,
+    type SetupRegistrationRequiredResponse as SetupRegistrationRequiredResponse,
+    type SetupResponseOutput as SetupResponseOutput,
+    type SetupStateResponse as SetupStateResponse,
+    type Verification as Verification,
+    type VerificationResponse as VerificationResponse,
+  };
+
+  export type APIError = API.APIError;
+  export type AppStateSnapshot = API.AppStateSnapshot;
   export type Attachment = API.Attachment;
+  export type AttachmentCapabilities = API.AttachmentCapabilities;
+  export type ChatCapabilities = API.ChatCapabilities;
+  export type ChatDraft = API.ChatDraft;
+  export type ChatStateCapabilities = API.ChatStateCapabilities;
+  export type DraftAttachment = API.DraftAttachment;
   export type Error = API.Error;
+  export type LinkPreview = API.LinkPreview;
   export type Message = API.Message;
   export type Reaction = API.Reaction;
+  export type SendStatus = API.SendStatus;
   export type User = API.User;
 }
