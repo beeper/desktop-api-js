@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.0.0 (unreleased)
+## 6.0.0 (2026-09-25)
 
 Full Changelog: [v5.0.0...v6.0.0](https://github.com/beeper/desktop-api-js/compare/v5.0.0...v6.0.0)
 
